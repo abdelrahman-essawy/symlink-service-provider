@@ -1,6 +1,6 @@
 import { common } from '@mui/material/colors';
 import { alpha, Palette, PaletteOptions } from '@mui/material/styles';
-import { error, indigo, info, neutral, success } from './colors';
+import { error, indigo, info, neutral, success, yellow } from './colors';
 
 export function createPalette(): Palette {
   const palette : PaletteOptions =  {
@@ -24,6 +24,7 @@ export function createPalette(): Palette {
     divider: '#F2F4F7',
     error,
     info,
+    warning: yellow,
     mode: 'light',
     grey: neutral,
     primary: indigo,
