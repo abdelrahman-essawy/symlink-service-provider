@@ -5,7 +5,7 @@ import Menu, { MenuProps } from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import PropTypes from "prop-types";
-import {useTranslation} from "react-i18next";
+import { useTranslation } from "react-i18next";
 
 const StyledMenu = styled((props: MenuProps) => (
   <Menu
@@ -45,7 +45,7 @@ const StyledMenu = styled((props: MenuProps) => (
 }));
 export const MenuButton = (props: any) => {
   const { items } = props;
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -79,13 +79,13 @@ export const MenuButton = (props: any) => {
         onClose={handleClose}
       >
         {items.map((child: any, index: number) => {
-            return (
-                <MenuItem key={index} onClick={child.onClick} disabled={child.disabled} >
-                    {t(child.label)}
-                </MenuItem>
-            );
+          return (
+            <MenuItem key={index} onClick={child.onClick} disabled={child.disabled} >
+              {t(child.label)}
+            </MenuItem>
+          );
         })}
-        
+
       </StyledMenu>
     </div>
   );
