@@ -10,6 +10,7 @@
   "Overview": "نظرة عامة",
   "Users management": "ادارة المستخدمين",
   "Clients": "العملاء",
+  "Profile": "الملف الشخصي",
   "Drivers": "السائقين",
   "Account": "الحساب",
   "Settings": "الاعدادات",
@@ -166,5 +167,19 @@
   "Financials": "المالية",
   "Transactions": "المعاملات",
   "Account Balance": "رصيد الحساب",
-  "Drivers Balances": "رصيد السائقين"
+  "Drivers Balances": "رصيد السائقين",
+
+"// ////next lines used in symline//// ": "/////next lines used in symline/////////// ",
+
+  "Projects": "مشروعات",
+  "Full Name": "الاسم",
+  "Location": "الموقع",
+  "Phone Number": "رقم الهاتف",
+  "City": "المدينة",
+  "Email": "البريد الاليكتروني",
+  "linkedin": "لينكد ان",
+  "Type here .." : "اكتب هنا..",
+  "Update": "تحديث"
+
+
 }
