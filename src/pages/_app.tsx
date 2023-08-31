@@ -15,6 +15,7 @@ import { I18nextProvider } from "react-i18next";
 import i18n from "@/configs/i18next";
 const clientSideEmotionCache = createEmotionCache();
 
+
 const SplashScreen = () => null;
 
 const App = (props: { Component: any; emotionCache?: any; pageProps: any }) => {

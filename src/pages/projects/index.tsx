@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import { Box, Card, Container,createTheme, Stack, Tab, Grid, CardHeader, Tabs, CardContent, Typography, Button, OutlinedInput } from '@mui/material';
+
 import React, { useState, useRef } from 'react';
 import { DashboardLayout } from '../../layouts/dashboard/layout';
 import { useTranslation } from 'react-i18next';
@@ -14,8 +15,8 @@ import HeaderTabs from '@/components/_used-symline/tabs/headerTabs';
 import { withStyles } from "@mui/styles";
 
 const Page = () => {
-  const { i18n } = useTranslation();
 
+  const { i18n } = useTranslation();
   const title = 'Projects';
   const { t } = useTranslation();
   const [value, setValue] = React.useState(0);
