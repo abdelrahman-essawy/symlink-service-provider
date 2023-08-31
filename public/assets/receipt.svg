@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="15.9990015px" height="17.9995px" viewBox="0 0 15.9990015 17.9995" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>receipt</title>
+    <g id="dasboard---client-(company)" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="support" transform="translate(-1114.0595, -321)" fill="#6755C1" fill-rule="nonzero">
+            <g id="Contact" transform="translate(352, 220)">
+                <g id="row" transform="translate(25.0595, 80)">
+                    <g id="receipt" transform="translate(737, 21)">
+                        <path d="M13,0 L3,0 C1,0 0,1 0,3 L0,15.621 C0,16.445 0.94098,16.915 1.59998,16.421 L2.95898,15.402 C3.55598,14.954 4.39204,15.014 4.92004,15.541 L6.939,17.56 C7.525,18.146 8.4751,18.146 9.0601,17.56 L11.079,15.541 C11.607,15.013 12.443,14.954 13.04,15.402 L14.399,16.421 C15.058,16.915 15.9990007,16.445 15.9990007,15.621 L15.9990007,3 C16,1 15,0 13,0 Z M9,10.75 L4,10.75 C3.586,10.75 3.25,10.414 3.25,10 C3.25,9.586 3.586,9.25 4,9.25 L9,9.25 C9.414,9.25 9.75,9.586 9.75,10 C9.75,10.414 9.414,10.75 9,10.75 Z M12,6.75 L4,6.75 C3.586,6.75 3.25,6.414 3.25,6 C3.25,5.586 3.586,5.25 4,5.25 L12,5.25 C12.414,5.25 12.75,5.586 12.75,6 C12.75,6.414 12.414,6.75 12,6.75 Z" id="Shape"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

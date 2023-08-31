@@ -9,51 +9,55 @@ import { OverviewLatestVehicles } from '../sections/overview/overview-latest-veh
 import OrderContextProvider from '@/contexts/order-context';
 const now = new Date();
 import { useTranslation } from 'react-i18next';
+import { useRouter } from 'next/router';
 
 const Page = () => {
-    const {t}= useTranslation();
-  return(
-  <>
-    <Head>
-      <title>
-        {t("Overview")} | Pronto
-      </title>
-    </Head>
-    <Box
-      component="main"
-      sx={{
-        flexGrow: 1,
-        py: 8
-      }}
-    >
-      <Container maxWidth="xl">
-        <Grid
-          container
-          spacing={3}
-        >
-          <Grid
-            xs={12}
-            md={6}
-            lg={4}
-          >
-            <OverviewLatestVehicles
-              sx={{ height: '100%' }}
-            />
-          </Grid>
-          <Grid
-            xs={12}
-            md={12}
-            lg={8}
-          >
-            <OverviewLatestOrders
-              sx={{ height: '100%' }}
-            />
-          </Grid>
-        </Grid>
-      </Container>
-    </Box>
-  </>
-);
+
+  const router = useRouter();
+  router.push('/projects');
+  const { t } = useTranslation();
+  return (
+    <>
+      {/* <Head> */}
+      {/*   <title> */}
+      {/*     {t("Overview")} | Pronto */}
+      {/*   </title> */}
+      {/* </Head> */}
+      {/* <Box */}
+      {/*   component="main" */}
+      {/*   sx={{ */}
+      {/*     flexGrow: 1, */}
+      {/*     py: 8 */}
+      {/*   }} */}
+      {/* > */}
+      {/*   <Container maxWidth="xl"> */}
+      {/*     <Grid */}
+      {/*       container */}
+      {/*       spacing={3} */}
+      {/*     > */}
+      {/*       <Grid */}
+      {/*         xs={12} */}
+      {/*         md={6} */}
+      {/*         lg={4} */}
+      {/*       > */}
+      {/*         <OverviewLatestVehicles */}
+      {/*           sx={{ height: '100%' }} */}
+      {/*         /> */}
+      {/*       </Grid> */}
+      {/*       <Grid */}
+      {/*         xs={12} */}
+      {/*         md={12} */}
+      {/*         lg={8} */}
+      {/*       > */}
+      {/*         <OverviewLatestOrders */}
+      {/*           sx={{ height: '100%' }} */}
+      {/*         /> */}
+      {/*       </Grid> */}
+      {/*     </Grid> */}
+      {/*   </Container> */}
+      {/* </Box> */}
+    </>
+  );
 }
 Page.getLayout = (page: any) => (
   <DashboardLayout>

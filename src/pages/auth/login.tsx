@@ -46,7 +46,7 @@ const Page = () => {
       try {
         await auth?.signIn(values.username, values.password);
         router.push('/');
-      } catch (err:any) {
+      } catch (err: any) {
         helpers.setStatus({ success: false });
         helpers.setErrors({ submit: err.message });
         helpers.setSubmitting(false);
@@ -162,7 +162,7 @@ const Page = () => {
                   variant="contained"
                 >
                   {t('continue')}
-                </Button> 
+                </Button>
               </form>
             )}
           </div>
