@@ -259,55 +259,55 @@ export const items = [
   //     </SvgIcon>
   //   ),
   // },
-  // {
-  //   external: false,
-  //   disabled: false,
-  //   menu: false,
-  //   title: "Settings",
-  //   icon: (
-  //     <SvgIcon fontSize="small">
-  //       <CogIcon />
-  //     </SvgIcon>
-  //   ),
-  //   children: [
-  //     {
-  //       external: false,
-  //       disabled: false,
-  //       menu: false,
-  //       title: "About",
-  //       path: "/settings/about",
-  //       icon: (
-  //         <SvgIcon fontSize="small">
-  //           <CogIcon />
-  //         </SvgIcon>
-  //       ),
-  //     },
-  //     {
-  //       external: false,
-  //       disabled: false,
-  //       menu: false,
-  //       title: "Social Links",
-  //       path: "/settings/social-links",
-  //       icon: (
-  //         <SvgIcon fontSize="small">
-  //           <CogIcon />
-  //         </SvgIcon>
-  //       ),
-  //     },
-  //     {
-  //       external: false,
-  //       disabled: false,
-  //       menu: false,
-  //       title: "Terms and Conditions",
-  //       path: "/settings/terms-and-conditions",
-  //       icon: (
-  //         <SvgIcon fontSize="small">
-  //           <PrivacyTipIcon />
-  //         </SvgIcon>
-  //       ),
-  //     },
-  //   ],
-  // },
+  {
+    external: false,
+    disabled: false,
+    menu: false,
+    title: "Settings",
+    icon: (
+      <SvgIcon fontSize="small">
+        <CogIcon />
+      </SvgIcon>
+    ),
+    children: [
+      {
+        external: false,
+        disabled: false,
+        menu: false,
+        title: "About",
+        path: "/settings/about",
+        icon: (
+          <SvgIcon fontSize="small">
+            <CogIcon />
+          </SvgIcon>
+        ),
+      },
+      {
+        external: false,
+        disabled: false,
+        menu: false,
+        title: "Social Links",
+        path: "/settings/social-links",
+        icon: (
+          <SvgIcon fontSize="small">
+            <CogIcon />
+          </SvgIcon>
+        ),
+      },
+      {
+        external: false,
+        disabled: false,
+        menu: false,
+        title: "Terms and Conditions",
+        path: "/settings/terms-and-conditions",
+        icon: (
+          <SvgIcon fontSize="small">
+            <PrivacyTipIcon />
+          </SvgIcon>
+        ),
+      },
+    ],
+  },
   // {
   //   external: false,
   //   disabled: false,
