@@ -14,8 +14,8 @@ import HeaderTabs from '@/components/_used-symline/tabs/headerTabs';
 import { withStyles } from "@mui/styles";
 
 const Page = () => {
-  const { i18n } = useTranslation();
 
+  const { i18n } = useTranslation();
   const title = 'Projects';
   const { t } = useTranslation();
   const [value, setValue] = React.useState(0);

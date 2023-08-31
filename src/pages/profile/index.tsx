@@ -144,7 +144,7 @@ const Page = () => {
                       
                         fullWidth={true}
                         sx={{ mt: 1, borderRadius: '50px',
-                        '& .MuiSelect-select': {
+                        '& .muirtl-19j8lcu-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiSelect-select': {
                           height: '20.125px',
                         }
                       }}

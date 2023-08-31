@@ -38,9 +38,15 @@ dependencies:
   '@mui/x-date-pickers':
     specifier: 5.0.19
     version: 5.0.19(@emotion/react@11.10.6)(@emotion/styled@11.10.6)(@mui/material@5.11.14)(@mui/system@5.11.9)(date-fns@2.29.3)(react-dom@18.2.0)(react@18.2.0)
+  '@types/draft-js':
+    specifier: ^0.11.12
+    version: 0.11.12
   '@types/jest':
     specifier: ^29.4.0
     version: 29.4.0
+  '@types/prop-types':
+    specifier: ^15.7.5
+    version: 15.7.5
   apexcharts:
     specifier: 3.37.0
     version: 3.37.0
