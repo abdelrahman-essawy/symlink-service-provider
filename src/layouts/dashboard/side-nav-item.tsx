@@ -81,6 +81,7 @@ export const SideNavItem = (props: { active?: boolean; disabled: boolean; extern
             whiteSpace: "nowrap",
             ...(active && {
               color: "white",
+              backgroundColor: "primary.main",
 
             }),
             ...(disabled && {
@@ -121,11 +122,16 @@ export const SideNavItem = (props: { active?: boolean; disabled: boolean; extern
                   textAlign: "left",
                   width: "100%",
                   ...(child.active && {
-                    backgroundColor: "rgba(255, 255, 255, 0.04)",
+                    backgroundColor: "primary.main",
                   }),
                   "&:hover": {
-                    backgroundColor: "rgba(255, 255, 255, 0.04)",
+
+
+
                   },
+                  ...(active && {
+                    backgroundColor: "primary.main",
+                  }),
                 }}
                 href="/clients"
                 {...secondary_linkProps}
@@ -139,7 +145,7 @@ export const SideNavItem = (props: { active?: boolean; disabled: boolean; extern
                       display: "inline-flex",
                       justifyContent: "center",
                       mr: 2,
-                      ...(child.active && {
+                      ...(active && {
                         color: "white",
 
                       }),
@@ -160,7 +166,6 @@ export const SideNavItem = (props: { active?: boolean; disabled: boolean; extern
                     whiteSpace: "nowrap",
                     ...(active && {
                       color: "white",
-
                     }),
                     ...(disabled && {
                       color: "grey.500",
