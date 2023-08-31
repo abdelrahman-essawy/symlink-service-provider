@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { Box, Card, Container,createTheme, Stack, Tab, Grid, CardHeader, Tabs, CardContent, Typography, Button, OutlinedInput } from '@mui/material';
+import { Box, Card, Container, createTheme, Stack, Tab, Grid, CardHeader, Tabs, CardContent, Typography, Button, OutlinedInput } from '@mui/material';
 import React, { useState, useRef } from 'react';
 import { DashboardLayout } from '../../layouts/dashboard/layout';
 import { useTranslation } from 'react-i18next';
@@ -12,6 +12,9 @@ import { useAbout } from '../../hooks/use-about';
 import MUIRichTextEditor, { TMUIRichTextEditorRef } from 'mui-rte-fixed';
 import HeaderTabs from '@/components/_used-symline/tabs/headerTabs';
 import { withStyles } from "@mui/styles";
+import SharedTable from '@/components/SharedTable';
+import projects from "../../../public/projects.json";
+import { dictionary, TranslatedWord } from '@/configs/i18next';
 
 const Page = () => {
 
@@ -43,7 +46,7 @@ const Page = () => {
     >
       <Container maxWidth="xl">
         <Typography variant="h3" sx={{ mb: 2 }} fontWeight={'bold'}>
-          {'Project name'}
+          {dictionary(title as TranslatedWord)}
         </Typography>
         <Grid container spacing={2} justifyContent={'space-between'}>
           <Grid item xs={12} md={6} >
@@ -56,7 +59,10 @@ const Page = () => {
           </Grid>
           <Grid item xs={12}>
             <Card elevation={0}>
-              <CustomTabPanel value={value} index={0}> two</CustomTabPanel>
+              <CustomTabPanel value={value} index={0}>
+
+                <SharedTable endpoint="http://localhost:3000/projects.json" fakeData={projects} />
+              </CustomTabPanel>
               <CustomTabPanel value={value} index={1}>
 
                 <CardContent sx={{ p: 1 }}>
@@ -75,19 +81,19 @@ const Page = () => {
                   </Typography>
                   <Grid container spacing={1} justifyContent={'space-between'}>
                     <Grid item xs={12} md={4} >
-                    <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
-                    Name: Jone Doe
-                  </Typography>
+                      <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
+                        Name: Jone Doe
+                      </Typography>
                     </Grid>
                     <Grid item xs={12} md={4} >
-                    <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
-                    Email: johndoel@gmail.com
-                  </Typography>
+                      <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
+                        Email: johndoel@gmail.com
+                      </Typography>
                     </Grid>
                     <Grid item xs={12} md={4} >
-                    <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
-                    Mobile Number: 9876543210
-                  </Typography>
+                      <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
+                        Mobile Number: 9876543210
+                      </Typography>
                     </Grid>
                   </Grid>
                   <Typography variant="body1" fontWeight="bold" color="primary" sx={{ mb: 1 }}>
@@ -95,19 +101,19 @@ const Page = () => {
                   </Typography>
                   <Grid container spacing={0} justifyContent={'space-between'}>
                     <Grid item xs={12} md={4} >
-                    <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
-                    Name: Jone Doe
-                  </Typography>
+                      <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
+                        Name: Jone Doe
+                      </Typography>
                     </Grid>
                     <Grid item xs={12} md={4} >
-                    <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
-                    Email: johndoel@gmail.com
-                  </Typography>
+                      <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
+                        Email: johndoel@gmail.com
+                      </Typography>
                     </Grid>
                     <Grid item xs={12} md={4} >
-                    <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
-                    Mobile Number: 9876543210
-                  </Typography>
+                      <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
+                        Mobile Number: 9876543210
+                      </Typography>
                     </Grid>
                   </Grid>
                   <Typography variant="h6" fontWeight="bold" color="primary" sx={{ p: 1, mb: 3, borderRadius: 1, bgcolor: "primary.lightest" }}>Web</Typography>
@@ -115,31 +121,31 @@ const Page = () => {
                     What is preferred testing time ?
                   </Typography>
                   <Typography variant="h6" fontWeight="light" sx={{ mb: 4 }}>
-                   Vulnerability assessment
+                    Vulnerability assessment
                   </Typography>
                   <Typography variant="h6" fontWeight="bold" sx={{ mb: 1 }}>
                     ow many web applications you want to assess ?
                   </Typography>
                   <Grid container spacing={0} justifyContent={'space-start'}>
                     <Grid item xs={12} md={4} >
-                    <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
-                   Internal applications: 7
-                  </Typography>
+                      <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
+                        Internal applications: 7
+                      </Typography>
                     </Grid>
                     <Grid item xs={12} md={4} >
-                    <Typography variant="h6" fontWeight="light" sx={{ mb: 4 }}>
-                    External applications: 4
-                  </Typography>
+                      <Typography variant="h6" fontWeight="light" sx={{ mb: 4 }}>
+                        External applications: 4
+                      </Typography>
                     </Grid>
                     <Typography variant="h6" fontWeight="bold" sx={{ mb: 1 }}>
-                   List the scoped applications: (i.e.domain.com)
-                  </Typography>
-                  <Typography variant="h6" fontWeight="light" sx={{ mb: 4 }}>
-                  Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. 
-                  </Typography>
-                  <Typography variant="h6" fontWeight="bold" sx={{ mb: 1 }}>
-                   4 Is verification required to assess whether the reported Vulnerability have been fixed ?
-                  </Typography>
+                      List the scoped applications: (i.e.domain.com)
+                    </Typography>
+                    <Typography variant="h6" fontWeight="light" sx={{ mb: 4 }}>
+                      Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.
+                    </Typography>
+                    <Typography variant="h6" fontWeight="bold" sx={{ mb: 1 }}>
+                      4 Is verification required to assess whether the reported Vulnerability have been fixed ?
+                    </Typography>
                   </Grid>
                 </CardContent>
               </CustomTabPanel>

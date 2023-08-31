@@ -9,6 +9,7 @@ import {
   Box,
   Button,
   FormHelperText,
+  Grid,
   Link,
   Stack,
   Tab,
@@ -46,7 +47,7 @@ const Page = () => {
       try {
         await auth?.signIn(values.username, values.password);
         router.push('/');
-      } catch (err:any) {
+      } catch (err: any) {
         helpers.setStatus({ success: false });
         helpers.setErrors({ submit: err.message });
         helpers.setSubmitting(false);
@@ -73,7 +74,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          {t("Login")} | Pronto
+          {t("Login")} | Symline
         </title>
       </Head>
       <Box
@@ -82,6 +83,7 @@ const Page = () => {
           flex: '1 1 auto',
           alignItems: 'center',
           display: 'flex',
+          direction: "ltr",
           justifyContent: 'center'
         }}
       >
@@ -94,57 +96,75 @@ const Page = () => {
           }}
         >
           <div>
-            <Stack
-              spacing={1}
-              sx={{ mb: 3 }}
-            >
-              <Typography variant="h4">
-                {t('Login')}
-              </Typography>
-            </Stack>
-            <Tabs
-              onChange={handleMethodChange}
-              sx={{ mb: 3 }}
-              value={method}
-            >
-              <Tab
-                label={t('username')}
-                value="username"
-              />
-              {/* <Tab
-                label="Phone Number"
-                value="phoneNumber"
-              /> */}
-            </Tabs>
+
+
+
             {method === 'username' && (
               <form
                 noValidate
                 onSubmit={formik.handleSubmit}
               >
-                <Stack spacing={3}>
-                  <TextField
-                    error={!!(formik.touched.username && formik.errors.username)}
-                    fullWidth
-                    helperText={formik.touched.username && formik.errors.username}
-                    label={t('username')}
-                    name="username"
-                    onBlur={formik.handleBlur}
-                    onChange={formik.handleChange}
-                    type="username"
-                    value={formik.values.username}
-                  />
-                  <TextField
-                    error={!!(formik.touched.password && formik.errors.password)}
-                    fullWidth
-                    helperText={formik.touched.password && formik.errors.password}
-                    label={t('password')}
-                    name="password"
-                    onBlur={formik.handleBlur}
-                    onChange={formik.handleChange}
-                    type="password"
-                    value={formik.values.password}
-                  />
-                </Stack>
+                <Grid container spacing={3} justifyContent="center" alignItems="center">
+
+                  <Grid item xs={9} >
+                    <Stack
+                      spacing={1}
+                      sx={{ mb: 3 }}
+                    >
+                      <Typography variant="h4">
+                        {t('Login')}
+                      </Typography>
+                    </Stack>
+                    <TextField
+                      error={!!(formik.touched.username && formik.errors.username)}
+                      fullWidth
+                      helperText={formik.touched.username && formik.errors.username}
+                      placeholder={`${t('username')}`}
+                      name="username"
+                      sx={{ mb: 3 }}
+                      onBlur={formik.handleBlur}
+                      onChange={formik.handleChange}
+                      type="username"
+                      value={formik.values.username}
+                    />
+                    <TextField
+                      error={!!(formik.touched.password && formik.errors.password)}
+                      fullWidth
+                      helperText={formik.touched.password && formik.errors.password}
+                      placeholder={`${t('password')}`}
+                      name="password"
+                      onBlur={formik.handleBlur}
+                      onChange={formik.handleChange}
+                      type="password"
+                      value={formik.values.password}
+                    />
+                    <Typography
+                      sx={{
+                        mx: 2,
+                        mt: 2,
+
+                        fontSize: 14,
+                        fontWeight: 700,
+                      }}
+                      color={"primary"}
+                    >
+                      <NextLink href="/auth/login" style={{ textDecoration: "none" }}>
+                        {t("Forgot password ?")}
+                      </NextLink>
+                    </Typography>
+                    <Button
+                      fullWidth
+                      size="large"
+                      color="warning"
+                      sx={{ mt: 3, borderRadius: '50px' }}
+                      type="submit"
+                      variant="contained"
+                    >
+                      {t('continue')}
+                    </Button>
+                  </Grid>
+                </Grid>
+
                 {formik.errors.submit && (
                   <Typography
                     color="error"
@@ -154,15 +174,7 @@ const Page = () => {
                     {formik.errors.submit}
                   </Typography>
                 )}
-                <Button
-                  fullWidth
-                  size="large"
-                  sx={{ mt: 3 }}
-                  type="submit"
-                  variant="contained"
-                >
-                  {t('continue')}
-                </Button> 
+
               </form>
             )}
           </div>
