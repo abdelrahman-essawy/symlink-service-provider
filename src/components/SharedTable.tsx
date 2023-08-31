@@ -47,6 +47,7 @@ const SharedTable = <T extends Record<string, any>>({
   renderColumns,
   columnVisibility,
   actions,
+  fakeData,
 }: {
   endpoint: string;
   renderColumns?: MRT_ColumnDef<T>["accessorKey"][];
@@ -54,6 +55,7 @@ const SharedTable = <T extends Record<string, any>>({
     Record<NonNullable<MRT_ColumnDef<T>["accessorKey"]>, boolean>
   >[];
   actions?: Partial<MRT_ColumnDef<T>>[];
+  fakeData: any;
 }) => {
   const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>(
     []
@@ -83,7 +85,8 @@ const SharedTable = <T extends Record<string, any>>({
       // fetchURL.searchParams.set("sorting", JSON.stringify(sorting ?? []));
       // branchId && fetchURL.searchParams.set("branch_id", branchId);
 
-      return (await axios.get(fetchURL.toString())).data as any;
+      // return (await axios.get(fetchURL.toString())).data as any;
+      return fakeData;
     },
     {
       keepPreviousData: true,

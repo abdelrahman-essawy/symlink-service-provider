@@ -13,6 +13,7 @@ import MUIRichTextEditor, { TMUIRichTextEditorRef } from 'mui-rte-fixed';
 import HeaderTabs from '@/components/_used-symline/tabs/headerTabs';
 import { withStyles } from "@mui/styles";
 import SharedTable from '@/components/SharedTable';
+import projects from "../../../public/projects.json";
 
 const Page = () => {
 
@@ -59,7 +60,7 @@ const Page = () => {
             <Card elevation={0}>
               <CustomTabPanel value={value} index={0}>
 
-                <SharedTable endpoint="http://localhost:3000/projects.json" />
+                <SharedTable endpoint="http://localhost:3000/projects.json" fakeData={projects} />
               </CustomTabPanel>
               <CustomTabPanel value={value} index={1}>
 
