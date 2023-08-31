@@ -151,7 +151,7 @@ const SharedTable = <T extends Record<string, any>>({
               color: "primary.main",
               fontWeight: "bold",
               bgcolor: "#f0f2fe",
-              padding: 2,
+              padding: 2.5,
               "&:first-child": {
                 borderRadius: 1.5,
                 borderTopRightRadius: 0,
@@ -338,7 +338,11 @@ const sharedTableColumns: MRT_ColumnDef<any>[] = [
     id: "progress",
     accessorKey: "progress",
     header: dictionary("Progress"),
-    Cell: ({ row }) => <Chip label={row.original.progress} color={"success"} />,
+    Cell: ({ row }) => <Chip label={row.original.progress} sx={{
+      bgcolor: "#e6f4ea",
+      color: "#1e7e34",
+      fontWeight: "bold"
+    }} />,
   },
 ];
 
