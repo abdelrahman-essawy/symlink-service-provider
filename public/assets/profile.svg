@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="49px" height="49px" viewBox="0 0 49 49" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>profile </title>
+    <g id="dasboard---service-provider-(expert)" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Project-(Discussion)" transform="translate(-386.5, -587.5)" fill-rule="nonzero">
+            <g id="Contact" transform="translate(352, 294)">
+                <g id="profile-" transform="translate(59, 318) scale(-1, 1) translate(-59, -318)translate(35, 294)">
+                    <circle id="Profile" stroke="#E8E8E8" fill="#EDEDED" cx="24" cy="24" r="24"></circle>
+                    <g id="Group" transform="translate(17, 15)" fill="#878787">
+                        <path d="M3.50903,4 C3.50903,1.794 5.30303,0 7.509,0 C9.715,0 11.509,1.794 11.509,4 C11.509,6.206 9.715,8 7.509,8 C5.30303,8 3.50903,6.206 3.50903,4 Z M9.5,10 L5.5,10 C1.44,10 0,12.973 0,15.519 C0,17.796 1.21105,19 3.50305,19 L11.4969,19 C13.7889,19 15,17.796 15,15.519 C15,12.973 13.56,10 9.5,10 Z" id="Shape"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

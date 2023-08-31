@@ -13,7 +13,6 @@ import {
   useMediaQuery
 } from '@mui/material';
 import React from 'react';
-import Logo from '../../assets/logo.png';
 import { Scrollbar } from '../../components/scrollbar';
 import { items } from './config';
 import { SideNavItem } from './side-nav-item';
@@ -23,7 +22,7 @@ export const SideNav = (props: { open: any; onClose: any; }) => {
   const { open, onClose } = props;
   const pathname = usePathname();
   const lgUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
-  
+
 
   const content = (
     <Scrollbar
@@ -34,7 +33,7 @@ export const SideNav = (props: { open: any; onClose: any; }) => {
         },
         '& .simplebar-scrollbar:before': {
           background: 'grey.500'
-        }
+        },
       }}
     >
       <Box
@@ -52,47 +51,14 @@ export const SideNav = (props: { open: any; onClose: any; }) => {
               display: 'inline-flex',
               height: 100,
               width: '100%',
-              justifyContent:"center",
-              
+              justifyContent: "center",
+
             }}
           >
-            <img src={Logo.src} className="App-logo" alt="logo" max-width={100} />
-          </Box>
-          <Box
-            sx={{
-              alignItems: 'center',
-              backgroundColor: 'rgba(255, 255, 255, 0.04)',
-              borderRadius: 1,
-              cursor: 'pointer',
-              display: 'flex',
-              justifyContent: 'space-between',
-              mt: 2,
-              p: '12px'
-            }}
-          >
-            <div>
-              <Typography
-                color="inherit"
-                variant="subtitle1"
-              >
-                Pronto
-              </Typography>
-              <Typography
-                color="grey.200"
-                variant="body2"
-              >
-                Production
-              </Typography>
-            </div>
-            <SvgIcon
-              fontSize="small"
-              sx={{ color: 'grey.200' }}
-            >
-              <ChevronUpDownIcon />
-            </SvgIcon>
+            <img src={"/assets/Logo_2.svg"} className="App-logo" alt="logo" max-width={100} />
           </Box>
         </Box>
-        <Divider sx={{ borderColor: 'grey.700' }} />
+        {/* <Divider sx={{ borderColor: 'grey.700' }} /> */}
         <Box
           component="nav"
           sx={{
@@ -124,7 +90,7 @@ export const SideNav = (props: { open: any; onClose: any; }) => {
                   title={item.title}
                   items={item.children}
                 />
-                );
+              );
             })}
           </Stack>
         </Box>
@@ -139,9 +105,10 @@ export const SideNav = (props: { open: any; onClose: any; }) => {
         open
         PaperProps={{
           sx: {
-            backgroundColor: 'grey.800',
-            color: 'common.white',
-            width: 280
+            backgroundColor: 'white',
+            color: 'black',
+            width: 280,
+            border: 'none',
           }
         }}
         variant="permanent"
@@ -158,8 +125,8 @@ export const SideNav = (props: { open: any; onClose: any; }) => {
       open={open}
       PaperProps={{
         sx: {
-          backgroundColor: 'grey.800',
-          color: 'common.white',
+          backgroundColor: 'white',
+          color: 'black',
           width: 280
         }
       }}

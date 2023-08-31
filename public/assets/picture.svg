@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="72px" height="72px" viewBox="0 0 72 72" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>picture</title>
+    <defs>
+        <filter x="-80.6%" y="-69.4%" width="261.1%" height="261.1%" filterUnits="objectBoundingBox" id="filter-1">
+            <feOffset dx="0" dy="4" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="9" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.254739583   0 0 0 0 0.349438101   0 0 0 0 0.837499976  0 0 0 0.25 0" type="matrix" in="shadowBlurOuter1" result="shadowMatrixOuter1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+    </defs>
+    <g id="dasboard---service-provider-(expert)" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Profile" transform="translate(-884, -389)">
+            <g id="Contact" transform="translate(352, 220)">
+                <g id="Edit-avt" transform="translate(449, 67)">
+                    <g id="picture" filter="url(#filter-1)" transform="translate(101, 116)">
+                        <rect id="Frame-Background" fill="#7288FA" fill-rule="nonzero" x="0" y="0" width="36" height="36" rx="18"></rect>
+                        <g id="Subtract" transform="translate(10.6664, 11.5828)" fill="#FFFFFF">
+                            <path d="M9.11588561,6.9669275 C9.11588561,5.98201913 8.31745992,5.18359349 7.33255212,5.18359349 C6.34764431,5.18359349 5.54921862,5.98201913 5.54921862,6.9669275 C5.54921862,7.95183587 6.34764431,8.75026151 7.33255212,8.75026151 C8.31745992,8.75026151 9.11588561,7.95183587 9.11588561,6.9669275 Z" fill-rule="nonzero"></path>
+                            <path d="M2.9013984,2.56666743 C1.29900045,2.56666743 0,3.86566811 0,5.4680669 L0,9.16666939 C0,11.1917134 1.64162274,12.8333378 3.66666675,12.8333378 L11,12.8333378 C13.025045,12.8333378 14.666667,11.1917134 14.666667,9.16666939 L14.666667,5.4680669 C14.666667,3.86566811 13.3676672,2.56666743 11.7652692,2.56666743 C11.3010129,2.56666743 10.8814255,2.28999333 10.6985463,1.86327416 L10.4714479,1.33337777 C10.1247745,0.524473164 9.32939041,0 8.44932892,0 L6.2173387,0 C5.33727657,0 4.54189215,0.524473959 4.19521881,1.33337873 L3.96812098,1.86327464 C3.78524121,2.28999365 3.36565502,2.56666743 2.9013984,2.56666743 Z M7.33255212,4.3502602 C8.77769744,4.3502602 9.94921897,5.52178228 9.94921897,6.9669275 C9.94921897,8.41207272 8.77769744,9.5835948 7.33255212,9.5835948 C5.88740679,9.5835948 4.71588526,8.41207272 4.71588526,6.9669275 C4.71588526,5.52178228 5.88740679,4.3502602 7.33255212,4.3502602 Z"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

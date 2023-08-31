@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16.916666px" height="17.2983398px" viewBox="0 0 16.916666 17.2983398" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>search</title>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="Search/Light/Default" transform="translate(-17.75, -17.75)" fill-rule="nonzero" stroke="#333F4E" stroke-width="1.5">
+            <g id="Icon-+-Text" transform="translate(18.5, 16)">
+                <g id="Search" transform="translate(0, 2.5)">
+                    <ellipse id="Ellipse" cx="6.66666651" cy="6.66666698" rx="6.66666651" ry="6.66666698"></ellipse>
+                    <line x1="11.25" y1="11.6316268" x2="15.416666" y2="15.7983398" id="Line"></line>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
