@@ -26,18 +26,18 @@ import React from "react";
 import { truncate } from "fs";
 
 export const items = [
-  {
-    external: false,
-    disabled: false,
-    menu: false,
-    title: "Overview",
-    path: "/",
-    icon: (
-      <SvgIcon fontSize="small">
-        <HomeIcon />
-      </SvgIcon>
-    ),
-  },
+  // {
+  //   external: false,
+  //   disabled: false,
+  //   menu: false,
+  //   title: "Overview",
+  //   path: "/",
+  //   icon: (
+  //     <SvgIcon fontSize="small">
+  //       <HomeIcon />
+  //     </SvgIcon>
+  //   ),
+  // },
   { // used in symline
     external: false,
     disabled: false,
