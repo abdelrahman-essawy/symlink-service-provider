@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import axiosClient from '../configs/axios-client'
 
+
 type UserType = {
   id: string,
   username: string,
@@ -101,7 +102,7 @@ export const AuthProvider = ({ children }: any) => {
 
     if (isAuthenticated) {
       const user: UserType = state.user;
-        console.log(state.user);
+      console.log(state.user);
       dispatch({
         type: HANDLERS.INITIALIZE,
         payload: user
@@ -123,15 +124,15 @@ export const AuthProvider = ({ children }: any) => {
   );
 
   const signIn = async (username: string, password: string) => {
-    const user: {id:string, avatar: string, name: string, username:string} = {
+    const user: { id: string, avatar: string, name: string, username: string } = {
       id: '',
       avatar: '',
       name: '',
       username: ''
-      };
+    };
     const res = await axiosClient.post('/auth/signin', { username, password });
 
-    if(res.status == 200){
+    if (res.status == 200) {
       const { data } = res.data;
       window.sessionStorage.setItem('authenticated', 'true');
       window.sessionStorage.setItem('token', data.access_token);
