@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="15px" viewBox="0 0 18 15" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>email</title>
+    <g id="dasboard---client-(company)" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="expert-details" transform="translate(-553, -332)" fill="#25314C" fill-rule="nonzero">
+            <g id="Contact" transform="translate(352, 220)">
+                <g id="Edit-avt" transform="translate(26, 15)">
+                    <g id="Group-4" transform="translate(175, 94)">
+                        <g id="email" transform="translate(0, 3)">
+                            <path d="M15,0 L3,0 C1,0 0,1 0,3 L0,12 C0,14 1,15 3,15 L15,15 C17,15 18,14 18,12 L18,3 C18,1 17,0 15,0 Z M14.9409,4.606 L10.0291,8.178 C9.7211,8.402 9.36,8.514 9,8.514 C8.64,8.514 8.2779,8.402 7.9709,8.179 L3.05908,4.606 C2.72408,4.363 2.65004,3.893 2.89404,3.558 C3.13704,3.224 3.60389,3.14801 3.94189,3.39301 L8.854,6.965 C8.942,7.028 9.059,7.029 9.147,6.965 L14.0591,3.39301 C14.3961,3.14801 14.8639,3.224 15.1069,3.558 C15.3509,3.894 15.2759,4.363 14.9409,4.606 Z" id="Shape"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

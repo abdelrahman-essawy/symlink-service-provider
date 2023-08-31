@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="45px" height="45px" viewBox="0 0 45 45" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>email_2</title>
+    <g id="dasboard---client-(company)" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Contact-us" transform="translate(-729, -260)" fill-rule="nonzero">
+            <g id="Group-2" transform="translate(708, 243)">
+                <g id="email_2" transform="translate(21, 17)">
+                    <circle id="Ellipse" fill="#7288FA" cx="22.5" cy="22.5" r="22.5"></circle>
+                    <g id="Group" transform="translate(14, 15)" fill="#FFFFFF">
+                        <path d="M15,0 L3,0 C1,0 0,1 0,3 L0,12 C0,14 1,15 3,15 L15,15 C17,15 18,14 18,12 L18,3 C18,1 17,0 15,0 Z M14.9409,4.606 L10.0291,8.178 C9.7211,8.402 9.36,8.514 9,8.514 C8.64,8.514 8.2779,8.402 7.9709,8.179 L3.05908,4.606 C2.72408,4.363 2.65004,3.893 2.89404,3.558 C3.13704,3.224 3.60389,3.14801 3.94189,3.39301 L8.854,6.965 C8.942,7.028 9.059,7.029 9.147,6.965 L14.0591,3.39301 C14.3961,3.14801 14.8639,3.224 15.1069,3.558 C15.3509,3.894 15.2759,4.363 14.9409,4.606 Z" id="Shape"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

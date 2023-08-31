@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="103.5px" height="103.5px" viewBox="0 0 103.5 103.5" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>back</title>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="46" height="46" rx="23"></rect>
+        <filter x="-104.2%" y="-83.3%" width="308.3%" height="308.3%" filterUnits="objectBoundingBox" id="filter-2">
+            <feOffset dx="0" dy="9.58333302" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="14.375" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.260677099   0 0 0 0 0.279931635   0 0 0 0 0.379166663  0 0 0 0.100000001 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="dasboard---client-(company)" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Project-(quiz)" transform="translate(-7.25, -130.8333)" fill-rule="nonzero">
+            <g id="back" transform="translate(36, 150)">
+                <g id="Rectangle">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                    <use fill="#FFFFFF" xlink:href="#path-1"></use>
+                </g>
+                <g id="Icons-/-Line-/-Arrow-left" transform="translate(15.533, 17.6674)" stroke="#333F4E" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+                    <g id="Arrow-left" transform="translate(0, 0)">
+                        <polyline id="Vector" points="5.3323258 0 0 5.33232622 5.3323258 10.6646516"></polyline>
+                        <line x1="14.9340269" y1="5.33260059" x2="0.149340336" y2="5.33260059" id="Vector"></line>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
