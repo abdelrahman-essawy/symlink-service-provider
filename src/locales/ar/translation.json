@@ -169,7 +169,7 @@
   "Account Balance": "رصيد الحساب",
   "Drivers Balances": "رصيد السائقين",
   "// ////next lines used in symline//// ": "/////next lines used in symline/////////// ",
-  "Projects": "مشروعات",
+  "Projects": "المشروعات",
   "Full Name": "الاسم",
   "Location": "الموقع",
   "Phone Number": "رقم الهاتف",
@@ -188,5 +188,6 @@
     "High Standards in design": "معايير عالية في التصميم",
     "Most anticipated techniques": "التقنيات الأكثر شهرة",
     "Even rated customers": "حتى العملاء المُقيّمين"
-  }
+  },
+  "Bids": "العروض"
 }

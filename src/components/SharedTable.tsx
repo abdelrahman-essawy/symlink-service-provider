@@ -22,6 +22,7 @@ import {
   Button,
   Chip,
   IconButton,
+  MenuItem,
   Stack,
   SvgIcon,
   Switch,
@@ -48,6 +49,7 @@ const SharedTable = <T extends Record<string, any>>({
   columnVisibility,
   actions,
   fakeData,
+  showActions,
 }: {
   endpoint: string;
   renderColumns?: MRT_ColumnDef<T>["accessorKey"][];
@@ -56,6 +58,7 @@ const SharedTable = <T extends Record<string, any>>({
   >[];
   actions?: Partial<MRT_ColumnDef<T>>[];
   fakeData: any;
+  showActions?: boolean;
 }) => {
   const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>(
     []
@@ -138,6 +141,23 @@ const SharedTable = <T extends Record<string, any>>({
   return (
     <>
       <MaterialReactTable
+
+        enableRowActions={showActions}
+        positionActionsColumn="first"
+        renderRowActionMenuItems={({ row, table }) => [
+          <MenuItem key="edit">
+          </MenuItem>,
+
+          <MenuItem key="delete">
+          </MenuItem>,
+        ]}
+        // onEditingRowSave={handleSaveRowEdits}
+        // onEditingRowCancel={handleCancelRowEdits}
+        localization={{
+          actions: dictionary("Actions"),
+          // rowsPerPage: dictionary("Rows per page"),
+        }}
+
         muiTablePaperProps={{
           sx: {
             boxShadow: "none",
@@ -241,6 +261,7 @@ const SharedTable = <T extends Record<string, any>>({
             </Box>
           </>
         )}
+        actions={actions}
       />
     </>
   );

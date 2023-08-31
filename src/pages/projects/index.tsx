@@ -14,6 +14,7 @@ import HeaderTabs from '@/components/_used-symline/tabs/headerTabs';
 import { withStyles } from "@mui/styles";
 import SharedTable from '@/components/SharedTable';
 import projects from "../../../public/projects.json";
+import { dictionary, TranslatedWord } from '@/configs/i18next';
 
 const Page = () => {
 
@@ -45,7 +46,7 @@ const Page = () => {
     >
       <Container maxWidth="xl">
         <Typography variant="h3" sx={{ mb: 2 }} fontWeight={'bold'}>
-          {'Project name'}
+          {dictionary(title as TranslatedWord)}
         </Typography>
         <Grid container spacing={2} justifyContent={'space-between'}>
           <Grid item xs={12} md={6} >
