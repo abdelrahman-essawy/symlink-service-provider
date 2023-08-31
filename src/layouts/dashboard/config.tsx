@@ -17,7 +17,7 @@ import BuildingOfficeIcon from "@heroicons/react/24/solid/BuildingOfficeIcon";
 import CurrencyDollarIcon from "@heroicons/react/24/solid/CurrencyDollarIcon";
 import BanknotesIcon from "@heroicons/react/24/solid/BanknotesIcon";
 import NoCrashIcon from "@mui/icons-material/NoCrash";
-
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import CarCrashIcon from "@mui/icons-material/CarCrash";
 import CreditCardIcon from "@heroicons/react/24/solid/CreditCardIcon";
 
@@ -38,7 +38,7 @@ export const items = [
       </SvgIcon>
     ),
   },
-  {
+  { // used in symline
     external: false,
     disabled: false,
     menu: false,
@@ -47,6 +47,18 @@ export const items = [
     icon: (
       <SvgIcon fontSize="small">
         <DashboardIcon />
+      </SvgIcon>
+    ),
+  },
+  { // used in symline
+    external: false,
+    disabled: false,
+    menu: false,
+    title: "Profile",
+    path: "/profile",
+    icon: (
+      <SvgIcon fontSize="small">
+        <AccountCircleIcon />
       </SvgIcon>
     ),
   },
