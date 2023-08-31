@@ -132,7 +132,7 @@ export function createComponents(palette: Palette): Components<Omit<Theme, 'comp
       styleOverrides: {
         input: {
           '&::placeholder': {
-            opacity: 1
+            opacity: .3
           }
         }
       }
@@ -153,9 +153,10 @@ export function createComponents(palette: Palette): Components<Omit<Theme, 'comp
       styleOverrides: {
         root: {
           backgroundColor: 'transparent',
-          borderRadius: 8,
+          borderRadius: '50px',
           borderStyle: 'solid',
           borderWidth: 1,
+          
           overflow: 'hidden',
           borderColor: palette.grey[200],
           transition: muiTheme.transitions.create([
@@ -186,6 +187,8 @@ export function createComponents(palette: Palette): Components<Omit<Theme, 'comp
         },
         input: {
           fontSize: 14,
+          padding: '14px !important',
+
           fontWeight: 500,
           lineHeight: '24px'
         }
