@@ -33,6 +33,14 @@ type colorType = {
   contrastText: string;
 };
 
+export const yellow = withAlphas({
+  lightest: '#FFF2D3',
+  light: '#FFE8B2',
+  main: '#FFD777',
+  dark: '#EEC86F',
+  darkest: '#D3B162',
+  contrastText: '#FFFFFF'
+});
 
 export const indigo = withAlphas({
   lightest: '#F5F7FF',
