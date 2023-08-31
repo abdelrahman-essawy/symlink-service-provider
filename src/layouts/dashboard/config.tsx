@@ -50,6 +50,19 @@ export const items = [
       </SvgIcon>
     ),
   },
+
+  { // used in symline
+    external: false,
+    disabled: false,
+    menu: false,
+    title: "Bids",
+    path: "/bids",
+    icon: (
+      <SvgIcon fontSize="small">
+        <AccountCircleIcon />
+      </SvgIcon>
+    ),
+  },
   { // used in symline
     external: false,
     disabled: false,
