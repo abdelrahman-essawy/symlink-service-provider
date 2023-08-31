@@ -54,14 +54,12 @@ export const AuthLayout = (props: { children: any }) => {
               backgroundRepeat: "repeat",
             }}
           /> */}
-          <Box display={{xs:'none', lg: 'flex'}}>
+          <Box display={{lg: 'flex'}}>
             <Grid container spacing={2} justifyContent="center" alignItems="center">
+              <Grid   xs={12}>
 
-            <Grid item xs={12}>
-
-
-              <img alt="" width="300px" src={Logo.src} />
               </Grid>
+              <img alt="" width="300px" src={Logo.src} />
             </Grid>
 
             
