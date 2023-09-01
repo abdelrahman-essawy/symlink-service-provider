@@ -1,9 +1,7 @@
 import Head from "next/head";
 import { Box, Card, Container, ListItemIcon, Typography } from "@mui/material";
-
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
 import React from "react";
 import { DashboardLayout } from "../../layouts/dashboard/layout";
 import { useTranslation } from "react-i18next";
@@ -44,7 +42,7 @@ const Page = () => {
           <Typography variant="h4">{t(title)}</Typography>
 
           <Card sx={{ mt: 3, p: 3 }}>
-            <Box sx={{ width: "100%", typography: "body1" }}>
+            <Box sx={{ width: "100%", typography: "body1", mb: 1 }}>
               <Typography variant="h5">{t("About_Page.Our Mission")}</Typography>
             </Box>
             <Box sx={{ width: "100%", typography: "body1" }}>
@@ -67,7 +65,9 @@ const Page = () => {
                         <CircleIcon />
                       </ListItemIcon>
                       <Box sx={{ width: "100%", typography: "body1" }}>
-                        <Typography variant="h6">{t(`About_Page.${data?.title}`)}</Typography>
+                        <Typography variant="h6" sx={{ mb: 1 }}>
+                          {t(`About_Page.${data?.title}`)}
+                        </Typography>
                         <Typography variant="body1">{t(`${data?.body}`)}</Typography>
                       </Box>
                     </ListItem>
