@@ -20,7 +20,7 @@ import NoCrashIcon from "@mui/icons-material/NoCrash";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import CarCrashIcon from "@mui/icons-material/CarCrash";
 import CreditCardIcon from "@heroicons/react/24/solid/CreditCardIcon";
-
+import SchoolIcon from '@mui/icons-material/School';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import React from "react";
 import { truncate } from "fs";
@@ -72,6 +72,18 @@ export const items = [
     icon: (
       <SvgIcon fontSize="small">
         <AccountCircleIcon />
+      </SvgIcon>
+    ),
+  },
+  { // used in symline
+    external: false,
+    disabled: false,
+    menu: false,
+    title: "Experience",
+    path: "/experience",
+    icon: (
+      <SvgIcon fontSize="small">
+        <SchoolIcon />
       </SvgIcon>
     ),
   },
