@@ -78,6 +78,18 @@ export const items = [
       </SvgIcon>
     ),
   },
+  { // used in symline
+    external: false,
+    disabled: false,
+    menu: false,
+    title: "Experience",
+    path: "/experience",
+    icon: (
+      <SvgIcon fontSize="small">
+        <SchoolIcon />
+      </SvgIcon>
+    ),
+  },
   // {
   //   external: false,
   //   disabled: false,
