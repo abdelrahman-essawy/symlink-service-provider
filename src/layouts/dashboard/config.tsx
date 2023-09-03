@@ -2,26 +2,26 @@ import ChartBarIcon from "@heroicons/react/24/solid/ChartBarIcon";
 import CogIcon from "@heroicons/react/24/solid/CogIcon";
 import UserIcon from "@heroicons/react/24/solid/UserIcon";
 import UsersIcon from "@heroicons/react/24/solid/UsersIcon";
-import NotificationAddIcon from '@mui/icons-material/NotificationAdd';
-import AddIcon from '@mui/icons-material/Add';
-import HomeWorkIcon from '@mui/icons-material/HomeWork';
+import NotificationAddIcon from "@mui/icons-material/NotificationAdd";
+import AddIcon from "@mui/icons-material/Add";
+import HomeWorkIcon from "@mui/icons-material/HomeWork";
 import { SvgIcon } from "@mui/material";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import MarkEmailUnreadIcon from "@mui/icons-material/MarkEmailUnread";
 import TaxiAlertIcon from "@mui/icons-material/TaxiAlert";
 import DriveEtaIcon from "@mui/icons-material/DriveEta";
-import PrivacyTipIcon from '@mui/icons-material/PrivacyTip';
-import HomeIcon from '@mui/icons-material/Home';
+import PrivacyTipIcon from "@mui/icons-material/PrivacyTip";
+import HomeIcon from "@mui/icons-material/Home";
 import BuildingOfficeIcon from "@heroicons/react/24/solid/BuildingOfficeIcon";
 import CurrencyDollarIcon from "@heroicons/react/24/solid/CurrencyDollarIcon";
 import BanknotesIcon from "@heroicons/react/24/solid/BanknotesIcon";
 import NoCrashIcon from "@mui/icons-material/NoCrash";
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import CarCrashIcon from "@mui/icons-material/CarCrash";
 import CreditCardIcon from "@heroicons/react/24/solid/CreditCardIcon";
 
-import DashboardIcon from '@mui/icons-material/Dashboard';
+import DashboardIcon from "@mui/icons-material/Dashboard";
 import React from "react";
 import { truncate } from "fs";
 
@@ -38,7 +38,8 @@ export const items = [
   //     </SvgIcon>
   //   ),
   // },
-  { // used in symline
+  {
+    // used in symline
     external: false,
     disabled: false,
     menu: false,
@@ -51,7 +52,8 @@ export const items = [
     ),
   },
 
-  { // used in symline
+  {
+    // used in symline
     external: false,
     disabled: false,
     menu: false,
@@ -63,7 +65,8 @@ export const items = [
       </SvgIcon>
     ),
   },
-  { // used in symline
+  {
+    // used in symline
     external: false,
     disabled: false,
     menu: false,
@@ -130,7 +133,7 @@ export const items = [
   //   menu: false,
   //   title: "Users management",
   //   children: [
-  //     
+  //
   //     {
   //       external: false,
   //       disabled: false,
@@ -291,22 +294,22 @@ export const items = [
         path: "/settings/about",
         icon: (
           <SvgIcon fontSize="small">
-            <CogIcon />
+            <AccountCircleIcon />
           </SvgIcon>
         ),
       },
-      {
-        external: false,
-        disabled: false,
-        menu: false,
-        title: "Social Links",
-        path: "/settings/social-links",
-        icon: (
-          <SvgIcon fontSize="small">
-            <CogIcon />
-          </SvgIcon>
-        ),
-      },
+      // {
+      //   external: false,
+      //   disabled: false,
+      //   menu: false,
+      //   title: "Social Links",
+      //   path: "/settings/social-links",
+      //   icon: (
+      //     <SvgIcon fontSize="small">
+      //       <CogIcon />
+      //     </SvgIcon>
+      //   ),
+      // },
       {
         external: false,
         disabled: false,
@@ -315,7 +318,19 @@ export const items = [
         path: "/settings/terms-and-conditions",
         icon: (
           <SvgIcon fontSize="small">
-            <PrivacyTipIcon />
+            <AccountCircleIcon />
+          </SvgIcon>
+        ),
+      },
+      {
+        external: false,
+        disabled: false,
+        menu: false,
+        title: "Contact us",
+        path: "/settings/contact-us",
+        icon: (
+          <SvgIcon fontSize="small">
+            <AccountCircleIcon />
           </SvgIcon>
         ),
       },
