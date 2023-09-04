@@ -1,7 +1,6 @@
 import Head from "next/head";
 import { Box, Container, Typography, Grid, Avatar, TextField, Button } from "@mui/material";
 import React from "react";
-import Image from "next/image";
 import { DashboardLayout } from "../../layouts/dashboard/layout";
 import { useTranslation } from "react-i18next";
 import { Card } from "@mui/material";
@@ -9,6 +8,8 @@ import PhoneIcon from "@mui/icons-material/Phone";
 import StyledTextarea from "../../components/StyledTextArea";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import EmailIcon from "@mui/icons-material/Email";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
 
 const DATA = {
   phone: "123456789",
@@ -54,12 +55,12 @@ const Page = () => {
             </Grid>
             <Grid item xs={12} md={4}>
               <Card sx={{ p: 1, mt: 2 }}>
-                <ContactCards label={"Email"} data={DATA.email} icon={PhoneIcon} />
+                <ContactCards label={"Email"} data={DATA.email} icon={EmailIcon} />
               </Card>
             </Grid>
             <Grid item xs={12} md={4}>
               <Card sx={{ p: 1, mt: 2 }}>
-                <ContactCards label={"Address"} data={DATA.address} icon={PhoneIcon} />
+                <ContactCards label={"Address"} data={DATA.address} icon={LocationOnIcon} />
               </Card>
             </Grid>
           </Grid>
@@ -113,7 +114,7 @@ const Page = () => {
                     <Button
                       size="large"
                       color="warning"
-                      sx={{ mt: 3, borderRadius: "50px", alignItems: "flex-end" }}
+                      sx={{ mt: 3, borderRadius: "50px" }}
                       type="submit"
                       variant="contained"
                     >
