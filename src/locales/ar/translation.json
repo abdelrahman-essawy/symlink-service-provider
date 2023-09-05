@@ -209,5 +209,8 @@
   "Deactivate account": "تعطيل الحساب",
   "You Are Deactivating Your Account": "انت تعطيل حسابك",
   "For extra security, this requires you to confirm your email or phone number when you reset your sign in password. Learn more": "لأجل الأمان الإضافي، يتطلب منك تأكيد عنوان بريدك الإلكتروني أو رقم هاتفك عند إعادة تعيين كلمة مرور تسجيل الدخول. اعرف المزيد...",
-  "Confirm Account Deactivation": "تأكيد تعطيل الحساب"
+  "Confirm Account Deactivation": "تأكيد تعطيل الحساب",
+  "Support": "الدعم",
+  "Create ticket": "انشاء تذكرة تقنية",
+  "Privacy Policy": "سياسة الخصوصية"
 }
