@@ -8,6 +8,7 @@ import ListItem from "@mui/material/ListItem";
 import Divider from "@mui/material/Divider";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import SendIcon from "@mui/icons-material/Send";
+import SupportModal from "@/components/modals/SupportModal";
 
 const DATA = [
   {
@@ -33,9 +34,15 @@ const DATA = [
 ];
 
 const Page = () => {
+  // ----------- hooks ----------------
+  const [open, setOpen] = React.useState(false);
   const title = `Support`;
   const { t } = useTranslation();
   const [active, setActive] = useState<number | null>(DATA[0].id);
+
+  // ----------------- functions ---------------
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   return (
     <>
@@ -65,6 +72,7 @@ const Page = () => {
               sx={{ mt: 3, borderRadius: "50px", px: 10 }}
               type="submit"
               variant="contained"
+              onClick={handleOpen}
             >
               {t("Create ticket")}
             </Button>
@@ -178,6 +186,7 @@ const Page = () => {
           </Card>
         </Container>
       </Box>
+      <SupportModal open={open} handleClose={handleClose} />
     </>
   );
 };
