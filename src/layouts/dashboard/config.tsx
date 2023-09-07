@@ -23,6 +23,7 @@ import CreditCardIcon from "@heroicons/react/24/solid/CreditCardIcon";
 import SchoolIcon from "@mui/icons-material/School";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import VideocamIcon from "@mui/icons-material/Videocam";
+import FindInPageIcon from "@mui/icons-material/FindInPage";
 import React from "react";
 import { truncate } from "fs";
 
@@ -76,6 +77,19 @@ export const items = [
     icon: (
       <SvgIcon fontSize="small">
         <AccountCircleIcon />
+      </SvgIcon>
+    ),
+  },
+  {
+    // used in symline
+    external: false,
+    disabled: false,
+    menu: false,
+    title: "Educational info",
+    path: "/educational-info",
+    icon: (
+      <SvgIcon fontSize="small">
+        <FindInPageIcon />
       </SvgIcon>
     ),
   },
