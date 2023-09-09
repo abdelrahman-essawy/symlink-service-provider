@@ -3,27 +3,29 @@ import { Box, Card, Container, createTheme, Stack, Tab, Grid, CardHeader, Tabs, 
 import React, { useState, useRef } from 'react';
 import { DashboardLayout } from '../../layouts/dashboard/layout';
 import { useTranslation } from 'react-i18next';
-import { TabPanel } from '@mui/lab';
-import { Theme } from '@mui/material';
 import CustomTabPanel from '@/components/_used-symline/tabs/tabsPanel';
-import TabContext from '@mui/lab/TabContext';
-import TabList from '@mui/lab/TabList';
-import { useAbout } from '../../hooks/use-about';
-import MUIRichTextEditor, { TMUIRichTextEditorRef } from 'mui-rte-fixed';
-import HeaderTabs from '@/components/_used-symline/tabs/headerTabs';
-import { withStyles } from "@mui/styles";
-import SharedTable from '@/components/SharedTable';
-import projects from "../../../public/projects.json";
 import { dictionary, TranslatedWord } from '@/configs/i18next';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import ExperienceDialog from '@/components/_used-symline/dialogs/experience-dialog';
 const Page = () => {
 
   const { i18n } = useTranslation();
   const title = 'Experience';
   const { t } = useTranslation();
-  const [value, setValue] = React.useState(0);
+  const [open, setOpen] = useState(false);
+  const [dialogName,setDialogName] = useState('');
+  const [value, setValue] = useState(0);
+  const handleClose = () => setOpen(false);
+  const handleOpenAdd = () => {
+    setDialogName('Add experience');
+    setOpen(true);
+  };
+  const handleOpenEdit = () => {
+    setDialogName('Edit experience');
+    setOpen(true);
 
+  };
   const handletabs = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -53,14 +55,12 @@ const Page = () => {
           <Grid item xs={12} md={6} >
           </Grid>
           <Grid item xs={12} md={3} sx={{ display: 'flex', justifyContent: 'end' }}>
-            <Button variant='contained' color="warning" sx={{ borderRadius: 8 }}>
+            <Button onClick={handleOpenAdd} variant='contained' color="warning" sx={{ borderRadius: 8 }}>
               {t('Add')}
             </Button>
           </Grid>
           <Grid item xs={12}>
             <Card elevation={0} sx={{ p: 3 }}>
-
-
               <CardContent sx={{ p: 1 }}>
                 <Grid container spacing={2} justifyContent={'space-between'}>
                   <Grid item xs={12} >
@@ -72,7 +72,7 @@ const Page = () => {
                         <Box>
 
                           <IconButton sx={{ mx: 1 }}><DeleteForeverIcon /></IconButton>
-                          <IconButton><BorderColorIcon /></IconButton>
+                          <IconButton><BorderColorIcon onClick={handleOpenEdit}/></IconButton>
 
                         </Box>
                       </Grid>
@@ -101,7 +101,7 @@ const Page = () => {
                         <Box>
 
                           <IconButton sx={{ mx: 1 }}><DeleteForeverIcon /></IconButton>
-                          <IconButton><BorderColorIcon /></IconButton>
+                          <IconButton><BorderColorIcon onClick={handleOpenEdit} /></IconButton>
 
                         </Box>
                       </Grid>
@@ -130,6 +130,7 @@ const Page = () => {
 
       </Container>
     </Box>
+    <ExperienceDialog name={dialogName} open={open} handleClose={handleClose}/>
   </>
 }
 

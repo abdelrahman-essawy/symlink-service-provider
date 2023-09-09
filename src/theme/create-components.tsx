@@ -30,7 +30,8 @@ export function createComponents(palette: Palette): Components<Omit<Theme, 'comp
       styleOverrides: {
         root: {
           borderRadius: '12px',
-          textTransform: 'none'
+          textTransform: 'none',
+          color: 'black'
         },
         sizeSmall: {
           padding: '6px 16px'
