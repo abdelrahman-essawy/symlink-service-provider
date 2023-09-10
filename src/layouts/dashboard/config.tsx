@@ -24,6 +24,7 @@ import SchoolIcon from "@mui/icons-material/School";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import FindInPageIcon from "@mui/icons-material/FindInPage";
+import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
 import React from "react";
 import { truncate } from "fs";
 
@@ -103,6 +104,19 @@ export const items = [
     icon: (
       <SvgIcon fontSize="small">
         <SchoolIcon />
+      </SvgIcon>
+    ),
+  },
+  {
+    // used in symline
+    external: false,
+    disabled: false,
+    menu: false,
+    title: "Certificate",
+    path: "/certificate",
+    icon: (
+      <SvgIcon fontSize="small">
+        <WorkspacePremiumIcon />
       </SvgIcon>
     ),
   },
