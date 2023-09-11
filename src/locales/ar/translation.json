@@ -211,6 +211,7 @@
     "": ""
   },
   "Bids": "العروض",
+  "Bid": "عرض",
   "Deactivate account": "تعطيل الحساب",
   "You Are Deactivating Your Account": "انت تعطيل حسابك",
   "For extra security, this requires you to confirm your email or phone number when you reset your sign in password. Learn more": "لأجل الأمان الإضافي، يتطلب منك تأكيد عنوان بريدك الإلكتروني أو رقم هاتفك عند إعادة تعيين كلمة مرور تسجيل الدخول. اعرف المزيد...",
@@ -222,5 +223,7 @@
   "Educational info": "معلومات التعليمية",
   "Programming Languages for Backend Development": "لغات البرمجة لتطوير الجزء الخلفي",
   "Certificate": "شهادة",
-  "Upload": "تحميل"
+  "Upload": "تحميل",
+  "Data added": "البيانات المضافة",
+  "Action": "عمل"
 }
