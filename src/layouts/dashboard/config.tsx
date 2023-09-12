@@ -73,6 +73,19 @@ export const items = [
     external: false,
     disabled: false,
     menu: false,
+    title: "Bids",
+    path: "/bid/rfp-name",
+    icon: (
+      <SvgIcon fontSize="small">
+        <AccountCircleIcon />
+      </SvgIcon>
+    ),
+  },
+  {
+    // used in symline
+    external: false,
+    disabled: false,
+    menu: false,
     title: "Profile",
     path: "/profile",
     icon: (
