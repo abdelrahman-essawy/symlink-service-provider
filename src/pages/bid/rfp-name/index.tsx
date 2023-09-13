@@ -19,6 +19,7 @@ import SharedTable from "@/components/SharedTable";
 import { dictionary, TranslatedWord } from "@/configs/i18next";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import SendIcon from "@mui/icons-material/Send";
+import BidModal from "@/components/modals/BidModal";
 
 const projects = {
   data: [
@@ -92,10 +93,14 @@ const Page = () => {
   const title = "RFP name";
   const { t } = useTranslation();
   const [value, setValue] = React.useState(0);
+  const [open, setOpen] = React.useState(false);
 
+  // ----------------- functions ---------------
   const handletabs = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   return (
     <>
       <Head>
@@ -126,7 +131,12 @@ const Page = () => {
               />
             </Grid>
             <Grid item xs={12} md={3} sx={{ display: "flex", justifyContent: "end" }}>
-              <Button variant="contained" color="warning" sx={{ borderRadius: 8 }}>
+              <Button
+                onClick={handleOpen}
+                variant="contained"
+                color="warning"
+                sx={{ borderRadius: 8 }}
+              >
                 {t("Bid")}
               </Button>
             </Grid>
@@ -319,6 +329,8 @@ const Page = () => {
           </Grid>
         </Container>
       </Box>
+
+      <BidModal open={open} handleClose={handleClose} />
     </>
   );
 };
