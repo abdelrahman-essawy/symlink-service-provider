@@ -327,7 +327,7 @@ const sharedTableColumns: MRT_ColumnDef<any>[] = [
     header: dictionary("Progress"),
     Cell: ({ row }) => (
       <Chip
-        label={row.original.progress}
+        label={dictionary(row.original.progress)} // translate if possible
         sx={{
           bgcolor: "#e6f4ea",
           color: "#1e7e34",
