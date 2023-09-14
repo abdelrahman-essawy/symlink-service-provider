@@ -2,14 +2,21 @@ import Head from "next/head";
 import { Box, Container, Button, Typography } from "@mui/material";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import React from "react";
+import React, {useState} from "react";
 import { DashboardLayout } from "../../layouts/dashboard/layout";
 import { useTranslation } from "react-i18next";
 import { Card } from "@mui/material";
+import EducationDialog from "@/components/_used-symline/dialogs/education-dialog";
 
 const Page = () => {
   const title = "Educational info";
   const { t } = useTranslation();
+  const [open, setOpen] = useState(false);
+
+  const handleClose = () => setOpen(false);
+  const handleOpen= () => {
+    setOpen(true);
+  };
 
   return (
     <>
@@ -56,6 +63,7 @@ const Page = () => {
               </Box>
             </Box>
             <Button
+            onClick={handleOpen}
               size="large"
               color="warning"
               sx={{ mt: 3, borderRadius: "50px" }}
@@ -67,6 +75,8 @@ const Page = () => {
           </Card>
         </Container>
       </Box>
+      <EducationDialog open={open} handleClose={handleClose}/>
+
     </>
   );
 };
