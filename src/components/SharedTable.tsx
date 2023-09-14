@@ -116,9 +116,8 @@ const SharedTable = <T extends Record<string, any>>({
         enableRowActions={showActions}
         positionActionsColumn="last"
         renderRowActionMenuItems={({ row, table }) => [
-          <MenuItem key="edit"></MenuItem>,
-
-          <MenuItem key="delete"></MenuItem>,
+          <MenuItem key="edit">{dictionary("Edit")}</MenuItem>,
+          <MenuItem key="delete">{dictionary("Delete")}</MenuItem>,
         ]}
         // onEditingRowSave={handleSaveRowEdits}
         // onEditingRowCancel={handleCancelRowEdits}
