@@ -114,7 +114,7 @@ const SharedTable = <T extends Record<string, any>>({
     <>
       <MaterialReactTable
         enableRowActions={showActions}
-        positionActionsColumn="first"
+        positionActionsColumn="last"
         renderRowActionMenuItems={({ row, table }) => [
           <MenuItem key="edit"></MenuItem>,
 

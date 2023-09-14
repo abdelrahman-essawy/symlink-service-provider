@@ -36,7 +36,7 @@ const Page = () => {
           <Typography variant="h3" sx={{ mb: 2 }} fontWeight={"bold"}>
             {dictionary(title as TranslatedWord)}
           </Typography>
-          <Card elevation={0}>
+          <Card sx={{ px: 2 }}>
             <SharedTable
               endpoint="http://localhost:3000/projects.json"
               fakeData={bids}
