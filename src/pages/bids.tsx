@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { Box, Card, Container, Grid, Typography } from "@mui/material";
+import { Box, Card, Container, Typography } from "@mui/material";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import SharedTable from "@/components/SharedTable";
@@ -41,7 +41,9 @@ const Page = () => {
               endpoint="http://localhost:3000/projects.json"
               fakeData={bids}
               showActions={true}
-              navigation={() => router.push(`/bid/rfp-name`)}
+              muiTableBodyRowProps={(row) => ({
+                onClick: () => router.push(`/bid/rfp-name`)
+              })}
             />
           </Card>
         </Container>

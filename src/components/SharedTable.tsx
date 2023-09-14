@@ -1,46 +1,25 @@
 // import { Order, OrdersApiResponse } from "@/@types/zod/OrdersTable";
-import axiosClient from "@/configs/axios-client";
 import { dictionary, TranslatedWord } from "@/configs/i18next";
 import { queryClient } from "@/pages/_app";
-import {
-  AttachMoney,
-  CreditCard,
-  DiscFull,
-  EventAvailable,
-  EventBusy,
-  LocalShipping,
-  LocalShippingSharp,
-  Percent,
-  PrecisionManufacturing,
-  Preview,
-  Segment,
-} from "@mui/icons-material";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import {
   Box,
-  Button,
   Chip,
   IconButton,
   MenuItem,
-  Stack,
-  SvgIcon,
-  Switch,
   Tooltip,
   Typography,
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { t } from "i18next";
 import {
   MaterialReactTable,
-  MRT_Column,
+  MaterialReactTableProps,
   MRT_ColumnDef,
   MRT_ColumnFiltersState,
   MRT_PaginationState,
   MRT_SortingState,
 } from "material-react-table";
-import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 const SharedTable = <T extends Record<string, any>>({
   endpoint,
@@ -49,7 +28,7 @@ const SharedTable = <T extends Record<string, any>>({
   actions,
   fakeData,
   showActions,
-  navigation,
+  muiTableBodyRowProps,
 }: {
   endpoint: string;
   renderColumns?: MRT_ColumnDef<T>["accessorKey"][];
@@ -57,7 +36,7 @@ const SharedTable = <T extends Record<string, any>>({
   actions?: Partial<MRT_ColumnDef<T>>[];
   fakeData: any;
   showActions?: boolean;
-  navigation?: any;
+  muiTableBodyRowProps?: MaterialReactTableProps<T>["muiTableBodyRowProps"];
 }) => {
   const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState("");
@@ -193,15 +172,11 @@ const SharedTable = <T extends Record<string, any>>({
         muiToolbarAlertBannerProps={
           isError
             ? {
-                color: "error",
-                children: "Error loading data",
-              }
+              color: "error",
+              children: "Error loading data",
+            }
             : undefined
         }
-        muiTableBodyRowProps={({ row }) => ({
-          onClick: navigation,
-          sx: { cursor: "pointer" },
-        })}
         onColumnFiltersChange={setColumnFilters}
         onGlobalFilterChange={setGlobalFilter}
         onPaginationChange={setPagination}
@@ -251,6 +226,8 @@ const SharedTable = <T extends Record<string, any>>({
           </>
         )}
         actions={actions}
+        muiTableBodyRowProps={muiTableBodyRowProps} // TODO: refactor this
+
       />
     </>
   );
