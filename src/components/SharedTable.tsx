@@ -1,47 +1,25 @@
-
 // import { Order, OrdersApiResponse } from "@/@types/zod/OrdersTable";
-import axiosClient from "@/configs/axios-client";
 import { dictionary, TranslatedWord } from "@/configs/i18next";
 import { queryClient } from "@/pages/_app";
-import {
-  AttachMoney,
-  CreditCard,
-  DiscFull,
-  EventAvailable,
-  EventBusy,
-  LocalShipping,
-  LocalShippingSharp,
-  Percent,
-  PrecisionManufacturing,
-  Preview,
-  Segment,
-} from "@mui/icons-material";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import {
   Box,
-  Button,
   Chip,
   IconButton,
   MenuItem,
-  Stack,
-  SvgIcon,
-  Switch,
   Tooltip,
   Typography,
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { t } from "i18next";
 import {
   MaterialReactTable,
-  MRT_Column,
+  MaterialReactTableProps,
   MRT_ColumnDef,
   MRT_ColumnFiltersState,
   MRT_PaginationState,
   MRT_SortingState,
 } from "material-react-table";
-import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 const SharedTable = <T extends Record<string, any>>({
   endpoint,
@@ -50,19 +28,17 @@ const SharedTable = <T extends Record<string, any>>({
   actions,
   fakeData,
   showActions,
+  muiTableBodyRowProps,
 }: {
   endpoint: string;
   renderColumns?: MRT_ColumnDef<T>["accessorKey"][];
-  columnVisibility?: Partial<
-    Record<NonNullable<MRT_ColumnDef<T>["accessorKey"]>, boolean>
-  >[];
+  columnVisibility?: Partial<Record<NonNullable<MRT_ColumnDef<T>["accessorKey"]>, boolean>>[];
   actions?: Partial<MRT_ColumnDef<T>>[];
   fakeData: any;
   showActions?: boolean;
+  muiTableBodyRowProps?: MaterialReactTableProps<T>["muiTableBodyRowProps"];
 }) => {
-  const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>(
-    []
-  );
+  const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState<MRT_SortingState>([]);
   const [pagination, setPagination] = useState<MRT_PaginationState>({
@@ -106,9 +82,7 @@ const SharedTable = <T extends Record<string, any>>({
   const columns: MRT_ColumnDef<T>[] = [
     ...keys
       .map((key, index) => {
-        const sharedColumn = sharedTableColumns?.find(
-          (column) => column.accessorKey === key
-        );
+        const sharedColumn = sharedTableColumns?.find((column) => column.accessorKey === key);
         // @ts-ignore
         const valueIsArray = Array.isArray(data?.data[0][key]);
 
@@ -117,9 +91,7 @@ const SharedTable = <T extends Record<string, any>>({
         if (sharedColumn) {
           return sharedColumn;
         } else if (keys.includes(key)) {
-          const translatedHeader = dictionary(
-            fromKeyToHeader(key) as TranslatedWord
-          );
+          const translatedHeader = dictionary(fromKeyToHeader(key) as TranslatedWord);
 
           return {
             accessorKey: key,
@@ -141,15 +113,11 @@ const SharedTable = <T extends Record<string, any>>({
   return (
     <>
       <MaterialReactTable
-
         enableRowActions={showActions}
-        positionActionsColumn="first"
+        positionActionsColumn="last"
         renderRowActionMenuItems={({ row, table }) => [
-          <MenuItem key="edit">
-          </MenuItem>,
-
-          <MenuItem key="delete">
-          </MenuItem>,
+          <MenuItem key="edit">{dictionary("Edit")}</MenuItem>,
+          <MenuItem key="delete">{dictionary("Delete")}</MenuItem>,
         ]}
         // onEditingRowSave={handleSaveRowEdits}
         // onEditingRowCancel={handleCancelRowEdits}
@@ -157,14 +125,12 @@ const SharedTable = <T extends Record<string, any>>({
           actions: dictionary("Actions"),
           // rowsPerPage: dictionary("Rows per page"),
         }}
-
         muiTablePaperProps={{
           sx: {
             boxShadow: "none",
             border: 0,
-          }
+          },
         }}
-
         muiTableProps={{
           sx: {
             "& .MuiTableCell-head": {
@@ -181,10 +147,9 @@ const SharedTable = <T extends Record<string, any>>({
                 borderRadius: 1.5,
                 borderTopLeftRadius: 0,
                 borderBottomLeftRadius: 0,
-
-              }
+              },
             },
-          }
+          },
         }}
         muiTableHeadRowProps={{
           sx: {
@@ -193,11 +158,9 @@ const SharedTable = <T extends Record<string, any>>({
               fontWeight: "bold",
               bgcolor: "#f0f2fe",
               padding: 2,
-
-            }
-          }
+            },
+          },
         }}
-
         getRowId={(originalRow) => originalRow.id}
         columns={columns}
         //@ts-ignore
@@ -262,6 +225,8 @@ const SharedTable = <T extends Record<string, any>>({
           </>
         )}
         actions={actions}
+        muiTableBodyRowProps={muiTableBodyRowProps} // TODO: refactor this
+
       />
     </>
   );
@@ -355,15 +320,21 @@ const sharedTableColumns: MRT_ColumnDef<any>[] = [
     accessorKey: "amount",
     header: dictionary("Amount"),
     Cell: ({ row }) => amountTagHandler(row.original.amount as number),
-  }, {
+  },
+  {
     id: "progress",
     accessorKey: "progress",
     header: dictionary("Progress"),
-    Cell: ({ row }) => <Chip label={row.original.progress} sx={{
-      bgcolor: "#e6f4ea",
-      color: "#1e7e34",
-      fontWeight: "bold"
-    }} />,
+    Cell: ({ row }) => (
+      <Chip
+        label={dictionary(row.original.progress)} // translate if possible
+        sx={{
+          bgcolor: "#e6f4ea",
+          color: "#1e7e34",
+          fontWeight: "bold",
+        }}
+      />
+    ),
   },
 ];
 
