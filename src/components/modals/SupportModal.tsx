@@ -3,13 +3,13 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import { TextField } from "@mui/material";
+import { IconButton, InputAdornment, TextField } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import StyledTextarea from "../StyledTextArea";
 import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
-
+import UploadFileIcon from '@mui/icons-material/UploadFile';
 const style = {
   position: "absolute" as "absolute",
   top: "50%",
@@ -17,13 +17,22 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: 450,
   bgcolor: "background.paper",
+
   borderRadius: 5,
   boxShadow: 24,
   p: 4,
 };
 
+
 export default function BasicModal({ open, handleClose }: any) {
   const { t } = useTranslation();
+  const [file, setFile] = React.useState({ name: 'Choose File' });
+
+  // handle file selection
+  const handleFileSelect = (event: any) => {
+    const file = event.target.files[0];
+    setFile(file);
+  };
   const formik = useFormik({
     initialValues: {
       title: "",
@@ -95,6 +104,21 @@ export default function BasicModal({ open, handleClose }: any) {
                   minRows={5}
                   placeholder={t("ContactUs_Page.Your message")}
                 />
+
+                <Button
+                  component="label"
+                  endIcon={<Typography variant="subtitle2">{`${file.name}`}</Typography>}
+                  variant="text"
+                  size="large"
+                >
+                  <UploadFileIcon color="warning" />
+                  <input
+                    type="file"
+                    onChange={handleFileSelect}
+                    hidden
+                  />
+                </Button>
+
                 <Button
                   size="large"
                   color="warning"
