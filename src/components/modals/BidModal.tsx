@@ -22,7 +22,7 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: 450,
   bgcolor: "background.paper",
-  borderRadius: 5,
+  borderRadius: 2,
   boxShadow: 24,
   p: 4,
 };

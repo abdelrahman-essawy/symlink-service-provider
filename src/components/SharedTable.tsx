@@ -2,14 +2,7 @@
 import { dictionary, TranslatedWord } from "@/configs/i18next";
 import { queryClient } from "@/pages/_app";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import {
-  Box,
-  Chip,
-  IconButton,
-  MenuItem,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import { Box, Chip, IconButton, MenuItem, Tooltip, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import {
   MaterialReactTable,
@@ -20,6 +13,7 @@ import {
   MRT_SortingState,
 } from "material-react-table";
 import { useEffect, useState } from "react";
+import ReceiptIcon from "@mui/icons-material/Receipt";
 
 const SharedTable = <T extends Record<string, any>>({
   endpoint,
@@ -171,9 +165,9 @@ const SharedTable = <T extends Record<string, any>>({
         muiToolbarAlertBannerProps={
           isError
             ? {
-              color: "error",
-              children: "Error loading data",
-            }
+                color: "error",
+                children: "Error loading data",
+              }
             : undefined
         }
         onColumnFiltersChange={setColumnFilters}
@@ -226,7 +220,6 @@ const SharedTable = <T extends Record<string, any>>({
         )}
         actions={actions}
         muiTableBodyRowProps={muiTableBodyRowProps} // TODO: refactor this
-
       />
     </>
   );
@@ -290,6 +283,15 @@ const sharedTableColumns: MRT_ColumnDef<any>[] = [
     size: 50,
   },
   {
+    accessorKey: "date",
+    header: dictionary("Date"),
+    Cell: ({ row }) => (
+      <Typography variant="body2">{new Date(row.getValue("date")).toLocaleDateString()}</Typography>
+    ),
+    enableEditing: false,
+    size: 50,
+  },
+  {
     accessorKey: "updated_at",
     header: dictionary("Updated at"),
     Cell: ({ row }) => (
@@ -297,6 +299,13 @@ const sharedTableColumns: MRT_ColumnDef<any>[] = [
         {new Date(row.getValue("updated_at")).toLocaleDateString()}
       </Typography>
     ),
+    enableEditing: false,
+    size: 50,
+  },
+  {
+    accessorKey: "receipt",
+    header: dictionary("Receipt"),
+    Cell: ({ row }) => <ReceiptIcon sx={{ color: "#6366F1" }} />,
     enableEditing: false,
     size: 50,
   },

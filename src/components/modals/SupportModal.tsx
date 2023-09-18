@@ -9,7 +9,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import StyledTextarea from "../StyledTextArea";
 import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
-import UploadFileIcon from '@mui/icons-material/UploadFile';
+import UploadFileIcon from "@mui/icons-material/UploadFile";
 const style = {
   position: "absolute" as "absolute",
   top: "50%",
@@ -18,15 +18,14 @@ const style = {
   width: 450,
   bgcolor: "background.paper",
 
-  borderRadius: 5,
+  borderRadius: 2,
   boxShadow: 24,
   p: 4,
 };
 
-
 export default function BasicModal({ open, handleClose }: any) {
   const { t } = useTranslation();
-  const [file, setFile] = React.useState({ name: 'Choose File' });
+  const [file, setFile] = React.useState({ name: "Choose File" });
 
   // handle file selection
   const handleFileSelect = (event: any) => {
@@ -112,11 +111,7 @@ export default function BasicModal({ open, handleClose }: any) {
                   size="large"
                 >
                   <UploadFileIcon color="warning" />
-                  <input
-                    type="file"
-                    onChange={handleFileSelect}
-                    hidden
-                  />
+                  <input type="file" onChange={handleFileSelect} hidden />
                 </Button>
 
                 <Button
