@@ -30,6 +30,7 @@ export const items = [
     external: false,
     disabled: false,
     menu: false,
+    id: "sidenav-bids",
     title: "Bids",
     path: "/bids",
     icon: (
@@ -51,25 +52,12 @@ export const items = [
       </SvgIcon>
     ),
   },
-
   {
     // used in symline
     external: false,
     disabled: false,
     menu: false,
-    title: "Profile",
-    path: "/profile",
-    icon: (
-      <SvgIcon fontSize="small">
-        <AccountCircleIcon />
-      </SvgIcon>
-    ),
-  },
-  {
-    // used in symline
-    external: false,
-    disabled: false,
-    menu: false,
+    id: "sidenav-educational-info",
     title: "Educational info",
     path: "/educational-info",
     icon: (
@@ -83,6 +71,7 @@ export const items = [
     external: false,
     disabled: false,
     menu: false,
+    id: "sidenav-experience",
     title: "Experience",
     path: "/experience",
     icon: (
@@ -96,6 +85,7 @@ export const items = [
     external: false,
     disabled: false,
     menu: false,
+    id: "sidenav-certificate",
     title: "Certificate",
     path: "/certificate",
     icon: (
@@ -121,6 +111,7 @@ export const items = [
     external: false,
     disabled: false,
     menu: false,
+    id: "sidenav-settings",
     title: "Settings",
     icon: (
       <SvgIcon fontSize="small">
@@ -128,6 +119,20 @@ export const items = [
       </SvgIcon>
     ),
     children: [
+      {
+        // used in symline
+        external: false,
+        disabled: false,
+        menu: false,
+        id: "sidenav-profile",
+        title: "Profile",
+        path: "/profile",
+        icon: (
+          <SvgIcon fontSize="small">
+            <AccountCircleIcon />
+          </SvgIcon>
+        ),
+      },
       {
         external: false,
         disabled: false,

@@ -4,11 +4,12 @@ import { Box, ButtonBase, Collapse, List, ListItemButton, ListItemIcon, ListItem
 import React from 'react';
 import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
+import RoleBasedRender from '@/hocs/RoleBasedRender';
 
 export const SideNavItem = (props: { active?: boolean; disabled: boolean; external: any; icon: any; path: any; title: any; items: any[] | undefined }) => {
   const { active = false, disabled, external, icon, path, title, items } = props;
   const { t } = useTranslation();
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const pathname = usePathname();
 
   const handleClick = () => {
@@ -69,6 +70,7 @@ export const SideNavItem = (props: { active?: boolean; disabled: boolean; extern
             {icon}
           </Box>
         )}
+        {/* parent item */}
         <Box
           component="span"
           sx={{
@@ -82,7 +84,6 @@ export const SideNavItem = (props: { active?: boolean; disabled: boolean; extern
             ...(active && {
               color: "white",
               backgroundColor: "primary.main",
-
             }),
             ...(disabled && {
               color: "grey.500",
@@ -109,72 +110,76 @@ export const SideNavItem = (props: { active?: boolean; disabled: boolean; extern
                 }
               : {};
             return (
-              <ButtonBase
-                key={key}
-                sx={{
-                  alignItems: "center",
-                  borderRadius: 1,
-                  display: "flex",
-                  justifyContent: "flex-start",
-                  pl: 4,
-                  pr: "16px",
-                  py: "6px",
-                  textAlign: "left",
-                  width: "100%",
-                  ...(child.active && {
-                    backgroundColor: "primary.main",
-                  }),
-                  "&:hover": {
+              // child item
+              <RoleBasedRender key={key} componentId={child.id}>
+                <ButtonBase
+                  key={key}
+                  sx={{
+                    alignItems: "center",
+                    borderRadius: 1,
+                    display: "flex",
+                    justifyContent: "flex-start",
+                    pl: 4,
+                    pr: "16px",
+                    py: "6px",
+                    mt: .5,
+                    textAlign: "left",
+                    width: "100%",
+                    ...(child.active && {
+                      backgroundColor: "primary.main",
+                    }),
+                    "&:hover": {
 
 
 
-                  },
-                  ...(active && {
-                    backgroundColor: "primary.main",
-                  }),
-                }}
-                href="/clients"
-                {...secondary_linkProps}
-              >
-                {icon && (
+                    },
+                    ...(active && {
+                      backgroundColor: "primary.main",
+                    }),
+                  }}
+                  href="/clients"
+                  {...secondary_linkProps}
+                >
+                  {icon && (
+                    <Box
+                      component="span"
+                      sx={{
+                        alignItems: "center",
+                        color: "black",
+                        display: "inline-flex",
+                        justifyContent: "center",
+                        mr: 2,
+                        ...(active && {
+                          color: "white",
+
+                        }),
+                      }}
+                    >
+                      {child.icon}
+                    </Box>
+                  )}
                   <Box
                     component="span"
                     sx={{
-                      alignItems: "center",
                       color: "black",
-                      display: "inline-flex",
-                      justifyContent: "center",
-                      mr: 2,
+                      flexGrow: 1,
+                      fontFamily: (theme) => theme.typography.fontFamily,
+                      fontSize: 14,
+                      fontWeight: 600,
+                      lineHeight: "24px",
+                      whiteSpace: "nowrap",
                       ...(active && {
                         color: "white",
-
+                      }),
+                      ...(disabled && {
+                        color: "grey.500",
                       }),
                     }}
                   >
-                    {child.icon}
+                    {t(child.title)}
                   </Box>
-                )}
-                <Box
-                  component="span"
-                  sx={{
-                    color: "black",
-                    flexGrow: 1,
-                    fontFamily: (theme) => theme.typography.fontFamily,
-                    fontSize: 14,
-                    fontWeight: 600,
-                    lineHeight: "24px",
-                    whiteSpace: "nowrap",
-                    ...(active && {
-                      color: "white",
-                    }),
-                    ...(disabled && {
-                      color: "grey.500",
-                    }),
-                  }}
-                >
-                  {t(child.title)}
-                </Box>
-              </ButtonBase>
+                </ButtonBase>
+              </RoleBasedRender>
             );
           })}
         </Collapse>

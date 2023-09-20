@@ -21,12 +21,9 @@ import { DashboardLayout } from "../../layouts/dashboard/layout";
 import { useTranslation } from "react-i18next";
 import HeaderTabs from "@/components/_used-symline/tabs/headerTabs";
 import CustomTabPanel from "@/components/_used-symline/tabs/tabsPanel";
-import SharedTable from "@/components/SharedTable";
-import projects from "../../../public/projects.json";
 
 const Page = () => {
   const title = "Projects";
-  const { t } = useTranslation();
   const [value, setValue] = React.useState(0);
   const handletabs = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
