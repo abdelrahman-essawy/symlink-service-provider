@@ -25,6 +25,7 @@ const sharedPermissions: Permissions = {
   canViewProjects: true,
   canViewProfile: true,
   canViewExperince: true,
+  canViewSupport: true,
   canViewSettingsAbout: true,
   canViewSettingsTermsAndConditions: true,
   canViewSettingsContactUs: true,
@@ -43,6 +44,7 @@ export const permissionSchema: PermissionsSchema = {
   },
   CLIENT: {
     ...sharedPermissions,
+    canViewWallet: true,
 
     notAbleToViewComponents: [
       "sidenav-bids",

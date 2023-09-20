@@ -9,6 +9,7 @@ export const PATH_PERMISSIONS = {
   "/educational-info": "canViewEducationalInfo",
   "/certificate": "canViewCertificate",
   "/support": "canViewSupport",
+  "/wallet": "canViewWallet",
 
   // Settings
   "/profile": "canViewProfile",
@@ -16,6 +17,7 @@ export const PATH_PERMISSIONS = {
   "/settings/terms-and-conditions": "canViewSettingsTermsAndConditions",
   "/settings/contact-us": "canViewSettingsContactUs",
   "/settings/deactivate-account": "canViewSettingsDeactivateAccount",
+
 
 } as const;
 
