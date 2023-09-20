@@ -17,6 +17,7 @@ import { Scrollbar } from '../../components/scrollbar';
 import { items } from './config';
 import { SideNavItem } from './side-nav-item';
 import { Theme } from '@mui/material';
+import RoleBasedRender from '@/hocs/RoleBasedRender';
 
 export const SideNav = (props: { open: any; onClose: any; }) => {
   const { open, onClose } = props;
@@ -80,16 +81,18 @@ export const SideNav = (props: { open: any; onClose: any; }) => {
               const active = item.path ? (pathname === item.path) : false;
 
               return (
-                <SideNavItem
-                  active={active}
-                  disabled={item.disabled}
-                  external={item.external}
-                  icon={item.icon}
-                  key={item.title}
-                  path={item.path}
-                  title={item.title}
-                  items={item.children}
-                />
+                <RoleBasedRender key={key} componentId={item?.id ?? ``}>
+                  <SideNavItem
+                    active={active}
+                    disabled={item.disabled}
+                    external={item.external}
+                    icon={item.icon}
+                    key={item.title}
+                    path={item.path}
+                    title={item.title}
+                    items={item.children}
+                  />
+                </RoleBasedRender>
               );
             })}
           </Stack>
