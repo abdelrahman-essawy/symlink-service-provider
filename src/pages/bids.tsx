@@ -42,7 +42,8 @@ const Page = () => {
               fakeData={bids}
               showActions={true}
               muiTableBodyRowProps={(row) => ({
-                onClick: () => router.push(`/bid/rfp-name`)
+                onClick: () => router.push(`/bid/rfp-name`),
+                sx: { cursor: "pointer" },
               })}
             />
           </Card>
