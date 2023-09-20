@@ -119,6 +119,7 @@ export const SideNavItem = (props: { active?: boolean; disabled: boolean; extern
                   pl: 4,
                   pr: "16px",
                   py: "6px",
+                  mt: .5,
                   textAlign: "left",
                   width: "100%",
                   ...(child.active && {
