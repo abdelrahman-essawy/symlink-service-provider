@@ -42,6 +42,7 @@ const Page = () => {
                 <SharedTable
                   muiTableBodyRowProps={(row) => ({
                     onClick: () => router.push(`/projects/1`),
+                    sx: { cursor: "pointer" },
                   })}
                   endpoint="http://localhost:3000/projects.json"
                   fakeData={projects}
