@@ -1,30 +1,36 @@
 import Head from "next/head";
-import { Box, Container, Typography, Grid, Avatar, TextField, Button } from "@mui/material";
+import { Box, Container, Typography, Grid, Avatar, TextField, Button, Select } from "@mui/material";
 import React from "react";
 import { DashboardLayout } from "../../layouts/dashboard/layout";
 import { useTranslation } from "react-i18next";
 import { Card } from "@mui/material";
-import PhoneIcon from "@mui/icons-material/Phone";
 import StyledTextarea from "../../components/StyledTextArea";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import EmailIcon from "@mui/icons-material/Email";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import MenuItem from "@mui/material/MenuItem";
+import Image from "next/image";
 
-const DATA = {
-  phone: "123456789",
-  email: "a@b.com",
-  address: "123 Main St",
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
 };
 
 const Page = () => {
-  const title = "Contact us";
+  const title = "Company profile";
   // ----------- hooks -------------
   const { t } = useTranslation();
 
   const formik = useFormik({
     initialValues: {
-      title: "",
+      companyName: "",
+      url: "",
       message: "",
     },
     validationSchema: Yup.object({}),
@@ -32,6 +38,14 @@ const Page = () => {
       console.log(values);
     },
   });
+  const [companyField, setCompanyField] = React.useState<string[]>([]);
+
+  const handleChange = (event: any) => {
+    const {
+      target: { value },
+    } = event;
+    setCompanyField(typeof value === "string" ? value.split(",") : value);
+  };
 
   return (
     <>
@@ -46,38 +60,11 @@ const Page = () => {
         }}
       >
         <Typography variant="h4">{t(title)}</Typography>
-        <Container maxWidth="xl">
-          <Grid container rowSpacing={2} columnSpacing={2}>
-            <Grid item xs={12} md={4}>
-              <Card sx={{ p: 1, mt: 2 }}>
-                <ContactCards label={"Phone"} data={DATA.phone} icon={PhoneIcon} />
-              </Card>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <Card sx={{ p: 1, mt: 2 }}>
-                <ContactCards label={"Email"} data={DATA.email} icon={EmailIcon} />
-              </Card>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <Card sx={{ p: 1, mt: 2 }}>
-                <ContactCards label={"Address"} data={DATA.address} icon={LocationOnIcon} />
-              </Card>
-            </Grid>
-          </Grid>
-        </Container>
+
         <Container maxWidth="xl">
           <Card sx={{ p: 3, mt: 3 }}>
-            <Typography variant="h4" sx={{ textAlign: "center" }}>
-              {t("ContactUs_Page.How can we help you ?")}
-            </Typography>
             <Grid container rowSpacing={3} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
               <Grid item md={6}>
-                <Box sx={{ m: 4, display: "flex", flexDirection: "column" }}>
-                  <Typography variant="h6">{t("ContactUs_Page.Contact form")}</Typography>
-                  <Typography variant="body1">
-                    {t("ContactUs_Page.Ask us everything and we would love to hear from you")}
-                  </Typography>
-                </Box>
                 <form onSubmit={formik.handleSubmit}>
                   <Box
                     sx={{
@@ -89,9 +76,9 @@ const Page = () => {
                     }}
                   >
                     <TextField
-                      id="title"
+                      id="companyName"
                       type="text"
-                      placeholder={t("Title") || "Title"}
+                      placeholder={t("Company name") || "Company name"}
                       inputProps={{
                         step: 300,
                         style: {
@@ -100,16 +87,52 @@ const Page = () => {
                           fontSize: "14px",
                         },
                       }}
-                      value={formik.values.title}
+                      value={formik.values.companyName}
                       onChange={formik.handleChange}
-                      name="title"
+                      name="companyName"
                     />
+                    <TextField
+                      id="url"
+                      type="text"
+                      placeholder={t("Website URL") || "Website URL"}
+                      inputProps={{
+                        step: 300,
+                        style: {
+                          padding: "8px 0 8px 8px",
+                          fontFamily: "Roboto",
+                          fontSize: "14px",
+                        },
+                      }}
+                      value={formik.values.url}
+                      onChange={formik.handleChange}
+                      name="url"
+                    />
+                    <Select
+                      sx={{ width: "200px", borderRadius: "50px" }}
+                      multiple
+                      displayEmpty
+                      value={companyField}
+                      onChange={handleChange}
+                      input={<OutlinedInput />}
+                      renderValue={(selected) => {
+                        if (selected.length === 0) {
+                          return <em>{t("Company fields")}</em>;
+                        }
+
+                        return selected.join(", ");
+                      }}
+                      MenuProps={MenuProps}
+                      inputProps={{ "aria-label": "Without label" }}
+                    >
+                      <MenuItem value={"Software"}>Software</MenuItem>
+                      <MenuItem value={"Software"}>Software</MenuItem>
+                    </Select>
                     <StyledTextarea
                       value={formik.values.message}
                       onChange={formik.handleChange}
                       name="message"
                       minRows={5}
-                      placeholder={t("Your message")}
+                      placeholder={t("Description") || "Description"}
                     />
                     <Button
                       size="large"
@@ -124,21 +147,13 @@ const Page = () => {
                 </form>
               </Grid>
               <Grid item md={6}>
-                <Box sx={{ m: 4, display: "flex", flexDirection: "column" }}>
-                  <Typography variant="h6">{t("ContactUs_Page.Our location")}</Typography>
-                  <Typography variant="body1">
-                    {t("ContactUs_Page.Ask us everything and we would love to hear from you")}
-                  </Typography>
-                </Box>
-                {/* must be an image here  */}
-                <div
-                  style={{
-                    maxWidth: 350,
-                    height: 200,
-                    backgroundColor: "gray",
-                    borderRadius: "10px",
-                  }}
-                ></div>
+                <Image
+                  style={{ marginTop: "70px" }}
+                  height={200}
+                  width={350}
+                  alt="company"
+                  src={require("../../assets/company.svg")}
+                />
               </Grid>
             </Grid>
           </Card>
@@ -151,22 +166,3 @@ const Page = () => {
 Page.getLayout = (page: any) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default Page;
-
-const ContactCards = ({ label, icon: Icon, data }: any) => {
-  const { t } = useTranslation();
-
-  return (
-    <>
-      <Container sx={{ display: "flex", flexDirection: "row", gap: 2 }}>
-        <Avatar sx={{ bgcolor: "#7288FA" }}>
-          <Icon sx={{ color: "#fff" }} />
-        </Avatar>
-
-        <Box sx={{ display: "flex", flexDirection: "column" }}>
-          <Typography variant="h6">{t(label)}</Typography>
-          <Typography variant="body1">{t(data)}</Typography>
-        </Box>
-      </Container>
-    </>
-  );
-};

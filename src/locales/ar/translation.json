@@ -234,5 +234,11 @@
   "Wallet": "المحفظة",
   "Receipt No": "رقم الفاتورة",
   "Receipt": "الفاتورة",
-  "Date": "التاريخ"
+  "Date": "التاريخ",
+  "Company profile": "ملف الشركة",
+  "Create company": "إنشاء شركة",
+  "Company name": "اسم الشركة",
+  "Website URL": "عنوان الويب",
+  "Company fields": "مجالات الشركة",
+  "Description": "الوصف"
 }
