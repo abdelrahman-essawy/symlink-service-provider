@@ -22,17 +22,36 @@ import { useAuth } from '../../hooks/use-auth';
 import { AuthLayout } from '../../layouts/auth/layout';
 import { useTranslation } from 'react-i18next';
 
+const service_provider = {
+  username: 'service_provider',
+  password: 'secret',
+  role: 'service_provider',
+  name: 'Service Provider',
+  avatar: '/static/mock-images/avatars/avatar_default.jpg',
+  submit: null
+}
+
+const client = {
+  username: 'client',
+  password: 'secret',
+  role: 'client',
+  name: 'Client',
+  avatar: '/static/mock-images/avatars/avatar_default.jpg',
+  submit: null
+}
+
 const Page = () => {
   const { t } = useTranslation();
   const router = useRouter();
   const auth = useAuth();
   const [method, setMethod] = useState('username');
   const formik = useFormik({
-    initialValues: {
-      username: 'superadmin',
-      password: 'secret',
-      submit: null
-    },
+    // initialValues: {
+    //   username: 'superadmin',
+    //   password: 'secret',
+    //   submit: null
+    // },
+    initialValues: service_provider,
     validationSchema: Yup.object({
       username: Yup
         .string()

@@ -43,7 +43,7 @@ export const AccountPopover = (props: { anchorEl: any; onClose: any; open: any; 
           color="text.secondary"
           variant="body2"
         >
-          Anika Visser
+          {auth?.user?.name}
         </Typography>
       </Box>
       <Divider />
