@@ -89,7 +89,6 @@ interface Tabs {
 }
 
 const HeaderTabs: React.FC<Tabs> = ({ label1, label2, label3, value, handleChange }: Tabs) => {
-  // const smUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('sm'));
 
   return (
     <CustomTabs
@@ -97,11 +96,31 @@ const HeaderTabs: React.FC<Tabs> = ({ label1, label2, label3, value, handleChang
       onChange={handleChange}
       scrollButtons
       allowScrollButtonsMobile
-      // variant={smUp ? 'fullWidth': 'scrollable' }
     >
-      <CustomTab disableRipple label={<StyledBadge badgeContent={4}>{label1}</StyledBadge>} />
+      <CustomTab
+        sx={{
+          px: 3,
+        }}
+        label={
+          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 2 }}>
+            <StyledBadge badgeContent={4} />
+            <Typography>{label1}</Typography>
+          </Box>
+        }
+      />
+
       <CustomTab disableRipple label={label2} />
-      <CustomTab disableRipple label={<StyledBadge badgeContent={4}>{label3}</StyledBadge>} />
+      <CustomTab disableRipple
+        sx={{
+          px: 3,
+        }}
+        label={
+          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 2 }}>
+            <StyledBadge badgeContent={6} />
+            <Typography>{label1}</Typography>
+          </Box>
+        }
+      />
     </CustomTabs>
   );
 };
