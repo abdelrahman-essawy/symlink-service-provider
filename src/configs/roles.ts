@@ -37,6 +37,7 @@ export const permissionSchema: PermissionsSchema = {
     canViewExperince: true,
     canViewEducationalInfo: true,
     canViewCertificate: true,
+    canViewExpertName: true,
 
     notAbleToViewComponents: ["example", "example3"],
   },
@@ -54,6 +55,7 @@ export const permissionSchema: PermissionsSchema = {
     ...sharedPermissions,
     canViewBids: true,
     canViewSettingsCreateCompany: true,
+    canViewExpertName: true,
     notAbleToViewComponents: [
       "sidenav-educational-info",
       "sidenav-experience",
