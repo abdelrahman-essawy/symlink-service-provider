@@ -240,5 +240,7 @@
   "Company name": "اسم الشركة",
   "Website URL": "عنوان الويب",
   "Company fields": "مجالات الشركة",
-  "Description": "الوصف"
+  "Description": "الوصف",
+  "Expert name": "اسم الخبير",
+  "About project": "حول المشروع"
 }

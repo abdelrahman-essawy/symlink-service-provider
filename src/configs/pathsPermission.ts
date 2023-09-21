@@ -14,6 +14,7 @@ export const PATH_PERMISSIONS = {
   "/educational-info": "canViewEducationalInfo",
   "/certificate": "canViewCertificate",
   "/support": "canViewSupport",
+  "/expert-name": "canViewExpertName",
 
   // Settings
   "/profile": "canViewProfile",
