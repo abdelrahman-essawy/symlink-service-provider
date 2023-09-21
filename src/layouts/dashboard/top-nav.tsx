@@ -18,6 +18,7 @@ import React from 'react';
 import { usePopover } from '../../hooks/use-popover';
 import { AccountPopover } from './account-popover';
 import { Theme } from '@mui/material';
+import LanguageToggle from '@/components/LanguageToggle';
 
 const SIDE_NAV_WIDTH = 280;
 const TOP_NAV_HEIGHT = 64;
@@ -60,6 +61,7 @@ export const TopNav = (props: { onNavOpen: any; }) => {
             direction="row"
             spacing={2}
           >
+            <LanguageToggle/>
             {!lgUp && (
               <IconButton onClick={onNavOpen}>
                 <SvgIcon fontSize="small">
