@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import PropTypes from 'prop-types';
-import { Box, Divider, MenuItem, MenuList, Popover, Typography } from '@mui/material';
+import { Box, Divider, Grid, MenuItem, MenuList, Popover, Switch, Typography } from '@mui/material';
 import { useAuth } from '../../hooks/use-auth';
 import React from 'react';
 
@@ -32,7 +32,7 @@ export const AccountPopover = (props: { anchorEl: any; onClose: any; open: any; 
     >
       <Box
         sx={{
-          py: 1.5,
+          pt: 1.5,
           px: 2
         }}
       >
@@ -46,6 +46,37 @@ export const AccountPopover = (props: { anchorEl: any; onClose: any; open: any; 
           {auth?.user?.name}
         </Typography>
       </Box>
+      <MenuList
+        onClick={onClose}
+      >
+        <MenuItem
+          onClick={() => router.push("/profile")}>
+          Profile
+        </MenuItem>
+
+        <MenuItem
+          sx={{
+            gap: 3,
+            cursor: 'auto',
+            "&:hover": {
+              backgroundColor: 'transparent',
+            },
+            "&:active": {
+              effect: 'none',
+            },
+          }}
+
+        >
+          Receive Orders
+          <Switch
+            checked={auth?.user?.receiveOrders ?? false}
+            color="primary"
+            edge="start"
+            name="checkedB"
+            onChange={() => { }}
+          />
+        </MenuItem>
+      </MenuList>
       <Divider />
       <MenuList
         disablePadding
@@ -57,11 +88,15 @@ export const AccountPopover = (props: { anchorEl: any; onClose: any; open: any; 
           }
         }}
       >
-        <MenuItem onClick={handleSignOut}>
-          Sign out
+        <MenuItem
+          sx={{
+            color: 'red',
+          }}
+          onClick={handleSignOut}>
+          Logout
         </MenuItem>
       </MenuList>
-    </Popover>
+    </Popover >
   );
 };
 
