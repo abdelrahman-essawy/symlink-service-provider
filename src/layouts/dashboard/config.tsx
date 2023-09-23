@@ -178,6 +178,18 @@ export const items = [
         disabled: false,
         menu: false,
         id: "sidenav-deactivate-account",
+        title: "Create company",
+        path: "/settings/create-company",
+        icon: (
+          <SvgIcon fontSize="small">
+            <AccountCircleIcon />
+          </SvgIcon>
+        ),
+      },
+      {
+        external: false,
+        disabled: false,
+        menu: false,
         title: "Deactivate account",
         path: "/settings/deactivate-account",
         icon: (

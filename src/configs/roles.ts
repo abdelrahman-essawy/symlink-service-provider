@@ -7,18 +7,18 @@ export const TROLES = {
   SERVICE_PROVIDER: "SERVICE_PROVIDER",
 } as const;
 
-export type ExtractValuesFromObjectType<T> = T extends {} ?
-  { [K in keyof T]: T[K] }[keyof T]
+export type ExtractValuesFromObjectType<T> = T extends {}
+  ? { [K in keyof T]: T[K] }[keyof T]
   : never;
 
 export type ROLES_ENUM = ExtractValuesFromObjectType<typeof TROLES>;
 export type PERMISSIONS_ENUM = ExtractValuesFromObjectType<typeof PATH_PERMISSIONS>;
-type Permissions = Readonly<Partial<Record<PERMISSIONS_ENUM, boolean>>>
+type Permissions = Readonly<Partial<Record<PERMISSIONS_ENUM, boolean>>>;
 type PermissionsSchema = {
   [key in ROLES_ENUM]: Permissions & {
     notAbleToViewComponents: string[];
   };
-}
+};
 
 const sharedPermissions: Permissions = {
   canViewLayout: true,
@@ -30,7 +30,6 @@ const sharedPermissions: Permissions = {
   canViewSettingsTermsAndConditions: true,
   canViewSettingsContactUs: true,
   canViewSettingsDeactivateAccount: true,
-
 };
 
 export const permissionSchema: PermissionsSchema = {
@@ -39,6 +38,7 @@ export const permissionSchema: PermissionsSchema = {
     canViewExperince: true,
     canViewEducationalInfo: true,
     canViewCertificate: true,
+    canViewExpertName: true,
 
     notAbleToViewComponents: ["example", "example3"],
   },
@@ -51,13 +51,13 @@ export const permissionSchema: PermissionsSchema = {
       "sidenav-educational-info",
       "sidenav-experience",
       "sidenav-certificate",
-
     ],
   },
   SERVICE_PROVIDER: {
     ...sharedPermissions,
     canViewBids: true,
-
+    canViewSettingsCreateCompany: true,
+    canViewExpertName: true,
     notAbleToViewComponents: [
       "sidenav-educational-info",
       "sidenav-experience",
@@ -85,4 +85,4 @@ export const getRolesThatCanAccessComponentId = (componentId: string): string[] 
     return !components.includes(componentId);
   });
   return rolesThatCanAccessComponent;
-}
+};
