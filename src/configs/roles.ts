@@ -1,4 +1,4 @@
-import { getPermisionNameFromPath } from "./pathsPermission";
+import { getPermissionNameFromPath } from "./pathsPermission";
 import { PATH_PERMISSIONS } from "./pathsPermission";
 
 export const TROLES = {
@@ -71,7 +71,7 @@ export const getRolesThatCanAccessPathName = (path: string): ROLES_ENUM[] => {
   const roles = Object.keys(permissionSchema) as ROLES_ENUM[];
   const rolesThatCanAccessPath = roles.filter((role) => {
     const rolePermissions = permissionSchema[role];
-    const permissionName = getPermisionNameFromPath(path as any);
+    const permissionName = getPermissionNameFromPath(path as any);
     return rolePermissions[permissionName];
   });
   return rolesThatCanAccessPath;

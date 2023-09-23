@@ -21,7 +21,7 @@ export const PATH_PERMISSIONS = {
 
 } as const;
 
-export const getPermisionNameFromPath = (path: keyof typeof PATH_PERMISSIONS) => {
+export const getPermissionNameFromPath = (path: keyof typeof PATH_PERMISSIONS) => {
   return PATH_PERMISSIONS[path] ?? false;
 };
 

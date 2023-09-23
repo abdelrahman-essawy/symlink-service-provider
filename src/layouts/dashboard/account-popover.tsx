@@ -13,12 +13,8 @@ export const AccountPopover = (props: { anchorEl: any; onClose: any; open: any; 
   const handleSignOut = useCallback(
     () => {
       onClose?.();
-      auth?.signOut();
-      sessionStorage.removeItem("authenticated")
-      sessionStorage.removeItem("token")
-      console.log("asd", auth?.user)
-
-      router.push('/');
+      // auth?.signOut();
+      router.push('/auth/login');
     },
     [onClose, auth, router]
   );
