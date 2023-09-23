@@ -1,4 +1,4 @@
-import { getPermisionNameFromPath } from "./pathsPermission";
+import { getPermissionNameFromPath } from "./pathsPermission";
 import { PATH_PERMISSIONS } from "./pathsPermission";
 
 export const TROLES = {
@@ -25,6 +25,7 @@ const sharedPermissions: Permissions = {
   canViewProjects: true,
   canViewProfile: true,
   canViewExperince: true,
+  canViewSupport: true,
   canViewSettingsAbout: true,
   canViewSettingsTermsAndConditions: true,
   canViewSettingsContactUs: true,
@@ -43,6 +44,7 @@ export const permissionSchema: PermissionsSchema = {
   },
   CLIENT: {
     ...sharedPermissions,
+    canViewWallet: true,
 
     notAbleToViewComponents: [
       "sidenav-bids",
@@ -69,7 +71,7 @@ export const getRolesThatCanAccessPathName = (path: string): ROLES_ENUM[] => {
   const roles = Object.keys(permissionSchema) as ROLES_ENUM[];
   const rolesThatCanAccessPath = roles.filter((role) => {
     const rolePermissions = permissionSchema[role];
-    const permissionName = getPermisionNameFromPath(path as any);
+    const permissionName = getPermissionNameFromPath(path as any);
     return rolePermissions[permissionName];
   });
   return rolesThatCanAccessPath;

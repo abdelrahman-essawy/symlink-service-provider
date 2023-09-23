@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { useAuthContext } from '../contexts/auth-context';
-import { getPermisionNameFromPath, hasPermissionToViewPath } from '@/configs/pathsPermission';
+import { getPermissionNameFromPath, hasPermissionToViewPath } from '@/configs/pathsPermission';
 import { getRolesThatCanAccessPathName } from '@/configs/roles';
 
 export const AuthGuard = (props: { children: any; }) => {
@@ -53,7 +53,7 @@ export const AuthGuard = (props: { children: any; }) => {
 
   const { pathname } = router;
 
-  const permision = getPermisionNameFromPath(pathname as any);
+  const permision = getPermissionNameFromPath(pathname as any);
 
   if (!permision) {
     return <div>No rule for this path, contact the administrator.</div>;

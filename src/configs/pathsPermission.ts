@@ -14,6 +14,7 @@ export const PATH_PERMISSIONS = {
   "/educational-info": "canViewEducationalInfo",
   "/certificate": "canViewCertificate",
   "/support": "canViewSupport",
+  "/wallet": "canViewWallet",
   "/expert-name": "canViewExpertName",
 
   // Settings
@@ -25,7 +26,7 @@ export const PATH_PERMISSIONS = {
   "/settings/deactivate-account": "canViewSettingsDeactivateAccount",
 } as const;
 
-export const getPermisionNameFromPath = (path: keyof typeof PATH_PERMISSIONS) => {
+export const getPermissionNameFromPath = (path: keyof typeof PATH_PERMISSIONS) => {
   return PATH_PERMISSIONS[path] ?? false;
 };
 

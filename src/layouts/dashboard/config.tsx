@@ -137,6 +137,7 @@ export const items = [
         external: false,
         disabled: false,
         menu: false,
+        id: "sidenav-about",
         title: "About",
         path: "/settings/about",
         icon: (
@@ -150,6 +151,7 @@ export const items = [
         external: false,
         disabled: false,
         menu: false,
+        id: "sidenav-terms-and-conditions",
         title: "Terms and Conditions",
         path: "/settings/terms-and-conditions",
         icon: (
@@ -162,6 +164,7 @@ export const items = [
         external: false,
         disabled: false,
         menu: false,
+        id: "sidenav-contact-us",
         title: "Contact us",
         path: "/settings/contact-us",
         icon: (
@@ -174,6 +177,7 @@ export const items = [
         external: false,
         disabled: false,
         menu: false,
+        id: "sidenav-deactivate-account",
         title: "Create company",
         path: "/settings/create-company",
         icon: (

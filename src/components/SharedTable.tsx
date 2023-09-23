@@ -165,9 +165,9 @@ const SharedTable = <T extends Record<string, any>>({
         muiToolbarAlertBannerProps={
           isError
             ? {
-                color: "error",
-                children: "Error loading data",
-              }
+              color: "error",
+              children: "Error loading data",
+            }
             : undefined
         }
         onColumnFiltersChange={setColumnFilters}
