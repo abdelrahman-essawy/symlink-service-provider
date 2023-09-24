@@ -50,6 +50,7 @@ export const permissionSchema: PermissionsSchema = {
       "headertabs-service-provider-projects",
       "button-request-to-review",
       "button-bid-rfp",
+      "menu-item-service-provider-receive-orders"
     ],
   },
   SERVICE_PROVIDER: {
@@ -65,7 +66,8 @@ export const permissionSchema: PermissionsSchema = {
       "button-request-a-project",
       "table-client-projects",
       "headertabs-client-projects",
-      "button-accept-reject-rfp",
+      "buttons-accept-reject-rfp",
+      "button-upload-file",
       // "sidenav-profile",
     ],
   },

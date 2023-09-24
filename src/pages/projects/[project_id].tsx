@@ -29,6 +29,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import RoleBasedRender from "@/hocs/RoleBasedRender";
 import { dictionary } from "@/configs/i18next";
 import bids from "../../../public/bids.json";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const Page = () => {
   const title = "Projects";
@@ -121,6 +122,17 @@ const Page = () => {
                 </Button>
               </Grid>
             </RoleBasedRender>
+            {value === 1 &&
+              <RoleBasedRender
+                componentId="button-upload-file"
+              >
+                <Button variant="contained" color="warning" sx={{ borderRadius: 8, alignSelf: "center" }}>
+                  {dictionary("Upload file")}
+                </Button>
+              </RoleBasedRender>
+            }
+
+
             <Grid item xs={12}>
               <Card elevation={0}>
                 <CustomTabPanel value={value} index={0}>
@@ -306,12 +318,10 @@ const Page = () => {
                     showActions={true}
                     renderRowActions={(row: any) => {
                       return (
-                        <SvgIcon style={{
-                          cursor: "pointer",
-                          color: "#6161d9",
-                        }} viewBox="0 0 24 24">
-                          <VisibilityIcon />
-                        </SvgIcon>
+                        <Box sx={{ display: "flex", flexDirection: "row", gap: 1 }}>
+                          <VisibilityIcon sx={{ color: "#7288FA" }} />
+                          <DeleteIcon sx={{ color: "#7288FA" }} />
+                        </Box>
                       )
                     }}
 

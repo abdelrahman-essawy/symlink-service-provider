@@ -91,8 +91,6 @@ const Page = () => {
                 </Button>
               </Grid>
             </RoleBasedRender>
-
-
             <RoleBasedRender
               componentId="buttons-accept-reject-rfp"
             >

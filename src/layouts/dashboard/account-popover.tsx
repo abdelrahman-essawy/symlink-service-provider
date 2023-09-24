@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { Box, Divider, Grid, MenuItem, MenuList, Popover, Switch, Typography } from '@mui/material';
 import { useAuth } from '../../hooks/use-auth';
 import React from 'react';
+import RoleBasedRender from '@/hocs/RoleBasedRender';
 
 export const AccountPopover = (props: { anchorEl: any; onClose: any; open: any; }) => {
   const { anchorEl, onClose, open } = props;
@@ -53,30 +54,32 @@ export const AccountPopover = (props: { anchorEl: any; onClose: any; open: any; 
           onClick={() => router.push("/profile")}>
           Profile
         </MenuItem>
+        <RoleBasedRender
+          componentId="menu-item-service-provider-receive-orders">
+          <MenuItem
+            disableRipple
+            sx={{
+              gap: 3,
+              cursor: 'auto',
+              "&:hover": {
+                backgroundColor: 'transparent',
+              },
+              "&:active": {
+                effect: 'none',
+              },
+            }}
 
-        <MenuItem
-          disableRipple
-          sx={{
-            gap: 3,
-            cursor: 'auto',
-            "&:hover": {
-              backgroundColor: 'transparent',
-            },
-            "&:active": {
-              effect: 'none',
-            },
-          }}
-
-        >
-          Receive Orders
-          <Switch
-            checked={auth?.user?.receiveOrders ?? false}
-            color="primary"
-            edge="start"
-            name="checkedB"
-            onChange={() => { }}
-          />
-        </MenuItem>
+          >
+            Receive Orders
+            <Switch
+              checked={auth?.user?.receiveOrders ?? false}
+              color="primary"
+              edge="start"
+              name="checkedB"
+              onChange={() => { }}
+            />
+          </MenuItem>
+        </RoleBasedRender>
       </MenuList>
       <Divider />
       <MenuList
