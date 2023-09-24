@@ -7,13 +7,23 @@ export default function usePreviousPath() {
   const router = useRouter();
   const [previousPath, setPreviousPath] = useState<string | null>(null);
   const [isinnerPath,setIsinnerPath] = useState(false);
-  const innerPathsList = ["/bid/rfp-name","/profile"]
+  const [isProfilePath,setIsProfilePath] = useState(false);
+  const innerPathsList = ["/bid/rfp-name","/profile","/certificate","/experience","/educational-info"]
+  const innerProfilePathsList = ["/profile","/certificate","/experience","/educational-info"]
   const checkIfInnerPath = ()=>{
     if(innerPathsList?.includes(router.pathname)){
       setIsinnerPath(true);
+
+      if(innerProfilePathsList.includes(router.pathname)){
+        setIsProfilePath(true);
+      }
+      else{
+        setIsProfilePath(false);
+      }
     }
     else {
       setIsinnerPath(false);
+      setIsProfilePath(false);
     }
   }
   useEffect(() => {
@@ -32,5 +42,5 @@ export default function usePreviousPath() {
     };
   }, [router.events, router.pathname]);
 
-  return {previousPath,isinnerPath};
+  return {previousPath,isinnerPath,isProfilePath};
 }

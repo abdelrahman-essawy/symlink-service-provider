@@ -32,6 +32,7 @@ const sharedPermissions: Permissions = {
   canViewSettingsContactUs: true,
   canViewSettingsDeactivateAccount: true,
   canViewWallet: true,
+
 };
 
 export const permissionSchema: PermissionsSchema = {
@@ -60,9 +61,9 @@ export const permissionSchema: PermissionsSchema = {
     canViewExpertName: true,
     canViewBidDetails: true,
     notAbleToViewComponents: [
-      "sidenav-educational-info",
-      "sidenav-experience",
-      "sidenav-certificate",
+      // "sidenav-educational-info",
+      // "sidenav-experience",
+      // "sidenav-certificate",
       "button-request-a-project",
       "table-client-projects",
       "headertabs-client-projects",

@@ -52,48 +52,7 @@ export const items = [
       </SvgIcon>
     ),
   },
-  {
-    // used in symline
-    external: false,
-    disabled: false,
-    menu: false,
-    id: "sidenav-educational-info",
-    title: "Educational info",
-    path: "/educational-info",
-    icon: (
-      <SvgIcon fontSize="small">
-        <FindInPageIcon />
-      </SvgIcon>
-    ),
-  },
-  {
-    // used in symline
-    external: false,
-    disabled: false,
-    menu: false,
-    id: "sidenav-experience",
-    title: "Experience",
-    path: "/experience",
-    icon: (
-      <SvgIcon fontSize="small">
-        <SchoolIcon />
-      </SvgIcon>
-    ),
-  },
-  {
-    // used in symline
-    external: false,
-    disabled: false,
-    menu: false,
-    id: "sidenav-certificate",
-    title: "Certificate",
-    path: "/certificate",
-    icon: (
-      <SvgIcon fontSize="small">
-        <WorkspacePremiumIcon />
-      </SvgIcon>
-    ),
-  },
+  
   {
     // used in symline
     external: false,
@@ -104,6 +63,20 @@ export const items = [
     icon: (
       <SvgIcon fontSize="small">
         <VideocamIcon />
+      </SvgIcon>
+    ),
+  },
+  {
+    // used in symline
+    external: false,
+    disabled: false,
+    menu: false,
+    id: "sidenav-profile",
+    title: "Profile",
+    path: "/profile",
+    icon: (
+      <SvgIcon fontSize="small">
+        <AccountCircleIcon />
       </SvgIcon>
     ),
   },
@@ -119,20 +92,7 @@ export const items = [
       </SvgIcon>
     ),
     children: [
-      {
-        // used in symline
-        external: false,
-        disabled: false,
-        menu: false,
-        id: "sidenav-profile",
-        title: "Profile",
-        path: "/profile",
-        icon: (
-          <SvgIcon fontSize="small">
-            <AccountCircleIcon />
-          </SvgIcon>
-        ),
-      },
+
       {
         external: false,
         disabled: false,
@@ -201,3 +161,62 @@ export const items = [
     ],
   },
 ];
+
+export const profileItems = [
+  {
+    // used in symline
+    external: false,
+    disabled: false,
+    menu: false,
+    id: "sidenav-profile",
+    title: "Profile",
+    path: "/profile",
+    icon: (
+      <SvgIcon fontSize="small">
+        <AccountCircleIcon />
+      </SvgIcon>
+    ),
+  },
+  {
+    // used in symline
+    external: false,
+    disabled: false,
+    menu: false,
+    id: "sidenav-educational-info",
+    title: "Educational info",
+    path: "/educational-info",
+    icon: (
+      <SvgIcon fontSize="small">
+        <FindInPageIcon />
+      </SvgIcon>
+    ),
+  },
+  {
+    // used in symline
+    external: false,
+    disabled: false,
+    menu: false,
+    id: "sidenav-experience",
+    title: "Experience",
+    path: "/experience",
+    icon: (
+      <SvgIcon fontSize="small">
+        <SchoolIcon />
+      </SvgIcon>
+    ),
+  },
+  {
+    // used in symline
+    external: false,
+    disabled: false,
+    menu: false,
+    id: "sidenav-certificate",
+    title: "Certificate",
+    path: "/certificate",
+    icon: (
+      <SvgIcon fontSize="small">
+        <WorkspacePremiumIcon />
+      </SvgIcon>
+    ),
+  },
+]
