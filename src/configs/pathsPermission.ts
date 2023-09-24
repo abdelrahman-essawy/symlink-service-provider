@@ -9,11 +9,14 @@ export const PATH_PERMISSIONS = {
   "/": "canViewLayout",
   "/dashboard": "canViewDashboard",
   "/projects": "canViewProjects",
+  "/projects/[project_id]": "canViewProjectsDetails",
   "/bids": "canViewBids",
+  "/bid/rfp-name": "canViewBidDetails", // TODO: make it dynamic [bid_Id]
   "/experience": "canViewExperince",
   "/educational-info": "canViewEducationalInfo",
   "/certificate": "canViewCertificate",
   "/support": "canViewSupport",
+  "/wallet": "canViewWallet",
   "/expert-name": "canViewExpertName",
 
   // Settings
@@ -25,7 +28,7 @@ export const PATH_PERMISSIONS = {
   "/settings/deactivate-account": "canViewSettingsDeactivateAccount",
 } as const;
 
-export const getPermisionNameFromPath = (path: keyof typeof PATH_PERMISSIONS) => {
+export const getPermissionNameFromPath = (path: keyof typeof PATH_PERMISSIONS) => {
   return PATH_PERMISSIONS[path] ?? false;
 };
 
@@ -38,6 +41,13 @@ export function hasPermissionToViewPath(role: ROLES_ENUM, permission: PERMISSION
     return false;
   }
 
+  if (!rolePermissions) {
+    return false;
+  }
+
+  if (!rolePermissions[permission]) {
+    return false;
+  }
   // Check if the role has the permission
   return !!rolePermissions[permission];
 }

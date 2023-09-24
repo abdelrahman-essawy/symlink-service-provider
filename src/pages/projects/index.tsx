@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { Box, Card, Container, Grid, Typography } from "@mui/material";
+import { Box, Button, Card, Container, Grid, Typography } from "@mui/material";
 import React from "react";
 import { DashboardLayout } from "../../layouts/dashboard/layout";
 import { useTranslation } from "react-i18next";
@@ -7,6 +7,7 @@ import SharedTable from "@/components/SharedTable";
 import projects from "../../../public/projects.json";
 import { dictionary, TranslatedWord } from "@/configs/i18next";
 import router from "next/router";
+import RoleBasedRender from "@/hocs/RoleBasedRender";
 
 const Page = () => {
   const { i18n } = useTranslation();
@@ -33,20 +34,47 @@ const Page = () => {
         }}
       >
         <Container maxWidth="xl">
-          <Typography variant="h3" sx={{ mb: 2 }} fontWeight={"bold"}>
-            {dictionary(title as TranslatedWord)}
-          </Typography>
+          <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
+            <Typography variant="h3" sx={{ mb: 2 }} fontWeight={"bold"}>
+              {dictionary(title as TranslatedWord)}
+            </Typography>
+            <RoleBasedRender
+              componentId="button-request-a-project"
+            >
+              <Button variant="contained" color="warning" sx={{ borderRadius: 8 }}>
+                {dictionary("Request a project")}
+              </Button>
+            </RoleBasedRender>
+          </Grid>
           <Grid container spacing={2} justifyContent={"space-between"}>
             <Grid item xs={12}>
               <Card sx={{ px: 2 }}>
-                <SharedTable
-                  muiTableBodyRowProps={(row) => ({
-                    onClick: () => router.push(`/projects/1`),
-                    sx: { cursor: "pointer" },
-                  })}
-                  endpoint="http://localhost:3000/projects.json"
-                  fakeData={projects}
-                />
+                <RoleBasedRender
+                  componentId="table-service-provider-projects">
+                  <SharedTable
+                    muiTableBodyRowProps={(row) => ({
+                      onClick: () => router.push(`/projects/1`),
+                      sx: { cursor: "pointer" },
+                    })}
+                    endpoint="http://localhost:3000/projects.json"
+                    fakeData={projects}
+                  />
+                </RoleBasedRender>
+
+                <RoleBasedRender
+                  componentId="table-client-projects">
+                  <SharedTable
+                    muiTableBodyRowProps={(row) => ({
+                      onClick: () => router.push(`/projects/1`),
+                      sx: { cursor: "pointer" },
+                    })}
+                    endpoint="http://localhost:3000/projects.json"
+                    fakeData={projects}
+                    enableRowSelection
+                    enableMultiRowSelection
+                    showActions
+                  />
+                </RoleBasedRender>
               </Card>
             </Grid>
           </Grid>

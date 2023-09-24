@@ -1,4 +1,4 @@
-import { getPermisionNameFromPath } from "./pathsPermission";
+import { getPermissionNameFromPath } from "./pathsPermission";
 import { PATH_PERMISSIONS } from "./pathsPermission";
 
 export const TROLES = {
@@ -23,22 +23,19 @@ type PermissionsSchema = {
 const sharedPermissions: Permissions = {
   canViewLayout: true,
   canViewProjects: true,
+  canViewProjectsDetails: true,
   canViewProfile: true,
   canViewExperince: true,
+  canViewSupport: true,
   canViewSettingsAbout: true,
   canViewSettingsTermsAndConditions: true,
   canViewSettingsContactUs: true,
   canViewSettingsDeactivateAccount: true,
+  canViewWallet: true,
 };
 
 export const permissionSchema: PermissionsSchema = {
   ADMIN: {
-    ...sharedPermissions,
-    canViewExperince: true,
-    canViewEducationalInfo: true,
-    canViewCertificate: true,
-    canViewExpertName: true,
-
     notAbleToViewComponents: ["example", "example3"],
   },
   CLIENT: {
@@ -49,6 +46,11 @@ export const permissionSchema: PermissionsSchema = {
       "sidenav-educational-info",
       "sidenav-experience",
       "sidenav-certificate",
+      "table-service-provider-projects",
+      "headertabs-service-provider-projects",
+      "button-request-to-review",
+      "button-bid-rfp",
+      "menu-item-service-provider-receive-orders"
     ],
   },
   SERVICE_PROVIDER: {
@@ -56,11 +58,17 @@ export const permissionSchema: PermissionsSchema = {
     canViewBids: true,
     canViewSettingsCreateCompany: true,
     canViewExpertName: true,
+    canViewBidDetails: true,
     notAbleToViewComponents: [
       "sidenav-educational-info",
       "sidenav-experience",
       "sidenav-certificate",
-      "sidenav-profile",
+      "button-request-a-project",
+      "table-client-projects",
+      "headertabs-client-projects",
+      "buttons-accept-reject-rfp",
+      "button-upload-file",
+      // "sidenav-profile",
     ],
   },
 };
@@ -69,7 +77,7 @@ export const getRolesThatCanAccessPathName = (path: string): ROLES_ENUM[] => {
   const roles = Object.keys(permissionSchema) as ROLES_ENUM[];
   const rolesThatCanAccessPath = roles.filter((role) => {
     const rolePermissions = permissionSchema[role];
-    const permissionName = getPermisionNameFromPath(path as any);
+    const permissionName = getPermissionNameFromPath(path as any);
     return rolePermissions[permissionName];
   });
   return rolesThatCanAccessPath;
