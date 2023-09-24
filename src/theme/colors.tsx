@@ -74,7 +74,7 @@ export const warning = withAlphas({
   light: '#FEF0C7',
   main: '#F79009',
   dark: '#B54708',
-  darkest: '#7A2E0E',
+  darkest: '#EAAD12',
   contrastText: '#FFFFFF'
 });
 
