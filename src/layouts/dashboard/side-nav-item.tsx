@@ -5,9 +5,10 @@ import React from 'react';
 import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import RoleBasedRender from '@/hocs/RoleBasedRender';
+import { StyledBadge } from '@/components/_used-symline/tabs/headerTabs';
 
-export const SideNavItem = (props: { active?: boolean; disabled: boolean; external: any; icon: any; path: any; title: any; items: any[] | undefined }) => {
-  const { active = false, disabled, external, icon, path, title, items } = props;
+export const SideNavItem = (props: { active?: boolean; disabled: boolean; external: any; icon: any; path: any; title: any; items: any[]; amount: number | undefined }) => {
+  const { active = false, disabled, external, icon, path, title, items, amount } = props;
   const { t } = useTranslation();
   const [open, setOpen] = React.useState(false);
   const pathname = usePathname();
@@ -52,6 +53,7 @@ export const SideNavItem = (props: { active?: boolean; disabled: boolean; extern
         }}
         {...linkProps}
       >
+
         {icon && (
           <Box
             component="span"
@@ -92,6 +94,23 @@ export const SideNavItem = (props: { active?: boolean; disabled: boolean; extern
         >
           {t(title)}
         </Box>
+        {amount != undefined && amount !== 0 && (
+          <StyledBadge
+            badgeContent={amount}
+            sx={{
+              "& .MuiBadge-badge": {
+                backgroundColor: "#dbbb76",
+                color: "dark-gray",
+                width: 26,
+                height: 26,
+                borderRadius: "50%",
+                mx: 1,
+              },
+            }}
+          />
+        )
+
+        }
       </ButtonBase>
       {items != undefined && (
         <Collapse in={open} timeout="auto" unmountOnExit>

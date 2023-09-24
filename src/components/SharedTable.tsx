@@ -23,6 +23,7 @@ const SharedTable = <T extends Record<string, any>>({
   fakeData,
   showActions,
   muiTableBodyRowProps,
+  renderRowActions,
 }: {
   endpoint: string;
   renderColumns?: MRT_ColumnDef<T>["accessorKey"][];
@@ -31,6 +32,7 @@ const SharedTable = <T extends Record<string, any>>({
   fakeData: any;
   showActions?: boolean;
   muiTableBodyRowProps?: MaterialReactTableProps<T>["muiTableBodyRowProps"];
+  renderRowActions?: MaterialReactTableProps<T>["renderRowActions"];
 }) => {
   const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState("");
@@ -109,6 +111,7 @@ const SharedTable = <T extends Record<string, any>>({
       <MaterialReactTable
         enableRowActions={showActions}
         positionActionsColumn="last"
+        renderRowActions={renderRowActions}
         renderRowActionMenuItems={({ row, table }) => [
           <MenuItem key="edit">{dictionary("Edit")}</MenuItem>,
           <MenuItem key="delete">{dictionary("Delete")}</MenuItem>,

@@ -24,13 +24,13 @@ export const items = [
       </SvgIcon>
     ),
   },
-
   {
     // used in symline
     external: false,
     disabled: false,
     menu: false,
     id: "sidenav-bids",
+    amount: 2,
     title: "Bids",
     path: "/bids",
     icon: (

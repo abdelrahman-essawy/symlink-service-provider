@@ -9,6 +9,7 @@ import {
   Button,
   Divider,
   Avatar,
+  SvgIcon,
 } from "@mui/material";
 import React from "react";
 import { DashboardLayout } from "../../../layouts/dashboard/layout";
@@ -20,73 +21,8 @@ import { dictionary, TranslatedWord } from "@/configs/i18next";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import SendIcon from "@mui/icons-material/Send";
 import BidModal from "@/components/modals/BidModal";
-
-const projects = {
-  data: [
-    {
-      Name: "اسم المشروع",
-      Type: "اسم العميل",
-      progress: "Completed",
-      date: "2023-03-14T12:00:40.000000Z",
-    },
-    {
-      Name: "اسم المشروع",
-      Type: "اسم العميل",
-      progress: "Completed",
-      date: "2023-03-14T12:00:40.000000Z",
-    },
-    {
-      Name: "اسم المشروع",
-      Type: "اسم العميل",
-      progress: "Completed",
-      date: "2023-03-14T12:00:40.000000Z",
-    },
-    {
-      Name: "اسم المشروع",
-      Type: "اسم العميل",
-      progress: "Completed",
-      date: "2023-03-14T12:00:40.000000Z",
-    },
-  ],
-  links: {
-    first: "https://zone.zbony.com/api/v1/admin/stores?page=1",
-    last: "https://zone.zbony.com/api/v1/admin/stores?page=2",
-    prev: null,
-    next: "https://zone.zbony.com/api/v1/admin/stores?page=2",
-  },
-  meta: {
-    current_page: 1,
-    from: 1,
-    last_page: 2,
-    links: [
-      {
-        url: null,
-        label: "&laquo; \u0627\u0644\u0633\u0627\u0628\u0642",
-        active: false,
-      },
-      {
-        url: "https://zone.zbony.com/api/v1/admin/stores?page=1",
-        label: "1",
-        active: true,
-      },
-      {
-        url: "https://zone.zbony.com/api/v1/admin/stores?page=2",
-        label: "2",
-        active: false,
-      },
-      {
-        url: "https://zone.zbony.com/api/v1/admin/stores?page=2",
-        label: "\u0627\u0644\u062a\u0627\u0644\u064a &raquo;",
-        active: false,
-      },
-    ],
-    path: "https://zone.zbony.com/api/v1/admin/stores",
-    per_page: 10,
-    to: 10,
-    total: 21,
-  },
-  message: "success",
-};
+import attachedFiles from "../../../../public/attached-files.json";
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 const Page = () => {
   const { i18n } = useTranslation();
@@ -120,16 +56,25 @@ const Page = () => {
           <Typography variant="h3" sx={{ mb: 2 }} fontWeight={"bold"}>
             {dictionary(title as TranslatedWord)}
           </Typography>
-          <Grid container spacing={2} justifyContent={"space-between"}>
-            <Grid item xs={12} md={6}>
-              <HeaderTabs
-                value={value}
-                handleChange={handletabs}
-                label1="Questions"
-                label2="Attached files"
-                label3="Discussion"
-              />
-            </Grid>
+          <Grid container spacing={2} justifyContent={"space-between"} alignItems={"end"} >
+            <HeaderTabs
+              value={value}
+              handleChange={handletabs}
+              tabs={
+                [{
+                  title: "Discussion",
+                  amount: 0
+                }, {
+                  title: "Attached files",
+                  amount: 5
+                },
+                {
+                  title: "Questions",
+                  amount: 3
+                },
+                ]
+              }
+            />
             <Grid item xs={12} md={3} sx={{ display: "flex", justifyContent: "end" }}>
               <Button
                 onClick={handleOpen}
@@ -137,7 +82,7 @@ const Page = () => {
                 color="warning"
                 sx={{ borderRadius: 8 }}
               >
-                {t("Bid")}
+                {dictionary("Bid")}
               </Button>
             </Grid>
             <Grid item xs={12}>
@@ -250,7 +195,21 @@ const Page = () => {
                   </CardContent>
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={1}>
-                  <SharedTable endpoint="http://localhost:3000/projects.json" fakeData={projects} />
+                  <SharedTable endpoint="http://localhost:3000/attached-files.json"
+                    showActions={true}
+                    renderRowActions={(row: any) => {
+                      return (
+                        <SvgIcon style={{
+                          cursor: "pointer",
+                          color: "#6161d9",
+                        }} viewBox="0 0 24 24">
+                          <VisibilityIcon />
+                        </SvgIcon>
+                      )
+                    }}
+
+                    fakeData={attachedFiles} />
+
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={2}>
                   {" "}

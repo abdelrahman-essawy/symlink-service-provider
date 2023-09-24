@@ -55,6 +55,7 @@ export const AccountPopover = (props: { anchorEl: any; onClose: any; open: any; 
         </MenuItem>
 
         <MenuItem
+          disableRipple
           sx={{
             gap: 3,
             cursor: 'auto',

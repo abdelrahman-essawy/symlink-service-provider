@@ -13,6 +13,7 @@ import {
   CardContent,
   Divider,
   Avatar,
+  SvgIcon,
 } from "@mui/material";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import SendIcon from "@mui/icons-material/Send";
@@ -21,6 +22,10 @@ import { DashboardLayout } from "../../layouts/dashboard/layout";
 import { useTranslation } from "react-i18next";
 import HeaderTabs from "@/components/_used-symline/tabs/headerTabs";
 import CustomTabPanel from "@/components/_used-symline/tabs/tabsPanel";
+import SharedTable from "@/components/SharedTable";
+import { useRouter } from "next/router";
+import attachedFiles from "../../../public/attached-files.json";
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 const Page = () => {
   const title = "Projects";
@@ -28,7 +33,7 @@ const Page = () => {
   const handletabs = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
-
+  const router = useRouter()
   return (
     <>
       <Head>
@@ -51,9 +56,21 @@ const Page = () => {
               <HeaderTabs
                 value={value}
                 handleChange={handletabs}
-                label1="Discussion"
-                label2="Questions"
-                label3="Attached filles"
+                tabs={
+                  [{
+                    title: "Discussion",
+                    amount: 0
+                  }, {
+                    title: "Attached filles",
+                    amount: 5
+                  },
+                  {
+                    title: "Questions",
+                    amount: 3
+                  },
+
+                  ]
+                }
               />
             </Grid>
             <Grid item xs={12} md={3} sx={{ display: "flex", justifyContent: "end" }}>
@@ -134,7 +151,7 @@ const Page = () => {
                     </Box>
                   </Grid>
                 </CustomTabPanel>
-                <CustomTabPanel value={value} index={1}>
+                <CustomTabPanel value={value} index={2}>
                   <CardContent sx={{ p: 1 }}>
                     <Typography
                       variant="h6"
@@ -142,7 +159,7 @@ const Page = () => {
                       color="primary"
                       sx={{ p: 1, mb: 3, borderRadius: 1, bgcolor: "primary.lightest" }}
                     >
-                      General Questtions
+                      General Questions
                     </Typography>
                     <Typography variant="h6" fontWeight="bold" sx={{ mb: 1 }}>
                       What is preferred testing time ?
@@ -241,9 +258,21 @@ const Page = () => {
                     </Grid>
                   </CardContent>
                 </CustomTabPanel>
-                <CustomTabPanel value={value} index={2}>
-                  {" "}
-                  three
+                <CustomTabPanel value={value} index={1}>
+                  <SharedTable endpoint="http://localhost:3000/attached-files.json"
+                    showActions={true}
+                    renderRowActions={(row: any) => {
+                      return (
+                        <SvgIcon style={{
+                          cursor: "pointer",
+                          color: "#6161d9",
+                        }} viewBox="0 0 24 24">
+                          <VisibilityIcon />
+                        </SvgIcon>
+                      )
+                    }}
+
+                    fakeData={attachedFiles} />
                 </CustomTabPanel>
               </Card>
             </Grid>

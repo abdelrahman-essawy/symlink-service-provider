@@ -23,6 +23,7 @@ type PermissionsSchema = {
 const sharedPermissions: Permissions = {
   canViewLayout: true,
   canViewProjects: true,
+  canViewProjectsDetails: true,
   canViewProfile: true,
   canViewExperince: true,
   canViewSupport: true,
@@ -30,21 +31,15 @@ const sharedPermissions: Permissions = {
   canViewSettingsTermsAndConditions: true,
   canViewSettingsContactUs: true,
   canViewSettingsDeactivateAccount: true,
+  canViewWallet: true,
 };
 
 export const permissionSchema: PermissionsSchema = {
   ADMIN: {
-    ...sharedPermissions,
-    canViewExperince: true,
-    canViewEducationalInfo: true,
-    canViewCertificate: true,
-    canViewExpertName: true,
-
     notAbleToViewComponents: ["example", "example3"],
   },
   CLIENT: {
     ...sharedPermissions,
-    canViewWallet: true,
 
     notAbleToViewComponents: [
       "sidenav-bids",
@@ -58,6 +53,7 @@ export const permissionSchema: PermissionsSchema = {
     canViewBids: true,
     canViewSettingsCreateCompany: true,
     canViewExpertName: true,
+    canViewBidDetails: true,
     notAbleToViewComponents: [
       "sidenav-educational-info",
       "sidenav-experience",
