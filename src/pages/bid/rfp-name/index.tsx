@@ -23,6 +23,7 @@ import SendIcon from "@mui/icons-material/Send";
 import BidModal from "@/components/modals/BidModal";
 import attachedFiles from "../../../../public/attached-files.json";
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import RoleBasedRender from "@/hocs/RoleBasedRender";
 
 const Page = () => {
   const { i18n } = useTranslation();
@@ -75,16 +76,50 @@ const Page = () => {
                 ]
               }
             />
-            <Grid item xs={12} md={3} sx={{ display: "flex", justifyContent: "end" }}>
-              <Button
-                onClick={handleOpen}
-                variant="contained"
-                color="warning"
-                sx={{ borderRadius: 8 }}
-              >
-                {dictionary("Bid")}
-              </Button>
-            </Grid>
+
+            <RoleBasedRender
+              componentId="button-bid-rfp"
+            >
+              <Grid item xs={12} md={3} sx={{ display: "flex", justifyContent: "end" }}>
+                <Button
+                  onClick={handleOpen}
+                  variant="contained"
+                  color="warning"
+                  sx={{ borderRadius: 8 }}
+                >
+                  {dictionary("Bid")}
+                </Button>
+              </Grid>
+            </RoleBasedRender>
+
+
+            <RoleBasedRender
+              componentId="buttons-accept-reject-rfp"
+            >
+              <Grid item xs={12} md={3} sx={{ display: "flex", justifyContent: "center", gap: 3 }}>
+                <Button
+                  onClick={handleOpen}
+                  variant="contained"
+                  color="warning"
+                  sx={{ borderRadius: 8 }}
+                >
+                  {dictionary("Accept")}
+                </Button>
+                <Button
+                  onClick={handleOpen}
+                  variant="contained"
+                  sx={{
+                    borderRadius: 8,
+                    color: "#ffffff",
+                    backgroundColor: "#6576d9",
+                  }}
+                >
+                  {dictionary("Reject")}
+                </Button>
+              </Grid>
+
+            </RoleBasedRender>
+
             <Grid item xs={12}>
               <Card elevation={0}>
                 <CustomTabPanel value={value} index={0}>

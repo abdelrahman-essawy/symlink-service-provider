@@ -46,6 +46,10 @@ export const permissionSchema: PermissionsSchema = {
       "sidenav-educational-info",
       "sidenav-experience",
       "sidenav-certificate",
+      "table-service-provider-projects",
+      "headertabs-service-provider-projects",
+      "button-request-to-review",
+      "button-bid-rfp",
     ],
   },
   SERVICE_PROVIDER: {
@@ -58,7 +62,11 @@ export const permissionSchema: PermissionsSchema = {
       "sidenav-educational-info",
       "sidenav-experience",
       "sidenav-certificate",
-      "sidenav-profile",
+      "button-request-a-project",
+      "table-client-projects",
+      "headertabs-client-projects",
+      "button-accept-reject-rfp",
+      // "sidenav-profile",
     ],
   },
 };

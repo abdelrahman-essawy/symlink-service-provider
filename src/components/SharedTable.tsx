@@ -24,6 +24,8 @@ const SharedTable = <T extends Record<string, any>>({
   showActions,
   muiTableBodyRowProps,
   renderRowActions,
+  enableRowSelection,
+  enableMultiRowSelection,
 }: {
   endpoint: string;
   renderColumns?: MRT_ColumnDef<T>["accessorKey"][];
@@ -33,6 +35,8 @@ const SharedTable = <T extends Record<string, any>>({
   showActions?: boolean;
   muiTableBodyRowProps?: MaterialReactTableProps<T>["muiTableBodyRowProps"];
   renderRowActions?: MaterialReactTableProps<T>["renderRowActions"];
+  enableRowSelection?: boolean;
+  enableMultiRowSelection?: boolean;
 }) => {
   const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState("");
@@ -109,6 +113,8 @@ const SharedTable = <T extends Record<string, any>>({
   return (
     <>
       <MaterialReactTable
+        enableRowSelection={enableRowSelection}
+        enableMultiRowSelection={enableMultiRowSelection}
         enableRowActions={showActions}
         positionActionsColumn="last"
         renderRowActions={renderRowActions}
@@ -338,17 +344,46 @@ const sharedTableColumns: MRT_ColumnDef<any>[] = [
     accessorKey: "progress",
     header: dictionary("Progress"),
     Cell: ({ row }) => (
-      <Chip
-        label={dictionary(row.original.progress)} // translate if possible
-        sx={{
-          bgcolor: "#e6f4ea",
-          color: "#1e7e34",
-          fontWeight: "bold",
-        }}
-      />
+      progressTagHandler(row.original.progress as "waiting for selection" | "completed")
     ),
   },
 ];
+
+export function progressTagHandler(progress: "waiting for selection" | "completed") {
+  switch (progress) {
+    case "waiting for selection":
+      return (
+        <Chip
+          label={(progress)} // translate if possible
+          sx={{
+            bgcolor: "#FBE9BA",
+            color: "#C18C00",
+            fontWeight: "bold",
+          }} />
+      );
+    case "completed":
+      return (
+        <Chip
+          label={(progress)} // translate if possible
+          sx={{
+            bgcolor: "#e6f4ea",
+            color: "#1e7e34",
+            fontWeight: "bold",
+          }} />
+      );
+    default:
+      return (
+        <Chip
+          label={(progress)} // translate if possible
+          sx={{
+            bgcolor: "#e6f4ea",
+            color: "#1e7e34",
+            fontWeight: "bold",
+          }} />
+      );
+  }
+}
+
 
 function fromKeyToHeader(input: string): string {
   const words = input.split("_");
