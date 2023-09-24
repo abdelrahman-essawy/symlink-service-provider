@@ -33,7 +33,7 @@ export const SideNavInnerItem = (props: { previousPath: any }) => {
           gap: "15px",
         }}
         onClick={() => {
-          router.back();
+          router.push(previousPath);
         }}
       >
         <Box>
