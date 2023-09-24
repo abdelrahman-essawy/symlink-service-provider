@@ -9,7 +9,9 @@ export const PATH_PERMISSIONS = {
   "/": "canViewLayout",
   "/dashboard": "canViewDashboard",
   "/projects": "canViewProjects",
+  "/projects/[project_id]": "canViewProjectsDetails",
   "/bids": "canViewBids",
+  "/bid/rfp-name": "canViewBidDetails", // TODO: make it dynamic [bid_Id]
   "/experience": "canViewExperince",
   "/educational-info": "canViewEducationalInfo",
   "/certificate": "canViewCertificate",
@@ -39,6 +41,13 @@ export function hasPermissionToViewPath(role: ROLES_ENUM, permission: PERMISSION
     return false;
   }
 
+  if (!rolePermissions) {
+    return false;
+  }
+
+  if (!rolePermissions[permission]) {
+    return false;
+  }
   // Check if the role has the permission
   return !!rolePermissions[permission];
 }

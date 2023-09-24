@@ -55,26 +55,26 @@ export const AuthGuard = (props: { children: any; }) => {
 
   const permision = getPermissionNameFromPath(pathname as any);
 
-  if (!permision) {
-    return <div>No rule for this path, contact the administrator.</div>;
-  }
+  if (!permision) router.push('/401');
+  console.log('permision', permision);
+  // if (!permision) {
+  //   return <div>No rule for this path, contact the administrator.</div>;
+  // }
 
   if (!useAuth?.user) {
     return router.push('/auth/login');
   }
-
-  if (!hasPermissionToViewPath(useAuth?.user?.role, permision as any)) {
-    return (
-      <>
-        <div>Not authorized to view {pathname}</div>
-        <div>Your role: {useAuth?.user?.role}</div>
-        <div>You need permision: {permision}</div>
-        <div>
-          Roles than can access {pathname}: {getRolesThatCanAccessPathName(pathname)}
-        </div>
-      </>
-    );
-  }
+  //   return (
+  //     <>
+  //       <div>Not authorized to view {pathname}</div>
+  //       <div>Your role: {useAuth?.user?.role}</div>
+  //       <div>You need permision: {permision}</div>
+  //       <div>
+  //         Roles than can access {pathname}: {getRolesThatCanAccessPathName(pathname)}
+  //       </div>
+  //     </>
+  //   );
+  // }
 
 
   return children;

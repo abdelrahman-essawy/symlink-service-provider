@@ -1,27 +1,18 @@
-import { styled } from "@mui/material/styles";
 import {
-  Tabs,
-  Tab,
-  Avatar,
-  Chip,
-  Typography,
-  Box,
-  useMediaQuery,
   Badge,
-  BadgeProps,
+  Box, Tab, Tabs as TabsSchema, Typography
 } from "@mui/material";
-import { Theme } from "@mui/material";
-import { useState } from "react";
+import { styled } from "@mui/material/styles";
 import { withStyles } from "@mui/styles";
 
-const StyledBadge = withStyles((theme) => ({
+export const StyledBadge = withStyles((theme) => ({
   badge: {
     backgroundColor: "lightgray",
     color: "black",
   },
 }))(Badge);
 
-const CustomTabs = styled(Tabs)(({ theme }) => ({
+const CustomTabs = styled(TabsSchema)(({ theme }) => ({
   backgroundColor: "#fff",
   minHeight: 44,
 
@@ -80,15 +71,16 @@ const CustomTab = styled(Tab)(({ theme }) => ({
     display: "none",
   },
 }));
-interface Tabs {
-  label1: string;
-  label2: string;
-  label3: string;
+interface TabsSchema {
+  tabs: {
+    title: string;
+    amount: number;
+  }[];
   value: number;
   handleChange: (event: React.SyntheticEvent, newValue: number) => void;
 }
 
-const HeaderTabs: React.FC<Tabs> = ({ label1, label2, label3, value, handleChange }: Tabs) => {
+const HeaderTabs: React.FC<TabsSchema> = ({ tabs, value, handleChange }: TabsSchema) => {
 
   return (
     <CustomTabs
@@ -96,31 +88,29 @@ const HeaderTabs: React.FC<Tabs> = ({ label1, label2, label3, value, handleChang
       onChange={handleChange}
       scrollButtons
       allowScrollButtonsMobile
+      sx={{
+        width: "fit-content",
+      }}
     >
-      <CustomTab
-        sx={{
-          px: 3,
-        }}
-        label={
-          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 2 }}>
-            <StyledBadge badgeContent={4} />
-            <Typography>{label1}</Typography>
-          </Box>
-        }
-      />
-
-      <CustomTab disableRipple label={label2} />
-      <CustomTab disableRipple
-        sx={{
-          px: 3,
-        }}
-        label={
-          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 2 }}>
-            <StyledBadge badgeContent={6} />
-            <Typography>{label1}</Typography>
-          </Box>
-        }
-      />
+      {
+        tabs.map(({ title, amount: amount }) => (
+          <CustomTab
+            key={title}
+            label={
+              <Box sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                px: 2,
+                gap: 2
+              }}>
+                <StyledBadge badgeContent={amount} />
+                <Typography>{title}</Typography>
+              </Box>
+            }
+          />
+        ))
+      }
     </CustomTabs>
   );
 };

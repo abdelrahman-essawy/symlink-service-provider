@@ -91,6 +91,7 @@ export const SideNav = (props: { open: any; onClose: any; }) => {
                     path={item.path}
                     title={item.title}
                     items={item.children}
+                    amount={item.amount}
                   />
                 </RoleBasedRender>
               );
