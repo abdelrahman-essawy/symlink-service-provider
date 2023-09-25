@@ -41,7 +41,9 @@ const Page = () => {
             <RoleBasedRender
               componentId="button-request-a-project"
             >
-              <Button variant="contained" color="warning" sx={{ borderRadius: 8 }}>
+              <Button
+                onClick={() => router.push("/bid/create-rfp")}
+                variant="contained" color="warning" sx={{ borderRadius: 8 }}>
                 {dictionary("Request a project")}
               </Button>
             </RoleBasedRender>
