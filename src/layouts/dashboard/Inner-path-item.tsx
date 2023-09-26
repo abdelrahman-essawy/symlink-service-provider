@@ -9,13 +9,23 @@ import { StyledBadge } from "@/components/_used-symline/tabs/headerTabs";
 // import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { useRouter } from "next/router";
-export const SideNavInnerItem = (props: { previousPath: any }) => {
+export const SideNavInnerItem = (props: { previousPath: string }) => {
   const { previousPath } = props;
   const { t } = useTranslation();
+
+  function capitalizeFirstLetter(str: string): string {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
   //remove "/" and make first char upperCase for tanslation
-  const title = (previousPath?.slice(1) as string).replace(/(^|\s)\S/g, (match) =>
+  const getPathTitle = ()=>{
+    if(previousPath?.search("settings")!=-1){
+      return capitalizeFirstLetter(previousPath?.split('/').pop() || '').split('-').join(' ');
+    }
+    return (previousPath?.slice(1) as string).replace(/(^|\s)\S/g, (match) =>
     match.toUpperCase()
   );
+  } 
+  const title = getPathTitle();
   const router = useRouter();
   return (
     <li>
