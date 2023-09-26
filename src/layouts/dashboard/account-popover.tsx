@@ -48,7 +48,6 @@ export const AccountPopover = (props: { anchorEl: any; onClose: any; open: any; 
         </Typography>
       </Box>
       <MenuList
-        onClick={onClose}
       >
         <MenuItem
           onClick={() => router.push("/profile")}>
@@ -72,11 +71,11 @@ export const AccountPopover = (props: { anchorEl: any; onClose: any; open: any; 
           >
             Receive Orders
             <Switch
-              checked={auth?.user?.receiveOrders ?? false}
+              checked={auth?.user?.receiveOrders}
               color="primary"
               edge="start"
               name="checkedB"
-              onChange={() => { }}
+              onChange={() => {auth?.ToggleReceiveOrders();}}
             />
           </MenuItem>
         </RoleBasedRender>

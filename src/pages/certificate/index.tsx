@@ -24,6 +24,7 @@ import { dictionary, TranslatedWord } from "@/configs/i18next";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ExperienceDialog from "@/components/_used-symline/dialogs/experience-dialog";
+import PdfViewerDialog from "@/components/PdfViewerDialog";
 
 const DATA = [
   { id: 1, title: "Certificate 1.pdf", img: require("../../assets/pdf.svg") },
@@ -45,6 +46,15 @@ const Page = () => {
   const handleOpenEdit = () => {
     setDialogName("Edit experience");
     setOpen(true);
+  };
+  //pdf Model
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const handleOpenDialog = () => {
+    setDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
   };
   const handletabs = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -110,7 +120,7 @@ const Page = () => {
                                 {certificate.title}
                               </Typography>
                               <Box>
-                                <IconButton sx={{ mx: 1 }}>
+                                <IconButton sx={{ mx: 1 }} >
                                   <DeleteForeverIcon />
                                 </IconButton>
                               </Box>
@@ -130,6 +140,7 @@ const Page = () => {
                               cursor: "pointer",
                               boxShadow: "0 4px 8px 0 rgba(0,0,0,0.08)",
                             }}
+                            onClick={handleOpenDialog}
                           >
                             <Image
                               alt={certificate.title}
@@ -153,6 +164,7 @@ const Page = () => {
         </Container>
       </Box>
       <ExperienceDialog name={dialogName} open={open} handleClose={handleClose} />
+      <PdfViewerDialog open={dialogOpen} onClose={handleCloseDialog} pdfUrl={'https://drive.google.com/file/d/105_LItMhs7CqoIGRzY7W2x2c9P-LGUBS/view?usp=sharing'} />
     </>
   );
 };

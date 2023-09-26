@@ -120,7 +120,97 @@ const Page = () => {
 
             <Grid item xs={12}>
               <Card elevation={0}>
-                <CustomTabPanel value={value} index={0}>
+              <CustomTabPanel value={value} index={0}>
+                  {" "}
+                  <Grid sx={{ p: 1 }} item xs={12} md={12}>
+                    <Box
+                      sx={{
+                        height: "500px",
+                      }}
+                    >
+                      <Message
+                        name="احمد حسن"
+                        message="هل لديك أي حماية في التطبيق؟"
+                        time="8:19 pm"
+                        avatar={require("../../../assets/icons/done-icon")}
+                      />
+
+                      <Message
+                        name="user"
+                        message="هل لديك أي حماية في التطبيق؟"
+                        time="8:19 pm"
+                        avatar={require("../../../assets/icons/done-icon")}
+                      />
+                      <Message
+                        name="احمد حسن"
+                        message="هل لديك أي حماية في التطبيق؟"
+                        time="8:19 pm"
+                        avatar={require("../../../assets/icons/done-icon")}
+                      />
+                    </Box>
+                    <Divider variant="middle" sx={{ my: 2 }} />
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        paddingX: 2,
+                        gap: 1,
+                      }}
+                    >
+                      <input
+                        type="text"
+                        style={{ width: "100%", height: "50px", border: "unset", outline: "unset" }}
+                        placeholder="اكتب رسالة هنا ..."
+                      />
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "row",
+                          gap: 1,
+                        }}
+                      >
+                        <Avatar
+                          sx={{
+                            backgroundColor: "#FFFFFF",
+                            border: "2px solid #ECECEC",
+                            color: "#373737",
+                            transform: "rotate(45deg)",
+                          }}
+                        >
+                          <AttachFileIcon />
+                        </Avatar>
+                        <Avatar
+                          sx={{
+                            backgroundColor: "#FFD777",
+                            color: "#ffffff",
+                            transform: "rotate(-45deg)",
+                          }}
+                        >
+                          <SendIcon />
+                        </Avatar>
+                      </Box>
+                    </Box>
+                  </Grid>
+                </CustomTabPanel>
+                <CustomTabPanel value={value} index={1}>
+                  <SharedTable endpoint="http://localhost:3000/attached-files.json"
+                    showActions={true}
+                    renderRowActions={(row: any) => {
+                      return (
+                        <SvgIcon style={{
+                          cursor: "pointer",
+                          color: "#6161d9",
+                        }} viewBox="0 0 24 24">
+                          <VisibilityIcon />
+                        </SvgIcon>
+                      )
+                    }}
+
+                    fakeData={attachedFiles} />
+
+                </CustomTabPanel>
+
+                <CustomTabPanel value={value} index={2}>
                   <CardContent sx={{ p: 1 }}>
                     <Typography
                       variant="h6"
@@ -226,95 +316,6 @@ const Page = () => {
                       </Typography>
                     </Grid>
                   </CardContent>
-                </CustomTabPanel>
-                <CustomTabPanel value={value} index={1}>
-                  <SharedTable endpoint="http://localhost:3000/attached-files.json"
-                    showActions={true}
-                    renderRowActions={(row: any) => {
-                      return (
-                        <SvgIcon style={{
-                          cursor: "pointer",
-                          color: "#6161d9",
-                        }} viewBox="0 0 24 24">
-                          <VisibilityIcon />
-                        </SvgIcon>
-                      )
-                    }}
-
-                    fakeData={attachedFiles} />
-
-                </CustomTabPanel>
-                <CustomTabPanel value={value} index={2}>
-                  {" "}
-                  <Grid sx={{ p: 1 }} item xs={12} md={12}>
-                    <Box
-                      sx={{
-                        height: "500px",
-                      }}
-                    >
-                      <Message
-                        name="احمد حسن"
-                        message="هل لديك أي حماية في التطبيق؟"
-                        time="8:19 pm"
-                        avatar={require("../../../assets/icons/done-icon")}
-                      />
-
-                      <Message
-                        name="user"
-                        message="هل لديك أي حماية في التطبيق؟"
-                        time="8:19 pm"
-                        avatar={require("../../../assets/icons/done-icon")}
-                      />
-                      <Message
-                        name="احمد حسن"
-                        message="هل لديك أي حماية في التطبيق؟"
-                        time="8:19 pm"
-                        avatar={require("../../../assets/icons/done-icon")}
-                      />
-                    </Box>
-                    <Divider variant="middle" sx={{ my: 2 }} />
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "row",
-                        paddingX: 2,
-                        gap: 1,
-                      }}
-                    >
-                      <input
-                        type="text"
-                        style={{ width: "100%", height: "50px", border: "unset", outline: "unset" }}
-                        placeholder="اكتب رسالة هنا ..."
-                      />
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexDirection: "row",
-                          gap: 1,
-                        }}
-                      >
-                        <Avatar
-                          sx={{
-                            backgroundColor: "#FFFFFF",
-                            border: "2px solid #ECECEC",
-                            color: "#373737",
-                            transform: "rotate(45deg)",
-                          }}
-                        >
-                          <AttachFileIcon />
-                        </Avatar>
-                        <Avatar
-                          sx={{
-                            backgroundColor: "#FFD777",
-                            color: "#ffffff",
-                            transform: "rotate(-45deg)",
-                          }}
-                        >
-                          <SendIcon />
-                        </Avatar>
-                      </Box>
-                    </Box>
-                  </Grid>
                 </CustomTabPanel>
               </Card>
             </Grid>

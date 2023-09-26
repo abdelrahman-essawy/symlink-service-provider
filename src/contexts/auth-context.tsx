@@ -26,6 +26,7 @@ type initialValue = {
   user: any,
   signIn: (username: string, password: string) => Promise<void>,
   signOut: () => Promise<void>,
+  ToggleReceiveOrders:()=>void,
 };
 
 const initialState = {
@@ -202,6 +203,13 @@ export const AuthProvider = ({ children }: any) => {
       payload: null
     });
   };
+  const ToggleReceiveOrders = () => {
+    const receiveOrders = !(state?.user?.receiveOrders);
+    dispatch({
+      type: HANDLERS.SIGN_IN,
+      payload: {...state?.user,receiveOrders}
+    });
+  };
 
   return (
     <AuthContext.Provider
@@ -209,7 +217,8 @@ export const AuthProvider = ({ children }: any) => {
         ...state,
         signIn,
         signUp,
-        signOut
+        signOut,
+        ToggleReceiveOrders
       }}
     >
       {children}
