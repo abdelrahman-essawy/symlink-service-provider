@@ -97,7 +97,7 @@ const Page = () => {
                   </Grid>
                   <Grid container sx={{ px: 2 }} spacing={1} alignItems="center" flexDirection={'row'} justifyContent={'start'} textAlign={'left'}>
 
-                    <Grid item xs={6} md={3}>
+                    <Grid item xs={6} md={4} lg={3}>
                       <FormControlLabel
                         value="web"
                         control={<Checkbox />}
@@ -105,15 +105,16 @@ const Page = () => {
                         labelPlacement="end"
                       />
                     </Grid>
-                    <Grid item xs={6} md={3}>
+                    <Grid item xs={12} md={4} lg={3}>
                       <FormControlLabel
                         value="Architecture configuration review"
                         control={<Checkbox />}
                         label={t("Architecture configuration review")}
                         labelPlacement="end"
+                        sx={{overflow:"hidden",whiteSpace:{xs:"nowrap",sm:"normal"}}}
                       />
                     </Grid>
-                    <Grid item xs={6} md={3}>
+                    <Grid item xs={6} md={4} lg={3}>
                       <FormControlLabel
                         value="مصدر الرمز"
                         control={<Checkbox />}
@@ -121,7 +122,7 @@ const Page = () => {
                         labelPlacement="end"
                       />
                     </Grid>
-                    <Grid item xs={6} md={3}>
+                    <Grid item xs={6} md={4} lg={3}>
                       <FormControlLabel
                         value="Moblie"
                         control={<Checkbox />}
@@ -129,7 +130,7 @@ const Page = () => {
                         labelPlacement="end"
                       />
                     </Grid>
-                    <Grid item xs={6} md={3}>
+                    <Grid item xs={6} md={4} lg={3}>
                       <FormControlLabel
                         value="Network"
                         control={<Checkbox />}
@@ -137,7 +138,7 @@ const Page = () => {
                         labelPlacement="end"
                       />
                     </Grid>
-                    <Grid item xs={6} md={3}>
+                    <Grid item xs={6} md={4} lg={3}>
                       <FormControlLabel
                         value="threat hunting"
                         control={<Checkbox />}

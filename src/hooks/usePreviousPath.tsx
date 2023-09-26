@@ -5,10 +5,10 @@ import { useRouter } from 'next/router';
 
 export default function usePreviousPath() {
   const router = useRouter();
-  const [previousPath, setPreviousPath] = useState<string>('');
+  const [previousPath, setPreviousPath] = useState<string>('/');
   const [isinnerPath,setIsinnerPath] = useState(false);
   const [isProfilePath,setIsProfilePath] = useState(false);
-  const innerPathsList = ["/bid/rfp-name","/profile","/certificate","/experience","/educational-info"]
+  const innerPathsList = ["/bid/create-rfp","/bid/rfp-name","/profile","/certificate","/experience","/educational-info"]
   const innerProfilePathsList = ["/profile","/certificate","/experience","/educational-info"]
   const checkIfInnerPath = ()=>{
     if(innerPathsList?.includes(router.pathname)){
