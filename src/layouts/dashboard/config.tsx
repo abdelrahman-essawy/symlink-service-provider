@@ -112,7 +112,7 @@ export const items = [
         disabled: false,
         menu: false,
         id: "sidenav-terms-and-conditions",
-        title: "Terms and Conditions",
+        title: "Terms and conditions",
         path: "/settings/terms-and-conditions",
         icon: (
           <SvgIcon fontSize="small">
