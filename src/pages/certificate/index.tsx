@@ -24,7 +24,7 @@ import { dictionary, TranslatedWord } from "@/configs/i18next";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ExperienceDialog from "@/components/_used-symline/dialogs/experience-dialog";
-import PdfViewerDialog from "@/components/PdfViewerDialog";
+// import PdfViewerDialog from "@/components/PdfViewerDialog";
 
 const DATA = [
   { id: 1, title: "Certificate 1.pdf", img: require("../../assets/pdf.svg") },
@@ -164,7 +164,7 @@ const Page = () => {
         </Container>
       </Box>
       <ExperienceDialog name={dialogName} open={open} handleClose={handleClose} />
-      <PdfViewerDialog open={dialogOpen} onClose={handleCloseDialog} pdfUrl={'https://drive.google.com/file/d/105_LItMhs7CqoIGRzY7W2x2c9P-LGUBS/view?usp=sharing'} />
+      {/* <PdfViewerDialog open={dialogOpen} onClose={handleCloseDialog} pdfUrl={'https://drive.google.com/file/d/105_LItMhs7CqoIGRzY7W2x2c9P-LGUBS/view?usp=sharing'} /> */}
     </>
   );
 };
