@@ -1,10 +1,9 @@
-import { Box, Card, Container, createTheme, Stack, Tab, FormLabel, Grid, Select, Chip, CardHeader, Tabs, CardContent, Divider, Typography, Button, OutlinedInput, IconButton, Checkbox, FormControlLabel, TextField } from '@mui/material';
-import React, { useState, useRef } from 'react';
+import { Box, FormLabel, Grid, Divider, Typography, IconButton, Checkbox, FormControlLabel, TextField } from '@mui/material';
+import React, { useState } from 'react';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import CheckIcon from '@mui/icons-material/Check';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from "next/navigation";
-import dayjs, { Dayjs } from 'dayjs';
 
 
 export default function Step1() {
@@ -13,17 +12,17 @@ export default function Step1() {
   const { t } = useTranslation();
   const router = useRouter();
   const [country, setCountry] = useState('');
-  const [date, setDate] = React.useState<Dayjs>(); // dayjs('2023-08-27')
+  const [date, setDate] = React.useState(); // dayjs('2023-08-27')
   const [hide, setHide] = useState('hidden');
-const [show, setShow] = useState(true);
-const [show2, setShow2] = useState(true);
+  const [show, setShow] = useState(true);
+  const [show2, setShow2] = useState(true);
 
-const showIcon = () => {
-  setShow(!show);
-};
-const showIcon2 = () => {
-  setShow2(!show2);
-};
+  const showIcon = () => {
+    setShow(!show);
+  };
+  const showIcon2 = () => {
+    setShow2(!show2);
+  };
   return (
     <>
 
@@ -155,19 +154,19 @@ const showIcon2 = () => {
 
           </Box>
           <Grid container spacing={3} alignItems="center" flexDirection={'row'} justifyContent={'start'} >
-            <Grid item xs={12} sx={{ mt: 3, display: 'flex', flexDirection: 'row', alignItems:"center" }}>
+            <Grid item xs={12} sx={{ mt: 3, display: 'flex', flexDirection: 'row', alignItems: "center" }}>
               <IconButton color="warning" aria-label="add an alarm" size='small' sx={{ border: `1px solid #ffe3a0` }} onClick={showIcon}>
-                <CheckIcon fontSize='small' sx={{color: 'warning.dark',visibility: show ? 'hidden' : 'visable'}} />
+                <CheckIcon fontSize='small' sx={{ color: 'warning.dark', visibility: show ? 'hidden' : 'visable' }} />
               </IconButton>
-              <Typography sx={{px:1}} variant="body2">{t("Whitebox(whitelist the assessor's IP of the and provide testing users for every role in the application)")}</Typography>
+              <Typography sx={{ px: 1 }} variant="body2">{t("Whitebox(whitelist the assessor's IP of the and provide testing users for every role in the application)")}</Typography>
 
 
             </Grid>
-            <Grid item xs={12} sx={{ mt: 3, display: 'flex', flexDirection: 'row', alignItems:"center" }}>
+            <Grid item xs={12} sx={{ mt: 3, display: 'flex', flexDirection: 'row', alignItems: "center" }}>
               <IconButton color="warning" aria-label="add an alarm" size='small' sx={{ border: `1px solid #ffe3a0` }} onClick={showIcon2}>
-                <CheckIcon fontSize='small' sx={{color: 'warning.dark',visibility: show2 ? 'hidden' : 'visable'}} />
+                <CheckIcon fontSize='small' sx={{ color: 'warning.dark', visibility: show2 ? 'hidden' : 'visable' }} />
               </IconButton>
-              <Typography sx={{px:1}} variant="body2" >{t("Blackbox (the assessor has no knowledage of the application/ network)")}</Typography>
+              <Typography sx={{ px: 1 }} variant="body2" >{t("Blackbox (the assessor has no knowledage of the application/ network)")}</Typography>
 
 
             </Grid>
@@ -177,5 +176,3 @@ const showIcon2 = () => {
     </>
   )
 }
-
-
