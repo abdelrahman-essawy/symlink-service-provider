@@ -160,8 +160,8 @@ const SharedTable = <T extends Record<string, any>>({
             "& .MuiTableCell-root": {
               color: "primary.main",
               fontWeight: "bold",
-              bgcolor: "#f0f2fe",
               padding: 2,
+              verticalAlign: "middle",
             },
           },
         }}
@@ -353,12 +353,16 @@ const sharedTableColumns: MRT_ColumnDef<any>[] = [
     accessorKey: "service_provider_name",
     header: dictionary("Service provider name"),
     Cell: ({ row }) => (
-      <Typography
-        variant="body2">
-        <Link href={`/service-providers/${row.original.service_provider_id}`}>
-          {row.original.service_provider_name}
-        </Link>
-      </Typography>
+      <Link
+        style={{
+          color: "#6366F1",
+          padding: "10px",
+          fontWeight: "bold",
+          textDecoration: "none",
+        }}
+        href={`/service-providers/${row.original.service_provider_id}`}>
+        {row.original.service_provider_name}
+      </Link>
     ),
   }
 ];
