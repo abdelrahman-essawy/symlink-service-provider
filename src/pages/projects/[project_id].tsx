@@ -13,6 +13,7 @@ import {
   CardContent,
   Divider,
   Avatar,
+  SvgIcon,
 } from "@mui/material";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import SendIcon from "@mui/icons-material/Send";
@@ -21,6 +22,14 @@ import { DashboardLayout } from "../../layouts/dashboard/layout";
 import { useTranslation } from "react-i18next";
 import HeaderTabs from "@/components/_used-symline/tabs/headerTabs";
 import CustomTabPanel from "@/components/_used-symline/tabs/tabsPanel";
+import SharedTable, { amountTagHandler, progressTagHandler } from "@/components/SharedTable";
+import { useRouter } from "next/router";
+import attachedFiles from "../../../public/attached-files.json";
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import RoleBasedRender from "@/hocs/RoleBasedRender";
+import { dictionary } from "@/configs/i18next";
+import bids from "../../../public/bids.json";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const Page = () => {
   const title = "Projects";
@@ -28,7 +37,7 @@ const Page = () => {
   const handletabs = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
-
+  const router = useRouter()
   return (
     <>
       <Head>
@@ -45,22 +54,85 @@ const Page = () => {
         }}
       >
         <Container maxWidth="xl">
-          <Typography variant="h3" sx={{ mb: 2 }} fontWeight={"bold"}></Typography>
+          <Grid display={"flex"} alignItems={"center"} justifyContent={"start"} gap={10}>
+            <Typography variant="h3" sx={{ mb: 2 }} fontWeight={"bold"}>
+              {dictionary("Project name")}
+            </Typography>
+            <RoleBasedRender
+              componentId="tag-project-status">
+              {progressTagHandler("waiting for selection")}
+            </RoleBasedRender>
+          </Grid>
+
           <Grid container spacing={2} justifyContent={"space-between"}>
-            <Grid item xs={12} md={6}>
-              <HeaderTabs
-                value={value}
-                handleChange={handletabs}
-                label1="Discussion"
-                label2="Questions"
-                label3="Attached filles"
-              />
+            <Grid item xs={12} md={8}>
+              <RoleBasedRender
+                componentId="headertabs-service-provider-projects">
+                <HeaderTabs
+                  value={value}
+                  handleChange={handletabs}
+                  tabs={
+                    [{
+                      title: "Discussion",
+                      amount: 0
+                    }, {
+                      title: "Attached filles",
+                      amount: 5
+                    },
+                    {
+                      title: "Questions",
+                      amount: 3
+                    },
+                    ]
+                  }
+                />
+              </RoleBasedRender>
+
+              <RoleBasedRender
+                componentId="headertabs-client-projects">
+                <HeaderTabs
+                  value={value}
+                  handleChange={handletabs}
+                  tabs={
+                    [{
+                      title: "Discussion",
+                      amount: 0
+                    }, {
+                      title: "Attached filles",
+                      amount: 5
+                    },
+                    {
+                      title: "Questions",
+                      amount: 3
+                    },
+                    {
+                      title: "List of bids",
+                      amount: 6
+                    },
+                    ]
+                  }
+                />
+              </RoleBasedRender>
             </Grid>
-            <Grid item xs={12} md={3} sx={{ display: "flex", justifyContent: "end" }}>
-              <Button variant="contained" color="warning" sx={{ borderRadius: 8 }}>
-                {"Submit to review"}
-              </Button>
-            </Grid>
+            <RoleBasedRender
+              componentId="button-request-to-review">
+              <Grid item xs={12} md={3} sx={{ display: "flex", justifyContent: "end" }}>
+                <Button variant="contained" color="warning" sx={{ borderRadius: 8 }}>
+                  {"Submit to review"}
+                </Button>
+              </Grid>
+            </RoleBasedRender>
+            {value === 1 &&
+              <RoleBasedRender
+                componentId="button-upload-file"
+              >
+                <Button variant="contained" color="warning" sx={{ borderRadius: 8, alignSelf: "center" }}>
+                  {dictionary("Upload file")}
+                </Button>
+              </RoleBasedRender>
+            }
+
+
             <Grid item xs={12}>
               <Card elevation={0}>
                 <CustomTabPanel value={value} index={0}>
@@ -134,7 +206,7 @@ const Page = () => {
                     </Box>
                   </Grid>
                 </CustomTabPanel>
-                <CustomTabPanel value={value} index={1}>
+                <CustomTabPanel value={value} index={2}>
                   <CardContent sx={{ p: 1 }}>
                     <Typography
                       variant="h6"
@@ -142,7 +214,7 @@ const Page = () => {
                       color="primary"
                       sx={{ p: 1, mb: 3, borderRadius: 1, bgcolor: "primary.lightest" }}
                     >
-                      General Questtions
+                      General Questions
                     </Typography>
                     <Typography variant="h6" fontWeight="bold" sx={{ mb: 1 }}>
                       What is preferred testing time ?
@@ -241,10 +313,47 @@ const Page = () => {
                     </Grid>
                   </CardContent>
                 </CustomTabPanel>
-                <CustomTabPanel value={value} index={2}>
-                  {" "}
-                  three
+                <CustomTabPanel value={value} index={1}>
+                  <SharedTable endpoint="http://localhost:3000/attached-files.json"
+                    showActions={true}
+                    renderRowActions={(row: any) => {
+                      return (
+                        <Box sx={{ display: "flex", flexDirection: "row", gap: 1 }}>
+                          <VisibilityIcon sx={{ color: "#7288FA" }} />
+                          <DeleteIcon sx={{ color: "#7288FA" }} />
+                        </Box>
+                      )
+                    }}
+
+                    fakeData={attachedFiles} />
                 </CustomTabPanel>
+                <CustomTabPanel value={value} index={3}>
+                  <SharedTable
+                    endpoint="http://localhost:3000/bids.json"
+                    fakeData={bids}
+                    showActions={true}
+                    renderRowActions={(row) => (
+                      <Button
+                        variant="contained"
+                        color="warning"
+                        sx={{
+                          borderRadius: 8,
+                          backgroundColor: "#FFF8E6",
+                          border: 1,
+                          borderColor: "#FFD777",
+                        }}
+                        onClick={() => { }}
+                      >
+                        {dictionary("Accept")}
+                      </Button>
+                    )}
+                    muiTableBodyRowProps={(row) => ({
+                      onClick: () => router.push(`/bid/rfp-name`),
+                      sx: { cursor: "pointer" },
+                    })}
+                  />
+                </CustomTabPanel>
+
               </Card>
             </Grid>
           </Grid>

@@ -24,13 +24,13 @@ export const items = [
       </SvgIcon>
     ),
   },
-
   {
     // used in symline
     external: false,
     disabled: false,
     menu: false,
     id: "sidenav-bids",
+    amount: 2,
     title: "Bids",
     path: "/bids",
     icon: (
@@ -49,6 +49,131 @@ export const items = [
     icon: (
       <SvgIcon fontSize="small">
         <WalletIcon />
+      </SvgIcon>
+    ),
+  },
+  
+  {
+    // used in symline
+    external: false,
+    disabled: false,
+    menu: false,
+    title: "Support",
+    path: "/support",
+    icon: (
+      <SvgIcon fontSize="small">
+        <VideocamIcon />
+      </SvgIcon>
+    ),
+  },
+  {
+    // used in symline
+    external: false,
+    disabled: false,
+    menu: false,
+    id: "sidenav-profile",
+    title: "Profile",
+    path: "/profile",
+    icon: (
+      <SvgIcon fontSize="small">
+        <AccountCircleIcon />
+      </SvgIcon>
+    ),
+  },
+  {
+    external: false,
+    disabled: false,
+    menu: false,
+    id: "sidenav-settings",
+    title: "Settings",
+    icon: (
+      <SvgIcon fontSize="small">
+        <CogIcon />
+      </SvgIcon>
+    ),
+    children: [
+
+      {
+        external: false,
+        disabled: false,
+        menu: false,
+        id: "sidenav-about",
+        title: "About",
+        path: "/settings/about",
+        icon: (
+          <SvgIcon fontSize="small">
+            <AccountCircleIcon />
+          </SvgIcon>
+        ),
+      },
+
+      {
+        external: false,
+        disabled: false,
+        menu: false,
+        id: "sidenav-terms-and-conditions",
+        title: "Terms and conditions",
+        path: "/settings/terms-and-conditions",
+        icon: (
+          <SvgIcon fontSize="small">
+            <AccountCircleIcon />
+          </SvgIcon>
+        ),
+      },
+      {
+        external: false,
+        disabled: false,
+        menu: false,
+        id: "sidenav-contact-us",
+        title: "Contact us",
+        path: "/settings/contact-us",
+        icon: (
+          <SvgIcon fontSize="small">
+            <AccountCircleIcon />
+          </SvgIcon>
+        ),
+      },
+      {
+        external: false,
+        disabled: false,
+        menu: false,
+        id: "sidenav-deactivate-account",
+        title: "Create company",
+        path: "/settings/create-company",
+        icon: (
+          <SvgIcon fontSize="small">
+            <AccountCircleIcon />
+          </SvgIcon>
+        ),
+      },
+      {
+        external: false,
+        disabled: false,
+        menu: false,
+        title: "Deactivate account",
+        path: "/settings/deactivate-account",
+        icon: (
+          <SvgIcon fontSize="small">
+            <AccountCircleIcon />
+          </SvgIcon>
+        ),
+      },
+    ],
+  },
+];
+
+export const profileItems = [
+  {
+    // used in symline
+    external: false,
+    disabled: false,
+    menu: false,
+    id: "sidenav-profile",
+    title: "Profile",
+    path: "/profile",
+    icon: (
+      <SvgIcon fontSize="small">
+        <AccountCircleIcon />
       </SvgIcon>
     ),
   },
@@ -94,106 +219,4 @@ export const items = [
       </SvgIcon>
     ),
   },
-  {
-    // used in symline
-    external: false,
-    disabled: false,
-    menu: false,
-    title: "Support",
-    path: "/support",
-    icon: (
-      <SvgIcon fontSize="small">
-        <VideocamIcon />
-      </SvgIcon>
-    ),
-  },
-  {
-    external: false,
-    disabled: false,
-    menu: false,
-    id: "sidenav-settings",
-    title: "Settings",
-    icon: (
-      <SvgIcon fontSize="small">
-        <CogIcon />
-      </SvgIcon>
-    ),
-    children: [
-      {
-        // used in symline
-        external: false,
-        disabled: false,
-        menu: false,
-        id: "sidenav-profile",
-        title: "Profile",
-        path: "/profile",
-        icon: (
-          <SvgIcon fontSize="small">
-            <AccountCircleIcon />
-          </SvgIcon>
-        ),
-      },
-      {
-        external: false,
-        disabled: false,
-        menu: false,
-        title: "About",
-        path: "/settings/about",
-        icon: (
-          <SvgIcon fontSize="small">
-            <AccountCircleIcon />
-          </SvgIcon>
-        ),
-      },
-
-      {
-        external: false,
-        disabled: false,
-        menu: false,
-        title: "Terms and Conditions",
-        path: "/settings/terms-and-conditions",
-        icon: (
-          <SvgIcon fontSize="small">
-            <AccountCircleIcon />
-          </SvgIcon>
-        ),
-      },
-      {
-        external: false,
-        disabled: false,
-        menu: false,
-        title: "Contact us",
-        path: "/settings/contact-us",
-        icon: (
-          <SvgIcon fontSize="small">
-            <AccountCircleIcon />
-          </SvgIcon>
-        ),
-      },
-      {
-        external: false,
-        disabled: false,
-        menu: false,
-        title: "Create company",
-        path: "/settings/create-company",
-        icon: (
-          <SvgIcon fontSize="small">
-            <AccountCircleIcon />
-          </SvgIcon>
-        ),
-      },
-      {
-        external: false,
-        disabled: false,
-        menu: false,
-        title: "Deactivate account",
-        path: "/settings/deactivate-account",
-        icon: (
-          <SvgIcon fontSize="small">
-            <AccountCircleIcon />
-          </SvgIcon>
-        ),
-      },
-    ],
-  },
-];
+]

@@ -38,7 +38,9 @@ const Page = () => {
           </Typography>
           <Grid container spacing={2} justifyContent={"space-between"}>
             <Grid item xs={12}>
-              <Card elevation={0}>
+              <Card sx={{
+                px: 2,
+              }}>
                 <SharedTable endpoint="http://localhost:3000/projects.json" fakeData={wallet} />
               </Card>
             </Grid>
