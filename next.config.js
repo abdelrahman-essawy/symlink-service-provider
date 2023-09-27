@@ -3,5 +3,9 @@ module.exports = {
   // output: "export",
   images: {
     unoptimized: true
-  }
+  },
+  i18n: {
+    locales: ["en", "ar"],
+    defaultLocale: "ar", localeDetection: false
+  },
 };

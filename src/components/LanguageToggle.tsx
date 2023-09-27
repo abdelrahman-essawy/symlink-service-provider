@@ -1,13 +1,12 @@
 import React, { use } from "react";
 import { useTranslation } from "react-i18next";
 import { Button, createTheme, ThemeProvider } from "@mui/material";
-import { useTheme } from "@emotion/react";
-
+import { useTheme } from '@mui/material/styles';
 const LanguageToggle = () => {
   const { i18n } = useTranslation();
   const theme = useTheme();
   const handleToggleLanguage = () => {
-    const newLanguage = i18n.language === "en" ? "ar" : "en";
+    const newLanguage = i18n.language === "ar" ? "en" : "ar";
     i18n.changeLanguage(newLanguage);
   };
   
