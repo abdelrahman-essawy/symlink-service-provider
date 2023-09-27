@@ -6,13 +6,12 @@ import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import RoleBasedRender from "@/hocs/RoleBasedRender";
 import { StyledBadge } from "@/components/_used-symline/tabs/headerTabs";
-// import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { useRouter } from "next/router";
 export const SideNavInnerItem = (props: { previousPath: string }) => {
   const { previousPath } = props;
-  const { t } = useTranslation();
-
+  const { t ,i18n} = useTranslation();
   function capitalizeFirstLetter(str: string): string {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
@@ -38,7 +37,7 @@ export const SideNavInnerItem = (props: { previousPath: string }) => {
           pl: "16px",
           pr: "16px",
           py: 2,
-          textAlign: "left",
+          textAlign: i18n.language === "en" ? 'right' : 'left',
           width: "100%",
           gap: "15px",
         }}
@@ -59,7 +58,11 @@ export const SideNavInnerItem = (props: { previousPath: string }) => {
             }}
             size="small"
           >
-            <ArrowForwardIcon />
+            {  i18n.language === "ar" ?
+              <ArrowForwardIcon />
+              :
+              <ArrowBackIcon />
+              }
           </IconButton>
         </Box>
         <Box
