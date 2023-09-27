@@ -14,6 +14,7 @@ import {
 } from "material-react-table";
 import { useEffect, useState } from "react";
 import ReceiptIcon from "@mui/icons-material/Receipt";
+import Link from "next/link";
 
 const SharedTable = <T extends Record<string, any>>({
   endpoint,
@@ -347,6 +348,19 @@ const sharedTableColumns: MRT_ColumnDef<any>[] = [
       progressTagHandler(row.original.progress as "waiting for selection" | "completed")
     ),
   },
+  {
+    id: "service_provider_name",
+    accessorKey: "service_provider_name",
+    header: dictionary("Service provider name"),
+    Cell: ({ row }) => (
+      <Typography
+        variant="body2">
+        <Link href={`/service-providers/${row.original.service_provider_id}`}>
+          {row.original.service_provider_name}
+        </Link>
+      </Typography>
+    ),
+  }
 ];
 
 export function progressTagHandler(progress: "waiting for selection" | "completed") {

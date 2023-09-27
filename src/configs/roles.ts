@@ -32,7 +32,6 @@ const sharedPermissions: Permissions = {
   canViewSettingsContactUs: true,
   canViewSettingsDeactivateAccount: true,
   canViewWallet: true,
-
 };
 
 export const permissionSchema: PermissionsSchema = {
@@ -42,6 +41,7 @@ export const permissionSchema: PermissionsSchema = {
   CLIENT: {
     ...sharedPermissions,
     canViewCreateRfp: true,
+    canViewServiceProviderProfile: true,
 
     notAbleToViewComponents: [
       "sidenav-bids",
@@ -59,7 +59,6 @@ export const permissionSchema: PermissionsSchema = {
     ...sharedPermissions,
     canViewBids: true,
     canViewSettingsCreateCompany: true,
-    canViewExpertName: true,
     canViewBidDetails: true,
     notAbleToViewComponents: [
       // "sidenav-educational-info",
