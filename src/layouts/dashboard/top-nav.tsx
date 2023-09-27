@@ -83,9 +83,6 @@ export const TopNav = (props: { onNavOpen: any; }) => {
             direction="row"
             spacing={2}
           >
-            <Tooltip title="Contacts">
-            <LanguageToggle/>
-            </Tooltip>
             <Tooltip title="Notifications">
               <IconButton>
                 <Badge
