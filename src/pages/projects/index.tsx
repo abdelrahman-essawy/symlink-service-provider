@@ -5,6 +5,7 @@ import { DashboardLayout } from "../../layouts/dashboard/layout";
 import { useTranslation } from "react-i18next";
 import SharedTable from "@/components/SharedTable";
 import projects from "../../../public/projects.json";
+import projectsForSP from "../../../public/projects-for-sp.json";
 import { dictionary, TranslatedWord } from "@/configs/i18next";
 import router from "next/router";
 import RoleBasedRender from "@/hocs/RoleBasedRender";
@@ -70,8 +71,8 @@ const Page = () => {
                       onClick: () => router.push(`/projects/1`),
                       sx: { cursor: "pointer" },
                     })}
-                    endpoint="http://localhost:3000/projects.json"
-                    fakeData={projects}
+                    endpoint="http://localhost:3000/projects-for-sp.json"
+                    fakeData={projectsForSP}
                     enableRowSelection
                     enableMultiRowSelection
                     showActions
