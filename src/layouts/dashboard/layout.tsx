@@ -6,10 +6,11 @@ import { usePathname } from "next/navigation";
 import { withAuthGuard } from "../../hocs/with-auth-guard";
 import React from "react";
 import { useTranslation } from "react-i18next";
+import { Stack, useMediaQuery } from "@mui/material";
 
 const SIDE_NAV_WIDTH = 280;
 
-const LayoutRoot = styled("div")(({ theme }) => ({
+const LayoutRoot = styled(Stack)(({ theme }) => ({
   display: "flex",
   flex: "1 1 auto",
   maxWidth: "100%",
@@ -42,8 +43,8 @@ export const DashboardLayout = withAuthGuard((props: { children: any }) => {
       <TopNav onNavOpen={() => setOpenNav(true)} />
       <SideNav onClose={() => setOpenNav(false)} open={openNav} />
       <LayoutRoot style={{
-            paddingLeft: i18n.language === "en" ? SIDE_NAV_WIDTH : 0,
-            paddingRight: i18n.language === "en" ?  0: SIDE_NAV_WIDTH,
+            paddingLeft: useMediaQuery("(min-width:1200px)") ? i18n.language === "en" ? SIDE_NAV_WIDTH : 0 : 0,
+            paddingRight: useMediaQuery("(min-width:1200px)") ? i18n.language === "en" ?  0: SIDE_NAV_WIDTH : 0,
       }}>
         <LayoutContainer>{children}</LayoutContainer>
       </LayoutRoot>
