@@ -83,9 +83,7 @@ export const TopNav = (props: { onNavOpen: any; }) => {
             direction="row"
             spacing={2}
           >
-            <Tooltip title="Contacts">
-            <LanguageToggle/>
-            </Tooltip>
+
             <Tooltip title="Notifications">
               <IconButton>
                 <Badge
@@ -98,6 +96,11 @@ export const TopNav = (props: { onNavOpen: any; }) => {
                   </SvgIcon>
                 </Badge>
               </IconButton>
+            </Tooltip>
+            <Tooltip title="LanguageToggle">
+            <IconButton>
+            <LanguageToggle/>
+            </IconButton>
             </Tooltip>
             <Avatar
               onClick={accountPopover.handleOpen}
