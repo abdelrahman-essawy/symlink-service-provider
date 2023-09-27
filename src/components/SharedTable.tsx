@@ -160,6 +160,7 @@ const SharedTable = <T extends Record<string, any>>({
             "& .MuiTableCell-root": {
               color: "primary.main",
               fontWeight: "bold",
+              bgcolor: "#f0f2fe",
               padding: 2,
               verticalAlign: "middle",
             },
