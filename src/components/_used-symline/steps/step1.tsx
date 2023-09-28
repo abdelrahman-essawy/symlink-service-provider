@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import CheckIcon from '@mui/icons-material/Check';
 import { useTranslation } from 'react-i18next';
+import dayjs, { Dayjs } from 'dayjs';
+
 import { useRouter } from "next/navigation";
 
 
@@ -12,7 +14,7 @@ export default function Step1() {
   const { t } = useTranslation();
   const router = useRouter();
   const [country, setCountry] = useState('');
-  const [date, setDate] = React.useState(); // dayjs('2023-08-27')
+  const [date, setDate] = React.useState<Dayjs | null>(dayjs()); // dayjs('2023-08-27')
   const [hide, setHide] = useState('hidden');
   const [show, setShow] = useState(true);
   const [show2, setShow2] = useState(true);
@@ -40,7 +42,7 @@ export default function Step1() {
                 <DatePicker
                   disablePast
                   renderInput={(props: any) => <TextField  {...props} />}
-                  value={`${date || '09/27/2023'}`}
+                  value={`${date}`}
                   onChange={(newVal: any) => setDate(newVal)}
                 />
               </Box>
