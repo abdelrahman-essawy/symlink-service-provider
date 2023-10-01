@@ -18,15 +18,13 @@ export const SideNavInnerItem = (props: { previousPath: string }) => {
   }
   //remove "/" and make first char upperCase for tanslation 
   const getPathTitle = ()=>{
-
+    
+    
+   if(previousPath?.search("settings")!=-1){
+      return capitalizeFirstLetter(previousPath?.split('/').pop() || '').split('-').join(' ');
+    }
     if(previousPath?.search("project_id")!=-1){
       return capitalizeFirstLetter(previousPath?.split('/[project_id]').pop() || 'projects').split('-').join(' ');
-    }
-    return (previousPath?.slice(1) as string).replace(/(^|\s)\S/g, (match) =>
-    match.toUpperCase()
-  );
-    if(previousPath?.search("settings")!=-1){
-      return capitalizeFirstLetter(previousPath?.split('/').pop() || '').split('-').join(' ');
     }
     return (previousPath?.slice(1) as string).replace(/(^|\s)\S/g, (match) =>
     match.toUpperCase()
@@ -50,7 +48,12 @@ export const SideNavInnerItem = (props: { previousPath: string }) => {
           gap: "15px",
         }}
         onClick={() => {
-          router.back();
+          if(previousPath?.search("project_id")!=-1) {
+            router.push('/projects')
+          }else {
+
+            router.push(previousPath);
+          }
         }}
       >
         <Box>
