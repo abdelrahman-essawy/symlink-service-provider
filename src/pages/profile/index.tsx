@@ -106,14 +106,15 @@ const Page = () => {
                         overlap="circular"
                         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
                         badgeContent={
-                          <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" >
+                          <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" sx={{boxShadow: "-6px 7px 8px rgba(0, 0, 0, 0.08)"}}>
 
                             <Button
                               variant="contained"
                               size="large"
                               component="label"
+                              sx={{color: 'white'}}
                             >
-                              <PhotoCameraIcon fontSize='small' />
+                              <PhotoCameraIcon fontSize='small'  />
                               <input
                                 type="file"
                                 onChange={handleFileSelect}
