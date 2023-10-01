@@ -58,6 +58,8 @@ const Page = () => {
             {dictionary(title as TranslatedWord)}
           </Typography>
           <Grid container spacing={2} justifyContent={"space-between"} alignItems={"end"} >
+          <Grid item xs={12} sm={10}>
+
             <HeaderTabs
               value={value}
               handleChange={handletabs}
@@ -76,11 +78,12 @@ const Page = () => {
                 ]
               }
             />
+          </Grid>
 
             <RoleBasedRender
               componentId="button-bid-rfp"
             >
-              <Grid item xs={12} md={3} sx={{ display: "flex", justifyContent: "end" }}>
+              <Grid item xs={12} sm={2} sx={{ display: "flex", justifyContent:{sm: 'end', xs:'start'}}}>
                 <Button
                   onClick={handleOpen}
                   variant="contained"
@@ -94,7 +97,7 @@ const Page = () => {
             <RoleBasedRender
               componentId="buttons-accept-reject-rfp"
             >
-              <Grid item xs={12} md={3} sx={{ display: "flex", justifyContent: "center", gap: 3 }}>
+              <Grid item xs={12} md={2} sx={{ display: "flex", justifyContent:{sm: 'end', xs:'start'} }}>
                 <Button
                   onClick={handleOpen}
                   variant="contained"
