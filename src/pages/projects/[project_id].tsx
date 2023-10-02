@@ -27,13 +27,26 @@ import { useRouter } from "next/router";
 import attachedFiles from "../../../public/attached-files.json";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import RoleBasedRender from "@/hocs/RoleBasedRender";
+import { useState } from "react";
 import { dictionary } from "@/configs/i18next";
 import bids from "../../../public/bids.json";
 import DeleteIcon from '@mui/icons-material/Delete';
-
+import ViewImagesDialog from "@/components/_used-symline/dialogs/view-images";
+import ConfirmDialog from "@/components/_used-symline/dialogs/confirm-dialog";
 const Page = () => {
   const title = "Projects";
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
+  const [open, setOpen] = useState(false);
+  const [confirm, setConfirm] = useState(false);
+  const handleCloseConfirm = () => setConfirm(false);
+  const handleOpenConfirm = () => {
+    setConfirm(true);
+  };
+  const handleClose = () => setOpen(false);
+  const handleOpen= () => {
+    setOpen(true);
+  };
+
   const handletabs = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -319,8 +332,8 @@ const Page = () => {
                     renderRowActions={(row: any) => {
                       return (
                         <Box sx={{ display: "flex", flexDirection: "row", gap: 1 }}>
-                          <VisibilityIcon sx={{ color: "#7288FA" }} />
-                          <DeleteIcon sx={{ color: "#7288FA" }} />
+                          <VisibilityIcon color="primary" sx={{cursor:"pointer" , '&:hover': {color: 'primary.dark'}}}  onClick={handleOpen}/>
+                          <DeleteIcon color="primary" sx={{cursor:"pointer" , '&:hover': {color: 'primary.dark'}}} onClick={handleOpenConfirm} />
                         </Box>
                       )
                     }}
@@ -358,7 +371,11 @@ const Page = () => {
             </Grid>
           </Grid>
         </Container>
+
       </Box>
+      <ViewImagesDialog open={open} handleClose={handleClose}/>
+
+        <ConfirmDialog open={ confirm} handleClose={ handleCloseConfirm}/>
     </>
   );
 };
@@ -408,6 +425,7 @@ const Message = ({ name, avatar, message, time }: any) => {
           }}
         ></div>
       </Box>
+
     </Box>
   );
 };
