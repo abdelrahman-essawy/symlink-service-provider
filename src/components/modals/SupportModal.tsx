@@ -29,12 +29,21 @@ export default function BasicModal({ open, handleClose }: any) {
   const { t } = useTranslation();
   const [file, setFile] = React.useState({ name: "Choose File" });
   const [loading, setLoading] = React.useState(false);
+  const [upload, setUpload] = React.useState(false);
+
   const update = async () => {
     setLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 1600));
 
     setLoading(false);
     handleClose();
+  };
+  const uploading = async () => {
+    setUpload(true);
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    setUpload(false);
+    
   };
   // handle file selection
   const handleFileSelect = (event: any) => {
@@ -95,7 +104,7 @@ export default function BasicModal({ open, handleClose }: any) {
                   display: "flex",
                   flexDirection: "column",
                   px: 4,
-                  gap: 1,
+                  gap: 2,
                   justifyContent: "center",
                   alignItems: "flex-start",
                 }}
@@ -142,22 +151,29 @@ export default function BasicModal({ open, handleClose }: any) {
 
                   />
                 </FormControl>
+                <FormControl  sx={{bgcolor: 'primary.lightest', borderRadius: '10px'}}>
 
-                <Button
+                <LoadingButton
                   component="label"
-                  endIcon={<Typography sx={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word', fontSize: { md: '15px !important', xs: '14px !important' } }}>{`${file.name}`}</Typography>}
+                  loading={upload}
+                  onChange={uploading}
+
+                  endIcon={<Typography sx={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word', fontSize: { md: '15px !important', xs: '14px !important' } }}>{`${file?.name ?? 'Choose File'}`}</Typography>}
                   variant="text"
+                  
                   size="small"
                 >
                   <UploadFileIcon color="warning" sx={{ ml: '-15px' }} />
                   <input type="file" onChange={handleFileSelect} hidden />
-                </Button>
+                </LoadingButton>
+                  </FormControl>
 
 
                 <FormControl fullWidth >
 
                    <LoadingButton 
                     size="large"
+                    
                     color="warning"
                     onClick={update}
                     loading={loading}
