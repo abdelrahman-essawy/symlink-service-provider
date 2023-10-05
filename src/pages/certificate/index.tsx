@@ -24,20 +24,33 @@ import { dictionary, TranslatedWord } from "@/configs/i18next";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ExperienceDialog from "@/components/_used-symline/dialogs/experience-dialog";
+import ViewerPdf from "@/components/_used-symline/dialogs/pdf-viewer";
+import ViewImagesDialog from "@/components/_used-symline/dialogs/view-images";
 // import PdfViewerDialog from "@/components/PdfViewerDialog";
 
 const DATA = [
   { id: 1, title: "Certificate 1.pdf", img: require("../../assets/pdf.svg") },
-  { id: 1, title: "Certificate 2.pdf", img: require("../../assets/png.svg") },
-  { id: 1, title: "Certificate 3.pdf", img: require("../../assets/jpg.svg") },
+  { id: 1, title: "Certificate 2.png", img: require("../../assets/png.svg") },
+  { id: 1, title: "Certificate 3.jpg", img: require("../../assets/jpg.svg") },
 ];
 const Page = () => {
   const { i18n } = useTranslation();
   const title = "Certificate";
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
+  const [openCertificate, setOpenCertificate] = useState(false);
+  const [openPdf, setOpenPdf] = useState(false);
   const [dialogName, setDialogName] = useState("");
   const [value, setValue] = useState(0);
+
+  const handleCloseCertificate = () => setOpenCertificate(false);
+  const handleOpenCertificate = () => {
+    setOpenCertificate(true);
+  };
+  const handleClosePdf = () => setOpenPdf(false);
+  const handleOpenPdf = () => {
+    setOpenPdf(true);
+  };
   const handleClose = () => setOpen(false);
   const handleOpenAdd = () => {
     setDialogName("Add experience");
@@ -140,7 +153,8 @@ const Page = () => {
                               cursor: "pointer",
                               boxShadow: "0 4px 8px 0 rgba(0,0,0,0.08)",
                             }}
-                            onClick={handleOpenDialog}
+                            onClick={certificate.title == 'Certificate 1.pdf'? handleOpenPdf : handleOpenCertificate}
+
                           >
                             <Image
                               alt={certificate.title}
@@ -163,6 +177,9 @@ const Page = () => {
           </Grid>
         </Container>
       </Box>
+      <ViewerPdf open={openPdf} handleClose={handleClosePdf} document={"https://pdfobject.com/pdf/sample.pdf"}/>
+      <ViewImagesDialog open={openCertificate} handleClose={handleCloseCertificate}/>
+
       <ExperienceDialog name={dialogName} open={open} handleClose={handleClose} />
       {/* <PdfViewerDialog open={dialogOpen} onClose={handleCloseDialog} pdfUrl={'https://drive.google.com/file/d/105_LItMhs7CqoIGRzY7W2x2c9P-LGUBS/view?usp=sharing'} /> */}
     </>
