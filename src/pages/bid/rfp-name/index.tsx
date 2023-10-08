@@ -216,7 +216,7 @@ const Page = () => {
                 </CustomTabPanel>
 
                 <CustomTabPanel value={value} index={2}>
-                  <CardContent sx={{ p: 1 }}>
+                  <CardContent sx={{ p: 1 , direction: 'rtl'}}>
                     <Typography
                       variant="h6"
                       fontWeight="bold"
