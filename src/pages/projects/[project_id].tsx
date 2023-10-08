@@ -35,6 +35,8 @@ import ViewImagesDialog from "@/components/_used-symline/dialogs/view-images";
 import ConfirmDialog from "@/components/_used-symline/dialogs/confirm-dialog";
 const Page = () => {
   const title = "Projects";
+  const { i18n } = useTranslation();
+
   const [value, setValue] = useState(0);
   const [open, setOpen] = useState(false);
   const [confirm, setConfirm] = useState(false);
@@ -62,8 +64,10 @@ const Page = () => {
           flexGrow: 1,
           py: 8,
           bgcolor: "primary.lightest",
-          borderTopLeftRadius: 25,
-          borderBottomLeftRadius: 25,
+          borderTopLeftRadius: i18n.language == 'ar' ? 25 : 0,
+          borderBottomLeftRadius: i18n.language == 'ar' ? 25 : 25,
+          borderTopRightRadius: i18n.language == 'ar' ? 0 : 25,
+          borderBottomRightRadius: i18n.language == 'ar' ? 0 : 25,
         }}
       >
         <Container maxWidth="xl">
