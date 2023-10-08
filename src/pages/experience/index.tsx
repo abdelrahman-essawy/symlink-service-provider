@@ -40,9 +40,11 @@ const Page = () => {
       sx={{
         flexGrow: 1,
         py: 8,
-        bgcolor: 'primary.lightest',
-        borderTopLeftRadius: 25,
-        borderBottomLeftRadius: 25,
+        bgcolor: "primary.lightest",
+        borderTopLeftRadius: i18n.language == 'ar' ? 25 : 0,
+        borderBottomLeftRadius: i18n.language == 'ar' ? 25 : 25,
+        borderTopRightRadius: i18n.language == 'ar' ? 0 : 25,
+        borderBottomRightRadius: i18n.language == 'ar' ? 0 : 25,
 
 
       }}
