@@ -26,6 +26,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ExperienceDialog from "@/components/_used-symline/dialogs/experience-dialog";
 import ViewerPdf from "@/components/_used-symline/dialogs/pdf-viewer";
 import ViewImagesDialog from "@/components/_used-symline/dialogs/view-images";
+import { LoadingButton } from "@mui/lab";
 // import PdfViewerDialog from "@/components/PdfViewerDialog";
 
 const DATA = [
@@ -42,7 +43,30 @@ const Page = () => {
   const [openPdf, setOpenPdf] = useState(false);
   const [dialogName, setDialogName] = useState("");
   const [value, setValue] = useState(0);
+  const [file, setFile] = React.useState({ name: "Choose File" });
+  const [loading, setLoading] = React.useState(false);
+  const [upload, setUpload] = React.useState(false);
 
+
+  const update = async () => {
+    setLoading(true);
+    await new Promise((resolve) => setTimeout(resolve, 1600));
+
+    setLoading(false);
+    handleClose();
+  };
+  const uploading = async () => {
+    setUpload(true);
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    setUpload(false);
+    
+  };
+   // handle file selection
+   const handleFileSelect = (event: any) => {
+    const file = event.target.files[0];
+    setFile(file);
+  };
   const handleCloseCertificate = () => setOpenCertificate(false);
   const handleOpenCertificate = () => {
     setOpenCertificate(true);
@@ -96,14 +120,20 @@ const Page = () => {
           <Grid container spacing={2} justifyContent={"space-between"}>
             <Grid item xs={12} md={6}></Grid>
             <Grid item xs={12} md={3} sx={{ display: "flex", justifyContent: "end" }}>
-              <Button
-                onClick={handleOpenAdd}
-                variant="contained"
-                color="warning"
-                sx={{ borderRadius: 8 }}
-              >
-                {t("Upload")}
-              </Button>
+            <LoadingButton
+                  component="label"
+                  loading={upload}
+                  onChange={uploading}
+
+             
+                  variant="contained"
+                  color="warning"
+                  size="medium"
+                >
+                  <Typography sx={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word',  }}>  {t("Upload")}</Typography>
+                  <input type="file" onChange={handleFileSelect} hidden />
+                </LoadingButton>
+           
             </Grid>
             <Grid item xs={12}>
               <Card elevation={0} sx={{ p: 3 }}>
