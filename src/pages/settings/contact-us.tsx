@@ -97,6 +97,7 @@ const Page = () => {
                     <TextField
                       id="title"
                       type="text"
+                      fullWidth
                       placeholder={t("Title") || "Title"}
                       inputProps={{
                         step: 300,
@@ -106,9 +107,7 @@ const Page = () => {
                           fontSize: "14px",
                         },
                       }}
-                      value={formik.values.title}
-                      onChange={formik.handleChange}
-                      name="title"
+                    
                     />
                      <TextField
                      fullWidth
