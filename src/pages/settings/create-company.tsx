@@ -70,7 +70,7 @@ const Page = () => {
         <Container maxWidth="xl">
           <Card sx={{ p: 3, mt: 3 }}>
             <Grid container rowSpacing={3} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-              <Grid item md={6}>
+              <Grid item md={6} xs={12}>
                 <form onSubmit={formik.handleSubmit}>
                   <Box
                     sx={{
@@ -100,6 +100,7 @@ const Page = () => {
                     <TextField
                       id="url"
                       type="text"
+                      
                       placeholder={t("Website URL") || "Website URL"}
                       inputProps={{
                         step: 300,
@@ -116,6 +117,7 @@ const Page = () => {
                     <Select
                       sx={{ width: "200px", borderRadius: "50px" }}
                       multiple
+                      fullWidth
                       displayEmpty
                       value={companyField}
                       onChange={handleChange}
@@ -133,17 +135,31 @@ const Page = () => {
                       <MenuItem value={"Software"}>Software</MenuItem>
                       <MenuItem value={"Software"}>Software</MenuItem>
                     </Select>
-                    <StyledTextarea
-                      value={formik.values.message}
-                      onChange={formik.handleChange}
-                      name="message"
-                      minRows={5}
-                      placeholder={t("Description") || "Description"}
-                    />
+                    <TextField
+                     fullWidth
+                    id="title"
+                    multiline
+                  
+                    rows="3"
+
+                    type="text"
+                    placeholder={t("Description") || "Description"}
+                    InputProps={{
+
+                      sx: {
+                        p: 0,
+                        borderRadius: '10px', // Set the desired border radius
+                      },// Set the desired border radius
+
+                    }}
+
+
+                  />
+
                     <Button
                       size="large"
                       color="warning"
-                      sx={{ mt: 3, borderRadius: "50px" }}
+                      sx={{ mt: 3, borderRadius: "50px" ,display: {xs: 'none', md: 'block'}}}
                       type="submit"
                       variant="contained"
                     >
@@ -160,6 +176,15 @@ const Page = () => {
                   alt="company"
                   src={require("../../assets/company.svg")}
                 />
+                  <Button
+                      size="large"
+                      color="warning"
+                      sx={{ mt: 3, borderRadius: "50px" ,display: {xs: 'block', md: 'none'}}}
+                      type="submit"
+                      variant="contained"
+                    >
+                      {t("Send")}
+                    </Button>
               </Grid>
             </Grid>
           </Card>
