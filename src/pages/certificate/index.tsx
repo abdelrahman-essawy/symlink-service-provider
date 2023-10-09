@@ -27,6 +27,8 @@ import ExperienceDialog from "@/components/_used-symline/dialogs/experience-dial
 import ViewerPdf from "@/components/_used-symline/dialogs/pdf-viewer";
 import ViewImagesDialog from "@/components/_used-symline/dialogs/view-images";
 import { LoadingButton } from "@mui/lab";
+import ConfirmDialog from "@/components/_used-symline/dialogs/confirm-dialog";
+
 // import PdfViewerDialog from "@/components/PdfViewerDialog";
 
 const DATA = [
@@ -46,7 +48,11 @@ const Page = () => {
   const [file, setFile] = React.useState({ name: "Choose File" });
   const [loading, setLoading] = React.useState(false);
   const [upload, setUpload] = React.useState(false);
-
+  const [confirm, setConfirm] = useState(false);
+  const handleCloseConfirm = () => setConfirm(false);
+  const handleOpenConfirm = () => {
+    setConfirm(true);
+  };
 
   const update = async () => {
     setLoading(true);
@@ -166,7 +172,7 @@ const Page = () => {
                               </Typography>
                               <Box>
                                 <IconButton sx={{ mx: 1 }} >
-                                  <DeleteForeverIcon />
+                                  <DeleteForeverIcon onClick={handleOpenConfirm}/>
                                 </IconButton>
                               </Box>
                             </Grid>
@@ -211,6 +217,7 @@ const Page = () => {
       </Box>
       <ViewerPdf open={openPdf} handleClose={handleClosePdf} document={"https://pdfobject.com/pdf/sample.pdf"}/>
       <ViewImagesDialog open={openCertificate} handleClose={handleCloseCertificate}/>
+      <ConfirmDialog open={ confirm} handleClose={ handleCloseConfirm} message="Are you sure you want to delete this file ?"/>
 
       <ExperienceDialog name={dialogName} open={open} handleClose={handleClose} />
       {/* <PdfViewerDialog open={dialogOpen} onClose={handleCloseDialog} pdfUrl={'https://drive.google.com/file/d/105_LItMhs7CqoIGRzY7W2x2c9P-LGUBS/view?usp=sharing'} /> */}
