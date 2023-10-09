@@ -20,7 +20,7 @@ const style = {
   p: 4,
 };
 
-export default function ConfirmDialog({ open, handleClose }: any) {
+export default function ConfirmDialog({ open, handleClose, message }: any) {
   const { t } = useTranslation();
   const [dateFrom, setDateFrom] = React.useState<Dayjs | null>(dayjs());
   const [dateTo, setDateTo] = React.useState<Dayjs | null>(dayjs());
@@ -85,7 +85,7 @@ export default function ConfirmDialog({ open, handleClose }: any) {
                   variant="h6"
                   component="h2"
                 >
-                  {t("Are you sure you want to delete this file ?")}
+                  {t(message)}
                 </Typography>
               </Box>
 

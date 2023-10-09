@@ -379,7 +379,7 @@ const Page = () => {
       </Box>
       <ViewImagesDialog open={open} handleClose={handleClose}/>
 
-        <ConfirmDialog open={ confirm} handleClose={ handleCloseConfirm}/>
+        <ConfirmDialog open={ confirm} handleClose={ handleCloseConfirm} message="Are you sure you want to delete this file ?"/>
     </>
   );
 };
