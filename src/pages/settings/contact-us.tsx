@@ -87,7 +87,7 @@ const Page = () => {
                 <form onSubmit={formik.handleSubmit}>
                   <Box
                     sx={{
-                      m: 4,
+                      m: {xs:0, md: 4},
                       display: "flex",
                       flexDirection: "column",
                       gap: 2,
@@ -110,17 +110,30 @@ const Page = () => {
                       onChange={formik.handleChange}
                       name="title"
                     />
-                    <StyledTextarea
-                      value={formik.values.message}
-                      onChange={formik.handleChange}
-                      name="message"
-                      minRows={5}
-                      placeholder={t("Your message")}
-                    />
+                     <TextField
+                     fullWidth
+                    id="title"
+                    multiline
+                  
+                    rows="3"
+
+                    type="text"
+                    placeholder={t("Description") || "Description"}
+                    InputProps={{
+
+                      sx: {
+                        p: 0,
+                        borderRadius: '10px', // Set the desired border radius
+                      },// Set the desired border radius
+
+                    }}
+
+
+                  />
                     <Button
                       size="large"
                       color="warning"
-                      sx={{ mt: 3, borderRadius: "50px" }}
+                      sx={{ mt: 3, borderRadius: "50px" ,display: {xs: 'none', md: 'block'}}}
                       type="submit"
                       variant="contained"
                     >
@@ -136,15 +149,25 @@ const Page = () => {
                     {t("ContactUs_Page.Ask us everything and we would love to hear from you")}
                   </Typography>
                 </Box>
-                {/* must be an image here  */}
+                {/* must be an image here  */} 
                 <div
                   style={{
-                    maxWidth: 350,
+                    width: '100%',
+                    maxWidth: 430,
                     height: 200,
                     backgroundColor: "gray",
                     borderRadius: "10px",
                   }}
                 ></div>
+                 <Button
+                      size="large"
+                      color="warning"
+                      sx={{ mt: 3, borderRadius: "50px" ,display: {xs: 'block', md: 'none'}}}
+                      type="submit"
+                      variant="contained"
+                    >
+                      {t("Send")}
+                    </Button>
               </Grid>
             </Grid>
           </Card>
