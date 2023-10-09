@@ -101,7 +101,7 @@ const Page = () => {
             >
               <Grid item xs={12} md={2} sx={{ display: "flex", justifyContent:{sm: 'end', xs:'start'} }}>
                 <Button
-                  onClick={handleOpen}
+                 
                   variant="contained"
                   color="warning"
                   sx={{ borderRadius: 8 }}
@@ -109,7 +109,7 @@ const Page = () => {
                   {dictionary("Accept")}
                 </Button>
                 <Button
-                  onClick={handleOpen}
+                 
                   variant="contained"
                   sx={{
                     borderRadius: 8,
