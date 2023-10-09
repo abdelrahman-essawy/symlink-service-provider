@@ -89,23 +89,7 @@ export default function ExperienceDialog({ open, handleClose, name}: any) {
                 flexDirection={'row'}
                 display={'flex'}
               >
-                <Grid item xs={12} md={4}>
-                  <FormControl fullWidth>
-
-                  <Typography  sx={{ mx: 2, mb: 1}}  fontSize="medium" fontWeight="medium">
-                    {t('Date to')}
-                  </Typography>
-                  <TextField
-                    id="title"
-                    type="text"
-
-                    placeholder={t("Type here ..") || "Type here .."}
-                   
-                
-                    name="title"
-                  />
-                  </FormControl>
-                </Grid>
+               
                 <Grid item xs={12} md={4}>
                   <FormControl fullWidth>
                     
@@ -120,6 +104,23 @@ export default function ExperienceDialog({ open, handleClose, name}: any) {
                     placeholder={t("Type here ..") || "Type here .."}
                     
                  
+                    name="title"
+                  />
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <FormControl fullWidth>
+
+                  <Typography  sx={{ mx: 2, mb: 1}}  fontSize="medium" fontWeight="medium">
+                    {t('Date to')}
+                  </Typography>
+                  <TextField
+                    id="title"
+                    type="text"
+
+                    placeholder={t("Type here ..") || "Type here .."}
+                   
+                
                     name="title"
                   />
                   </FormControl>
