@@ -6,6 +6,7 @@ import SchoolIcon from "@mui/icons-material/School";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import FindInPageIcon from "@mui/icons-material/FindInPage";
+import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
 import React from "react";
 import { truncate } from "fs";
@@ -62,7 +63,7 @@ export const items = [
     path: "/support",
     icon: (
       <SvgIcon fontSize="small">
-        <VideocamIcon />
+        <SupportAgentIcon />
       </SvgIcon>
     ),
   },
