@@ -81,7 +81,7 @@ export const items = [
       </SvgIcon>
     ),
   },
-  {
+ /*  {
     external: false,
     disabled: false,
     menu: false,
@@ -160,7 +160,7 @@ export const items = [
         ),
       },
     ],
-  },
+  }, */
 ];
 
 export const profileItems = [
