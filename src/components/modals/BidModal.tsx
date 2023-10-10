@@ -18,7 +18,8 @@ import InputLabel from "@mui/material/InputLabel";
 import InputAdornment from "@mui/material/InputAdornment";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { Checkbox, TextField, FormControlLabel, Dialog, Card, CardContent, CardHeader } from "@mui/material";
+import { Checkbox, TextField, FormControlLabel, Dialog, Grid ,SelectChangeEvent, Card, CardContent, CardHeader } from "@mui/material";
+import { KeyboardEvent } from 'react';
 
 const style = {
   position: "absolute" as "absolute",
@@ -37,6 +38,21 @@ export default function BasicModal({ open, handleClose }: any) {
   const [dateFrom, setDateFrom] = React.useState<Dayjs | null>(dayjs());
   const [dateTo, setDateTo] = React.useState<Dayjs | null>(dayjs());
 
+  const [date, setDate] = useState('');
+
+  const handleSelectDate = (event: SelectChangeEvent) => {
+    setDate(event.target.value as string);
+  };
+
+  const handleKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
+    const keyCode = event.keyCode || event.which;
+    const keyValue = String.fromCharCode(keyCode);
+    const isNumeric = /^\d+$/.test(keyValue);
+
+    if (!isNumeric) {
+      event.preventDefault();
+    }
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -99,50 +115,49 @@ export default function BasicModal({ open, handleClose }: any) {
                   }}
                 >
                   <Typography variant="subtitle2" fontWeight="bold">{t("Pick duration")}</Typography>
-                  <FormControl fullWidth sx={{ direction: 'rtl' }} >
-                    {/* For DateRangePicker */}
-
-                    <DatePicker
-
-                      renderInput={(props: any) => <TextField  {...props} helperText={t("From")} />}
-                      value={`${dateFrom}`}
-                      onChange={(newVal: any) => setDateFrom(newVal)}
-                    />
-
-
-                    {/*     <Select
+                  <Grid container justifyContent="space-between"  sx={{ direction: 'rtl'}} >
                   
-                    sx={{ borderRadius: "50px" }}
-                    value={formik.values.title}
-                    onChange={formik.handleChange}
-                    displayEmpty
-                    inputProps={{ "aria-label": "Without label" }}
-                  >
-                    <MenuItem value="">
-                      <em>{t("Pick duration")}</em>
-                    </MenuItem>
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
-                  </Select> */}
-                  </FormControl>
-                  <FormControl fullWidth sx={{ direction: 'rtl' }} >
-                    {/* For DateRangePicker */}
+                    <Grid item xs={12} md={5.5}>
+                    <Select
+                      dir="rtl"
+                      value={date}
+                      onChange={handleSelectDate}
+                      sx={{ borderRadius: "50px" }}
+                  fullWidth
+                      displayEmpty
+                      inputProps={{ "aria-label": "Without label" }}
+                    >
+                      <MenuItem value="">
+                        {t("Pick duration")}
+                      </MenuItem>
+                      <MenuItem value={"Hour"}>{t("Hour")}</MenuItem>
+                      <MenuItem value={"Day"}>{t("Day")}</MenuItem>
+                      <MenuItem value={"Week"}>{t("Week")}</MenuItem>
+                      <MenuItem value={"Month"}>{t("Month")}</MenuItem>
+                      <MenuItem value={"Year"}>{t(" Year")}</MenuItem>
 
-                    <DatePicker
+                    </Select>
+                      </Grid>
+                  
+                      <Grid item xs={12} md={5.5}>
+                    <OutlinedInput
+                      type="text"
+                      fullWidth
+                      onKeyPress={handleKeyPress}
 
-
-                      renderInput={(props: any) => <TextField  {...props} helperText={t("To")} />}
-                      value={`${dateTo}`}
-                      onChange={(newVal: any) => setDateTo(newVal)}
+                      dir="rtl"
+                      sx={{ borderRadius: "50px",  }}
+                      id="outlined-adornment-amount"
                     />
-
-
-                  </FormControl>
+                    </Grid>
+                  </Grid>
+               
                   <Typography variant="subtitle2" fontWeight="bold">{t("Put your price")}</Typography>
                   <FormControl fullWidth >
                     <OutlinedInput
-                      type="number"
+                      type="text"
+                      onKeyPress={handleKeyPress}
+
                       placeholder="00.0"
                       sx={{ borderRadius: "50px" }}
                       id="outlined-adornment-amount"
