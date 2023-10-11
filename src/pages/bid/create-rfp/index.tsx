@@ -103,8 +103,8 @@ const Page = () => {
           >
 
             
-            <IconButton onClick={addInput} aria-label="add" color="inherit" size="medium" sx={{bgcolor: (theme) => theme.palette.warning.main,}}>
-                <PostAddIcon sx={{color: 'white', '&:hover': {color: (theme) => theme.palette.warning.main}}} fontSize="large"/>
+            <IconButton onClick={addInput} aria-label="add" color="inherit" size="medium" >
+                <PostAddIcon color="warning"  fontSize="large"/>
               </IconButton>
           </Tooltip>
             </Grid>
@@ -192,9 +192,18 @@ const Page = () => {
 
                 </Grid>
               </CardContent>
-                <IconButton onClick={addInput} aria-label="add" color="inherit" size="medium" sx={{bgcolor: (theme) => theme.palette.warning.main,}}>
-                <PostAddIcon sx={{color: 'white', '&:hover': {color: (theme) => theme.palette.warning.main}}} fontSize="large"/>
+              <Tooltip
+            TransitionComponent={Fade}
+            TransitionProps={{ timeout: 600 }}
+            title={`${t('Add')} ${t('General questions')}`}
+            arrow
+          >
+
+            
+            <IconButton onClick={addInput} aria-label="add" color="inherit" size="medium" >
+                <PostAddIcon color="warning"  fontSize="large"/>
               </IconButton>
+          </Tooltip>
             </Card>
           </Grid>
             ))}
