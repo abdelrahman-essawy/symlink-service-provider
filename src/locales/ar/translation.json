@@ -275,7 +275,12 @@
   "Attached file name": "اسم المرفق",
   "Are you sure you want to delete this file ?": "هل أنت متأكد أنك تريد حذف هذا الملف ؟",
   "Are you sure you want to delete this experience ?": "هل أنت متأكد أنك تريد حذف هذه الخبرة ؟",
-
+  "Hour": "ساعة",
+  "Day": "يوم",
+  "Week": "اسبوع",
+  "Number here ...": "العدد هنا ...",
+  "Month": "شهر",
+  " Year": "سنة",
   "Request a project": "طلب مشروع",
   "Upload file": "رفع ملف",
   "Back to": "الرجوع الي",
