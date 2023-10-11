@@ -115,9 +115,9 @@ export default function BasicModal({ open, handleClose }: any) {
                   }}
                 >
                   <Typography variant="subtitle2" fontWeight="bold">{t("Pick duration")}</Typography>
-                  <Grid container justifyContent="space-between"  sx={{ direction: 'rtl'}} >
+                  <Grid container spacing={1} justifyContent="space-between"  sx={{ direction: 'rtl'}} >
                   
-                    <Grid item xs={12} md={5.5}>
+                    <Grid item xs={12} md={5.5} sx={{order: {xs: 2, md: 1}}}>
                     <Select
                       dir="rtl"
                       value={date}
@@ -139,11 +139,12 @@ export default function BasicModal({ open, handleClose }: any) {
                     </Select>
                       </Grid>
                   
-                      <Grid item xs={12} md={5.5}>
+                      <Grid item xs={12} md={5.5} sx={{order: {xs: 1, md: 2}}}>
                     <OutlinedInput
                       type="text"
                       fullWidth
                       onKeyPress={handleKeyPress}
+                      placeholder={`${t('Number here ...')}`}
 
                       dir="rtl"
                       sx={{ borderRadius: "50px",  }}

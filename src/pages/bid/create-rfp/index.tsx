@@ -1,18 +1,22 @@
 import Head from 'next/head';
-import { Box, Card, Container, createTheme, Stack, Tab, Grid, CardHeader, Tabs, CardContent, Typography, Button, OutlinedInput, IconButton, Checkbox, FormControlLabel } from '@mui/material';
+import { Box, Card, Container, createTheme, Stack, Tab, Grid,Tooltip, CardHeader, Tabs, CardContent, Typography, Button, OutlinedInput, IconButton, Checkbox, FormControlLabel } from '@mui/material';
 import React, { useState, useRef } from 'react';
 import { DashboardLayout } from '../../../layouts/dashboard/layout';
 import { useTranslation } from 'react-i18next';
 import MobileStepper from '@mui/material/MobileStepper';
-
+import PostAddIcon from '@mui/icons-material/PostAdd';
 import CustomTabPanel from '@/components/_used-symline/tabs/tabsPanel';
 import { dictionary, TranslatedWord } from '@/configs/i18next';
+import Fade from '@mui/material/Fade';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import ExperienceDialog from '@/components/_used-symline/dialogs/experience-dialog';
 import { useRouter } from "next/navigation";
+import { styled } from '@mui/material/styles';
 import Step1 from '@/components/_used-symline/steps/step1';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import Step2 from '@/components/_used-symline/steps/step2';
+import { indexof } from 'stylis';
 const Page = () => {
 
   const { i18n } = useTranslation();
@@ -24,9 +28,20 @@ const Page = () => {
   const [dialogName, setDialogName] = useState('');
   const [value, setValue] = useState(0);
   const [activeStep, setActiveStep] = React.useState(0);
+  const [inputs, setInputs] = useState([1, 2]);
+
   const handleClose = () => setOpen(false);
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+  const addInput = () => {
+    setInputs([...inputs, (inputs.length - 1) + 1]);
+
+  };
+  const removeInput = (index: number) => {
+    const updatedInputs = [...inputs];
+    updatedInputs.splice(index, 1);
+    setInputs(updatedInputs);
   };
 
   const handleNext = () => {
@@ -77,9 +92,34 @@ const Page = () => {
           {dictionary(title as TranslatedWord)}
         </Typography>
         <Grid container spacing={3} justifyContent={'space-between'}>
+          {inputs.length <= 0 && (
+          
+            <Grid item xs={12} >
+                <Tooltip
+            TransitionComponent={Fade}
+            TransitionProps={{ timeout: 600 }}
+            title={`${t('Add')} ${t('General questions')}`}
+            arrow
+          >
 
-          <Grid item xs={12}>
-            <Card elevation={0} sx={{ p: 3 }}>
+            
+            <IconButton onClick={addInput} aria-label="add" color="inherit" size="medium" sx={{bgcolor: (theme) => theme.palette.warning.main,}}>
+                <PostAddIcon sx={{color: 'white', '&:hover': {color: (theme) => theme.palette.warning.main}}} fontSize="large"/>
+              </IconButton>
+          </Tooltip>
+            </Grid>
+          )}
+            {inputs.map((item, index) => (
+          <Grid key={index} item xs={12} >
+              
+            <Card  elevation={0} sx={{ p: 3 , }}>
+              <CardHeader action={
+                    <IconButton onClick={() => removeInput(index)} aria-label="delete" >
+
+                      <HighlightOffIcon sx={{color: 'lightgrey', cursor: 'pointer'}} />
+                    </IconButton>
+              
+              } sx={{p: 0, m: 0}} />
               <CardContent sx={{ p: 1 }}>
                 <Grid container spacing={0} justifyContent={'space-between'} alignItems="center">
                   <Grid item xs={12} >
@@ -151,11 +191,14 @@ const Page = () => {
                   </Grid>
 
                 </Grid>
-
               </CardContent>
+                <IconButton onClick={addInput} aria-label="add" color="inherit" size="medium" sx={{bgcolor: (theme) => theme.palette.warning.main,}}>
+                <PostAddIcon sx={{color: 'white', '&:hover': {color: (theme) => theme.palette.warning.main}}} fontSize="large"/>
+              </IconButton>
             </Card>
           </Grid>
-          <Grid item xs={12}>
+            ))}
+          <Grid item xs={12} >
             <Card elevation={0} sx={{ p: 3 }}>
               <CardContent sx={{ p: 1 }}>
                 <Grid container spacing={2} justifyContent={'space-between'} alignItems="center">

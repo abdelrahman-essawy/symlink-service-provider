@@ -182,7 +182,7 @@ const Page = () => {
                             transform: "rotate(45deg)",
                           }}
                         >
-                          <AttachFileIcon />
+                          <AttachFileIcon sx={{cursor: 'pointer'}} />
                         </Avatar>
                         <Avatar
                           sx={{
@@ -191,7 +191,7 @@ const Page = () => {
                             transform: "rotate(-45deg)",
                           }}
                         >
-                          <SendIcon />
+                          <SendIcon sx={{cursor: 'pointer'}}/>
                         </Avatar>
                       </Box>
                     </Box>
