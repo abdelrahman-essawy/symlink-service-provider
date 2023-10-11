@@ -28,7 +28,7 @@ const Page = () => {
   const [dialogName, setDialogName] = useState('');
   const [value, setValue] = useState(0);
   const [activeStep, setActiveStep] = React.useState(0);
-  const [inputs, setInputs] = useState([1, 2]);
+  const [inputs, setInputs] = useState([1]);
 
   const handleClose = () => setOpen(false);
   const handleBack = () => {
@@ -114,8 +114,8 @@ const Page = () => {
               
             <Card  elevation={0} sx={{ p: 3 , }}>
               <CardHeader action={
-                    <IconButton onClick={() => removeInput(index)} aria-label="delete" >
-
+                    <IconButton onClick={() => removeInput(index)} aria-label="delete" sx={{visibility: inputs.length == 1 ? 'hidden' :  'visible'}}>
+                      
                       <HighlightOffIcon sx={{color: 'lightgrey', cursor: 'pointer'}} />
                     </IconButton>
               
