@@ -28,7 +28,7 @@ const Page = () => {
   const [dialogName, setDialogName] = useState('');
   const [value, setValue] = useState(0);
   const [activeStep, setActiveStep] = React.useState(0);
-  const [inputs, setInputs] = useState([1, 2]);
+  const [inputs, setInputs] = useState([1]);
 
   const handleClose = () => setOpen(false);
   const handleBack = () => {
@@ -103,8 +103,8 @@ const Page = () => {
           >
 
             
-            <IconButton onClick={addInput} aria-label="add" color="inherit" size="medium" sx={{bgcolor: (theme) => theme.palette.warning.main,}}>
-                <PostAddIcon sx={{color: 'white', '&:hover': {color: (theme) => theme.palette.warning.main}}} fontSize="large"/>
+            <IconButton onClick={addInput} aria-label="add" color="inherit" size="medium" >
+                <PostAddIcon color="warning"  fontSize="large"/>
               </IconButton>
           </Tooltip>
             </Grid>
@@ -114,8 +114,8 @@ const Page = () => {
               
             <Card  elevation={0} sx={{ p: 3 , }}>
               <CardHeader action={
-                    <IconButton onClick={() => removeInput(index)} aria-label="delete" >
-
+                    <IconButton onClick={() => removeInput(index)} aria-label="delete" sx={{visibility: inputs.length == 1 ? 'hidden' :  'visible'}}>
+                      
                       <HighlightOffIcon sx={{color: 'lightgrey', cursor: 'pointer'}} />
                     </IconButton>
               
@@ -192,9 +192,18 @@ const Page = () => {
 
                 </Grid>
               </CardContent>
-                <IconButton onClick={addInput} aria-label="add" color="inherit" size="medium" sx={{bgcolor: (theme) => theme.palette.warning.main,}}>
-                <PostAddIcon sx={{color: 'white', '&:hover': {color: (theme) => theme.palette.warning.main}}} fontSize="large"/>
+              <Tooltip
+            TransitionComponent={Fade}
+            TransitionProps={{ timeout: 600 }}
+            title={`${t('Add')} ${t('General questions')}`}
+            arrow
+          >
+
+            
+            <IconButton onClick={addInput} aria-label="add" color="inherit" size="medium" >
+                <PostAddIcon color="warning"  fontSize="large"/>
               </IconButton>
+          </Tooltip>
             </Card>
           </Grid>
             ))}
