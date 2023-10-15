@@ -7,6 +7,7 @@ interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
   value: number;
+  padding?: string;
 }
  const CustomTabPanel = function (props: TabPanelProps) {
   const { children, value, index, ...other } = props;
@@ -20,7 +21,7 @@ interface TabPanelProps {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3 }}>
+        <Box sx={{ p: props.padding || 3 }}>
           <Typography>{children}</Typography>
         </Box>
       )}
