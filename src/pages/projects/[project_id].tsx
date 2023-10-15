@@ -3,26 +3,17 @@ import {
   Box,
   Card,
   Container,
-  Stack,
-  Tab,
-  Tabs,
   Typography,
   Button,
-  OutlinedInput,
   Grid,
   CardContent,
-  Divider,
-  Avatar,
-  SvgIcon,
 } from "@mui/material";
-import AttachFileIcon from "@mui/icons-material/AttachFile";
-import SendIcon from "@mui/icons-material/Send";
 import React from "react";
 import { DashboardLayout } from "../../layouts/dashboard/layout";
 import { useTranslation } from "react-i18next";
 import HeaderTabs from "@/components/_used-symline/tabs/headerTabs";
 import CustomTabPanel from "@/components/_used-symline/tabs/tabsPanel";
-import SharedTable, { amountTagHandler, progressTagHandler } from "@/components/SharedTable";
+import SharedTable, {  progressTagHandler } from "@/components/SharedTable";
 import { useRouter } from "next/router";
 import attachedFiles from "../../../public/attached-files.json";
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -32,6 +23,7 @@ import { dictionary } from "@/configs/i18next";
 import bids from "../../../public/bids.json";
 import DeleteIcon from '@mui/icons-material/Delete';
 import ViewImagesDialog from "@/components/_used-symline/dialogs/view-images";
+import Chat from "@/components/_used-symline/chat/chat";
 import ConfirmDialog from "@/components/_used-symline/dialogs/confirm-dialog";
 const Page = () => {
   const title = "Projects";
@@ -152,76 +144,9 @@ const Page = () => {
 
             <Grid item xs={12}>
               <Card elevation={0}>
-                <CustomTabPanel value={value} index={0}>
-                  <Grid sx={{ p: 1 }} item xs={12} md={12}>
-                    <Box
-                      sx={{
-                        height: "500px",
-                      }}
-                    >
-                      <Message
-                        name="احمد حسن"
-                        message="هل لديك أي حماية في التطبيق؟"
-                        time="8:19 pm"
-                        avatar={require("../../assets/icons/done-icon")}
-                      />
-
-                      <Message
-                        name="user"
-                        message="هل لديك أي حماية في التطبيق؟"
-                        time="8:19 pm"
-                        avatar={require("../../assets/icons/done-icon")}
-                      />
-                      <Message
-                        name="احمد حسن"
-                        message="هل لديك أي حماية في التطبيق؟"
-                        time="8:19 pm"
-                        avatar={require("../../assets/icons/done-icon")}
-                      />
-                    </Box>
-                    <Divider variant="middle" sx={{ my: 2 }} />
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "row",
-                        paddingX: 2,
-                        gap: 1,
-                      }}
-                    >
-                      <input
-                        type="text"
-                        style={{ width: "100%", height: "50px", border: "unset", outline: "unset" }}
-                        placeholder="اكتب رسالة هنا ..."
-                      />
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexDirection: "row",
-                          gap: 1,
-                        }}
-                      >
-                        <Avatar
-                          sx={{
-                            backgroundColor: "#FFFFFF",
-                            border: "2px solid #ECECEC",
-                            color: "#373737",
-                            transform: "rotate(45deg)",
-                          }}
-                        >
-                          <AttachFileIcon sx={{cursor: 'pointer'}}/>
-                        </Avatar>
-                        <Avatar
-                          sx={{
-                            backgroundColor: "#FFD777",
-                            color: "#ffffff",
-                            transform: "rotate(-45deg)",
-                          }}
-                        >
-                          <SendIcon sx={{cursor: 'pointer'}}/>
-                        </Avatar>
-                      </Box>
-                    </Box>
-                  </Grid>
+                <CustomTabPanel value={value} index={0} padding={'0'}>
+                  <Chat />
+              
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={2}>
                   <CardContent sx={{ p: 1 , direction: 'rtl'}}>
@@ -387,49 +312,3 @@ const Page = () => {
 Page.getLayout = (page: any) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default Page;
-
-const Message = ({ name, avatar, message, time }: any) => {
-  const { t } = useTranslation();
-
-  return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: name === "user" ? "row-reverse" : "row",
-        alignItems: "flex-end",
-        gap: "30px",
-        mb: 3,
-      }}
-    >
-      <Avatar alt="Remy Sharp" src={avatar} />
-      <Box
-        sx={{
-          bgcolor: name === "user" ? "#F6F6F6" : "#adb8ef",
-          borderRadius: "10px",
-          width: name === "user" ? "70%" : "50%",
-          p: 2,
-          position: "relative",
-        }}
-      >
-        <Typography sx={{ mb: 2 }} variant="h6">
-          {name}
-        </Typography>
-        <Typography variant="body1">{message}</Typography>
-        <Typography variant="body2">{time}</Typography>
-        <div
-          style={{
-            position: "absolute",
-            bottom: 0,
-            backgroundColor: name === "user" ? "#F6F6F6" : "#adb8ef",
-            transform: name === "user" ? "skewX(-35deg)" : "skewX(35deg)",
-            right: name === "user" ? "unset" : "-5px",
-            left: name === "user" ? "-5px" : "unset",
-            width: "40px",
-            height: "20px",
-          }}
-        ></div>
-      </Box>
-
-    </Box>
-  );
-};
