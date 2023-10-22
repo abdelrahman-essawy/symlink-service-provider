@@ -364,10 +364,7 @@ export default function Chat() {
                 pb: 1
               }}
             >
-              <Tooltip title="Send to the general chat" >
-
-                <Radio name="send" checked={sendToGroup} onClick={handleRadio} />
-              </Tooltip>
+             
               <Avatar
                 component="label"
                 sx={{
