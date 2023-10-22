@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { Box, Card, Container, createTheme, Stack, Tab, Grid,Tooltip, CardHeader, Tabs, CardContent, Typography, Button, OutlinedInput, IconButton, Checkbox, FormControlLabel } from '@mui/material';
+import { Box, Card, Container, createTheme, Stack, Tab, Grid, Tooltip, CardHeader, Tabs, CardContent, Typography, Popover, Button, List, ListItem, ListItemText, OutlinedInput, IconButton, Checkbox, FormControlLabel, ListItemButton, ListItemIcon, FormLabel, Radio, TextField } from '@mui/material';
 import React, { useState, useRef } from 'react';
 import { DashboardLayout } from '../../../layouts/dashboard/layout';
 import { useTranslation } from 'react-i18next';
@@ -16,26 +16,33 @@ import { styled } from '@mui/material/styles';
 import Step1 from '@/components/_used-symline/steps/step1';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import Step2 from '@/components/_used-symline/steps/step2';
+import AddIcon from '@mui/icons-material/Add';
 import { indexof } from 'stylis';
+import Moblie from '@/components/_used-symline/questions/mobile';
+import Web from '@/components/_used-symline/questions/web';
+import Network from '@/components/_used-symline/questions/network';
+import SourceCode from '@/components/_used-symline/questions/sourceCode';
+import ArchitectureConfigurationReview from '@/components/_used-symline/questions/architectureConfigurationReview';
+import ThreatHunting from '@/components/_used-symline/questions/threatHunting';
 const Page = () => {
 
   const { i18n } = useTranslation();
   const title = 'Create RFP';
   const { t } = useTranslation();
   const router = useRouter();
-
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [open, setOpen] = useState(false);
   const [dialogName, setDialogName] = useState('');
   const [value, setValue] = useState(0);
   const [activeStep, setActiveStep] = React.useState(0);
-  const [inputs, setInputs] = useState([1]);
-
+  const [inputs, setInputs] = useState(["Web"]);
+  const questionsTitles = ['Web', 'Architecture configuration review', 'Source code', 'Phone', 'Network', 'Threat hunting'];
   const handleClose = () => setOpen(false);
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
-  const addInput = () => {
-    setInputs([...inputs, (inputs.length - 1) + 1]);
+  const addInput = (item: any) => {
+    setInputs([...inputs, item]);
 
   };
   const removeInput = (index: number) => {
@@ -54,6 +61,16 @@ const Page = () => {
     }
   };
 
+  const handleClickList = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseList = () => {
+    setAnchorEl(null);
+  };
+
+  const openList = Boolean(anchorEl);
+  const id = openList ? 'simple-popover' : undefined;
 
   const steps = [
     {
@@ -91,41 +108,58 @@ const Page = () => {
         <Typography variant="h3" sx={{ mb: 2 }} fontWeight={'bold'}>
           {dictionary(title as TranslatedWord)}
         </Typography>
-        <Grid container spacing={3} justifyContent={'space-between'}>
-          {inputs.length <= 0 && (
-          
-            <Grid item xs={12} >
-                <Tooltip
-            TransitionComponent={Fade}
-            TransitionProps={{ timeout: 600 }}
-            title={`${t('Add')} ${t('General questions')}`}
-            arrow
-          >
 
-            
-            <IconButton onClick={addInput} aria-label="add" color="inherit" size="medium" >
-                <PostAddIcon color="warning"  fontSize="large"/>
-              </IconButton>
-          </Tooltip>
-            </Grid>
-          )}
-            {inputs.map((item, index) => (
-          <Grid key={index} item xs={12} >
-              
-            <Card  elevation={0} sx={{ p: 3 , }}>
-              <CardHeader action={
-                    <IconButton onClick={() => removeInput(index)} aria-label="delete" sx={{visibility: inputs.length == 1 ? 'hidden' :  'visible'}}>
-                      
-                      <HighlightOffIcon sx={{color: 'lightgrey', cursor: 'pointer'}} />
-                    </IconButton>
-              
-              } sx={{p: 0, m: 0}} />
+        <Grid container spacing={3} justifyContent={'flex-end'}>
+
+
+          <Grid item xs={12} justifyContent="flex-end" display="flex">
+
+
+
+            <Button variant="contained" onClick={handleClickList} aria-describedby={id} aria-label="add" color="warning" size="large" sx={{ borderRadius: 20 }}>
+              {t("Add assessment")} <AddIcon />
+            </Button>
+            <Popover
+              id={id}
+              open={openList}
+              anchorEl={anchorEl}
+              onClose={handleCloseList}
+              anchorOrigin={{
+                horizontal: 'left',
+                vertical: 'bottom'
+              }}
+              PaperProps={{ sx: { width: 300, borderRadius: 3 } }}
+
+            >
+              <List sx={{ p: 2 }}>
+                {questionsTitles.map((item: any, index) => (
+
+
+                  <ListItem key={index} disablePadding divider>
+                    <ListItemButton onClick={() => (addInput(item))}>
+
+                      <ListItemText primary={`${t(item)}`} />
+                    </ListItemButton>
+                  </ListItem>
+                ))}
+
+              </List>
+
+
+            </Popover>
+          </Grid>
+
+
+          <Grid item xs={12} >
+
+            <Card elevation={0} sx={{ p: 3, }}>
+
               <CardContent sx={{ p: 1 }}>
                 <Grid container spacing={0} justifyContent={'space-between'} alignItems="center">
                   <Grid item xs={12} >
 
                     <Grid container spacing={0} direction={'row'} justifyContent={'space-between'} textAlign={'left'}>
-                      <Grid item xs={12} sx={{ py: 1, px: 1, borderRadius: 1, bgcolor: "warning.lightest", display: 'flex', alignItems: "center", justifyContent: "space-between" }}>
+                      <Grid item xs={12} sx={{ p: 1, px: 1, borderRadius: 1, bgcolor: "warning.lightest", display: 'flex', alignItems: "center", justifyContent: "space-between" }}>
 
                         <Typography variant="body2" fontWeight="bold" color="warning.darkest">{t("General questions")}</Typography>
 
@@ -133,7 +167,7 @@ const Page = () => {
 
                     </Grid>
                     <Typography variant="body1" fontWeight="bold" sx={{ mb: 1, mt: 3, px: 1 }}>
-                      {t("Type of the assessment ?")}
+                      {t("What is the allowed  testing time ?")}
                     </Typography>
 
                   </Grid>
@@ -141,129 +175,115 @@ const Page = () => {
 
                     <Grid item xs={6} md={4} lg={3}>
                       <FormControlLabel
-                        value="web"
+                        value="During the working hours"
                         control={<Checkbox />}
-                        label={t("Web")}
+                        label={t("During the working hours")}
                         labelPlacement="end"
                       />
                     </Grid>
                     <Grid item xs={12} md={4} lg={3}>
                       <FormControlLabel
-                        value="Architecture configuration review"
+                        value="Off working hours"
                         control={<Checkbox />}
-                        label={t("Architecture configuration review")}
+                        label={t("Off working hours")}
                         labelPlacement="end"
-                        sx={{overflow:"hidden",whiteSpace:{xs:"nowrap",sm:"normal"}}}
+                        sx={{ overflow: "hidden", whiteSpace: { xs: "nowrap", sm: "normal" } }}
                       />
                     </Grid>
                     <Grid item xs={6} md={4} lg={3}>
                       <FormControlLabel
-                        value="مصدر الرمز"
+                        value="Weekends"
                         control={<Checkbox />}
-                        label={t("Source code")}
+                        label={t("Weekends")}
                         labelPlacement="end"
                       />
                     </Grid>
-                    <Grid item xs={6} md={4} lg={3}>
+                    <Grid item xs={12} md={4} lg={3}>
                       <FormControlLabel
-                        value="Moblie"
+                        value="No preference"
                         control={<Checkbox />}
-                        label={t("Mobile")}
+                        label={t("No preference")}
                         labelPlacement="end"
                       />
                     </Grid>
-                    <Grid item xs={6} md={4} lg={3}>
-                      <FormControlLabel
-                        value="Network"
-                        control={<Checkbox />}
-                        label={t("Network")}
-                        labelPlacement="end"
-                      />
-                    </Grid>
-                    <Grid item xs={6} md={4} lg={3}>
-                      <FormControlLabel
-                        value="threat hunting"
-                        control={<Checkbox />}
-                        label={t("Threat hunting")}
-                        labelPlacement="end"
-                      />
-                    </Grid>
+
                   </Grid>
 
                 </Grid>
               </CardContent>
-              <Tooltip
-            TransitionComponent={Fade}
-            TransitionProps={{ timeout: 600 }}
-            title={`${t('Add')} ${t('General questions')}`}
-            arrow
-          >
+            </Card>
+          </Grid>
 
+          {inputs.map((item, index) => (
+            <Grid key={index} item xs={12} >
+              <Card elevation={0} sx={{ p: 3 }}>
+                <CardContent sx={{ p: 1 }}>
+                  <Grid container spacing={2} justifyContent={'space-between'} alignItems="center">
+                    <Grid item xs={12}>
+
+                      <Box sx={{ width: '100%', pa: 0 }}>
+
+                        <Grid container spacing={0} justifyContent="center">
+                          <Grid item xs={12}>
+                            <Box sx={{ px: 1, borderRadius: 1, bgcolor: "warning.lightest", display: 'flex', alignItems: "center", justifyContent: "space-between" }}>
+                              <Typography variant="body2" fontWeight="bold" color="warning.darkest">{t(`${item}`)}</Typography>
+                              <Box>
+
+                                <IconButton onClick={() => removeInput(index)} aria-label="delete" >
+
+                                  <DeleteForeverIcon sx={{ cursor: 'pointer' }} />
+                                </IconButton>
+
+                              </Box>
+                            </Box>
+                            {
+                              item === 'Web' && (
+                                <Web />
+                              )
+                            }
+                            {
+                              item === 'Architecture configuration review' && (
+                                <ArchitectureConfigurationReview />
+                              )
+                            }
+                            {
+                              item === 'Network' && (
+                                <Network />
+                              )
+                            }
+                            {
+                              item === 'Threat hunting' && (
+                                <ThreatHunting />
+                              )
+                            }
+                              {
+                              item === 'Phone' && (
+                                <Moblie />
+                              )
+                            }
+                            {
+                              item === 'Source code' && (
+                                <SourceCode />
+                              )
+                            }
+
+                          </Grid>
+                        </Grid>
+                      </Box>
+                    </Grid>
+                 
+                  </Grid>
+
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
             
-            <IconButton onClick={addInput} aria-label="add" color="inherit" size="medium" >
-                <PostAddIcon color="warning"  fontSize="large"/>
-              </IconButton>
-          </Tooltip>
-            </Card>
-          </Grid>
-            ))}
-          <Grid item xs={12} >
-            <Card elevation={0} sx={{ p: 3 }}>
-              <CardContent sx={{ p: 1 }}>
-                <Grid container spacing={2} justifyContent={'space-between'} alignItems="center">
-                  <Grid item xs={12}>
-
-                    <Box sx={{ my: 1, width: '100%', pa: 0 }}>
-                      {steps[activeStep].step}
-                    </Box>
-                  </Grid>
-                  <Grid item xs={5} >
-
-                <MobileStepper
-                
-                  sx={{
-                    direction: "rtl",
-                    pa: 0,
-                    '& .MuiMobileStepper-dots': {
-                      visibility: 'hidden',
-                    }
-                  }}
-                  steps={maxSteps}
-                  position="static"
-                  
-                  activeStep={activeStep}
-                  nextButton={
-                    <Button
-                      variant="contained"
-                      size="medium"
-                      color='warning'
-                      onClick={handleNext}
-
-                    >
-                      {activeStep === maxSteps - 1 ? t('confirm') : t('Next')}
-
-                    </Button>
-                  }
-                  backButton={ activeStep == 1 ?
-                    <Button variant="outlined"
-
-                      size="medium" onClick={handleBack} >
-
-                      {t('Back')}
-                    </Button>
-                    : ""
-                  }
-                />
-                  </Grid>
-                </Grid>
-
-              </CardContent>
-            </Card>
-          </Grid>
+           
         </Grid>
 
       </Container>
-    </Box>
+    </Box >
   </>
 }
 
