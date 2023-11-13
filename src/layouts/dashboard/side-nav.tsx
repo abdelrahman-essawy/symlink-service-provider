@@ -22,10 +22,13 @@ import RoleBasedRender from '@/hocs/RoleBasedRender';
 import usePreviousPath from '@/hooks/usePreviousPath';
 import { useTranslation } from 'react-i18next';
 import { SideNavInnerItem } from './Inner-path-item';
-
+import { useTheme } from '@mui/material';
+import { createTheme } from "@/theme";
 export const SideNav = (props: { open: any; onClose: any; }) => {
   const { open, onClose } = props;
   const pathname = usePathname();
+  const theme = useTheme();
+  const { i18n } = useTranslation();
   const lgUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
   const {previousPath,isinnerPath,isProfilePath} = usePreviousPath();
   const {t} = useTranslation();
@@ -155,11 +158,13 @@ export const SideNav = (props: { open: any; onClose: any; }) => {
       </Box>
     </Scrollbar>
   );
-
+  useEffect(() => {
+    console.log(theme.direction)
+  },[theme.direction]);       
   if (lgUp) {
     return (
       <Drawer
-        anchor="left"
+        anchor={i18n.language === "en" ? 'right' : 'left'}
         open
         PaperProps={{
           sx: {
@@ -178,7 +183,7 @@ export const SideNav = (props: { open: any; onClose: any; }) => {
 
   return (
     <Drawer
-      anchor="left"
+    anchor={i18n.language === "en" ? 'right' : 'left'}
       onClose={onClose}
       open={open}
       PaperProps={{

@@ -18,6 +18,8 @@ import React from 'react';
 import { usePopover } from '../../hooks/use-popover';
 import { AccountPopover } from './account-popover';
 import { Theme } from '@mui/material';
+import LanguageToggle from '@/components/LanguageToggle';
+import { useTranslation } from 'react-i18next';
 
 const SIDE_NAV_WIDTH = 280;
 const TOP_NAV_HEIGHT = 64;
@@ -26,7 +28,7 @@ export const TopNav = (props: { onNavOpen: any; }) => {
   const { onNavOpen } = props;
   const lgUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
   const accountPopover = usePopover();
-
+  const { i18n } = useTranslation();
   return (
     <>
       <Box
@@ -35,9 +37,9 @@ export const TopNav = (props: { onNavOpen: any; }) => {
           backdropFilter: 'blur(6px)',
           backgroundColor: (theme) => alpha(theme.palette.background.default, 0.8),
           position: 'sticky',
-          left: {
-            lg: `${SIDE_NAV_WIDTH}px`
-          },
+          left: `${i18n.language === "ar"  ? SIDE_NAV_WIDTH : 0}px`,
+          right:  `${i18n.language === "ar"  ? 0 : SIDE_NAV_WIDTH}px`
+          ,
           top: 0,
           width: {
             lg: `calc(100% - ${SIDE_NAV_WIDTH}px)`
@@ -60,6 +62,7 @@ export const TopNav = (props: { onNavOpen: any; }) => {
             direction="row"
             spacing={2}
           >
+            
             {!lgUp && (
               <IconButton onClick={onNavOpen}>
                 <SvgIcon fontSize="small">
@@ -80,7 +83,13 @@ export const TopNav = (props: { onNavOpen: any; }) => {
             direction="row"
             spacing={2}
           >
-          
+            <Tooltip title="Contacts">
+              <IconButton>
+                <SvgIcon fontSize="small">
+                  <UsersIcon />
+                </SvgIcon>
+              </IconButton>
+            </Tooltip>
             <Tooltip title="Notifications">
               <IconButton>
                 <Badge
@@ -93,6 +102,11 @@ export const TopNav = (props: { onNavOpen: any; }) => {
                   </SvgIcon>
                 </Badge>
               </IconButton>
+            </Tooltip>
+            <Tooltip title="LanguageToggle">
+            <IconButton>
+            <LanguageToggle/>
+            </IconButton>
             </Tooltip>
             <Avatar
               onClick={accountPopover.handleOpen}

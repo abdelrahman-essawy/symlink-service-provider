@@ -6,13 +6,12 @@ import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import RoleBasedRender from '@/hocs/RoleBasedRender';
 import { StyledBadge } from '@/components/_used-symline/tabs/headerTabs';
-
 export const SideNavItem = (props: { active?: boolean; disabled: boolean; external: any; icon: any; path: any; title: any; items: any[]; amount: number | undefined }) => {
   const { active = false, disabled, external, icon, path, title, items, amount } = props;
   const { t } = useTranslation();
   const [open, setOpen] = React.useState(false);
   const pathname = usePathname();
-
+  const { i18n } = useTranslation();
   const handleClick = () => {
     setOpen(!open);
   };
@@ -42,7 +41,7 @@ export const SideNavItem = (props: { active?: boolean; disabled: boolean; extern
           pl: "16px",
           pr: "16px",
           py: 2,
-          textAlign: "left",
+          textAlign: i18n.language === "en" ? 'right' : 'left',
           width: "100%",
           ...(active && {
             backgroundColor: "primary.main",
@@ -62,7 +61,8 @@ export const SideNavItem = (props: { active?: boolean; disabled: boolean; extern
               color: "black",
               display: "inline-flex",
               justifyContent: "center",
-              mr: 2,
+              mr: i18n.language === "ar" ? 2 : 0,
+              ml: i18n.language === "ar" ? 0 : 2,
               ...(active && {
                 color: "white",
 
@@ -104,7 +104,7 @@ export const SideNavItem = (props: { active?: boolean; disabled: boolean; extern
                 width: 26,
                 height: 26,
                 borderRadius: "50%",
-                mx: 1,
+                mx: i18n.language === "ar" ? 1 : -1,
               },
             }}
           />
@@ -138,11 +138,11 @@ export const SideNavItem = (props: { active?: boolean; disabled: boolean; extern
                     borderRadius: 1,
                     display: "flex",
                     justifyContent: "flex-start",
-                    pl: 4,
+                    pl: "16px",
                     pr: "16px",
                     py: "6px",
                     mt: .5,
-                    textAlign: "left",
+                    textAlign: i18n.language === "en" ? 'right' : 'left',
                     width: "100%",
                     ...(child.active && {
                       backgroundColor: "primary.main",
@@ -167,7 +167,8 @@ export const SideNavItem = (props: { active?: boolean; disabled: boolean; extern
                         color: "black",
                         display: "inline-flex",
                         justifyContent: "center",
-                        mr: 2,
+                        mr: i18n.language === "ar" ? 2 : 0,
+                        ml: i18n.language === "ar" ? 0 : 2,
                         ...(active && {
                           color: "white",
 

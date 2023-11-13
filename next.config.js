@@ -5,6 +5,12 @@ const nextConfig = {
   images: {
     domains: ["img.freepik.com", "veterinaire-tour-hassan.com"],
     unoptimized: true
+  },
+  i18n: {
+    locales: ["en", "ar"],
+    defaultLocale: "ar", localeDetection: false
+  },
+};
   
   },
   webpack: (config) => {
@@ -16,3 +22,4 @@ return config;
   },
 };
 module.exports = nextConfig;
+

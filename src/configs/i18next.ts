@@ -17,13 +17,17 @@ const resources = {
 i18n
   .use(initReactI18next) // passes i18n down to react-i18next
   .init({
+    supportedLngs: ['en', 'ar',],
     resources,
     lng: 'ar',
-    fallbackLng: 'ar',
-
+    fallbackLng: 'en',
+    debug: false,
     interpolation: {
       escapeValue: false // react already safes arom xss
-    }
+    },
+    backend: {
+      loadPath: '/assets/locales/{{lng}}/translation.json',
+    },
   });
 
 export default i18n;
