@@ -1,7 +1,9 @@
-module.exports = {
+// next.config.js
+const nextConfig = {
   reactStrictMode: true,
-  // output: "export",
+
   images: {
+    domains: ["img.freepik.com", "veterinaire-tour-hassan.com"],
     unoptimized: true
   },
   i18n: {
@@ -9,3 +11,15 @@ module.exports = {
     defaultLocale: "ar", localeDetection: false
   },
 };
+  
+  },
+  webpack: (config) => {
+    config.module.rules.push({
+      test: /\.node/,
+      use: "raw-loader",
+    });
+return config;
+  },
+};
+module.exports = nextConfig;
+

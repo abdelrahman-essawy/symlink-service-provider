@@ -11,6 +11,8 @@ import EducationDialog from "@/components/_used-symline/dialogs/education-dialog
 const Page = () => {
   const title = "Educational info";
   const { t } = useTranslation();
+  const { i18n } = useTranslation();
+
   const [open, setOpen] = useState(false);
 
   const handleClose = () => setOpen(false);
@@ -28,6 +30,11 @@ const Page = () => {
         sx={{
           flexGrow: 1,
           py: 8,
+          bgcolor: "primary.lightest",
+          borderTopLeftRadius: i18n.language == 'ar' ? 25 : 0,
+          borderBottomLeftRadius: i18n.language == 'ar' ? 25 : 25,
+          borderTopRightRadius: i18n.language == 'ar' ? 0 : 25,
+          borderBottomRightRadius: i18n.language == 'ar' ? 0 : 25,
         }}
       >
         <Container maxWidth="xl">

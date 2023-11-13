@@ -12,6 +12,8 @@ import {useTranslation} from 'react-i18next';
 const Page = () => {
   const {t} = useTranslation();
   const clientContext = useClient();
+  const { i18n } = useTranslation();
+
   const router = useRouter();
   const [user, setUser] = useState<any>();
   const [loading, setLoading] = useState(true);
@@ -42,6 +44,11 @@ const Page = () => {
         sx={{
           flexGrow: 1,
           py: 8,
+          bgcolor: "primary.lightest",
+          borderTopLeftRadius: i18n.language == 'ar' ? 25 : 0,
+          borderBottomLeftRadius: i18n.language == 'ar' ? 25 : 25,
+          borderTopRightRadius: i18n.language == 'ar' ? 0 : 25,
+          borderBottomRightRadius: i18n.language == 'ar' ? 0 : 25,
         }}
       >
         <></>

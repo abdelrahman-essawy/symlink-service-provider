@@ -7,23 +7,21 @@ import {
   CardContent,
   Typography,
   Button,
-  Divider,
-  Avatar,
   SvgIcon,
 } from "@mui/material";
 import React from "react";
+
 import { DashboardLayout } from "../../../layouts/dashboard/layout";
 import { useTranslation } from "react-i18next";
 import CustomTabPanel from "@/components/_used-symline/tabs/tabsPanel";
 import HeaderTabs from "@/components/_used-symline/tabs/headerTabs";
 import SharedTable from "@/components/SharedTable";
 import { dictionary, TranslatedWord } from "@/configs/i18next";
-import AttachFileIcon from "@mui/icons-material/AttachFile";
-import SendIcon from "@mui/icons-material/Send";
 import BidModal from "@/components/modals/BidModal";
 import attachedFiles from "../../../../public/attached-files.json";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import RoleBasedRender from "@/hocs/RoleBasedRender";
+import Chat from "@/components/_used-symline/chat/chat";
 
 const Page = () => {
   const { i18n } = useTranslation();
@@ -31,6 +29,7 @@ const Page = () => {
   const { t } = useTranslation();
   const [value, setValue] = React.useState(0);
   const [open, setOpen] = React.useState(false);
+  
 
   // ----------------- functions ---------------
   const handletabs = (event: React.SyntheticEvent, newValue: number) => {
@@ -49,8 +48,10 @@ const Page = () => {
           flexGrow: 1,
           py: 8,
           bgcolor: "primary.lightest",
-          borderTopLeftRadius: 25,
-          borderBottomLeftRadius: 25,
+          borderTopLeftRadius: i18n.language == 'ar' ? 25 : 0,
+          borderBottomLeftRadius: i18n.language == 'ar' ? 25 : 25,
+          borderTopRightRadius: i18n.language == 'ar' ? 0 : 25,
+          borderBottomRightRadius: i18n.language == 'ar' ? 0 : 25,
         }}
       >
         <Container maxWidth="xl">
@@ -58,29 +59,32 @@ const Page = () => {
             {dictionary(title as TranslatedWord)}
           </Typography>
           <Grid container spacing={2} justifyContent={"space-between"} alignItems={"end"} >
-            <HeaderTabs
-              value={value}
-              handleChange={handletabs}
-              tabs={
-                [{
-                  title: "Discussion",
-                  amount: 0
-                }, {
-                  title: "Attached files",
-                  amount: 5
-                },
-                {
-                  title: "Questions",
-                  amount: 3
-                },
-                ]
-              }
-            />
+            <Grid item xs={12} sm={10}>
+
+              <HeaderTabs
+                value={value}
+                handleChange={handletabs}
+                tabs={
+                  [{
+                    title: "Discussion",
+                    amount: 0
+                  }, {
+                    title: "Attached files",
+                    amount: 5
+                  },
+                  {
+                    title: "Questions",
+                    amount: 3
+                  },
+                  ]
+                }
+              />
+            </Grid>
 
             <RoleBasedRender
               componentId="button-bid-rfp"
             >
-              <Grid item xs={12} md={3} sx={{ display: "flex", justifyContent: "end" }}>
+              <Grid item xs={12} sm={2} sx={{ display: "flex", justifyContent: { sm: 'end', xs: 'start' } }}>
                 <Button
                   onClick={handleOpen}
                   variant="contained"
@@ -94,9 +98,9 @@ const Page = () => {
             <RoleBasedRender
               componentId="buttons-accept-reject-rfp"
             >
-              <Grid item xs={12} md={3} sx={{ display: "flex", justifyContent: "center", gap: 3 }}>
+              <Grid item xs={12} md={2} sx={{ display: "flex", justifyContent: { sm: 'end', xs: 'start' } }}>
                 <Button
-                  onClick={handleOpen}
+
                   variant="contained"
                   color="warning"
                   sx={{ borderRadius: 8 }}
@@ -104,7 +108,7 @@ const Page = () => {
                   {dictionary("Accept")}
                 </Button>
                 <Button
-                  onClick={handleOpen}
+
                   variant="contained"
                   sx={{
                     borderRadius: 8,
@@ -118,79 +122,10 @@ const Page = () => {
 
             </RoleBasedRender>
 
-            <Grid item xs={12}>
-              <Card elevation={0}>
-              <CustomTabPanel value={value} index={0}>
-                  {" "}
-                  <Grid sx={{ p: 1 }} item xs={12} md={12}>
-                    <Box
-                      sx={{
-                        height: "500px",
-                      }}
-                    >
-                      <Message
-                        name="احمد حسن"
-                        message="هل لديك أي حماية في التطبيق؟"
-                        time="8:19 pm"
-                        avatar={require("../../../assets/icons/done-icon")}
-                      />
-
-                      <Message
-                        name="user"
-                        message="هل لديك أي حماية في التطبيق؟"
-                        time="8:19 pm"
-                        avatar={require("../../../assets/icons/done-icon")}
-                      />
-                      <Message
-                        name="احمد حسن"
-                        message="هل لديك أي حماية في التطبيق؟"
-                        time="8:19 pm"
-                        avatar={require("../../../assets/icons/done-icon")}
-                      />
-                    </Box>
-                    <Divider variant="middle" sx={{ my: 2 }} />
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "row",
-                        paddingX: 2,
-                        gap: 1,
-                      }}
-                    >
-                      <input
-                        type="text"
-                        style={{ width: "100%", height: "50px", border: "unset", outline: "unset" }}
-                        placeholder="اكتب رسالة هنا ..."
-                      />
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexDirection: "row",
-                          gap: 1,
-                        }}
-                      >
-                        <Avatar
-                          sx={{
-                            backgroundColor: "#FFFFFF",
-                            border: "2px solid #ECECEC",
-                            color: "#373737",
-                            transform: "rotate(45deg)",
-                          }}
-                        >
-                          <AttachFileIcon />
-                        </Avatar>
-                        <Avatar
-                          sx={{
-                            backgroundColor: "#FFD777",
-                            color: "#ffffff",
-                            transform: "rotate(-45deg)",
-                          }}
-                        >
-                          <SendIcon />
-                        </Avatar>
-                      </Box>
-                    </Box>
-                  </Grid>
+            <Grid item xs={12} >
+              <Card elevation={0} >
+                <CustomTabPanel value={value} index={0} padding={'0'}>
+                 <Chat />
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={1}>
                   <SharedTable endpoint="http://localhost:3000/attached-files.json"
@@ -211,7 +146,7 @@ const Page = () => {
                 </CustomTabPanel>
 
                 <CustomTabPanel value={value} index={2}>
-                  <CardContent sx={{ p: 1 }}>
+                  <CardContent sx={{ p: 1, direction: 'rtl' }}>
                     <Typography
                       variant="h6"
                       fontWeight="bold"
@@ -331,48 +266,3 @@ const Page = () => {
 Page.getLayout = (page: any) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default Page;
-
-const Message = ({ name, avatar, message, time }: any) => {
-  const { t } = useTranslation();
-
-  return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: name === "user" ? "row-reverse" : "row",
-        alignItems: "flex-end",
-        gap: "30px",
-        mb: 3,
-      }}
-    >
-      <Avatar alt="Remy Sharp" src={avatar} />
-      <Box
-        sx={{
-          bgcolor: name === "user" ? "#F6F6F6" : "#adb8ef",
-          borderRadius: "10px",
-          width: name === "user" ? "70%" : "50%",
-          p: 2,
-          position: "relative",
-        }}
-      >
-        <Typography sx={{ mb: 2 }} variant="h6">
-          {name}
-        </Typography>
-        <Typography variant="body1">{message}</Typography>
-        <Typography variant="body2">{time}</Typography>
-        <div
-          style={{
-            position: "absolute",
-            bottom: 0,
-            backgroundColor: name === "user" ? "#F6F6F6" : "#adb8ef",
-            transform: name === "user" ? "skewX(-35deg)" : "skewX(35deg)",
-            right: name === "user" ? "unset" : "-5px",
-            left: name === "user" ? "-5px" : "unset",
-            width: "40px",
-            height: "20px",
-          }}
-        ></div>
-      </Box>
-    </Box>
-  );
-};
