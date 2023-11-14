@@ -133,57 +133,57 @@ export const AuthProvider = ({ children }: any) => {
       username: '',
       role: 'CLIENT'
     };
-    // const res = await axiosClient.post('/auth/signin', { username, password });
+    const res = await axiosClient.post('/auth/signin', { username, password });
 
-    // if (res.status == 200) {
-    //   const { data } = res.data;
-    //   window.sessionStorage.setItem('authenticated', 'true');
-    //   window.sessionStorage.setItem('token', data.access_token);
-    //   axiosClient.defaults.headers.common['Authorization'] = `Bearer ${data.access_token}`;
-    //   user.id = data.id;
-    //   user.avatar = data.avatar;
-    //   user.name = data.name;
-    //   user.username = data.username;
-    //   user.role = data.role;
-    // }
-    // else {
-    //   throw new Error('Please check your username and password');
-    // }
-    console.log(username);
-
-    const addDataToSessionStorage = (user: UserType) => {
-      sessionStorage.setItem('authenticated', 'true');
-      sessionStorage.setItem('token', 'fake-token');
+    if (res.status == 200) {
+      const { data } = res.data;
+      window.sessionStorage.setItem('authenticated', 'true');
+      window.sessionStorage.setItem('token', data.access_token);
+      axiosClient.defaults.headers.common['Authorization'] = `Bearer ${data.access_token}`;
+      user.id = data.id;
+      user.avatar = data.avatar;
+      user.name = data.name;
+      user.username = data.username;
+      user.role = data.role;
     }
-
-    switch (username) {
-      case 'admin':
-        user.id = '1';
-        user.avatar = 'https://i.pravatar.cc/300';
-        user.name = 'Admin';
-        user.username = 'admin';
-        user.role = 'ADMIN';
-        addDataToSessionStorage(user);
-        break;
-      case 'client':
-        user.id = '2';
-        user.avatar = 'https://i.pravatar.cc/300';
-        user.name = 'Client';
-        user.username = 'client';
-        user.role = 'CLIENT';
-        addDataToSessionStorage(user);
-        break;
-      case 'service_provider':
-        user.id = '3';
-        user.avatar = 'https://i.pravatar.cc/300';
-        user.name = 'Service Provider';
-        user.username = 'service_provider';
-        user.role = 'SERVICE_PROVIDER';
-        addDataToSessionStorage(user);
-        break;
-      default:
-        throw new Error('Please check your username and password');
+    else {
+      throw new Error('Please check your username and password');
     }
+    // console.log(username);
+
+    // const addDataToSessionStorage = (user: UserType) => {
+    //   sessionStorage.setItem('authenticated', 'true');
+    //   sessionStorage.setItem('token', 'fake-token');
+    // }
+
+    // switch (username) {
+    //   case 'admin':
+    //     user.id = '1';
+    //     user.avatar = 'https://i.pravatar.cc/300';
+    //     user.name = 'Admin';
+    //     user.username = 'admin';
+    //     user.role = 'ADMIN';
+    //     addDataToSessionStorage(user);
+    //     break;
+    //   case 'client':
+    //     user.id = '2';
+    //     user.avatar = 'https://i.pravatar.cc/300';
+    //     user.name = 'Client';
+    //     user.username = 'client';
+    //     user.role = 'CLIENT';
+    //     addDataToSessionStorage(user);
+    //     break;
+    //   case 'service_provider':
+    //     user.id = '3';
+    //     user.avatar = 'https://i.pravatar.cc/300';
+    //     user.name = 'Service Provider';
+    //     user.username = 'service_provider';
+    //     user.role = 'SERVICE_PROVIDER';
+    //     addDataToSessionStorage(user);
+    //     break;
+    //   default:
+    //     throw new Error('Please check your username and password');
+    // }
 
 
 
