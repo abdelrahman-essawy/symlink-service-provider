@@ -1,11 +1,13 @@
-import {
-  Badge,
-  Box, Tab, Tabs as TabsSchema, Typography
-} from "@mui/material";
 import { styled } from "@mui/material/styles";
+import {
+  Tab,
+  Typography,
+  Box,
+  Badge,
+} from "@mui/material";
 import { withStyles } from "@mui/styles";
 
-export const StyledBadge = withStyles((theme) => ({
+const StyledBadge = withStyles((theme) => ({
   badge: {
     backgroundColor: "lightgray",
     color: "black",
