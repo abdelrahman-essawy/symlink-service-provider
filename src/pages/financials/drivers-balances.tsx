@@ -60,7 +60,7 @@ const Page = (effect: React.EffectCallback, deps?: React.DependencyList) => {
   return (
     <>
       <Head>
-        <title>{t(title)} | Pronto</title>
+        <title>{t(title)} | SymLink</title>
       </Head>
       <Box
         component="main"

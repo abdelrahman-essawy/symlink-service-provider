@@ -44,7 +44,7 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>Vehicle | Pronto</title>
+        <title>Vehicle | SymLink</title>
       </Head>
       <Box
         component="main"

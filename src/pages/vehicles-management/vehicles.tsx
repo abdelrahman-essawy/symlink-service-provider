@@ -83,7 +83,7 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>{t("Vehicles")} | Pronto</title>
+        <title>{t("Vehicles")} | SymLink</title>
       </Head>
       <Box
         component="main"

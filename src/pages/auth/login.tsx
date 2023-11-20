@@ -88,7 +88,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          {t("Login")} | Symline
+          {t("Login")} | Symlink
         </title>
       </Head>
       <Box
@@ -164,6 +164,20 @@ const Page = () => {
                     >
                       <NextLink href="/auth/login" style={{ textDecoration: "none" }}>
                         {t("Forgot password ?")}
+                      </NextLink>
+                    </Typography>
+                    <Typography
+                      sx={{
+                        mx: 2,
+                        mt: 2,
+
+                        fontSize: 14,
+                        fontWeight: 700,
+                      }}
+                      color={"primary"}
+                    >
+                      <NextLink href="/auth/register" style={{ textDecoration: "none" }}>
+                        {t("Dont't have an Account? Signup now !")}
                       </NextLink>
                     </Typography>
                     <Button

@@ -25,6 +25,7 @@ type initialValue = {
   isLoading: boolean,
   user: any,
   signIn: (username: string, password: string) => Promise<void>,
+  signUp: (username: string, email:string, password: string) => Promise<void>,
   signOut: () => Promise<void>,
   ToggleReceiveOrders:()=>void,
 };
@@ -139,7 +140,6 @@ export const AuthProvider = ({ children }: any) => {
       const { data } = res.data;
       window.sessionStorage.setItem('authenticated', 'true');
       window.sessionStorage.setItem('token', data.access_token);
-      axiosClient.defaults.headers.common['Authorization'] = `Bearer ${data.access_token}`;
       user.id = data.id;
       user.avatar = data.avatar;
       user.name = data.name;
@@ -193,7 +193,29 @@ export const AuthProvider = ({ children }: any) => {
     });
   };
 
-  const signUp = async (username: any, name: any, password: any) => {
+  const signUp = async (username: any, email: any, password: any) => {
+    const user: UserType = {
+      id: '',
+      avatar: '',
+      name: '',
+      username: '',
+      role: 'CLIENT'
+    };
+    const res = await axiosClient.post('/auth/register', { username, email, password });
+    if (res.status == 200) {
+      const { data } = res.data;
+      window.sessionStorage.setItem('authenticated', 'true');
+      window.sessionStorage.setItem('token', data.access_token);
+      user.id = data.id;
+      user.avatar = data.avatar;
+      user.name = data.name;
+      user.username = data.username;
+      user.role = data.role;
+    }
+    else {
+      throw new Error('Please check your username and password');
+    }
+
     throw new Error('Sign up is not implemented');
   };
 

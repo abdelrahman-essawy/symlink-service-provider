@@ -84,7 +84,7 @@ const handleSearch = (event: any) => {
   return (
     <>
       <Head>
-        <title>{t("Verification Requests")} | Pronto</title>
+        <title>{t("Verification Requests")} | SymLink</title>
       </Head>
       <Box
         component="main"

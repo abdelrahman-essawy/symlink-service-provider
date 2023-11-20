@@ -103,7 +103,7 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>{t("Add New Admin")} | Pronto</title>
+        <title>{t("Add New Admin")} | SymLink</title>
       </Head>
 
       <Container maxWidth="xl" >

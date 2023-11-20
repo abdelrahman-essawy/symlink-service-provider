@@ -45,7 +45,7 @@ const Page = () => {
     return <>
         <Head>
             <title>
-                {title} | Pronto
+                {title} | SymLink
             </title>
         </Head>
         <Box

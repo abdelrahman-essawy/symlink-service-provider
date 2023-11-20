@@ -35,7 +35,7 @@ const Page = () => {
     }),
     onSubmit: async (values, helpers) => {
       try {
-        // await auth.signUp(values.email, values.name, values.password);
+        await auth?.signUp(values.name, values.email, values.password);
         router.push('/');
       } catch (err: any) {
         helpers.setStatus({ success: false });
@@ -49,7 +49,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Register | Pronto
+          Register | SymLink
         </title>
       </Head>
       <Box

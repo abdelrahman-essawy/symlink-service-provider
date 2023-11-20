@@ -13,7 +13,7 @@ axiosClient.defaults.headers.common = {
 axiosClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig<any>) => {
     const token = window.sessionStorage.getItem("token");
-    config.headers.Authorization = token ?? undefined;
+    config.headers.Authorization = `Bearer ${token}` ?? undefined;
     return config;
   },
   (error: any) => Promise.reject(error)

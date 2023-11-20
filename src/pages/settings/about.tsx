@@ -30,7 +30,7 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>{title} | Pronto</title>
+        <title>{title} | SymLink</title>
       </Head>
       <Box
         component="main"
