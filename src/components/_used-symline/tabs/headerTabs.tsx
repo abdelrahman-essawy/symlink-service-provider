@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { withStyles } from "@mui/styles";
 
-const StyledBadge = withStyles((theme) => ({
+export const StyledBadge = withStyles((theme) => ({
   badge: {
     backgroundColor: "lightgray",
     color: "black",
