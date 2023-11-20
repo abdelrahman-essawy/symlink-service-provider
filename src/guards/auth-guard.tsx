@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { useAuthContext } from '../contexts/auth-context';
+import { getPermissionNameFromPath, hasPermissionToViewPath } from '@/configs/pathsPermission';
+import { getRolesThatCanAccessPathName } from '@/configs/roles';
 
 export const AuthGuard = (props: { children: any; }) => {
   const { children } = props;
@@ -48,6 +50,32 @@ export const AuthGuard = (props: { children: any; }) => {
 
   // If got here, it means that the redirect did not occur, and that tells us that the user is
   // authenticated / authorized.
+
+  const { pathname } = router;
+
+  const permision = getPermissionNameFromPath(pathname as any);
+
+  if (!permision) router.push('/401');
+  console.log('permision', permision);
+  // if (!permision) {
+  //   return <div>No rule for this path, contact the administrator.</div>;
+  // }
+
+  if (!useAuth?.user) {
+    return router.push('/auth/login');
+  }
+  //   return (
+  //     <>
+  //       <div>Not authorized to view {pathname}</div>
+  //       <div>Your role: {useAuth?.user?.role}</div>
+  //       <div>You need permision: {permision}</div>
+  //       <div>
+  //         Roles than can access {pathname}: {getRolesThatCanAccessPathName(pathname)}
+  //       </div>
+  //     </>
+  //   );
+  // }
+
 
   return children;
 };

@@ -2,14 +2,7 @@
 import { dictionary, TranslatedWord } from "@/configs/i18next";
 import { queryClient } from "@/pages/_app";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import {
-  Box,
-  Chip,
-  IconButton,
-  MenuItem,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import { Box, Chip, IconButton, MenuItem, Tooltip, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import {
   MaterialReactTable,
@@ -20,6 +13,8 @@ import {
   MRT_SortingState,
 } from "material-react-table";
 import { useEffect, useState } from "react";
+import ReceiptIcon from "@mui/icons-material/Receipt";
+import Link from "next/link";
 
 const SharedTable = <T extends Record<string, any>>({
   endpoint,
@@ -29,6 +24,9 @@ const SharedTable = <T extends Record<string, any>>({
   fakeData,
   showActions,
   muiTableBodyRowProps,
+  renderRowActions,
+  enableRowSelection,
+  enableMultiRowSelection,
 }: {
   endpoint: string;
   renderColumns?: MRT_ColumnDef<T>["accessorKey"][];
@@ -37,6 +35,9 @@ const SharedTable = <T extends Record<string, any>>({
   fakeData: any;
   showActions?: boolean;
   muiTableBodyRowProps?: MaterialReactTableProps<T>["muiTableBodyRowProps"];
+  renderRowActions?: MaterialReactTableProps<T>["renderRowActions"];
+  enableRowSelection?: boolean;
+  enableMultiRowSelection?: boolean;
 }) => {
   const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState("");
@@ -113,8 +114,11 @@ const SharedTable = <T extends Record<string, any>>({
   return (
     <>
       <MaterialReactTable
+        enableRowSelection={enableRowSelection}
+        enableMultiRowSelection={enableMultiRowSelection}
         enableRowActions={showActions}
         positionActionsColumn="last"
+        renderRowActions={renderRowActions}
         renderRowActionMenuItems={({ row, table }) => [
           <MenuItem key="edit">{dictionary("Edit")}</MenuItem>,
           <MenuItem key="delete">{dictionary("Delete")}</MenuItem>,
@@ -158,6 +162,7 @@ const SharedTable = <T extends Record<string, any>>({
               fontWeight: "bold",
               bgcolor: "#f0f2fe",
               padding: 2,
+              verticalAlign: "middle",
             },
           },
         }}
@@ -226,7 +231,6 @@ const SharedTable = <T extends Record<string, any>>({
         )}
         actions={actions}
         muiTableBodyRowProps={muiTableBodyRowProps} // TODO: refactor this
-
       />
     </>
   );
@@ -290,6 +294,15 @@ const sharedTableColumns: MRT_ColumnDef<any>[] = [
     size: 50,
   },
   {
+    accessorKey: "date",
+    header: dictionary("Date"),
+    Cell: ({ row }) => (
+      <Typography variant="body2">{new Date(row.getValue("date")).toLocaleDateString()}</Typography>
+    ),
+    enableEditing: false,
+    size: 50,
+  },
+  {
     accessorKey: "updated_at",
     header: dictionary("Updated at"),
     Cell: ({ row }) => (
@@ -297,6 +310,13 @@ const sharedTableColumns: MRT_ColumnDef<any>[] = [
         {new Date(row.getValue("updated_at")).toLocaleDateString()}
       </Typography>
     ),
+    enableEditing: false,
+    size: 50,
+  },
+  {
+    accessorKey: "receipt",
+    header: dictionary("Receipt"),
+    Cell: ({ row }) => <ReceiptIcon sx={{ color: "#6366F1" }} />,
     enableEditing: false,
     size: 50,
   },
@@ -326,17 +346,63 @@ const sharedTableColumns: MRT_ColumnDef<any>[] = [
     accessorKey: "progress",
     header: dictionary("Progress"),
     Cell: ({ row }) => (
-      <Chip
-        label={dictionary(row.original.progress)} // translate if possible
-        sx={{
-          bgcolor: "#e6f4ea",
-          color: "#1e7e34",
-          fontWeight: "bold",
-        }}
-      />
+      progressTagHandler(row.original.progress as "waiting for selection" | "completed")
     ),
   },
+  {
+    id: "service_provider_name",
+    accessorKey: "service_provider_name",
+    header: dictionary("Service provider name"),
+    Cell: ({ row }) => (
+      <Link
+        style={{
+          color: "#6366F1",
+          padding: "10px",
+          fontWeight: "bold",
+          textDecoration: "none",
+        }}
+        href={`/service-providers/${row.original.service_provider_id}`}>
+        {row.original.service_provider_name}
+      </Link>
+    ),
+  }
 ];
+
+export function progressTagHandler(progress: "waiting for selection" | "completed") {
+  switch (progress) {
+    case "waiting for selection":
+      return (
+        <Chip
+          label={(progress)} // translate if possible
+          sx={{
+            bgcolor: "#FBE9BA",
+            color: "#C18C00",
+            fontWeight: "bold",
+          }} />
+      );
+    case "completed":
+      return (
+        <Chip
+          label={(progress)} // translate if possible
+          sx={{
+            bgcolor: "#e6f4ea",
+            color: "#1e7e34",
+            fontWeight: "bold",
+          }} />
+      );
+    default:
+      return (
+        <Chip
+          label={(progress)} // translate if possible
+          sx={{
+            bgcolor: "#e6f4ea",
+            color: "#1e7e34",
+            fontWeight: "bold",
+          }} />
+      );
+  }
+}
+
 
 function fromKeyToHeader(input: string): string {
   const words = input.split("_");

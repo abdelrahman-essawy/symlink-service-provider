@@ -18,7 +18,8 @@ const Page = () => {
   const router = useRouter();
   const [vehicle, setVehicle] = useState<any>();
   const [loading, setLoading] = useState(true);
-
+  const { i18n } = useTranslation();
+ 
   const fetchVehicle = async () => {
     if (typeof router.query.id === "string") {
       await vehicleContext?.getVehicle(router.query.id);
@@ -50,6 +51,11 @@ const Page = () => {
         sx={{
           flexGrow: 1,
           py: 8,
+          bgcolor: "primary.lightest",
+          borderTopLeftRadius: i18n.language == 'ar' ? 25 : 0,
+          borderBottomLeftRadius: i18n.language == 'ar' ? 25 : 25,
+          borderTopRightRadius: i18n.language == 'ar' ? 0 : 25,
+          borderBottomRightRadius: i18n.language == 'ar' ? 0 : 25,
         }}
       >
         {!loading && vehicle && (

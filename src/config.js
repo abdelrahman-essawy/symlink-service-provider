@@ -1,3 +1,3 @@
 module.exports = global.config = {
-    baseURL: 'https://pronto.zbony.com/v1/'
+    baseURL: 'http://164.90.181.17:3000/'
 };

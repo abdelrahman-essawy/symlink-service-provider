@@ -81,9 +81,11 @@ const Page = () => {
       sx={{
         flexGrow: 1,
         py: 8,
-        bgcolor: 'primary.lightest',
-        borderTopLeftRadius: 25,
-        borderBottomLeftRadius: 25,
+        bgcolor: "primary.lightest",
+        borderTopLeftRadius: i18n.language == 'ar' ? 25 : 0,
+        borderBottomLeftRadius: i18n.language == 'ar' ? 25 : 25,
+        borderTopRightRadius: i18n.language == 'ar' ? 0 : 25,
+        borderBottomRightRadius: i18n.language == 'ar' ? 0 : 25,
 
 
       }}
@@ -106,14 +108,15 @@ const Page = () => {
                         overlap="circular"
                         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
                         badgeContent={
-                          <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" >
+                          <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" sx={{boxShadow: "-6px 7px 8px rgba(0, 0, 0, 0.08)"}}>
 
                             <Button
                               variant="contained"
                               size="large"
                               component="label"
+                              sx={{color: 'white'}}
                             >
-                              <PhotoCameraIcon fontSize='small' />
+                              <PhotoCameraIcon fontSize='small'  />
                               <input
                                 type="file"
                                 onChange={handleFileSelect}

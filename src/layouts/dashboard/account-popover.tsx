@@ -1,9 +1,10 @@
 import { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import PropTypes from 'prop-types';
-import { Box, Divider, MenuItem, MenuList, Popover, Typography } from '@mui/material';
+import { Box, Divider, Grid, MenuItem, MenuList, Popover, Switch, Typography } from '@mui/material';
 import { useAuth } from '../../hooks/use-auth';
 import React from 'react';
+import RoleBasedRender from '@/hocs/RoleBasedRender';
 
 export const AccountPopover = (props: { anchorEl: any; onClose: any; open: any; }) => {
   const { anchorEl, onClose, open } = props;
@@ -13,7 +14,7 @@ export const AccountPopover = (props: { anchorEl: any; onClose: any; open: any; 
   const handleSignOut = useCallback(
     () => {
       onClose?.();
-      auth?.signOut();
+      // auth?.signOut();
       router.push('/auth/login');
     },
     [onClose, auth, router]
@@ -32,7 +33,7 @@ export const AccountPopover = (props: { anchorEl: any; onClose: any; open: any; 
     >
       <Box
         sx={{
-          py: 1.5,
+          pt: 1.5,
           px: 2
         }}
       >
@@ -43,9 +44,42 @@ export const AccountPopover = (props: { anchorEl: any; onClose: any; open: any; 
           color="text.secondary"
           variant="body2"
         >
-          Anika Visser
+          {auth?.user?.name}
         </Typography>
       </Box>
+      <MenuList
+      >
+        <MenuItem
+          onClick={() => router.push("/profile")}>
+          Profile
+        </MenuItem>
+        <RoleBasedRender
+          componentId="menu-item-service-provider-receive-orders">
+          <MenuItem
+            disableRipple
+            sx={{
+              gap: 3,
+              cursor: 'auto',
+              "&:hover": {
+                backgroundColor: 'transparent',
+              },
+              "&:active": {
+                effect: 'none',
+              },
+            }}
+
+          >
+            Receive Orders
+            <Switch
+              checked={auth?.user?.receiveOrders}
+              color="primary"
+              edge="start"
+              name="checkedB"
+              onChange={() => {auth?.ToggleReceiveOrders();}}
+            />
+          </MenuItem>
+        </RoleBasedRender>
+      </MenuList>
       <Divider />
       <MenuList
         disablePadding
@@ -57,11 +91,15 @@ export const AccountPopover = (props: { anchorEl: any; onClose: any; open: any; 
           }
         }}
       >
-        <MenuItem onClick={handleSignOut}>
-          Sign out
+        <MenuItem
+          sx={{
+            color: 'red',
+          }}
+          onClick={handleSignOut}>
+          Logout
         </MenuItem>
       </MenuList>
-    </Popover>
+    </Popover >
   );
 };
 

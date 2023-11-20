@@ -25,6 +25,7 @@ const DATA = [
 const Page = () => {
   const title = "Terms and Conditions";
   const { t } = useTranslation();
+  const { i18n } = useTranslation();
 
   return (
     <>
@@ -35,7 +36,12 @@ const Page = () => {
         component="main"
         sx={{
           flexGrow: 1,
-          py: 8,
+              py: 8,
+              bgcolor: "primary.lightest",
+              borderTopLeftRadius: i18n.language == 'ar' ? 25 : 0,
+              borderBottomLeftRadius: i18n.language == 'ar' ? 25 : 25,
+              borderTopRightRadius: i18n.language == 'ar' ? 0 : 25,
+              borderBottomRightRadius: i18n.language == 'ar' ? 0 : 25,
         }}
       >
         <Container maxWidth="xl">

@@ -8,7 +8,8 @@ type UserType = {
   id: string,
   username: string,
   name: string,
-  avatar: string
+  avatar: string,
+  role: "CLIENT" | "SERVICE_PROVIDER" | "ADMIN"
 };
 
 type ActionType = { type: string, payload: any }
@@ -25,6 +26,7 @@ type initialValue = {
   user: any,
   signIn: (username: string, password: string) => Promise<void>,
   signOut: () => Promise<void>,
+  ToggleReceiveOrders:()=>void,
 };
 
 const initialState = {
@@ -124,11 +126,12 @@ export const AuthProvider = ({ children }: any) => {
   );
 
   const signIn = async (username: string, password: string) => {
-    const user: { id: string, avatar: string, name: string, username: string } = {
+    const user: UserType = {
       id: '',
       avatar: '',
       name: '',
-      username: ''
+      username: '',
+      role: 'CLIENT'
     };
     const res = await axiosClient.post('/auth/signin', { username, password });
 
@@ -141,10 +144,48 @@ export const AuthProvider = ({ children }: any) => {
       user.avatar = data.avatar;
       user.name = data.name;
       user.username = data.username;
+      user.role = data.role;
     }
     else {
       throw new Error('Please check your username and password');
     }
+    // console.log(username);
+
+    // const addDataToSessionStorage = (user: UserType) => {
+    //   sessionStorage.setItem('authenticated', 'true');
+    //   sessionStorage.setItem('token', 'fake-token');
+    // }
+
+    // switch (username) {
+    //   case 'admin':
+    //     user.id = '1';
+    //     user.avatar = 'https://i.pravatar.cc/300';
+    //     user.name = 'Admin';
+    //     user.username = 'admin';
+    //     user.role = 'ADMIN';
+    //     addDataToSessionStorage(user);
+    //     break;
+    //   case 'client':
+    //     user.id = '2';
+    //     user.avatar = 'https://i.pravatar.cc/300';
+    //     user.name = 'Client';
+    //     user.username = 'client';
+    //     user.role = 'CLIENT';
+    //     addDataToSessionStorage(user);
+    //     break;
+    //   case 'service_provider':
+    //     user.id = '3';
+    //     user.avatar = 'https://i.pravatar.cc/300';
+    //     user.name = 'Service Provider';
+    //     user.username = 'service_provider';
+    //     user.role = 'SERVICE_PROVIDER';
+    //     addDataToSessionStorage(user);
+    //     break;
+    //   default:
+    //     throw new Error('Please check your username and password');
+    // }
+
+
 
     dispatch({
       type: HANDLERS.SIGN_IN,
@@ -162,6 +203,13 @@ export const AuthProvider = ({ children }: any) => {
       payload: null
     });
   };
+  const ToggleReceiveOrders = () => {
+    const receiveOrders = !(state?.user?.receiveOrders);
+    dispatch({
+      type: HANDLERS.SIGN_IN,
+      payload: {...state?.user,receiveOrders}
+    });
+  };
 
   return (
     <AuthContext.Provider
@@ -169,7 +217,8 @@ export const AuthProvider = ({ children }: any) => {
         ...state,
         signIn,
         signUp,
-        signOut
+        signOut,
+        ToggleReceiveOrders
       }}
     >
       {children}

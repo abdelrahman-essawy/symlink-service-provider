@@ -8,6 +8,8 @@ import { dictionary, TranslatedWord } from '@/configs/i18next';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import ExperienceDialog from '@/components/_used-symline/dialogs/experience-dialog';
+import ConfirmDialog from "@/components/_used-symline/dialogs/confirm-dialog";
+
 const Page = () => {
 
   const { i18n } = useTranslation();
@@ -16,6 +18,11 @@ const Page = () => {
   const [open, setOpen] = useState(false);
   const [dialogName,setDialogName] = useState('');
   const [value, setValue] = useState(0);
+  const [confirm, setConfirm] = useState(false);
+  const handleCloseConfirm = () => setConfirm(false);
+  const handleOpenConfirm = () => {
+    setConfirm(true);
+  };
   const handleClose = () => setOpen(false);
   const handleOpenAdd = () => {
     setDialogName('Add experience');
@@ -40,9 +47,11 @@ const Page = () => {
       sx={{
         flexGrow: 1,
         py: 8,
-        bgcolor: 'primary.lightest',
-        borderTopLeftRadius: 25,
-        borderBottomLeftRadius: 25,
+        bgcolor: "primary.lightest",
+        borderTopLeftRadius: i18n.language == 'ar' ? 25 : 0,
+        borderBottomLeftRadius: i18n.language == 'ar' ? 25 : 25,
+        borderTopRightRadius: i18n.language == 'ar' ? 0 : 25,
+        borderBottomRightRadius: i18n.language == 'ar' ? 0 : 25,
 
 
       }}
@@ -71,7 +80,7 @@ const Page = () => {
                         <Typography variant="h6" fontWeight="bold" color="primary">Project name</Typography>
                         <Box>
 
-                          <IconButton sx={{ mx: 1 }}><DeleteForeverIcon /></IconButton>
+                          <IconButton sx={{ mx: 1 }}><DeleteForeverIcon onClick={handleOpenConfirm} /></IconButton>
                           <IconButton><BorderColorIcon onClick={handleOpenEdit}/></IconButton>
 
                         </Box>
@@ -130,6 +139,8 @@ const Page = () => {
 
       </Container>
     </Box>
+    <ConfirmDialog open={ confirm} handleClose={ handleCloseConfirm} message="Are you sure you want to delete this experience ?"/>
+
     <ExperienceDialog name={dialogName} open={open} handleClose={handleClose}/>
   </>
 }

@@ -38,7 +38,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          {t(title)} | Pronto
+          {t(title)} | Symline
         </title>
       </Head>
       <Box

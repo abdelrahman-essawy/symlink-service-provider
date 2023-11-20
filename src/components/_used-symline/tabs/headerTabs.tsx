@@ -1,25 +1,28 @@
 import { styled } from "@mui/material/styles";
 import {
-  Tabs,
   Tab,
-  Avatar,
-  Chip,
   Typography,
   Box,
-  useMediaQuery,
   Badge,
-  BadgeProps,
+  Tabs,
 } from "@mui/material";
-import { Theme } from "@mui/material";
-import { useState } from "react";
 import { withStyles } from "@mui/styles";
 
-const StyledBadge = withStyles((theme) => ({
+export const StyledBadge = withStyles((theme) => ({
   badge: {
     backgroundColor: "lightgray",
     color: "black",
   },
 }))(Badge);
+
+interface TabsSchema {
+  tabs: {
+    title: string;
+    amount: number;
+  }[];
+  value: number;
+  handleChange: (event: React.SyntheticEvent, newValue: number) => void;
+}
 
 const CustomTabs = styled(Tabs)(({ theme }) => ({
   backgroundColor: "#fff",
@@ -80,16 +83,8 @@ const CustomTab = styled(Tab)(({ theme }) => ({
     display: "none",
   },
 }));
-interface Tabs {
-  label1: string;
-  label2: string;
-  label3: string;
-  value: number;
-  handleChange: (event: React.SyntheticEvent, newValue: number) => void;
-}
 
-const HeaderTabs: React.FC<Tabs> = ({ label1, label2, label3, value, handleChange }: Tabs) => {
-  // const smUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('sm'));
+const HeaderTabs: React.FC<TabsSchema> = ({ tabs, value, handleChange }: TabsSchema) => {
 
   return (
     <CustomTabs
@@ -97,11 +92,29 @@ const HeaderTabs: React.FC<Tabs> = ({ label1, label2, label3, value, handleChang
       onChange={handleChange}
       scrollButtons
       allowScrollButtonsMobile
-      // variant={smUp ? 'fullWidth': 'scrollable' }
+      sx={{
+        width: "fit-content",
+      }}
     >
-      <CustomTab disableRipple label={<StyledBadge badgeContent={4}>{label1}</StyledBadge>} />
-      <CustomTab disableRipple label={label2} />
-      <CustomTab disableRipple label={<StyledBadge badgeContent={4}>{label3}</StyledBadge>} />
+      {
+        tabs.map(({ title, amount: amount }) => (
+          <CustomTab
+            key={title}
+            label={
+              <Box sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                px: 2,
+                gap: 2
+              }}>
+                <StyledBadge badgeContent={amount} />
+                <Typography>{title}</Typography>
+              </Box>
+            }
+          />
+        ))
+      }
     </CustomTabs>
   );
 };

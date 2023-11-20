@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { Box, Card, Container, Typography } from "@mui/material";
+import { Box, Button, Card, Container, Typography } from "@mui/material";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import SharedTable from "@/components/SharedTable";
@@ -28,8 +28,10 @@ const Page = () => {
           flexGrow: 1,
           py: 8,
           bgcolor: "primary.lightest",
-          borderTopLeftRadius: 25,
-          borderBottomLeftRadius: 25,
+          borderTopLeftRadius: i18n.language == 'ar' ? 25 : 0,
+          borderBottomLeftRadius: i18n.language == 'ar' ? 25 : 25,
+          borderTopRightRadius: i18n.language == 'ar' ? 0 : 25,
+          borderBottomRightRadius: i18n.language == 'ar' ? 0 : 25,
         }}
       >
         <Container maxWidth="xl">
@@ -38,11 +40,27 @@ const Page = () => {
           </Typography>
           <Card sx={{ px: 2 }}>
             <SharedTable
-              endpoint="http://localhost:3000/projects.json"
+              endpoint="http://localhost:3000/bids.json"
               fakeData={bids}
               showActions={true}
+              renderRowActions={(row) => (
+                <Button
+                  variant="contained"
+                  color="warning"
+                  sx={{
+                    borderRadius: 8,
+                    backgroundColor: "#FFF8E6",
+                    border: 1,
+                    borderColor: "#FFD777",
+                  }}
+                  onClick={() => { }}
+                >
+                  {dictionary("Bid")}
+                </Button>
+              )}
               muiTableBodyRowProps={(row) => ({
-                onClick: () => router.push(`/bid/rfp-name`)
+                onClick: () => router.push(`/bid/rfp-name`),
+                sx: { cursor: "pointer" },
               })}
             />
           </Card>

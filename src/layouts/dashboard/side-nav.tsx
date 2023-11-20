@@ -10,20 +10,28 @@ import {
   Stack,
   SvgIcon,
   Typography,
+  ButtonBase,
   useMediaQuery
 } from '@mui/material';
-import React from 'react';
+import React ,{useEffect, useState} from 'react';
 import { Scrollbar } from '../../components/scrollbar';
-import { items } from './config';
+import { items,profileItems } from './config';
 import { SideNavItem } from './side-nav-item';
 import { Theme } from '@mui/material';
-
+import RoleBasedRender from '@/hocs/RoleBasedRender';
+import usePreviousPath from '@/hooks/usePreviousPath';
+import { useTranslation } from 'react-i18next';
+import { SideNavInnerItem } from './Inner-path-item';
+import { useTheme } from '@mui/material';
+import { createTheme } from "@/theme";
 export const SideNav = (props: { open: any; onClose: any; }) => {
   const { open, onClose } = props;
   const pathname = usePathname();
+  const theme = useTheme();
+  const { i18n } = useTranslation();
   const lgUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
-
-
+  const {previousPath,isinnerPath,isProfilePath} = usePreviousPath();
+  const {t} = useTranslation();
   const content = (
     <Scrollbar
       sx={{
@@ -55,7 +63,7 @@ export const SideNav = (props: { open: any; onClose: any; }) => {
 
             }}
           >
-            <img src={"/assets/Logo_2.svg"} className="App-logo" alt="logo" max-width={100} />
+            <img src={"/assets/Logo_2.svg"} className="App-logo" alt="logo" style={{maxWidth:"90%"}}  />
           </Box>
         </Box>
         {/* <Divider sx={{ borderColor: 'grey.700' }} /> */}
@@ -67,29 +75,82 @@ export const SideNav = (props: { open: any; onClose: any; }) => {
             py: 3
           }}
         >
+       <Stack
+            component="ul"
+            spacing={0.5}
+            sx={{
+              listStyle: 'none',
+              p: 0,
+              m: 0,
+              display: isinnerPath ?'flex' : "none",
+            }}
+          >
+            <SideNavInnerItem previousPath={previousPath}  />
+          </Stack>
+
           <Stack
             component="ul"
             spacing={0.5}
             sx={{
               listStyle: 'none',
               p: 0,
-              m: 0
+              m: 0,
+              // display: isinnerPath ? "none":'flex',
+              height: isinnerPath ? "0":'auto',
+              transition: 'height 0.3s ease',
+              overflow: 'hidden'
             }}
           >
             {items.map((item: any, key) => {
               const active = item.path ? (pathname === item.path) : false;
 
               return (
-                <SideNavItem
-                  active={active}
-                  disabled={item.disabled}
-                  external={item.external}
-                  icon={item.icon}
-                  key={item.title}
-                  path={item.path}
-                  title={item.title}
-                  items={item.children}
-                />
+                <RoleBasedRender key={key} componentId={item?.id ?? ``}>
+                  <SideNavItem
+                    active={active}
+                    disabled={item.disabled}
+                    external={item.external}
+                    icon={item.icon}
+                    key={item.title}
+                    path={item.path}
+                    title={item.title}
+                    items={item.children}
+                    amount={item.amount}
+                  />
+                </RoleBasedRender>
+              );
+            })}
+          </Stack>
+          <Stack
+            component="ul"
+            spacing={0.5}
+            sx={{
+              listStyle: 'none',
+              p: 0,
+              m: 0,
+              // display: isinnerPath ? "none":'flex',
+              height: isProfilePath ? "auto":'0',
+              transition: 'height 0.3s ease',
+              overflow: 'hidden'
+            }}
+          >
+            {profileItems.map((item: any, key) => {
+              const active = item.path ? (pathname === item.path) : false;
+
+              return (
+                <RoleBasedRender key={key} componentId={item?.id ?? ``}>
+                  <SideNavItem
+                    active={active}
+                    disabled={item.disabled}
+                    external={item.external}
+                    icon={item.icon}
+                    key={item.title}
+                    path={item.path}
+                    title={item.title}
+                    items={item.children}
+                    amount={item.amount}
+                  />
+                </RoleBasedRender>
               );
             })}
           </Stack>
@@ -97,11 +158,13 @@ export const SideNav = (props: { open: any; onClose: any; }) => {
       </Box>
     </Scrollbar>
   );
-
+  useEffect(() => {
+    console.log(theme.direction)
+  },[theme.direction]);       
   if (lgUp) {
     return (
       <Drawer
-        anchor="left"
+        anchor={i18n.language === "en" ? 'right' : 'left'}
         open
         PaperProps={{
           sx: {
@@ -120,7 +183,7 @@ export const SideNav = (props: { open: any; onClose: any; }) => {
 
   return (
     <Drawer
-      anchor="left"
+    anchor={i18n.language === "en" ? 'right' : 'left'}
       onClose={onClose}
       open={open}
       PaperProps={{

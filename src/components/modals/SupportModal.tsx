@@ -3,13 +3,15 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import { TextField } from "@mui/material";
+import { Card, CardContent, CardHeader, Dialog,  IconButton, FormControl, InputAdornment, TextField } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import LoadingButton from '@mui/lab/LoadingButton';
+
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import StyledTextarea from "../StyledTextArea";
 import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
-
+import UploadFileIcon from "@mui/icons-material/UploadFile";
 const style = {
   position: "absolute" as "absolute",
   top: "50%",
@@ -17,13 +19,37 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: 450,
   bgcolor: "background.paper",
-  borderRadius: 5,
+
+  borderRadius: 2,
   boxShadow: 24,
   p: 4,
 };
 
 export default function BasicModal({ open, handleClose }: any) {
   const { t } = useTranslation();
+  const [file, setFile] = React.useState({ name: "Choose File" });
+  const [loading, setLoading] = React.useState(false);
+  const [upload, setUpload] = React.useState(false);
+
+  const update = async () => {
+    setLoading(true);
+    await new Promise((resolve) => setTimeout(resolve, 1600));
+
+    setLoading(false);
+    handleClose();
+  };
+  const uploading = async () => {
+    setUpload(true);
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    setUpload(false);
+    
+  };
+  // handle file selection
+  const handleFileSelect = (event: any) => {
+    const file = event.target.files[0];
+    setFile(file);
+  };
   const formik = useFormik({
     initialValues: {
       title: "",
@@ -37,78 +63,132 @@ export default function BasicModal({ open, handleClose }: any) {
 
   return (
     <div>
-      <Modal
+      <Dialog
+        maxWidth="xs"
+        sx={{ whiteSpace: "nowrap", }}
+        fullWidth
+        scroll="paper"
+        PaperProps={{ sx: { borderRadius: 2.5 } }}
         open={open}
         onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
       >
-        <Box sx={style}>
-          <HighlightOffRoundedIcon
-            onClick={handleClose}
-            sx={{
-              position: "absolute",
-              right: "30px",
-              top: "30px",
-              color: "#C4C4C4",
-              cursor: "pointer",
-            }}
+
+        <Card sx={{ overflowY: 'auto' }}>
+          <CardHeader sx={{ p: 0, m: 0 }}
+            action={
+              <HighlightOffRoundedIcon
+                onClick={handleClose}
+                sx={{
+                  position: "relative",
+                  transform: 'translate(-100%, 80%)',
+                  color: "#C4C4C4",
+                  cursor: "pointer",
+                }}
+              />
+            }
           />
           <Typography
-            sx={{ textAlign: "center" }}
+            sx={{ textAlign: "center", mt: 2 }}
             id="modal-modal-title"
             variant="h6"
             component="h2"
           >
             {t("Create ticket")}
           </Typography>
-          <Box sx={{ m: 2, mt: 5 }}>
+          <CardContent>
             <form onSubmit={formik.handleSubmit}>
               <Box
                 sx={{
                   display: "flex",
                   flexDirection: "column",
+                  px: 4,
                   gap: 2,
+                  justifyContent: "center",
                   alignItems: "flex-start",
                 }}
               >
-                <TextField
-                  id="title"
-                  type="text"
-                  placeholder={t("Title") || "Title"}
-                  inputProps={{
-                    step: 300,
-                    style: {
-                      padding: "8px 0 8px 8px",
-                      fontFamily: "Roboto",
-                      fontSize: "14px",
-                    },
-                  }}
-                  value={formik.values.title}
-                  onChange={formik.handleChange}
-                  name="title"
-                />
-                <StyledTextarea
-                  value={formik.values.message}
-                  onChange={formik.handleChange}
-                  name="message"
-                  minRows={5}
-                  placeholder={t("ContactUs_Page.Your message")}
-                />
-                <Button
-                  size="large"
-                  color="warning"
-                  sx={{ mt: 3, borderRadius: "50px" }}
-                  type="submit"
-                  variant="contained"
+                <FormControl fullWidth >
+
+                  <TextField
+                    id="title"
+                    type="text"
+                    placeholder={t("Title") || "Title"}
+                    inputProps={{
+                      step: 300,
+                      style: {
+                        padding: "8px 0 8px 8px",
+                        fontFamily: "Roboto",
+                        fontSize: "14px",
+                      },
+                    }}
+                    value={formik.values.title}
+                    onChange={formik.handleChange}
+                    name="title"
+                  />
+                </FormControl>
+                <FormControl fullWidth >
+                  <TextField
+                    id="title"
+                    multiline
+                    value={formik.values.message}
+                    onChange={formik.handleChange}
+                    rows="3"
+                    name="message"
+
+                    type="text"
+                    placeholder={t("Description") || "Description"}
+                    InputProps={{
+
+                      sx: {
+                        p: 0,
+                        borderRadius: '10px', // Set the desired border radius
+                      },// Set the desired border radius
+
+                    }}
+
+
+                  />
+                </FormControl>
+                <FormControl  sx={{bgcolor: 'primary.lightest', borderRadius: '10px'}}>
+
+                <LoadingButton
+                  component="label"
+                  loading={upload}
+                  onChange={uploading}
+
+                  endIcon={<Typography sx={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word', fontSize: { md: '15px !important', xs: '14px !important' } }}>{`${file?.name ?? 'Choose File'}`}</Typography>}
+                  variant="text"
+                  
+                  size="small"
                 >
-                  {t("Send")}
-                </Button>
+                  <UploadFileIcon color="warning" sx={{ ml: '-15px' }} />
+                  <input type="file" onChange={handleFileSelect} hidden />
+                </LoadingButton>
+                  </FormControl>
+
+
+                <FormControl fullWidth >
+
+                   <LoadingButton 
+                    size="large"
+                    
+                    color="warning"
+                    onClick={update}
+                    loading={loading}
+                    sx={{ mt: 3, borderRadius: "50px" }}
+                    type="submit"
+                    variant="contained"
+                  >
+                    {t("Send")}
+                  </LoadingButton>
+                </FormControl>
               </Box>
             </form>
-          </Box>
-        </Box>
-      </Modal>
+          </CardContent>
+        </Card>
+      </Dialog>
     </div>
   );
 }
