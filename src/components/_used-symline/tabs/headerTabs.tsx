@@ -4,6 +4,7 @@ import {
   Typography,
   Box,
   Badge,
+  Tabs,
 } from "@mui/material";
 import { withStyles } from "@mui/styles";
 
@@ -14,7 +15,16 @@ const StyledBadge = withStyles((theme) => ({
   },
 }))(Badge);
 
-const CustomTabs = styled(TabsSchema)(({ theme }) => ({
+interface TabsSchema {
+  tabs: {
+    title: string;
+    amount: number;
+  }[];
+  value: number;
+  handleChange: (event: React.SyntheticEvent, newValue: number) => void;
+}
+
+const CustomTabs = styled(Tabs)(({ theme }) => ({
   backgroundColor: "#fff",
   minHeight: 44,
 
@@ -73,14 +83,6 @@ const CustomTab = styled(Tab)(({ theme }) => ({
     display: "none",
   },
 }));
-interface TabsSchema {
-  tabs: {
-    title: string;
-    amount: number;
-  }[];
-  value: number;
-  handleChange: (event: React.SyntheticEvent, newValue: number) => void;
-}
 
 const HeaderTabs: React.FC<TabsSchema> = ({ tabs, value, handleChange }: TabsSchema) => {
 
