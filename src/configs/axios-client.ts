@@ -2,7 +2,6 @@ import axios, { AxiosResponse, InternalAxiosRequestConfig } from "axios";
 import { redirect } from "next/navigation";
 
 const axiosClient = axios.create({
-  // baseURL: "http://localhost:3000/v1/admin/" // API URL,
   baseURL: process.env.API_URL, // API SERVER URL,
 });
 
