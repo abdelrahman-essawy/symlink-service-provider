@@ -1,45 +1,39 @@
-import { useCallback, useState } from 'react';
-import Head from 'next/head';
-import NextLink from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import {
-  Box,
-  Button,
-  Grid,
-  Stack,
-  TextField,
-  Typography
-} from '@mui/material';
-import React from 'react';
-import { useAuth } from '../../hooks/use-auth';
-import { AuthLayout } from '../../layouts/auth/layout';
-import { useTranslation } from 'react-i18next';
+import { useCallback, useState } from "react";
+import Head from "next/head";
+import NextLink from "next/link";
+import { useRouter } from "next/navigation";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { Box, Button, Grid, Stack, TextField, Typography } from "@mui/material";
+import React from "react";
+import { useAuth } from "../../hooks/use-auth";
+import { AuthLayout } from "../../layouts/auth/layout";
+import { useTranslation } from "react-i18next";
+import Link from "next/link";
 
 const service_provider = {
-  username: 'service_provider',
-  password: 'secret',
-  role: 'service_provider',
-  name: 'Service Provider',
-  avatar: '/static/mock-images/avatars/avatar_default.jpg',
-  submit: null
-}
+  username: "service_provider",
+  password: "secret",
+  role: "service_provider",
+  name: "Service Provider",
+  avatar: "/static/mock-images/avatars/avatar_default.jpg",
+  submit: null,
+};
 
 const client = {
-  username: 'client',
-  password: 'secret',
-  role: 'client',
-  name: 'Client',
-  avatar: '/static/mock-images/avatars/avatar_default.jpg',
-  submit: null
-}
+  username: "client",
+  password: "secret",
+  role: "client",
+  name: "Client",
+  avatar: "/static/mock-images/avatars/avatar_default.jpg",
+  submit: null,
+};
 
 const Page = () => {
   const { t } = useTranslation();
   const router = useRouter();
   const auth = useAuth();
-  const [method, setMethod] = useState('username');
+  const [method, setMethod] = useState("username");
   const formik = useFormik({
     // initialValues: {
     //   username: 'superadmin',
@@ -48,92 +42,74 @@ const Page = () => {
     // },
     initialValues: service_provider,
     validationSchema: Yup.object({
-      username: Yup
-        .string()
-        .max(255)
-        .required('username is required'),
-      password: Yup
-        .string()
-        .max(255)
-        .required('Password is required')
+      username: Yup.string().max(255).required("username is required"),
+      password: Yup.string().max(255).required("Password is required"),
     }),
     onSubmit: async (values, helpers) => {
       try {
         await auth?.signIn(values.username, values.password);
-        router.push('/');
+        router.push("/");
       } catch (err: any) {
         helpers.setStatus({ success: false });
         helpers.setErrors({ submit: err.message });
         helpers.setSubmitting(false);
       }
-    }
+    },
   });
 
-  const handleMethodChange = useCallback(
-    (_event: any, value: React.SetStateAction<string>) => {
-      setMethod(value);
-    },
-    []
-  );
+  const handleMethodChange = useCallback((_event: any, value: React.SetStateAction<string>) => {
+    setMethod(value);
+  }, []);
 
-  const handleSkip = useCallback(
-    () => {
-      // auth.skip();
-      router.push('/');
-    },
-    [router]
-  );
+  const handleSkip = useCallback(() => {
+    // auth.skip();
+    router.push("/");
+  }, [router]);
 
   return (
     <>
       <Head>
-        <title>
-          {t("Login")} | Symline
-        </title>
+        <title>{t("Login")} | Symline</title>
       </Head>
       <Box
         sx={{
-          backgroundColor: 'background.paper',
-          flex: '1 1 auto',
-          alignItems: 'center',
-          display: 'flex',
+          backgroundColor: "background.paper",
+          flex: "1 1 auto",
+          alignItems: "center",
+          display: "flex",
           direction: "ltr",
-          justifyContent: 'center'
+          justifyContent: "center",
         }}
       >
         <Box
           sx={{
             maxWidth: 550,
             px: 3,
-            py: '100px',
-            width: '100%'
+            py: "100px",
+            width: "100%",
           }}
         >
           <div>
-
-
-
-            {method === 'username' && (
-              <form
-                noValidate
-                onSubmit={formik.handleSubmit}
-              >
+            {method === "username" && (
+              <form noValidate onSubmit={formik.handleSubmit}>
                 <Grid container spacing={3} justifyContent="center" alignItems="center">
-
-                  <Grid item xs={9} >
-                    <Stack
-                      spacing={1}
-                      sx={{ mb: 3 }}
-                    >
-                      <Typography variant="h4">
-                        {t('Login')}
+                  <Grid item xs={12}>
+                    <Stack spacing={2} sx={{ mb: 3 }}>
+                      <Typography variant="h4">{t("Login")}</Typography>
+                      <Typography color="text.secondary" variant="body2">
+                       {t( 'Don\'t have an account' )  } &nbsp;
+                        <Link
+                          href="/auth/register"
+                        >
+                          {t("Register")} 
+                        </Link>
                       </Typography>
                     </Stack>
                     <TextField
                       error={!!(formik.touched.username && formik.errors.username)}
                       fullWidth
                       helperText={formik.touched.username && formik.errors.username}
-                      placeholder={`${t('username')}`}
+                      placeholder={`${t("username")}`}
                       name="username"
                       sx={{ mb: 3 }}
                       onBlur={formik.handleBlur}
@@ -145,7 +121,7 @@ const Page = () => {
                       error={!!(formik.touched.password && formik.errors.password)}
                       fullWidth
                       helperText={formik.touched.password && formik.errors.password}
-                      placeholder={`${t('password')}`}
+                      placeholder={`${t("password")}`}
                       name="password"
                       onBlur={formik.handleBlur}
                       onChange={formik.handleChange}
@@ -170,25 +146,20 @@ const Page = () => {
                       fullWidth
                       size="large"
                       color="warning"
-                      sx={{ mt: 3, borderRadius: '50px' }}
+                      sx={{ mt: 3, borderRadius: "50px" }}
                       type="submit"
                       variant="contained"
                     >
-                      {t('continue')}
+                      {t("continue")}
                     </Button>
                   </Grid>
                 </Grid>
 
                 {formik.errors.submit && (
-                  <Typography
-                    color="error"
-                    sx={{ mt: 3 }}
-                    variant="body2"
-                  >
+                  <Typography color="error" sx={{ mt: 3 }} variant="body2">
                     {formik.errors.submit}
                   </Typography>
                 )}
-
               </form>
             )}
           </div>
@@ -198,10 +169,6 @@ const Page = () => {
   );
 };
 
-Page.getLayout = (page: any) => (
-  <AuthLayout>
-    {page}
-  </AuthLayout>
-);
+Page.getLayout = (page: any) => <AuthLayout>{page}</AuthLayout>;
 
 export default Page;
