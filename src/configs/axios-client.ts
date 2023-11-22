@@ -3,11 +3,14 @@ import { redirect } from "next/navigation";
 
 const axiosClient = axios.create({
   // baseURL: "http://localhost:3000/v1/admin/" // API URL,
-  baseURL: "http://164.90.181.17:3000/v1/", // API SERVER URL,
+  baseURL: process.env.API_URL, // API SERVER URL,
 });
 
 axiosClient.defaults.headers.common = {
   "Content-Type": "application/json",
+  "Accept-Language": 'ar',
+  "Access-Control-Allow-Origin": "*",
+  "Accept": "application/json",
 };
 
 axiosClient.interceptors.request.use(
