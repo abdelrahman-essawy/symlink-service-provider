@@ -51,7 +51,7 @@ const Page = () => {
         router.push("/");
       } catch (err: any) {
         helpers.setStatus({ success: false });
-        helpers.setErrors({ submit: err.message });
+        helpers.setErrors({ submit: err?.response?.data?.message || "Unknown error occurred"});
         helpers.setSubmitting(false);
       }
     },
