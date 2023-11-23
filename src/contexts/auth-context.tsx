@@ -142,7 +142,6 @@ export const AuthProvider = ({ children }: any) => {
 
     if (res.status == 200 || res.status == 201) {
       const { data } = res.data;
-      console.log(data);
       window.sessionStorage.setItem('authenticated', 'true');
       window.sessionStorage.setItem('token', data.access_token);
       window.sessionStorage.setItem("user", JSON.stringify(data));
@@ -151,7 +150,7 @@ export const AuthProvider = ({ children }: any) => {
       user.avatar = data.avatar;
       user.name = data.name;
       user.username = data.username;
-      user.role = data.role || 'CLIENT';
+      user.role = data.role;
     }
     else {
       throw new Error('Please check your username and password');
