@@ -2,6 +2,7 @@ import Head from "next/head";
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
 import { useFormik } from "formik";
+import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 import * as Yup from "yup";
 import {
   Box,
@@ -13,10 +14,8 @@ import {
   Select,
   FormLabel,
   Grid,
-  OutlinedInput,
   Avatar,
   Badge,
-  FormControl,
   MenuItem,
 } from "@mui/material";
 import React, { useState } from "react";
@@ -24,6 +23,7 @@ import { useAuth } from "../../hooks/use-auth";
 import { AuthLayout } from "../../layouts/auth/layout";
 import { useTranslation } from "react-i18next";
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
+import PersonIcon from "@mui/icons-material/Person";
 
 const Page = () => {
   const router = useRouter();
@@ -174,6 +174,11 @@ const Page = () => {
                         borderRadius: "100px",
                         height: "20.125px",
                       },
+                    "& .MuiSelect-select ,& .MuiSelect-outlined ,& .MuiInputBase-input ,& .MuiOutlinedInput-input ,& .muirtl-wnioi0-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
+                      {
+                        margin: '0 30px'
+
+                      },
                   }}
                   MenuProps={{
                     PaperProps: {
@@ -187,6 +192,17 @@ const Page = () => {
                   name="role"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
+                  IconComponent={() => (
+                    <PersonIcon
+                      style={{
+                        position: "absolute",
+                        color: "grey",
+                        userSelect: "none",
+                        pointerEvents: "none",
+                        margin: "15px",
+                      }}
+                    />
+                  )}
                 >
                   {Roles.map((item: any) => (
                     <MenuItem key={item?.id} value={item?.name}>
@@ -203,9 +219,10 @@ const Page = () => {
               <Button
                 fullWidth
                 size="large"
-                sx={{ mt: 3, borderRadius: "50px" }}
+                sx={{ mt: 3, borderRadius: "50px",color:"white" }}
                 type="submit"
                 variant="contained"
+                
               >
                 {t("Create")}
               </Button>
