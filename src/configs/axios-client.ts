@@ -10,6 +10,7 @@ axiosClient.defaults.headers.common = {
   "Accept-Language": 'ar',
   "Access-Control-Allow-Origin": "*",
   "Accept": "application/json",
+  "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
 };
 
 // axiosClient.interceptors.request.use(
