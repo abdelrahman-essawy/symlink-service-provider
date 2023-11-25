@@ -159,7 +159,7 @@ const Page = () => {
   }, [formRecord]);
 
   const [questions, setQuestions] = useState<IQuestion[]>([]);
-  const fetchGernalQuestions = async () => {
+  const fetchGernalAssessments = async () => {
     try {
       const res = await axiosClient?.get(`meta-data?status=Type_of_assessment`);
       setQuestions(res?.data?.data);
@@ -168,7 +168,7 @@ const Page = () => {
     }
   };
   useEffect(() => {
-    fetchGernalQuestions();
+    fetchGernalAssessments();
   }, []);
 
   const maxSteps = steps.length;
