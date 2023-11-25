@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useReducer, useRef } from 'react';
+import { createContext, useContext, useEffect, useReducer, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import React from 'react';
 import axiosClient from '../configs/axios-client'
@@ -86,6 +86,7 @@ export const AuthContext = createContext<initialValue | undefined>(undefined);
 export const AuthProvider = ({ children }: any) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const initialized = useRef(false);
+  const [authUser, setAuthUser] = useState<UserType | undefined>(undefined);
 
   const initialize = async () => {
     // Prevent from calling twice in development mode with React.StrictMode enabled
@@ -98,26 +99,31 @@ export const AuthProvider = ({ children }: any) => {
     let isAuthenticated = false;
 
     try {
-      isAuthenticated = window.sessionStorage.getItem('authenticated') === 'true';
+      isAuthenticated = window.sessionStorage.getItem("authenticated") === "true";
     } catch (err) {
       console.error(err);
     }
 
     if (isAuthenticated) {
-      const user: UserType = state.user;
-      console.log(state.user);
+      const json = window.sessionStorage.getItem("user");
+      const user = json == undefined ? undefined : JSON.parse(json);
+      const token = window.sessionStorage.getItem("token");
+      axiosClient.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      setAuthUser(user);
+
       dispatch({
         type: HANDLERS.INITIALIZE,
-        payload: user
+        payload: user,
       });
     } else {
       dispatch({
         type: HANDLERS.INITIALIZE,
-        payload: null
+        payload: null,
       });
     }
   };
 
+  
   useEffect(
     () => {
       initialize();
@@ -141,16 +147,17 @@ export const AuthProvider = ({ children }: any) => {
    }});
 
     if (res.status == 200 || res.status == 201) {
-      const { data } = res.data;
+      const { data: user } = res.data;
       window.sessionStorage.setItem('authenticated', 'true');
-      window.sessionStorage.setItem('token', data.access_token);
-      window.sessionStorage.setItem("user", JSON.stringify(data));
-      axiosClient.defaults.headers.common['Authorization'] = `Bearer ${data.access_token}`;
-      user.id = data.id;
-      user.avatar = data.avatar;
-      user.name = data.name;
-      user.username = data.username;
-      user.role = data.role;
+      window.sessionStorage.setItem('token', user.access_token);
+      window.sessionStorage.setItem("user", JSON.stringify(user));
+      axiosClient.defaults.headers.common['Authorization'] = `Bearer ${user.access_token}`;
+      user.id = user.id;
+      user.avatar = user.avatar;
+      user.name = user.name;
+      user.username = user.username;
+      user.role = user.role;
+      setAuthUser(user);
     }
     else {
       throw new Error('Please check your username and password');
