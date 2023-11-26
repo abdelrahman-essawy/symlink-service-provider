@@ -9,7 +9,7 @@ type UserType = {
   username: string,
   name: string,
   avatar: string,
-  role: "CLIENT" | "SERVICE_PROVIDER" | "ADMIN"
+  role: "CLIENT" | "PROVIDER" | "ADMIN"
 };
 
 type ActionType = { type: string, payload: any }
