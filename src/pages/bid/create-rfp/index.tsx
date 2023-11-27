@@ -27,25 +27,17 @@ import {
   Radio,
   TextField,
 } from "@mui/material";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { DashboardLayout } from "../../../layouts/dashboard/layout";
 import { useTranslation } from "react-i18next";
 import { dictionary, TranslatedWord } from "@/configs/i18next";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useRouter } from "next/navigation";
-import Step1 from "@/components/_used-symline/steps/step1";
-import Step2 from "@/components/_used-symline/steps/step2";
 import AddIcon from "@mui/icons-material/Add";
-import Moblie from "@/components/_used-symline/questions/mobile";
-import Web from "@/components/_used-symline/questions/web";
-import Network from "@/components/_used-symline/questions/network";
-import SourceCode from "@/components/_used-symline/questions/sourceCode";
-import ArchitectureConfigurationReview from "@/components/_used-symline/questions/architectureConfigurationReview";
-import ThreatHunting from "@/components/_used-symline/questions/threatHunting";
 import GeneralQuestions from "@/sections/bids/create-bids/general-questions";
 import InputAdornment from "@mui/material/InputAdornment";
 import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
 import axiosClient from "@/configs/axios-client";
+import RenderAssessments from "@/sections/bids/create-bids/render-assessments";
 export interface IQuestion {
   id: string;
   type: string;
@@ -54,10 +46,10 @@ export interface IQuestion {
 export interface RFP {
   project_name: string;
   time_type_id: string;
-  projects: Project[];
+  projects: IProject[];
 }
 
-export interface Project {
+export interface IProject {
   category_id: string;
   assessments_type_id: string;
   apis_size_id: string;
@@ -98,33 +90,26 @@ const Page = () => {
   const [value, setValue] = useState(0);
   const [activeStep, setActiveStep] = React.useState(0);
   const [inputs, setInputs] = useState<any[]>([]);
-  const questionsTitles = [
-    "Web",
-    "Architecture configuration review",
-    "Source code",
-    "Phone",
-    "Network",
-    "Threat hunting",
-  ];
-  const handleClose = () => setOpen(false);
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-  const addInput = (item: any) => {
-    setInputs([...inputs, item]);
+  const handleClose = useCallback(() => {
+    setOpen(false);
+  }, []);
+
+  const addInput = (itemName: string,itemID:string) => {
+    const new_project: IProject = {
+      category_id: itemID,
+    } as IProject;
+    setFormRecord({ ...formRecord, projects: [...formRecord?.projects, new_project] });
+    setInputs([...inputs, {name:itemName,id:inputs?.length}]);
   };
   const removeInput = (index: number) => {
+    //remove from the FormRecord
+    const AllProjects:IProject[] = formRecord.projects; 
+    AllProjects.splice(index, 1);
+    setFormRecord({...formRecord, projects:AllProjects})
+    //remove from the UI
     const updatedInputs = [...inputs];
     updatedInputs.splice(index, 1);
     setInputs(updatedInputs);
-  };
-
-  const handleNext = () => {
-    if (activeStep !== maxSteps - 1) {
-      setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    } else {
-      setTimeout(() => router.push("/"), 2500);
-    }
   };
 
   const handleClickList = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -138,31 +123,39 @@ const Page = () => {
   const openList = Boolean(anchorEl);
   const id = openList ? "simple-popover" : undefined;
 
-  const steps = [
-    {
-      id: 1,
-      step: <Step1 />,
-    },
-    {
-      id: 2,
-      step: <Step2 />,
-    },
-  ];
-
   function handleChange(event: any) {
     let data: any = { ...formRecord };
     data[event.target.name] = event.target.value;
     setFormRecord(data);
   }
+
+  function handleChangeProjects(event: any,index: number) {
+    const newProject:any = formRecord.projects[index];
+    const AllProjects:IProject[] = formRecord.projects; 
+    newProject[event.target.name]  = event.target.value;
+    AllProjects[index] = newProject;
+    setFormRecord({...formRecord, projects:AllProjects});
+  }
+
+  function handleChangeNumberInProjects(event: any,index: number) {
+    const { value } = event.target;
+    const numericValue = value.replace(/[^0-9.]/g, "");
+    const newProject:any = formRecord.projects[index];
+    const AllProjects:IProject[] = formRecord.projects; 
+    newProject[event.target.name]  = numericValue;
+    AllProjects[index] = newProject;
+    setFormRecord({...formRecord, projects:AllProjects});
+  }
+  //TODO: remove this function
   useEffect(() => {
     console.log(formRecord);
   }, [formRecord]);
 
-  const [questions, setQuestions] = useState<IQuestion[]>([]);
+  const [assessments, setAssessments] = useState<IQuestion[]>([]);
   const fetchGernalAssessments = async () => {
     try {
       const res = await axiosClient?.get(`meta-data?status=Type_of_assessment`);
-      setQuestions(res?.data?.data);
+      setAssessments(res?.data?.data);
     } catch (error) {
       console.log(error);
     }
@@ -171,7 +164,13 @@ const Page = () => {
     fetchGernalAssessments();
   }, []);
 
-  const maxSteps = steps.length;
+  const countAssessments = useCallback(
+    (assessment_name: string) => {
+      return inputs?.filter((input) => input?.name == assessment_name)?.length;
+    },
+    [inputs]
+  );
+
   return (
     <>
       <Head>
@@ -188,7 +187,7 @@ const Page = () => {
             borderBottomLeftRadius: i18n.language == "ar" ? 25 : 25,
             borderTopRightRadius: i18n.language == "ar" ? 0 : 25,
             borderBottomRightRadius: i18n.language == "ar" ? 0 : 25,
-            direction:i18n.language == "ar" ? "ltr" : "rtl"
+            direction: i18n.language == "ar" ? "ltr" : "rtl",
           }}
         >
           <Container maxWidth="xl">
@@ -205,17 +204,18 @@ const Page = () => {
                 alignItems: "start",
               }}
             >
-              <Grid item xs={8} justifyContent="flex-end" display="flex">
+              <Grid item xs={12} md={8} justifyContent="flex-end" display="flex">
                 <TextField
                   fullWidth={true}
                   sx={{
                     "& .MuiOutlinedInput-root": { borderRadius: "50px" },
                     mt: 0,
-                    "& .muirtl-b3016c-MuiInputAdornment-root.MuiInputAdornment-positionStart.muirtl-b3016c-MuiInputAdornment-root:not(.MuiInputAdornment-hiddenLabel)": {
-                      marginTop: 0,
-                      marginX: 1,
-                      padding:"0",
-                    },
+                    "& .muirtl-b3016c-MuiInputAdornment-root.MuiInputAdornment-positionStart.muirtl-b3016c-MuiInputAdornment-root:not(.MuiInputAdornment-hiddenLabel)":
+                      {
+                        marginTop: 0,
+                        marginX: 1,
+                        padding: "0",
+                      },
                   }}
                   placeholder={`${t("Project name")}`}
                   variant="filled"
@@ -233,7 +233,7 @@ const Page = () => {
                   }}
                 />
               </Grid>
-              <Grid item xs={4} justifyContent="flex-end" display="flex">
+              <Grid item md={4} xs={12} sx={{justifyContent:{xs:"center",md:"end"}}} display="flex">
                 <Button
                   variant="contained"
                   onClick={handleClickList}
@@ -241,11 +241,12 @@ const Page = () => {
                   aria-label="add"
                   color="warning"
                   size="large"
-                  sx={{ borderRadius: 20,
+                  sx={{
+                    borderRadius: 20,
                     display: "flex",
-                  justifyContent: "center",
-                  alignItems: "start",
-                  gap:.5
+                    justifyContent: "center",
+                    alignItems: "start",
+                    gap: 0.5,
                   }}
                 >
                   {t("Add assessment")} <AddIcon />
@@ -261,16 +262,31 @@ const Page = () => {
                   }}
                   PaperProps={{ sx: { width: 300, borderRadius: 3 } }}
                 >
-                  <List sx={{ p: 1.5  }}>
-                    {questionsTitles.map((item: any, index) => (
-                      <ListItem key={item} disablePadding divider={index!=questionsTitles?.length-1}>
+                  <List sx={{ p: 1.5 }}>
+                    {assessments.map((item: any, index) => (
+                      <ListItem
+                        key={item?.id}
+                        disablePadding
+                        divider={index != assessments?.length - 1}
+                      >
                         <ListItemButton
-                          onClick={() => addInput(item)}
-                          sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
+                          onClick={() => addInput(item?.name_en,item.id)}
+                          sx={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                          }}
                         >
-                          <ListItemText primary={`${t(item)}`}  sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}  />
+                          <ListItemText
+                            primary={`${t(item?.name)}`}
+                            sx={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                            }}
+                          />
                           <Badge
-                            badgeContent={1}
+                            badgeContent={countAssessments(item?.name_en)}
                             color="warning"
                             overlap="circular"
                             anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
@@ -286,63 +302,18 @@ const Page = () => {
                 time_type_id={formRecord?.time_type_id}
                 handleonchange={handleChange}
               />
-              
+
               {inputs.map((item, index) => (
-                <Grid key={index} item xs={12}>
-                  <Card elevation={0} sx={{ p: 3 }}>
-                    <CardContent sx={{ p: 1 }}>
-                      <Grid
-                        container
-                        spacing={2}
-                        justifyContent={"space-between"}
-                        alignItems="center"
-                      >
-                        <Grid item xs={12}>
-                          <Box sx={{ width: "100%", pa: 0 }}>
-                            <Grid container spacing={0} justifyContent="center">
-                              <Grid item xs={12}>
-                                <Box
-                                  sx={{
-                                    px: 1,
-                                    borderRadius: 1,
-                                    bgcolor: "warning.lightest",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "space-between",
-                                  }}
-                                >
-                                  <Typography
-                                    variant="body2"
-                                    fontWeight="bold"
-                                    color="warning.darkest"
-                                  >
-                                    {t(`${item}`)}
-                                  </Typography>
-                                  <Box>
-                                    <IconButton
-                                      onClick={() => removeInput(index)}
-                                      aria-label="delete"
-                                    >
-                                      <DeleteForeverIcon sx={{ cursor: "pointer" }} />
-                                    </IconButton>
-                                  </Box>
-                                </Box>
-                                {item === "Web" && <Web />}
-                                {item === "Architecture configuration review" && (
-                                  <ArchitectureConfigurationReview />
-                                )}
-                                {item === "Network" && <Network />}
-                                {item === "Threat hunting" && <ThreatHunting />}
-                                {item === "Phone" && <Moblie />}
-                                {item === "Source code" && <SourceCode />}
-                              </Grid>
-                            </Grid>
-                          </Box>
-                        </Grid>
-                      </Grid>
-                    </CardContent>
-                  </Card>
-                </Grid>
+                <RenderAssessments
+                  key={item?.id}
+                  projects={formRecord?.projects}
+                  onChange={handleChangeProjects}
+                  onChangeNumber={handleChangeNumberInProjects}
+                  assessment={item?.name}
+                  index={index}
+                  removeInput={removeInput}
+                  order={inputs?.filter((input)=>input.name == item.name).indexOf(item)}
+                />
               ))}
             </Grid>
           </Container>
