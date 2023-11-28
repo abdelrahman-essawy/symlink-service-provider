@@ -12,12 +12,12 @@ import { useTranslation } from "react-i18next";
 import { useRouter } from "next/navigation";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControl from "@mui/material/FormControl";
-import { IMetaData, IProject } from "@/@types/assessments";
+import { IMetaData, IAssessmentProject } from "@/@types/assessments";
 import axiosClient from "@/configs/axios-client";
 interface IProps {
   onChange: (event: any, index: number) => void;
   onChangeNumber: (event: any, index: number) => void;
-  projects: IProject[];
+  projects: IAssessmentProject[];
   index: number;
 }
 

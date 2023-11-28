@@ -42,6 +42,7 @@
     "formik": "2.2.9",
     "i18next": "^22.4.11",
     "material-react-table": "^1.14.0",
+    "moment": "^2.29.4",
     "mui-rte-fixed": "^2.1.0",
     "next": "13.1.6",
     "nprogress": "0.2.0",

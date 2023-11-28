@@ -38,7 +38,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
 import axiosClient from "@/configs/axios-client";
 import RenderAssessments from "@/sections/bids/create-bids/render-assessments";
-import { ICategory, IProject, IQuestion, RFP } from "@/@types/assessments";
+import { ICategory, IAssessmentProject, IQuestion, RFP } from "@/@types/assessments";
 import CircularProgress from "@mui/material/CircularProgress";
 import useAlert from "@/hooks/useAlert";
 const Page = () => {
@@ -65,15 +65,15 @@ const Page = () => {
   }, []);
 
   const addInput = (itemName: string, itemID: string) => {
-    const new_project: IProject = {
+    const new_project: IAssessmentProject = {
       category_id: itemID,
-    } as IProject;
+    } as IAssessmentProject;
     setFormRecord({ ...formRecord, projects: [...formRecord?.projects, new_project] });
     setInputs([...inputs, { name: itemName, id: inputs?.length }] as ICategory[]);
   };
   const removeInput = (index: number) => {
     //remove from the FormRecord
-    const AllProjects: IProject[] = formRecord.projects;
+    const AllProjects: IAssessmentProject[] = formRecord.projects;
     AllProjects.splice(index, 1);
     setFormRecord({ ...formRecord, projects: AllProjects });
     //remove from the UI
@@ -101,7 +101,7 @@ const Page = () => {
 
   function handleChangeProjects(event: any, index: number) {
     const newProject: any = formRecord.projects[index];
-    const AllProjects: IProject[] = formRecord.projects;
+    const AllProjects: IAssessmentProject[] = formRecord.projects;
     newProject[event.target.name] = event.target.value;
     AllProjects[index] = newProject;
     setFormRecord({ ...formRecord, projects: AllProjects });
@@ -111,7 +111,7 @@ const Page = () => {
     const { value } = event.target;
     const numericValue = value.replace(/[^0-9.]/g, "");
     const newProject: any = formRecord.projects[index];
-    const AllProjects: IProject[] = formRecord.projects;
+    const AllProjects: IAssessmentProject[] = formRecord.projects;
     newProject[event.target.name] = parseFloat(numericValue) || 0;
     AllProjects[index] = newProject;
     setFormRecord({ ...formRecord, projects: AllProjects });

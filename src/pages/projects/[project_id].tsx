@@ -1,27 +1,19 @@
 import Head from "next/head";
-import {
-  Box,
-  Card,
-  Container,
-  Typography,
-  Button,
-  Grid,
-  CardContent,
-} from "@mui/material";
+import { Box, Card, Container, Typography, Button, Grid, CardContent } from "@mui/material";
 import React from "react";
 import { DashboardLayout } from "../../layouts/dashboard/layout";
 import { useTranslation } from "react-i18next";
 import HeaderTabs from "@/components/_used-symline/tabs/headerTabs";
 import CustomTabPanel from "@/components/_used-symline/tabs/tabsPanel";
-import SharedTable, {  progressTagHandler } from "@/components/SharedTable";
+import SharedTable, { progressTagHandler } from "@/components/SharedTable";
 import { useRouter } from "next/router";
 import attachedFiles from "../../../public/attached-files.json";
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import RoleBasedRender from "@/hocs/RoleBasedRender";
 import { useState } from "react";
 import { dictionary } from "@/configs/i18next";
 import bids from "../../../public/bids.json";
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteIcon from "@mui/icons-material/Delete";
 import ViewImagesDialog from "@/components/_used-symline/dialogs/view-images";
 import Chat from "@/components/_used-symline/chat/chat";
 import ConfirmDialog from "@/components/_used-symline/dialogs/confirm-dialog";
@@ -37,14 +29,14 @@ const Page = () => {
     setConfirm(true);
   };
   const handleClose = () => setOpen(false);
-  const handleOpen= () => {
+  const handleOpen = () => {
     setOpen(true);
   };
 
   const handletabs = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
-  const router = useRouter()
+  const router = useRouter();
   return (
     <>
       <Head>
@@ -56,10 +48,10 @@ const Page = () => {
           flexGrow: 1,
           py: 8,
           bgcolor: "primary.lightest",
-          borderTopLeftRadius: i18n.language == 'ar' ? 25 : 0,
-          borderBottomLeftRadius: i18n.language == 'ar' ? 25 : 25,
-          borderTopRightRadius: i18n.language == 'ar' ? 0 : 25,
-          borderBottomRightRadius: i18n.language == 'ar' ? 0 : 25,
+          borderTopLeftRadius: i18n.language == "ar" ? 25 : 0,
+          borderBottomLeftRadius: i18n.language == "ar" ? 25 : 25,
+          borderTopRightRadius: i18n.language == "ar" ? 0 : 25,
+          borderBottomRightRadius: i18n.language == "ar" ? 0 : 25,
         }}
       >
         <Container maxWidth="xl">
@@ -67,89 +59,85 @@ const Page = () => {
             <Typography variant="h3" sx={{ mb: 2 }} fontWeight={"bold"}>
               {dictionary("Project name")}
             </Typography>
-            <RoleBasedRender
-              componentId="tag-project-status">
+            <RoleBasedRender componentId="tag-project-status">
               {progressTagHandler("waiting for selection")}
             </RoleBasedRender>
           </Grid>
 
           <Grid container spacing={2} justifyContent={"space-between"}>
             <Grid item xs={12} md={8}>
-              <RoleBasedRender
-                componentId="headertabs-service-provider-projects">
+              <RoleBasedRender componentId="headertabs-service-provider-projects">
                 <HeaderTabs
                   value={value}
                   handleChange={handletabs}
-                  tabs={
-                    [{
+                  tabs={[
+                    {
                       title: "Discussion",
-                      amount: 0
-                    }, {
+                      amount: 0,
+                    },
+                    {
                       title: "Attached filles",
-                      amount: 5
+                      amount: 5,
                     },
                     {
                       title: "Questions",
-                      amount: 3
+                      amount: 3,
                     },
-                    ]
-                  }
+                  ]}
                 />
               </RoleBasedRender>
 
-              <RoleBasedRender
-                componentId="headertabs-client-projects">
+              <RoleBasedRender componentId="headertabs-client-projects">
                 <HeaderTabs
                   value={value}
                   handleChange={handletabs}
-                  tabs={
-                    [{
+                  tabs={[
+                    {
                       title: "Discussion",
-                      amount: 0
-                    }, {
+                      amount: 0,
+                    },
+                    {
                       title: "Attached filles",
-                      amount: 5
+                      amount: 5,
                     },
                     {
                       title: "Questions",
-                      amount: 3
+                      amount: 3,
                     },
                     {
                       title: "List of bids",
-                      amount: 6
+                      amount: 6,
                     },
-                    ]
-                  }
+                  ]}
                 />
               </RoleBasedRender>
             </Grid>
-            <RoleBasedRender
-              componentId="button-request-to-review">
+            <RoleBasedRender componentId="button-request-to-review">
               <Grid item xs={12} md={3} sx={{ display: "flex", justifyContent: "end" }}>
                 <Button variant="contained" color="warning" sx={{ borderRadius: 8 }}>
                   {"Submit to review"}
                 </Button>
               </Grid>
             </RoleBasedRender>
-            {value === 1 &&
-              <RoleBasedRender
-                componentId="button-upload-file"
-              >
-                <Button variant="contained" color="warning" sx={{ borderRadius: 8, alignSelf: "center" }}>
+            {value === 1 && (
+              <RoleBasedRender componentId="button-upload-file">
+                <Button
+                  variant="contained"
+                  color="warning"
+                  sx={{ borderRadius: 8, alignSelf: "center" }}
+                >
                   {dictionary("Upload file")}
                 </Button>
               </RoleBasedRender>
-            }
-
+            )}
 
             <Grid item xs={12}>
               <Card elevation={0}>
-                <CustomTabPanel value={value} index={0} padding={'0'}>
+                <CustomTabPanel value={value} index={0} padding={"0"}>
                   <Chat />
-              
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={2}>
-                  <CardContent sx={{ p: 1 , direction: 'rtl'}}>
+                  <CardContent sx={{ p: 1, direction: "rtl" }}>
                     <Typography
                       variant="h6"
                       fontWeight="bold"
@@ -256,18 +244,27 @@ const Page = () => {
                   </CardContent>
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={1}>
-                  <SharedTable endpoint="http://localhost:3000/attached-files.json"
+                  <SharedTable
+                    endpoint="http://localhost:3000/attached-files.json"
                     showActions={true}
                     renderRowActions={(row: any) => {
                       return (
                         <Box sx={{ display: "flex", flexDirection: "row", gap: 1 }}>
-                          <VisibilityIcon color="primary" sx={{cursor:"pointer" , '&:hover': {color: 'primary.dark'}}}  onClick={handleOpen}/>
-                          <DeleteIcon color="primary" sx={{cursor:"pointer" , '&:hover': {color: 'primary.dark'}}} onClick={handleOpenConfirm} />
+                          <VisibilityIcon
+                            color="primary"
+                            sx={{ cursor: "pointer", "&:hover": { color: "primary.dark" } }}
+                            onClick={handleOpen}
+                          />
+                          <DeleteIcon
+                            color="primary"
+                            sx={{ cursor: "pointer", "&:hover": { color: "primary.dark" } }}
+                            onClick={handleOpenConfirm}
+                          />
                         </Box>
-                      )
+                      );
                     }}
-
-                    fakeData={attachedFiles} />
+                    fakeData={attachedFiles}
+                  />
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={3}>
                   <SharedTable
@@ -284,7 +281,7 @@ const Page = () => {
                           border: 1,
                           borderColor: "#FFD777",
                         }}
-                        onClick={() => { }}
+                        onClick={() => {}}
                       >
                         {dictionary("Accept")}
                       </Button>
@@ -295,16 +292,18 @@ const Page = () => {
                     })}
                   />
                 </CustomTabPanel>
-
               </Card>
             </Grid>
           </Grid>
         </Container>
-
       </Box>
-      <ViewImagesDialog open={open} handleClose={handleClose}/>
+      <ViewImagesDialog open={open} handleClose={handleClose} />
 
-        <ConfirmDialog open={ confirm} handleClose={ handleCloseConfirm} message="Are you sure you want to delete this file ?"/>
+      <ConfirmDialog
+        open={confirm}
+        handleClose={handleCloseConfirm}
+        message="Are you sure you want to delete this file ?"
+      />
     </>
   );
 };

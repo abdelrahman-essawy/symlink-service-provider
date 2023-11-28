@@ -94,6 +94,7 @@ const HeaderTabs: React.FC<TabsSchema> = ({ tabs, value, handleChange }: TabsSch
       allowScrollButtonsMobile
       sx={{
         width: "fit-content",
+        
       }}
     >
       {
@@ -106,7 +107,8 @@ const HeaderTabs: React.FC<TabsSchema> = ({ tabs, value, handleChange }: TabsSch
                 alignItems: "center",
                 justifyContent: "center",
                 px: 2,
-                gap: 2
+                gap: 2,
+                direction:"ltr"
               }}>
                 <StyledBadge badgeContent={amount} />
                 <Typography>{title}</Typography>
