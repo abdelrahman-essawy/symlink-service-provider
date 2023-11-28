@@ -47,7 +47,7 @@ export const SideNav = (props: { open: any; onClose: any; }) => {
           height: '100%'
         }}
       >
-        <Box sx={{ p: 3 }}>
+        <Box sx={{ px: 1.5 }}>
           <Box
             component={NextLink}
             href="/"
@@ -59,7 +59,7 @@ export const SideNav = (props: { open: any; onClose: any; }) => {
 
             }}
           >
-            <img src={"/assets/Logo_2.svg"} className="App-logo" alt="logo" style={{maxWidth:"90%"}}  />
+            <img src={"/assets/Logo_2.svg"} className="App-logo" alt="logo" style={{maxWidth:"80%"}}  />
           </Box>
         </Box>
         {/* <Divider sx={{ borderColor: 'grey.700' }} /> */}
@@ -67,8 +67,7 @@ export const SideNav = (props: { open: any; onClose: any; }) => {
           component="nav"
           sx={{
             flexGrow: 1,
-            px: 2,
-            py: 3
+            p: 2,
           }}
         >
        <Stack
