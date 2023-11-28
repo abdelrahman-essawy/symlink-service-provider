@@ -4,43 +4,40 @@ import NextLink from "next/link";
 import { useRouter } from "next/navigation";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Box, Button, Grid, Stack, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  Stack,
+  TextField,
+  Typography,
+  IconButton,
+  InputAdornment,
+} from "@mui/material";
 import React from "react";
 import { useAuth } from "../../hooks/use-auth";
 import { AuthLayout } from "../../layouts/auth/layout";
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
-
-const service_provider = {
-  username: "service_provider",
-  password: "secret",
-  role: "service_provider",
-  name: "Service Provider",
-  avatar: "/static/mock-images/avatars/avatar_default.jpg",
-  submit: null,
-};
-
-const client = {
-  username: "client",
-  password: "secret",
-  role: "client",
-  name: "Client",
-  avatar: "/static/mock-images/avatars/avatar_default.jpg",
-  submit: null,
-};
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
 const Page = () => {
-  const { t } = useTranslation();
+  const { t , i18n} = useTranslation();
   const router = useRouter();
   const auth = useAuth();
   const [method, setMethod] = useState("username");
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+  const handleMouseDownPassword = () => setShowPassword(!showPassword);
+
   const formik = useFormik({
-    // initialValues: {
-    //   username: 'superadmin',
-    //   password: 'secret',
-    //   submit: null
-    // },
-    initialValues: service_provider,
+    initialValues: {
+      username: "",
+      password: "",
+      submit: null,
+    },
     validationSchema: Yup.object({
       username: Yup.string().max(255).required("username is required"),
       password: Yup.string().max(255).required("Password is required"),
@@ -51,7 +48,7 @@ const Page = () => {
         router.push("/");
       } catch (err: any) {
         helpers.setStatus({ success: false });
-        helpers.setErrors({ submit: err?.response?.data?.message || "Unknown error occurred"});
+        helpers.setErrors({ submit: err?.response?.data?.message || "Unknown error occurred" });
         helpers.setSubmitting(false);
       }
     },
@@ -77,7 +74,6 @@ const Page = () => {
           flex: "1 1 auto",
           alignItems: "center",
           display: "flex",
-          direction: "ltr",
           justifyContent: "center",
         }}
       >
@@ -94,15 +90,11 @@ const Page = () => {
               <form noValidate onSubmit={formik.handleSubmit}>
                 <Grid container spacing={3} justifyContent="center" alignItems="center">
                   <Grid item xs={12}>
-                    <Stack spacing={2} sx={{ mb: 3 }}>
+                    <Stack spacing={2} sx={{ mb: 3 ,direction:i18n.language == 'ar' ? "ltr":"rtl" }}>
                       <Typography variant="h4">{t("Login")}</Typography>
                       <Typography color="text.secondary" variant="body2">
-                       {t( 'Don\'t have an account' )  } &nbsp;
-                        <Link
-                          href="/auth/register"
-                        >
-                          {t("Register")} 
-                        </Link>
+                        {t("Don't have an account")} &nbsp;
+                        <Link href="/auth/register">{t("Register")}</Link>
                       </Typography>
                     </Stack>
                     <TextField
@@ -125,8 +117,21 @@ const Page = () => {
                       name="password"
                       onBlur={formik.handleBlur}
                       onChange={formik.handleChange}
-                      type="password"
                       value={formik.values.password}
+                      type={showPassword ? "text" : "password"}
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton
+                              aria-label="toggle password visibility"
+                              onClick={handleClickShowPassword}
+                              onMouseDown={handleMouseDownPassword}
+                            >
+                              {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                            </IconButton>
+                          </InputAdornment>
+                        ),
+                      }}
                     />
                     <Typography
                       sx={{
