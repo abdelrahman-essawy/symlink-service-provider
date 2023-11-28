@@ -1,7 +1,7 @@
 import { createContext, Dispatch, useState, useEffect } from "react";
 import axiosClient from "../configs/axios-client";
 import { IProject } from "@/@types/project";
-import { get_Projects,} from "../environment/apis"
+import { get_Projects,get_Project_id} from "../environment/apis"
 export const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
 //TODO: move this to types folder
 
@@ -20,6 +20,15 @@ const ProjectContextProvider = ({ children }: any) => {
         setCount(res.data.meta.total);
         setPageSize(res.data.meta.limit);
         setTotalPages(res.data.meta.totalPages);
+      })
+      .catch((error) => {});
+  };
+
+  const getProject =  (id: string) => {
+    axiosClient
+      .get(get_Project_id(id))
+      .then((res) => {
+        setSelectedProject(res.data.data);
       })
       .catch((error) => {});
   };
@@ -55,6 +64,7 @@ const ProjectContextProvider = ({ children }: any) => {
         pageSize,
         totalPages,
         fetchProjects,
+        getProject,
         AddProject,
         EditProject,
         DeleteProject,
@@ -74,6 +84,7 @@ export type ProjectContextType = {
   totalPages: number;
   Selectedproject: any;
   fetchProjects: (page: number, rowsPerPage: number, filter?: string) => void;
+  getProject: ( id: string) => void;
   AddProject: (project: IProject) => void;
   EditProject: (project: IProject) => void;
   DeleteProject: (project_id: string) => void;

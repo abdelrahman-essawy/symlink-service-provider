@@ -100,3 +100,4 @@ export const get_financials_drivers_balance = (page: number = 1, rowsPerPage: nu
 //-----------------------------------------------------SYMLINK----------------------------------------------------
 
 export const get_Projects = (page: number = 1, rowsPerPage: number = 10, filter?: string) => `/multi-rfp?page=${page}&limit=${rowsPerPage}`;
+export const get_Project_id = (id: string) => `/multi-rfp/${id}`;

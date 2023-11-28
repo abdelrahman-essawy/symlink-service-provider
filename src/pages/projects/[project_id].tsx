@@ -5,7 +5,7 @@ import { DashboardLayout } from "../../layouts/dashboard/layout";
 import { useTranslation } from "react-i18next";
 import HeaderTabs from "@/components/_used-symline/tabs/headerTabs";
 import CustomTabPanel from "@/components/_used-symline/tabs/tabsPanel";
-import SharedTable, { progressTagHandler } from "@/components/SharedTable";
+import SharedTable from "@/components/SharedTable";
 import { useRouter } from "next/router";
 import attachedFiles from "../../../public/attached-files.json";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -17,10 +17,15 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ViewImagesDialog from "@/components/_used-symline/dialogs/view-images";
 import Chat from "@/components/_used-symline/chat/chat";
 import ConfirmDialog from "@/components/_used-symline/dialogs/confirm-dialog";
+import { useProject } from "@/hooks/use-project";
+import ProjectContextProvider from "@/contexts/project-context";
+import ProjectStatusBadge from "@/sections/projects/project-status";
 const Page = () => {
   const title = "Projects";
   const { i18n } = useTranslation();
-
+  const router = useRouter();
+  const { project_id } = router.query;
+  const projectContext = useProject();
   const [value, setValue] = useState(0);
   const [open, setOpen] = useState(false);
   const [confirm, setConfirm] = useState(false);
@@ -33,10 +38,19 @@ const Page = () => {
     setOpen(true);
   };
 
+  const fetchEmployee = async () => {
+    if (project_id && typeof project_id === "string") {
+      await projectContext?.getProject(project_id);
+    }
+  };
+
+  React.useEffect(() => {
+    fetchEmployee();
+  }, [])
+  
   const handletabs = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
-  const router = useRouter();
   return (
     <>
       <Head>
@@ -55,12 +69,12 @@ const Page = () => {
         }}
       >
         <Container maxWidth="xl">
-          <Grid display={"flex"} alignItems={"center"} justifyContent={"start"} gap={10}>
-            <Typography variant="h3" sx={{ mb: 2 }} fontWeight={"bold"}>
+          <Grid display={"flex"} alignItems={"center"} justifyContent={"start"} gap={5} sx={{ mb: 3 }}>
+            <Typography variant="h3"  fontWeight={"bold"}>
               {dictionary("Project name")}
             </Typography>
             <RoleBasedRender componentId="tag-project-status">
-              {progressTagHandler("waiting for selection")}
+              <ProjectStatusBadge status={projectContext?.Selectedproject?.request_for_proposal_status} />
             </RoleBasedRender>
           </Grid>
 
@@ -133,7 +147,6 @@ const Page = () => {
 
             <Grid item xs={12}>
               <Card elevation={0}>
-                
                 <CustomTabPanel value={value} index={0}>
                   <CardContent sx={{ p: 1, direction: "rtl" }}>
                     <Typography
@@ -312,6 +325,10 @@ const Page = () => {
   );
 };
 
-Page.getLayout = (page: any) => <DashboardLayout>{page}</DashboardLayout>;
+Page.getLayout = (page: any) => (
+  <DashboardLayout>
+    <ProjectContextProvider>{page}</ProjectContextProvider>
+  </DashboardLayout>
+);
 
 export default Page;
