@@ -26,7 +26,16 @@ export default function Web({ onChange, onChangeNumber, projects, index }: IProp
   const { t } = useTranslation();
   const router = useRouter();
   const [apisSize, setApisSize] = useState<IMetaData[]>([]);
+  const [assessments, setAssessments] = useState<IMetaData[]>([]);
   const fetchGernalAssessments = async () => {
+    try {
+      const res = await axiosClient?.get(`meta-data?status=Type_of_assessment`);
+      setAssessments(res?.data?.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const fetchGernalApisSize = async () => {
     try {
       const res = await axiosClient?.get(`meta-data?status=apis_size`);
       setApisSize(res?.data?.data);
@@ -35,6 +44,7 @@ export default function Web({ onChange, onChangeNumber, projects, index }: IProp
     }
   };
   useEffect(() => {
+    fetchGernalApisSize();
     fetchGernalAssessments();
   }, []);
   return (
@@ -45,37 +55,35 @@ export default function Web({ onChange, onChangeNumber, projects, index }: IProp
         alignItems="center"
         flexDirection={"row"}
         justifyContent={"end"}
-        textAlign={i18n.language == "en" ?"right": "left"}
+        textAlign={i18n.language == "en" ? "right" : "left"}
       >
         <Grid item xs={12}>
           <FormControl fullWidth>
-            <Typography variant="body1" fontWeight="bold" sx={{ mb: 3, mt: 3}}>
+            <Typography variant="body1" fontWeight="bold" sx={{ mb: 3, mt: 3 }}>
               {t("Assessment Type?")}
             </Typography>
             <RadioGroup
               row
-              aria-labelledby="time_type_id"
-              name="time_type_id"
+              aria-labelledby="assessments_type_id"
+              name="assessments_type_id"
               value={projects[index]?.assessments_type_id}
               onChange={(e: any) => onChange(e, index)}
             >
               <Grid container>
-                {[
-                  { id: "1", name: "Vulnerability Assessment" },
-                  { id: "2", name: "Penetrating Testing" },
-                ]?.map((question: any) => {
-                  return (
-                    <Grid item xs={6} md={4} lg={3} key={question?.id}>
-                      <FormControlLabel
-                        sx={{ width: "100%" }}
-                        value={question?.id}
-                        control={<Radio color="warning" />}
-                        label={t(question?.name)}
-                        color="warning"
-                      />
-                    </Grid>
-                  );
-                })}
+                {assessments?.length &&
+                  assessments?.map((question: any) => {
+                    return (
+                      <Grid item xs={6} md={4} lg={3} key={question?.id}>
+                        <FormControlLabel
+                          sx={{ width: "100%" }}
+                          value={question?.id}
+                          control={<Radio color="warning" />}
+                          label={t(question?.name)}
+                          color="warning"
+                        />
+                      </Grid>
+                    );
+                  })}
               </Grid>
             </RadioGroup>
           </FormControl>
@@ -227,7 +235,10 @@ export default function Web({ onChange, onChangeNumber, projects, index }: IProp
               aria-labelledby="necessary_resident_be_on_site"
               name="necessary_resident_be_on_site"
               value={projects[index]?.necessary_resident_be_on_site}
-              onChange={(e: any) => onChange(e, index)}
+              onChange={(e: any) => onChange({target:{
+                value: JSON.parse(e?.target?.value),
+                name: e?.target?.name,
+              }}, index)}
             >
               <Grid container>
                 <Grid item xs={12} md={4}>
@@ -267,7 +278,12 @@ export default function Web({ onChange, onChangeNumber, projects, index }: IProp
                 variant="outlined"
                 name="how_many_times_on_site"
                 value={projects[index]?.how_many_times_on_site}
-                onChange={(e: any) => onChange(e, index)}
+                onChange={(e: any) => onChangeNumber(e, index)}
+                type="text"
+                inputProps={{
+                  pattern: "^\\d+(\\.\\d+)?$", // Enforce numbers only pattern
+                  inputMode: "numeric", // Show numeric keyboard on mobile devices
+                }}
               />
             </Grid>
           </Grid>
@@ -285,7 +301,10 @@ export default function Web({ onChange, onChangeNumber, projects, index }: IProp
                 aria-labelledby="Verify_that_vulnerabilities_are_fixed"
                 name="Verify_that_vulnerabilities_are_fixed"
                 value={projects[index]?.Verify_that_vulnerabilities_are_fixed}
-                onChange={(e: any) => onChange(e, index)}
+                onChange={(e: any) => onChange({target:{
+                  value: JSON.parse(e?.target?.value),
+                  name: e?.target?.name,
+                }}, index)}
               >
                 <Grid container>
                   <Grid item xs={12} md={4}>

@@ -38,8 +38,9 @@ import InputAdornment from "@mui/material/InputAdornment";
 import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
 import axiosClient from "@/configs/axios-client";
 import RenderAssessments from "@/sections/bids/create-bids/render-assessments";
-import { IProject, IQuestion, RFP } from "@/@types/assessments";
-
+import { ICategory, IProject, IQuestion, RFP } from "@/@types/assessments";
+import CircularProgress from "@mui/material/CircularProgress";
+import useAlert from "@/hooks/useAlert";
 const Page = () => {
   const { i18n } = useTranslation();
   const title = "Create RFP";
@@ -55,23 +56,26 @@ const Page = () => {
   const [dialogName, setDialogName] = useState("");
   const [value, setValue] = useState(0);
   const [activeStep, setActiveStep] = React.useState(0);
-  const [inputs, setInputs] = useState<any[]>([]);
+  const [inputs, setInputs] = useState<ICategory[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const { showAlert, renderForAlert } = useAlert();
+
   const handleClose = useCallback(() => {
     setOpen(false);
   }, []);
 
-  const addInput = (itemName: string,itemID:string) => {
+  const addInput = (itemName: string, itemID: string) => {
     const new_project: IProject = {
       category_id: itemID,
     } as IProject;
     setFormRecord({ ...formRecord, projects: [...formRecord?.projects, new_project] });
-    setInputs([...inputs, {name:itemName,id:inputs?.length}]);
+    setInputs([...inputs, { name: itemName, id: inputs?.length }] as ICategory[]);
   };
   const removeInput = (index: number) => {
     //remove from the FormRecord
-    const AllProjects:IProject[] = formRecord.projects; 
+    const AllProjects: IProject[] = formRecord.projects;
     AllProjects.splice(index, 1);
-    setFormRecord({...formRecord, projects:AllProjects})
+    setFormRecord({ ...formRecord, projects: AllProjects });
     //remove from the UI
     const updatedInputs = [...inputs];
     updatedInputs.splice(index, 1);
@@ -95,32 +99,32 @@ const Page = () => {
     setFormRecord(data);
   }
 
-  function handleChangeProjects(event: any,index: number) {
-    const newProject:any = formRecord.projects[index];
-    const AllProjects:IProject[] = formRecord.projects; 
-    newProject[event.target.name]  = event.target.value;
+  function handleChangeProjects(event: any, index: number) {
+    const newProject: any = formRecord.projects[index];
+    const AllProjects: IProject[] = formRecord.projects;
+    newProject[event.target.name] = event.target.value;
     AllProjects[index] = newProject;
-    setFormRecord({...formRecord, projects:AllProjects});
+    setFormRecord({ ...formRecord, projects: AllProjects });
   }
 
-  function handleChangeNumberInProjects(event: any,index: number) {
+  function handleChangeNumberInProjects(event: any, index: number) {
     const { value } = event.target;
     const numericValue = value.replace(/[^0-9.]/g, "");
-    const newProject:any = formRecord.projects[index];
-    const AllProjects:IProject[] = formRecord.projects; 
-    newProject[event.target.name]  = numericValue;
+    const newProject: any = formRecord.projects[index];
+    const AllProjects: IProject[] = formRecord.projects;
+    newProject[event.target.name] = parseFloat(numericValue) || 0;
     AllProjects[index] = newProject;
-    setFormRecord({...formRecord, projects:AllProjects});
+    setFormRecord({ ...formRecord, projects: AllProjects });
   }
   //TODO: remove this function
   useEffect(() => {
     console.log(formRecord);
   }, [formRecord]);
 
-  const [assessments, setAssessments] = useState<IQuestion[]>([]);
+  const [assessments, setAssessments] = useState<ICategory[]>([]);
   const fetchGernalAssessments = async () => {
     try {
-      const res = await axiosClient?.get(`meta-data?status=Type_of_assessment`);
+      const res = await axiosClient?.get(`category`);
       setAssessments(res?.data?.data);
     } catch (error) {
       console.log(error);
@@ -136,13 +140,37 @@ const Page = () => {
     },
     [inputs]
   );
+  const handelsubmit = async (e: any) => {
+    e.preventDefault();
+    setIsLoading(true);
+    try {
+      const res = await axiosClient.post("multi-rfp", formRecord);
+      if(res.status === 200 || res.status === 201) {
+        router.push("/projects")
+      }
+    } catch (err:any) {
+      if (err?.response?.status == 400) {
+        if (err?.response?.data?.message) {
+          showAlert(err?.response?.data?.message, "error");
+        }
+      } else if (err.response.status == 400)
+        if (Object.keys(err?.response?.data?.errors)?.length > 0) {
+          const errors = err?.response?.data?.errors;
+          const firstError = Object.keys(errors)[0];
+          showAlert(`${firstError}: ${errors[firstError]}`, "error");
+        } else if (err.response.status == 500) {
+          showAlert(err?.response?.data?.message, "error");
+        } else return err;
+    }
+    setIsLoading(false);
+  };
 
   return (
     <>
       <Head>
         <title>{title} | Symline</title>
       </Head>
-      <form onSubmit={() => {}}>
+      <form onSubmit={handelsubmit}>
         <Box
           component="main"
           sx={{
@@ -199,7 +227,13 @@ const Page = () => {
                   }}
                 />
               </Grid>
-              <Grid item md={4} xs={12} sx={{justifyContent:{xs:"center",md:"end"}}} display="flex">
+              <Grid
+                item
+                md={4}
+                xs={12}
+                sx={{ justifyContent: { xs: "center", md: "end" } }}
+                display="flex"
+              >
                 <Button
                   variant="contained"
                   onClick={handleClickList}
@@ -236,7 +270,10 @@ const Page = () => {
                         divider={index != assessments?.length - 1}
                       >
                         <ListItemButton
-                          onClick={() => addInput(item?.name_en,item.id)}
+                          onClick={() => {
+                            console.log(item?.name_en || item?.name);
+                            addInput(item?.name_en || item?.name, item.id);
+                          }}
                           sx={{
                             display: "flex",
                             justifyContent: "space-between",
@@ -252,7 +289,7 @@ const Page = () => {
                             }}
                           />
                           <Badge
-                            badgeContent={countAssessments(item?.name_en)}
+                            badgeContent={countAssessments(item?.name_en || item?.name)}
                             color="warning"
                             overlap="circular"
                             anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
@@ -278,12 +315,34 @@ const Page = () => {
                   assessment={item?.name}
                   index={index}
                   removeInput={removeInput}
-                  order={inputs?.filter((input)=>input.name == item.name).indexOf(item)}
+                  order={inputs?.filter((input) => input.name == item.name).indexOf(item)}
                 />
               ))}
+              <Grid item xs={12} display={"flex"} sx={{ justifyContent: { xs: "center", md: "start" } }}>
+                <Button
+                  variant="contained"
+                  type="submit"
+                  aria-describedby={id}
+                  aria-label="add"
+                  color="warning"
+                  size="large"
+                  disabled={!(formRecord?.projects?.length > 0)}
+                  sx={{
+                    borderRadius: 20,
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "start",
+                    gap: 0.5,
+                    width:"200px",
+                  }}
+                >
+                  {isLoading ? <CircularProgress thickness={1.5} /> : t("Create")}
+                </Button>
+              </Grid>
             </Grid>
           </Container>
         </Box>
+        {renderForAlert()}
       </form>
     </>
   );

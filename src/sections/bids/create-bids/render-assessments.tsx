@@ -1,5 +1,4 @@
 import ArchitectureCompositionReview from "@/components/_used-symline/questions/architectureConfigurationReview";
-import Moblie from "@/components/_used-symline/questions/mobile";
 import Network from "@/components/_used-symline/questions/network";
 import SourceCode from "@/components/_used-symline/questions/sourceCode";
 import Web from "@/components/_used-symline/questions/web";
@@ -8,18 +7,28 @@ import React from "react";
 import { Card, Grid, CardContent, Typography, IconButton } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useTranslation } from "react-i18next";
+import Mobile from "@/components/_used-symline/questions/mobile";
+import ThreatHunting from "@/components/_used-symline/questions/threatHunting";
 
 type Props = {
   assessment: string;
   projects: any;
-  onChange: (event: any,index:number) => void;
-  onChangeNumber: (event: any,index:number) => void;
+  onChange: (event: any, index: number) => void;
+  onChangeNumber: (event: any, index: number) => void;
   index: number;
   order: number;
   removeInput: (index: number) => void;
 };
 
-const RenderAssessments = ({ assessment, projects, onChange,onChangeNumber, index, removeInput,order }: Props) => {
+const RenderAssessments = ({
+  assessment,
+  projects,
+  onChange,
+  onChangeNumber,
+  index,
+  removeInput,
+  order,
+}: Props) => {
   const { t } = useTranslation();
   return (
     <Grid item xs={12}>
@@ -41,7 +50,7 @@ const RenderAssessments = ({ assessment, projects, onChange,onChangeNumber, inde
                       }}
                     >
                       <Typography variant="body2" fontWeight="bold" color="warning.darkest">
-                        {t(`${assessment}`)+` ${order + 1}`}
+                        {t(`${assessment}`) + ` ${order + 1}`}
                       </Typography>
                       <Box>
                         <IconButton onClick={() => removeInput(index)} aria-label="delete">
@@ -52,15 +61,32 @@ const RenderAssessments = ({ assessment, projects, onChange,onChangeNumber, inde
                     <Box></Box>{" "}
                     <Box>
                       {assessment === "Web" ? (
-                        <Web projects={projects} onChange={onChange} index={index} onChangeNumber={onChangeNumber} />
+                        <Web
+                          projects={projects}
+                          onChange={onChange}
+                          index={index}
+                          onChangeNumber={onChangeNumber}
+                        />
                       ) : assessment === "Architecture composition review" ? (
                         <ArchitectureCompositionReview />
-                      ) : assessment === "Network" ? (
-                        <Network />
-                      ) : assessment === "Threat hunting" ? (
-                        <Moblie />
+                      ) : assessment === "the network" ? (
+                        <Network
+                          projects={projects}
+                          onChange={onChange}
+                          index={index}
+                          onChangeNumber={onChangeNumber}
+                        />
+                      ) : assessment === "the phone" ? (
+                        <Mobile
+                          projects={projects}
+                          onChange={onChange}
+                          index={index}
+                          onChangeNumber={onChangeNumber}
+                        />
                       ) : assessment === "Source code" ? (
                         <SourceCode />
+                      ) : assessment === "Threat hunting" ? (
+                        <ThreatHunting />
                       ) : null}
                     </Box>
                   </Grid>

@@ -54,11 +54,9 @@ function GeneralQuestions({time_type_id,handleonchange}:IProps) {
                 </Typography>
               </Grid>
               <FormControl fullWidth>
-                <FormLabel id="time_type_id" color="warning">
-                  <Typography variant="body1" fontWeight="bold" sx={{ mb: 1, mt: 3, px: 1 }}>
+                  <Typography variant="body1" fontWeight="bold" sx={{ mb: 1, mt: 3, px: 1 }} id="time_type_id">
                     {t("What is the allowed  testing time ?")}
                   </Typography>
-                </FormLabel>
                 <RadioGroup
                   row
                   aria-labelledby="time_type_id"

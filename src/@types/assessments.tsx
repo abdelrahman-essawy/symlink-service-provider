@@ -4,6 +4,10 @@ export type IMetaData = {
     title: string;
     completed: boolean;
 }
+export type ICategory = {
+    id: string
+    name: string
+}
 
 export interface IQuestion {
     id: string;
