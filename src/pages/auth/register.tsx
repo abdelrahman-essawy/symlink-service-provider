@@ -17,6 +17,8 @@ import {
   Avatar,
   Badge,
   MenuItem,
+  IconButton,
+  InputAdornment,
 } from "@mui/material";
 import React, { useState } from "react";
 import { useAuth } from "../../hooks/use-auth";
@@ -24,14 +26,18 @@ import { AuthLayout } from "../../layouts/auth/layout";
 import { useTranslation } from "react-i18next";
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import PersonIcon from "@mui/icons-material/Person";
-
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 const Page = () => {
   const router = useRouter();
   const auth = useAuth();
-  const { t } = useTranslation();
+  const { t ,i18n} = useTranslation();
   const [selectedFile, setSelectedFile] = useState<any>(null);
   const [previewUrl, setPreviewUrl] = useState<any>(null);
+  const [showPassword, setShowPassword] = useState(false);
 
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+  const handleMouseDownPassword = () => setShowPassword(!showPassword);
   // handle file selection
   const handleFileSelect = (event: any) => {
     const file = event.target.files[0];
@@ -81,7 +87,6 @@ const Page = () => {
         sx={{
           flex: "1 1 auto",
           alignItems: "center",
-          direction: "ltr",
           display: "flex",
           justifyContent: "center",
         }}
@@ -95,7 +100,7 @@ const Page = () => {
           }}
         >
           <div>
-            <Stack spacing={1} sx={{ mb: 3 }}>
+            <Stack spacing={1} sx={{ mb: 3 ,direction:i18n.language == 'ar' ? "ltr":"rtl" }}>
               <Typography variant="h4">{t("Register")}</Typography>
               <Typography color="text.secondary" variant="body2">
                 {t("Already have an account?")}
@@ -156,12 +161,25 @@ const Page = () => {
                   name="password"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
-                  type="password"
+                  type={showPassword ? "text" : "password"}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPassword}
+                          onMouseDown={handleMouseDownPassword}
+                        >
+                          {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
                   value={formik.values.password}
                   autoComplete="off"
                 />
 
-                <FormLabel sx={{ mx: 0 }}>{t("Register as")}</FormLabel>
+                <FormLabel sx={{ mx: 0,direction:i18n.language == 'ar' ? "ltr":"rtl" }}>{t("Register as")}</FormLabel>
                 <Select
                   labelId="demo-multiple-name-label"
                   id="demo-multiple-name"

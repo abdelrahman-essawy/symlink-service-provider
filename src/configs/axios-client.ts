@@ -7,7 +7,7 @@ const axiosClient = axios.create({
 
 axiosClient.defaults.headers.common = {
   "Content-Type": "application/json",
-  "Accept-Language": 'ar',
+  "Accept-Language": 'en',
   "Access-Control-Allow-Origin": "*",
   "Accept": "application/json",
   "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",

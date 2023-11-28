@@ -21,7 +21,7 @@ export default function Step2() {
           <Grid container spacing={0} alignItems="center" flexDirection={'row'} justifyContent={'start'} textAlign={'left'}>
             <Grid item xs={12} >
               <Typography variant="body1" fontWeight="bold" sx={{ mb: 3, mt: 3, }}>
-                {t("Type of the assessment ?")}
+                {t("Assessment Type?")}
               </Typography>
              
               <Grid spacing={0} container alignItems="end" justifyContent="flex-start">

@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 
 export default function usePreviousPath() {
   const router = useRouter();
-  const [previousPath, setPreviousPath] = useState<string>('/');
+  const [previousPath, setPreviousPath] = useState<string>(sessionStorage.getItem("previousPath") || '/');
   const [isinnerPath,setIsinnerPath] = useState(false);
   const [isProfilePath,setIsProfilePath] = useState(false);
   const innerPathsList = ["/bid/create-rfp","/bid/rfp-name","/profile","/certificate","/experience","/educational-info"]
@@ -30,6 +30,7 @@ export default function usePreviousPath() {
     const handleRouteChange = (url: string) => {
      if(!innerPathsList?.includes(router.pathname)) {
         setPreviousPath(router.pathname);
+        sessionStorage.setItem("previousPath", router.pathname)
       }
     };
 

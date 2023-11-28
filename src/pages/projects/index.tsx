@@ -47,7 +47,7 @@ const Page = () => {
               <Button
                 onClick={() => router.push("/bid/create-rfp")}
                 variant="contained" color="warning" sx={{ borderRadius: 8, mb: 2 }}>
-                {dictionary("Request a project")}
+                {dictionary("Create RFP")}
               </Button>
             </RoleBasedRender>
           </Grid>
@@ -61,7 +61,7 @@ const Page = () => {
                       onClick: () => router.push(`/projects/1`),
                       sx: { cursor: "pointer" },
                     })}
-                    endpoint="http://localhost:3000/projects.json"
+                    endpoint={process.env.API_URL + "/multi-rfp"}
                     fakeData={projects}
                   />
                 </RoleBasedRender>
@@ -73,7 +73,7 @@ const Page = () => {
                       onClick: () => router.push(`/projects/1`),
                       sx: { cursor: "pointer" },
                     })}
-                    endpoint="http://localhost:3000/projects-for-sp.json"
+                    endpoint= {process.env.API_URL + "/multi-rfp"}
                     fakeData={projectsForSP}
                     enableRowSelection
                     enableMultiRowSelection

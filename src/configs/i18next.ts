@@ -14,12 +14,27 @@ const resources = {
   }
 };
 
+export const languages = [
+  {
+      code: 'en',
+      name: 'English',
+      dir: 'ltr',
+      letter: 'En'
+  },
+  {
+      code: 'ar',
+      name: 'العربية',
+      dir: 'rtl',
+      letter: 'ع'
+  }
+]
+
 i18n
   .use(initReactI18next) // passes i18n down to react-i18next
   .init({
     supportedLngs: ['en', 'ar',],
     resources,
-    lng: 'ar',
+    lng: 'en',
     fallbackLng: 'en',
     debug: false,
     interpolation: {

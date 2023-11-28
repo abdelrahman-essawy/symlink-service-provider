@@ -2,12 +2,13 @@ import PropTypes from "prop-types";
 import NextLink from "next/link";
 import Image from "next/image";
 
-import { Box, Typography, Unstable_Grid2 as Grid } from "@mui/material";
+import { Box, Typography, Unstable_Grid2 as Grid, IconButton,Button } from "@mui/material";
 import React from "react";
 import Logo from "../../../public/assets/Logo.svg";
 import { useTranslation } from "react-i18next";
 // TODO: Change subtitle text
-import  BgImg  from '../../../public/assets/Logo.svg';
+import BgImg from "../../../public/assets/Logo.svg";
+import LocalizationSwitcher from "@/components/LocalizationSwitcher";
 
 export const AuthLayout = (props: { children: any }) => {
   const { children } = props;
@@ -41,28 +42,11 @@ export const AuthLayout = (props: { children: any }) => {
             },
           }}
         >
-          {/* <Image
-            quality={100}
-            fill
-            sizes="100%"
-            src={BgImg.src}
-            alt="Description of the SVG"
-            style={{
-              objectFit: "cover",
-
-              zIndex: "-1",
-              backgroundRepeat: "repeat",
-            }}
-          /> */}
-          <Box display={{lg: 'flex'}}>
+          <Box display={{ md: "flex", xs: "none" }}>
             <Grid container spacing={2} justifyContent="center" alignItems="center">
-              <Grid   xs={12}>
-
-              </Grid>
+              <Grid xs={12}></Grid>
               <img alt="" width="300px" src={Logo.src} />
             </Grid>
-
-            
           </Box>
         </Grid>
         {/*login section*/}
@@ -76,6 +60,11 @@ export const AuthLayout = (props: { children: any }) => {
             position: "relative",
           }}
         >
+          <Grid sx={{ display: "flex", justifyContent: "end", alignItems: "end",width:"98%",mt:1 }}>
+          <IconButton sx={{zIndex:3}} >
+            <LocalizationSwitcher />
+          </IconButton>
+          </Grid>
           <Box
             component="header"
             sx={{
