@@ -1,14 +1,3 @@
-export type IMetaData = {
-    userId: number;
-    id: number;
-    title: string;
-    completed: boolean;
-}
-export type ICategory = {
-    id: string
-    name: string
-}
-
 export interface IQuestion {
     id: string;
     type: string;
@@ -17,10 +6,10 @@ export interface IQuestion {
   export interface RFP {
     project_name: string;
     time_type_id: string;
-    projects: IProject[];
+    projects: IAssessmentProject[];
   }
   
-  export interface IProject {
+  export interface IAssessmentProject {
     category_id: string;
     assessments_type_id: string;
     apis_size_id: string;

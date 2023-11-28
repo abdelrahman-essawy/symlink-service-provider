@@ -27,7 +27,6 @@ interface TabsSchema {
 const CustomTabs = styled(Tabs)(({ theme }) => ({
   backgroundColor: "#fff",
   minHeight: 44,
-
   borderRadius: 10,
   "& .MuiTabs-flexContainer": {
     position: "relative",
@@ -35,7 +34,7 @@ const CustomTabs = styled(Tabs)(({ theme }) => ({
   },
   "& .MuiTabs-scroller": {
     [theme.breakpoints.up("md")]: {
-      padding: "0 8px",
+      padding: "0",
     },
   },
   "& .MuiTabs-indicator": {
@@ -61,6 +60,7 @@ const CustomTabs = styled(Tabs)(({ theme }) => ({
 
 const CustomTab = styled(Tab)(({ theme }) => ({
   transition: ".5s",
+  padding:"10px",
   "&:hover": {
     opacity: 1,
   },
@@ -94,6 +94,7 @@ const HeaderTabs: React.FC<TabsSchema> = ({ tabs, value, handleChange }: TabsSch
       allowScrollButtonsMobile
       sx={{
         width: "fit-content",
+        
       }}
     >
       {
@@ -106,7 +107,8 @@ const HeaderTabs: React.FC<TabsSchema> = ({ tabs, value, handleChange }: TabsSch
                 alignItems: "center",
                 justifyContent: "center",
                 px: 2,
-                gap: 2
+                gap: 2,
+                direction:"ltr",
               }}>
                 <StyledBadge badgeContent={amount} />
                 <Typography>{title}</Typography>

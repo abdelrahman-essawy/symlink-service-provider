@@ -97,3 +97,6 @@ export const reset_balance = (id: string) => `/financials/reset-balance/${id}`;
 export const get_financials_drivers_balance = (page: number = 1, rowsPerPage: number = 10, filter?: string) => `/financials/drivers-balance?page=${page + 1}&limit=${rowsPerPage}&filters=${filter!=undefined ?`username<>${filter}&filters=name<>${filter}&filters=phone<>${filter}`: ""}`;
 
 
+//-----------------------------------------------------SYMLINK----------------------------------------------------
+
+export const get_Projects = (page: number = 1, rowsPerPage: number = 10, filter?: string) => `/multi-rfp?page=${page}&limit=${rowsPerPage}`;
