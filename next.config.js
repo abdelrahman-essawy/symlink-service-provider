@@ -10,7 +10,7 @@ const nextConfig = {
   },
   i18n: {
     locales: ["en", "ar"],
-    defaultLocale: "ar",
+    defaultLocale: "en",
     localeDetection: false,
   },
   webpack: (config) => {
