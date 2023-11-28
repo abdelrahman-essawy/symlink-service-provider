@@ -38,9 +38,10 @@ import InputAdornment from "@mui/material/InputAdornment";
 import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
 import axiosClient from "@/configs/axios-client";
 import RenderAssessments from "@/sections/bids/create-bids/render-assessments";
-import { ICategory, IAssessmentProject, IQuestion, RFP } from "@/@types/assessments";
+import { IAssessmentProject, IQuestion, RFP } from "@/@types/assessments";
 import CircularProgress from "@mui/material/CircularProgress";
 import useAlert from "@/hooks/useAlert";
+import { ICategory } from "@/@types/project";
 const Page = () => {
   const { i18n } = useTranslation();
   const title = "Create RFP";

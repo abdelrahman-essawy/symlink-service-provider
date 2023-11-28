@@ -72,16 +72,16 @@ const Page = () => {
                   handleChange={handletabs}
                   tabs={[
                     {
-                      title: "Discussion",
-                      amount: 0,
+                      title: "Questions",
+                      amount: 3,
                     },
                     {
                       title: "Attached filles",
                       amount: 5,
                     },
                     {
-                      title: "Questions",
-                      amount: 3,
+                      title: "Discussion",
+                      amount: 0,
                     },
                   ]}
                 />
@@ -93,16 +93,16 @@ const Page = () => {
                   handleChange={handletabs}
                   tabs={[
                     {
-                      title: "Discussion",
-                      amount: 0,
+                      title: "Questions",
+                      amount: 3,
                     },
                     {
                       title: "Attached filles",
                       amount: 5,
                     },
                     {
-                      title: "Questions",
-                      amount: 3,
+                      title: "Discussion",
+                      amount: 0,
                     },
                     {
                       title: "List of bids",
@@ -133,10 +133,8 @@ const Page = () => {
 
             <Grid item xs={12}>
               <Card elevation={0}>
-                <CustomTabPanel value={value} index={0} padding={"0"}>
-                  <Chat />
-                </CustomTabPanel>
-                <CustomTabPanel value={value} index={2}>
+                
+                <CustomTabPanel value={value} index={0}>
                   <CardContent sx={{ p: 1, direction: "rtl" }}>
                     <Typography
                       variant="h6"
@@ -243,6 +241,7 @@ const Page = () => {
                     </Grid>
                   </CardContent>
                 </CustomTabPanel>
+
                 <CustomTabPanel value={value} index={1}>
                   <SharedTable
                     endpoint="http://localhost:3000/attached-files.json"
@@ -266,6 +265,11 @@ const Page = () => {
                     fakeData={attachedFiles}
                   />
                 </CustomTabPanel>
+
+                <CustomTabPanel value={value} index={2} padding={"0"}>
+                  <Chat />
+                </CustomTabPanel>
+
                 <CustomTabPanel value={value} index={3}>
                   <SharedTable
                     endpoint="http://localhost:3000/bids.json"
