@@ -30,6 +30,11 @@ import { MenuButton } from "@/components/button-menu";
 import { TActionMenuButton } from "@/components/shared/MenuItems";
 import { sharedStyles } from "@/utils/sharedStyles";
 import { CardTableActions } from "@/sections/projects/Project-table-actions";
+import { SearchBar } from "@/sections/shared/search-bar";
+import Noitems from "@/components/shared/no-items";
+import FolderCopyIcon from "@mui/icons-material/FolderCopy";
+import { useAuth } from "@/hooks/use-auth";
+
 const Page = () => {
   const { i18n } = useTranslation();
   const title = "Projects";
@@ -44,6 +49,7 @@ const Page = () => {
   const [selectedProjectId, setSelectedProjectId] = useState<string>("");
   const [openConfirm, setOpenConfirm] = useState(false);
   const [showView, setShowView] = useState(false);
+  const auth = useAuth();
   const headers = [
     { text: "RFP name", value: "project_name" },
     { text: "Status", value: "request_for_proposal_status" },
@@ -59,9 +65,12 @@ const Page = () => {
   const { handlePageChange, handleRowsPerPageChange, handleSearch, controller, setController } =
     usePageUtilities();
 
-
   useEffect(() => {
-    projectContext?.fetchProjects(controller.page, controller.rowsPerPage, controller.filter);
+    if(auth?.user?.role === "PROVIDER") {
+    projectContext?.fetchProjects(controller.page, controller.rowsPerPage, controller.SearchString);
+    }else if(auth?.user?.role === "CLIENT"){
+      projectContext?.fetchProjects(controller.page, controller.rowsPerPage, controller.SearchString,auth?.user?.id);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [controller]);
 
@@ -130,16 +139,12 @@ const Page = () => {
       ) : null;
     },
     onRenderActions: (item: any) => {
-      return (
-        <CardTableActions
-          card={item}
-        />
-      );
+      return <CardTableActions card={item} />;
     },
     onRowClick: (e: any, item: IProject) => push(`projects/${item.id}`),
   };
 
-  const menuItemsEmployees:TActionMenuButton[] = [
+  const menuItemsEmployees: TActionMenuButton[] = [
     {
       label: "Edit",
       onClick: (e: any, id: string | undefined) => {
@@ -198,33 +203,53 @@ const Page = () => {
             <Grid item xs={12}>
               <Card sx={{ p: 2 }}>
                 <RoleBasedRender componentId="table-service-provider-projects">
-                  <DataTable
-                    headers={headers}
-                    name="Project"
-                    items={projectContext?.projects}
-                    totalItems={projectContext?.count}
-                    totalPages={projectContext?.totalPages}
-                    page={controller?.page||1}
-                    rowsPerPage={controller?.rowsPerPage}
-                    onPageChange={handlePageChange}
-                    onRowsPerPageChange={handleRowsPerPageChange}
-                    {...additionalTableProps}
-                  />
+                  {projectContext?.count == undefined || projectContext?.count > 0 ? (
+                    <Stack spacing={2}>
+                      <SearchBar onSearchChange={handleSearch} />
+                      <DataTable
+                        headers={headers}
+                        name="Project"
+                        items={projectContext?.projects}
+                        totalItems={projectContext?.count}
+                        totalPages={projectContext?.totalPages}
+                        page={controller?.page || 1}
+                        rowsPerPage={controller?.rowsPerPage}
+                        onPageChange={handlePageChange}
+                        onRowsPerPageChange={handleRowsPerPageChange}
+                        {...additionalTableProps}
+                      />
+                    </Stack>
+                  ) : (
+                    <Noitems
+                      title={"No Project yet"}
+                      icon={<FolderCopyIcon sx={{ color: "gray", fontSize: "4.2em" }} />}
+                    />
+                  )}
                 </RoleBasedRender>
 
                 <RoleBasedRender componentId="table-client-projects">
-                  <DataTable
-                    headers={headers}
-                    name="Project"
-                    items={projectContext?.projects}
-                    totalItems={projectContext?.count}
-                    totalPages={projectContext?.totalPages}
-                    page={controller?.page||1}
-                    rowsPerPage={controller?.rowsPerPage}
-                    onPageChange={handlePageChange}
-                    onRowsPerPageChange={handleRowsPerPageChange}
-                    {...additionalTableProps}
-                  />
+                  {projectContext?.count == undefined || projectContext?.count > 0 ? (
+                    <Stack spacing={1}>
+                      <SearchBar onSearchChange={handleSearch} />
+                      <DataTable
+                        headers={headers}
+                        name="Project"
+                        items={projectContext?.projects}
+                        totalItems={projectContext?.count}
+                        totalPages={projectContext?.totalPages}
+                        page={controller?.page || 1}
+                        rowsPerPage={controller?.rowsPerPage}
+                        onPageChange={handlePageChange}
+                        onRowsPerPageChange={handleRowsPerPageChange}
+                        {...additionalTableProps}
+                      />
+                    </Stack>
+                  ) : (
+                    <Noitems
+                      title={"No Project yet"}
+                      icon={<FolderCopyIcon sx={{ color: "gray", fontSize: "4.2em" }} />}
+                    />
+                  )}
                 </RoleBasedRender>
               </Card>
             </Grid>

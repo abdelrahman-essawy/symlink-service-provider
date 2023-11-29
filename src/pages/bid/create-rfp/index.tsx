@@ -217,6 +217,7 @@ const Page = () => {
                   size="medium"
                   margin="dense"
                   name={"project_name"}
+                  required
                   value={formRecord?.project_name}
                   onChange={handleChange}
                   InputProps={{

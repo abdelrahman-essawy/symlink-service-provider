@@ -12,9 +12,9 @@ const ProjectContextProvider = ({ children }: any) => {
   const [pageSize, setPageSize] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
 
-  const fetchProjects =  (PageNumber: number , PageSize: number ,SearchString?:string) => {
+  const fetchProjects =  (PageNumber: number , PageSize: number ,SearchString?:string,userID?:string) => {
     axiosClient
-      .get(get_Projects(PageNumber, PageSize, SearchString))
+      .get(get_Projects(PageNumber, PageSize, SearchString,userID))
       .then((res) => {
         setProjects(res.data.data);
         setCount(res.data.meta.total);
@@ -73,7 +73,7 @@ export type ProjectContextType = {
   pageSize: number;
   totalPages: number;
   Selectedproject: any;
-  fetchProjects: (page: number, rowsPerPage: number, filter?: string) => void;
+  fetchProjects: (PageNumber: number , PageSize: number ,SearchString?:string,userID?:string) => void;
   AddProject: (project: IProject) => void;
   EditProject: (project: IProject) => void;
   DeleteProject: (project_id: string) => void;
