@@ -53,7 +53,7 @@ function GeneralQuestions({time_type_id,handleonchange}:IProps) {
                   {t("General questions")}
                 </Typography>
               </Grid>
-              <FormControl fullWidth>
+              <FormControl required fullWidth>
                   <Typography variant="body1" fontWeight="bold" sx={{ mb: 1, mt: 3, px: 1 }} id="time_type_id">
                     {t("What is the allowed  testing time ?")}
                   </Typography>

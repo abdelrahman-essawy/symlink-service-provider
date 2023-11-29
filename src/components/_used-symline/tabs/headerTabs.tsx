@@ -18,7 +18,7 @@ export const StyledBadge = withStyles((theme) => ({
 interface TabsSchema {
   tabs: {
     title: string;
-    amount: number;
+    amount?: number;
   }[];
   value: number;
   handleChange: (event: React.SyntheticEvent, newValue: number) => void;

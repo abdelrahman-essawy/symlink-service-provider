@@ -87,7 +87,6 @@ const Page = () => {
                   tabs={[
                     {
                       title: "Questions",
-                      amount: 3,
                     },
                     {
                       title: "Attached filles",
@@ -108,7 +107,6 @@ const Page = () => {
                   tabs={[
                     {
                       title: "Questions",
-                      amount: 3,
                     },
                     {
                       title: "Attached filles",
