@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 export const SearchBar = (props: any) => {
     const { filter, onSearchChange, placeholder } = props;
     return (
-        <Card sx={{ p: 2 }}>
+        <Card sx={{ p: 1 }} elevation={0}>
             <OutlinedInput
                 defaultValue=""
                 onChange={onSearchChange}

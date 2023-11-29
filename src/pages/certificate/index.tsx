@@ -28,6 +28,8 @@ import ViewerPdf from "@/components/_used-symline/dialogs/pdf-viewer";
 import ViewImagesDialog from "@/components/_used-symline/dialogs/view-images";
 import { LoadingButton } from "@mui/lab";
 import ConfirmDialog from "@/components/_used-symline/dialogs/confirm-dialog";
+import axiosClient from "@/configs/axios-client";
+import useAlert from "@/hooks/use-alert";
 
 // import PdfViewerDialog from "@/components/PdfViewerDialog";
 
@@ -40,39 +42,21 @@ const Page = () => {
   const { i18n } = useTranslation();
   const title = "Certificate";
   const { t } = useTranslation();
+  const { showAlert, renderForAlert } = useAlert();
   const [open, setOpen] = useState(false);
   const [openCertificate, setOpenCertificate] = useState(false);
   const [openPdf, setOpenPdf] = useState(false);
   const [dialogName, setDialogName] = useState("");
   const [value, setValue] = useState(0);
   const [file, setFile] = React.useState({ name: "Choose File" });
+
   const [loading, setLoading] = React.useState(false);
-  const [upload, setUpload] = React.useState(false);
   const [confirm, setConfirm] = useState(false);
   const handleCloseConfirm = () => setConfirm(false);
   const handleOpenConfirm = () => {
     setConfirm(true);
   };
 
-  const update = async () => {
-    setLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 1600));
-
-    setLoading(false);
-    handleClose();
-  };
-  const uploading = async () => {
-    setUpload(true);
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
-    setUpload(false);
-    
-  };
-   // handle file selection
-   const handleFileSelect = (event: any) => {
-    const file = event.target.files[0];
-    setFile(file);
-  };
   const handleCloseCertificate = () => setOpenCertificate(false);
   const handleOpenCertificate = () => {
     setOpenCertificate(true);
@@ -82,25 +66,28 @@ const Page = () => {
     setOpenPdf(true);
   };
   const handleClose = () => setOpen(false);
-  const handleOpenAdd = () => {
-    setDialogName("Add experience");
-    setOpen(true);
-  };
-  const handleOpenEdit = () => {
-    setDialogName("Edit experience");
-    setOpen(true);
-  };
   //pdf Model
   const [dialogOpen, setDialogOpen] = useState(false);
-  const handleOpenDialog = () => {
-    setDialogOpen(true);
-  };
+  //upload files
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleCloseDialog = () => {
-    setDialogOpen(false);
-  };
-  const handletabs = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    setLoading(true);
+    const file = event.target.files?.[0];
+    if (file) {
+      // Call your API endpoint to post the file data
+      const formData = new FormData();
+      formData.set("file",file );
+      const res = await axiosClient.post("/provider/add-certificate", formData,{headers:{'Content-Type': 'multipart/form-data'}});
+      if (res.status == 201 || res.status == 200) {
+        showAlert("Excel file uploaded successfully", "success");
+        //Reset input fields
+      } else {
+        showAlert("An error happened", "error");
+      }
+    }
+    event.target.value = "";
+    setLoading(false);
   };
   return (
     <>
@@ -113,10 +100,10 @@ const Page = () => {
           flexGrow: 1,
           py: 8,
           bgcolor: "primary.lightest",
-          borderTopLeftRadius: i18n.language == 'ar' ? 25 : 0,
-          borderBottomLeftRadius: i18n.language == 'ar' ? 25 : 25,
-          borderTopRightRadius: i18n.language == 'ar' ? 0 : 25,
-          borderBottomRightRadius: i18n.language == 'ar' ? 0 : 25,
+          borderTopLeftRadius: i18n.language == "ar" ? 25 : 0,
+          borderBottomLeftRadius: i18n.language == "ar" ? 25 : 25,
+          borderTopRightRadius: i18n.language == "ar" ? 0 : 25,
+          borderBottomRightRadius: i18n.language == "ar" ? 0 : 25,
         }}
       >
         <Container maxWidth="xl">
@@ -126,20 +113,24 @@ const Page = () => {
           <Grid container spacing={2} justifyContent={"space-between"}>
             <Grid item xs={12} md={6}></Grid>
             <Grid item xs={12} md={3} sx={{ display: "flex", justifyContent: "end" }}>
-            <LoadingButton
-                  component="label"
-                  loading={upload}
-                  onChange={uploading}
-
-             
-                  variant="contained"
-                  color="warning"
-                  size="medium"
-                >
-                  <Typography sx={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word',  }}>  {t("Upload")}</Typography>
-                  <input type="file" onChange={handleFileSelect} hidden />
-                </LoadingButton>
-           
+              <input
+                type="file"
+                ref={fileInputRef}
+                style={{ display: "none" }}
+                onChange={handleFileUpload}
+              />
+              <Button
+                // loading={upload}
+                
+                variant="contained"
+                color="warning"
+                size="large"
+                onClick={() => fileInputRef?.current?.click()}
+              >
+                <Typography sx={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>
+                  {t("Upload")}
+                </Typography>
+              </Button>
             </Grid>
             <Grid item xs={12}>
               <Card elevation={0} sx={{ p: 3 }}>
@@ -171,8 +162,8 @@ const Page = () => {
                                 {certificate.title}
                               </Typography>
                               <Box>
-                                <IconButton sx={{ mx: 1 }} >
-                                  <DeleteForeverIcon onClick={handleOpenConfirm}/>
+                                <IconButton sx={{ mx: 1 }}>
+                                  <DeleteForeverIcon onClick={handleOpenConfirm} />
                                 </IconButton>
                               </Box>
                             </Grid>
@@ -191,8 +182,11 @@ const Page = () => {
                               cursor: "pointer",
                               boxShadow: "0 4px 8px 0 rgba(0,0,0,0.08)",
                             }}
-                            onClick={certificate.title == 'Certificate 1.pdf'? handleOpenPdf : handleOpenCertificate}
-
+                            onClick={
+                              certificate.title == "Certificate 1.pdf"
+                                ? handleOpenPdf
+                                : handleOpenCertificate
+                            }
                           >
                             <Image
                               alt={certificate.title}
@@ -213,11 +207,20 @@ const Page = () => {
               </Card>
             </Grid>
           </Grid>
+          {renderForAlert()}
         </Container>
       </Box>
-      <ViewerPdf open={openPdf} handleClose={handleClosePdf} document={"https://pdfobject.com/pdf/sample.pdf"}/>
-      <ViewImagesDialog open={openCertificate} handleClose={handleCloseCertificate}/>
-      <ConfirmDialog open={ confirm} handleClose={ handleCloseConfirm} message="Are you sure you want to delete this file ?"/>
+      <ViewerPdf
+        open={openPdf}
+        handleClose={handleClosePdf}
+        document={"https://pdfobject.com/pdf/sample.pdf"}
+      />
+      <ViewImagesDialog open={openCertificate} handleClose={handleCloseCertificate} />
+      <ConfirmDialog
+        open={confirm}
+        handleClose={handleCloseConfirm}
+        message="Are you sure you want to delete this file ?"
+      />
 
       <ExperienceDialog name={dialogName} open={open} handleClose={handleClose} />
       {/* <PdfViewerDialog open={dialogOpen} onClose={handleCloseDialog} pdfUrl={'https://drive.google.com/file/d/105_LItMhs7CqoIGRzY7W2x2c9P-LGUBS/view?usp=sharing'} /> */}

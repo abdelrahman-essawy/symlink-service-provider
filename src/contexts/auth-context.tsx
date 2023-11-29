@@ -196,9 +196,14 @@ export const AuthProvider = ({ children }: any) => {
   };
 
   const signOut = () => {
+    window.sessionStorage.removeItem("authenticated");
+    window.sessionStorage.removeItem("token");
+    window.sessionStorage.removeItem("user");
+    delete axiosClient.defaults.headers.common["Authorization"];
+
     dispatch({
       type: HANDLERS.SIGN_OUT,
-      payload: null
+      payload: null,
     });
   };
   const ToggleReceiveOrders = () => {
