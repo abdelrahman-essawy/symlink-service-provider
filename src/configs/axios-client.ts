@@ -3,6 +3,7 @@ import axios, { AxiosResponse, InternalAxiosRequestConfig } from "axios";
 
 const axiosClient = axios.create({
   baseURL: process.env.API_URL, // API SERVER URL,
+  withCredentials:false,
 });
 
 axiosClient.defaults.headers.common = {
