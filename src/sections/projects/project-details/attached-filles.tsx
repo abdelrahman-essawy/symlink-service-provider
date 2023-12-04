@@ -101,12 +101,12 @@ function AttachedFilles() {
     onRenderActions: (college: any) => (
       <Box sx={{ display: "flex", gap: 0, alignItems: "baseline" }}>
         <Tooltip arrow placement="top" title="Show details">
-          <IconButton onClick={() => handleViewCollege(college)}>
+          <IconButton onClick={() => console.log(college)}>
             <EyeIcon />
           </IconButton>
         </Tooltip>
         <Tooltip arrow placement="top" title="Delete">
-          <IconButton onClick={() => handleEditCollege(college)}>
+          <IconButton onClick={() => console.log(college)}>
             <TrashIcon />
           </IconButton>
         </Tooltip>
