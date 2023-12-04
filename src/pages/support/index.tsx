@@ -50,18 +50,6 @@ const Page = () => {
       <Head>
         <title>{title} | Symlink</title>
       </Head>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          py: 8,
-          bgcolor: "primary.lightest",
-          borderTopLeftRadius: i18n.language == 'ar' ? 25 : 0,
-          borderBottomLeftRadius: i18n.language == 'ar' ? 25 : 25,
-          borderTopRightRadius: i18n.language == 'ar' ? 0 : 25,
-          borderBottomRightRadius: i18n.language == 'ar' ? 0 : 25,
-        }}
-      >
         <Container maxWidth="xl">
           <Box
             sx={{
@@ -75,7 +63,7 @@ const Page = () => {
             <Button
               size="large"
               color="warning"
-              sx={{ mt: 3, borderRadius: "50px", px: 10 }}
+              sx={{  borderRadius: "50px", px: 10 }}
               type="submit"
               variant="contained"
               onClick={handleOpen}
@@ -191,7 +179,6 @@ const Page = () => {
             </Grid>
           </Card>
         </Container>
-      </Box>
       <SupportModal open={open} handleClose={handleClose} />
     </>
   );
