@@ -150,9 +150,12 @@ const Page = () => {
         router.push("/projects")
       }
     } catch (err:any) {
-      if (err?.response?.status == 400) {
-        if (err?.response?.data?.message) {
+      if (err?.response?.status == 400 ||err?.response?.status == 422) {
+        if (err?.response?.data?.message?.message && typeof err?.response?.data?.message?.message== "string") {
           showAlert(err?.response?.data?.message, "error");
+        }
+        if (err?.response?.data?.message?.message&& typeof err?.response?.data?.message?.message== "object") {
+          showAlert(err?.response?.data?.message?.message[0], "error");
         }
       } else if (err.response.status == 400)
         if (Object.keys(err?.response?.data?.errors)?.length > 0) {
