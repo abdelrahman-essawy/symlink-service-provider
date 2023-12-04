@@ -21,6 +21,7 @@ import { Theme } from "@mui/material";
 import LanguageToggle from "@/components/LanguageToggle";
 import { useTranslation } from "react-i18next";
 import LocalizationSwitcher from "@/components/LocalizationSwitcher";
+import { useAuth } from "@/hooks/use-auth";
 
 const SIDE_NAV_WIDTH = 280;
 const TOP_NAV_HEIGHT = 64;
@@ -30,6 +31,7 @@ export const TopNav = (props: { onNavOpen: any }) => {
   const lgUp = useMediaQuery((theme: Theme) => theme.breakpoints.up("lg"));
   const accountPopover = usePopover();
   const { i18n } = useTranslation();
+  const auth = useAuth();
   return (
     <>
       <Box
@@ -103,7 +105,7 @@ export const TopNav = (props: { onNavOpen: any }) => {
                 height: 40,
                 width: 40,
               }}
-              src="/assets/avatars/avatar-anika-visser.png"
+              src={auth?.user?.avatar}
             />
           </Stack>
         </Stack>

@@ -3,7 +3,7 @@ import axios, { AxiosResponse, InternalAxiosRequestConfig } from "axios";
 
 const axiosClient = axios.create({
   baseURL: process.env.API_URL, // API SERVER URL,
-  withCredentials:false,
+  withCredentials:false,  
 });
 
 axiosClient.defaults.headers.common = {
@@ -12,6 +12,7 @@ axiosClient.defaults.headers.common = {
   "Access-Control-Allow-Origin": "*",
   "Accept": "application/json",
   "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+
 };
 
 // axiosClient.interceptors.request.use(

@@ -9,6 +9,8 @@ type UserType = {
   username: string,
   name: string,
   avatar: string,
+  phone: any;
+  email: string;
   role: "CLIENT" | "PROVIDER" | "ADMIN"
 };
 
@@ -17,7 +19,8 @@ type ActionType = { type: string, payload: any }
 const HANDLERS = {
   INITIALIZE: 'INITIALIZE',
   SIGN_IN: 'SIGN_IN',
-  SIGN_OUT: 'SIGN_OUT'
+  SIGN_OUT: 'SIGN_OUT',
+  UPLOAD_AVATAR: 'UPLOAD_AVATAR'
 };
 
 type initialValue = {
@@ -26,7 +29,8 @@ type initialValue = {
   user: any,
   signIn: (username: string, password: string) => Promise<void>,
   signUp: (avatarFile: any, email :  string,  password:  string , role:  string) => Promise<void>,
-  signOut: () => Promise<void>,
+  signOut: () => void,
+  updateProfile: (formData:FormData) => Promise<any>,
   ToggleReceiveOrders:()=>void,
 };
 
@@ -56,6 +60,15 @@ const handlers = {
       )
     };
   },
+  [HANDLERS.UPLOAD_AVATAR]: (state: any, action: { payload: any }) => {
+    const user = action.payload;
+
+    return {
+      ...state,
+      isAuthenticated: true,
+      user,
+    };
+  },
   [HANDLERS.SIGN_IN]: (state: any, action: { payload: any; }) => {
     const user = action.payload;
 
@@ -71,7 +84,7 @@ const handlers = {
       isAuthenticated: false,
       user: null
     };
-  }
+  },
 };
 
 const reducer = (state: any, action: ActionType) => (
@@ -109,8 +122,8 @@ export const AuthProvider = ({ children }: any) => {
       const user = json == undefined ? undefined : JSON.parse(json);
       const token = window.sessionStorage.getItem("token");
       axiosClient.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      axiosClient.defaults.headers.common['Accept-Language'] = sessionStorage.getItem("language") == "ar" ? "ar" : "en"
       setAuthUser(user);
-
       dispatch({
         type: HANDLERS.INITIALIZE,
         payload: user,
@@ -133,16 +146,9 @@ export const AuthProvider = ({ children }: any) => {
   );
 
   const signIn = async (username: string, password: string) => {
-    const user: UserType = {
-      id: '',
-      avatar: '',
-      name: '',
-      username: '',
-      role: 'CLIENT'
-    };
     delete axiosClient.defaults.headers.common["Authorization"];
     const res = await axiosClient.post('/auth/signin', { username, password },{'headers':
-    {
+    { 
      "Content-Type": 'application/json'
    }});
 
@@ -152,20 +158,21 @@ export const AuthProvider = ({ children }: any) => {
       window.sessionStorage.setItem('token', user.access_token);
       window.sessionStorage.setItem("user", JSON.stringify(user));
       axiosClient.defaults.headers.common['Authorization'] = `Bearer ${user.access_token}`;
+      axiosClient.defaults.headers.common['Accept-Language'] = sessionStorage.getItem("language") == "ar" ? "ar" : "en";
       user.id = user.id;
       user.avatar = user.avatar;
       user.name = user.name;
       user.username = user.username;
       user.role = user.role;
       setAuthUser(user);
+      dispatch({
+        type: HANDLERS.SIGN_IN,
+        payload: user
+      });
     }
     else {
       throw new Error('Please check your username and password');
     }
-    dispatch({
-      type: HANDLERS.SIGN_IN,
-      payload: user
-    });
   };
 
   const signUp = async (avatarFile: any, email :  string,  password:  string, role:  string) => {
@@ -200,12 +207,33 @@ export const AuthProvider = ({ children }: any) => {
     window.sessionStorage.removeItem("token");
     window.sessionStorage.removeItem("user");
     delete axiosClient.defaults.headers.common["Authorization"];
-
-    dispatch({
-      type: HANDLERS.SIGN_OUT,
-      payload: null,
-    });
+    delete axiosClient.defaults.headers.common['Accept-Language'];
+    // dispatch({
+    //   type: HANDLERS.SIGN_OUT,
+    //   payload: null,
+    // });
   };
+
+  const updateProfile = async (formData:FormData): Promise<any>=>{
+    try{  
+      const res = await axiosClient.put("/profile", formData, {headers: { 'Content-Type': 'application/multipart'}});
+      if (authUser){
+        authUser.avatar = res?.data?.data.avatar;
+        authUser.name = res?.data?.data.name;
+        authUser.email = res?.data?.data.email;
+        authUser.phone = res?.data?.data.phone;
+        window.sessionStorage.setItem("user", JSON.stringify(authUser));
+        setAuthUser(authUser);
+        dispatch({
+          type: HANDLERS.UPLOAD_AVATAR,
+          payload: authUser,
+        });
+      }
+      return res;
+    }catch(err: any){
+      return err;
+    }
+  }
   const ToggleReceiveOrders = () => {
     const receiveOrders = !(state?.user?.receiveOrders);
     dispatch({
@@ -221,6 +249,7 @@ export const AuthProvider = ({ children }: any) => {
         signIn,
         signUp,
         signOut,
+        updateProfile,
         ToggleReceiveOrders
       }}
     >

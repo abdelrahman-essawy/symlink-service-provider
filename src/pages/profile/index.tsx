@@ -3,30 +3,25 @@ import {
   Box,
   Card,
   Container,
-  createTheme,
   Select,
   TextField,
   FormLabel,
   MenuItem,
-  SelectChangeEvent,
-  Stack,
-  Tab,
   Grid,
-  CardHeader,
-  Tabs,
+  IconButton,
   CardContent,
   Typography,
   Button,
-  OutlinedInput,
+  InputAdornment,
   Avatar,
   Badge,
-  FormControl,
+  InputLabel,
 } from "@mui/material";
 import React, { useState, useRef } from "react";
 import { DashboardLayout } from "../../layouts/dashboard/layout";
 import { useTranslation } from "react-i18next";
 import CircularProgress from "@mui/material/CircularProgress";
-
+import ClearIcon from "@mui/icons-material/Clear";
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import axiosClient from "@/configs/axios-client";
 import useAlert from "@/hooks/use-alert";
@@ -55,7 +50,7 @@ export interface IUserProfile {
   city: ICity;
 }
 
-const toBeSent = ["name", "email", "linkedin", "city_id",'phone'];
+const toBeSent = ["name", "email", "linkedin", "city_id", "phone"];
 interface ICountry {
   name: string;
   id: string;
@@ -79,11 +74,14 @@ const Page = () => {
     undefined
   );
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingData, setIsLoadingData] = useState(true);
 
   const fetchUserProfile = async () => {
     try {
-      const res = await axiosClient.get("/profile");
-      setProfileFormRecord(res.data.data);
+    setIsLoadingData(true);
+    const res = await axiosClient.get("/profile");
+    setProfileFormRecord(res.data.data);
+    setIsLoadingData(false);
     } catch (error: any) {
       showAlert(error.response.data.message);
     }
@@ -91,12 +89,14 @@ const Page = () => {
 
   //when change Country id
   React.useEffect(() => {
-    if(profileFormRecord?.city?.country_id){
-      fetchCities();
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [profileFormRecord?.city?.country_id])
-  
+    fetchCities();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [profileFormRecord?.city?.country_id]);
+
+  React.useEffect(() => {
+    console.log(profileFormRecord);
+  }, [profileFormRecord]);
+
   const fetchCountries = async () => {
     try {
       const res = await axiosClient.get("/addresses/country?page=1&limit=10");
@@ -108,27 +108,25 @@ const Page = () => {
 
   const fetchCities = async () => {
     try {
-      const res = await axiosClient.get(`/addresses/country/${profileFormRecord?.city?.country_id}`);
+      const res = await axiosClient.get(
+        `/addresses/country/${profileFormRecord?.city?.country_id}`
+      );
       setCities(res.data.data);
     } catch (error: any) {
       showAlert(error.response.data.message);
     }
   };
   React.useEffect(() => {
-    fetchUserProfile();
-    fetchCountries();
-    if(profileFormRecord?.city_id){
-      fetchCities();
-    }
+    (async () => {
+      await fetchCountries();
+      await fetchCities();
+      await fetchUserProfile();
+    })();
   }, []);
-
-  React.useEffect(() => {
-    console.log(profileFormRecord);
-  }, [profileFormRecord]);
 
   const [selectedFile, setSelectedFile] = useState<string | Blob>("");
   const [formData, setFormData] = useState<FormData | any>(new FormData());
-  const [previewUrl, setPreviewUrl] = useState('');
+  const [previewUrl, setPreviewUrl] = useState("");
 
   // handle file selection
   const handleFileSelect = (event: any) => {
@@ -165,8 +163,8 @@ const Page = () => {
         }
       });
 
-    await axiosClient
-      .put("/profile",formData,{headers: {"Content-Type": "multipart/form-data"}})
+    await auth
+      ?.updateProfile(formData)
       .then(() => {
         fetchUserProfile();
         showAlert("Your Profile has been edited successfully", "success");
@@ -195,7 +193,8 @@ const Page = () => {
           borderBottomRightRadius: i18n.language == "ar" ? 0 : 25,
         }}
       >
-        <form onSubmit={handleSubmit}>
+{  !isLoadingData&&
+      <form onSubmit={handleSubmit}>
           <Container maxWidth="xl">
             <Typography variant="h3" sx={{ mb: 2 }} fontWeight={"bold"}>
               {t("Profile")}
@@ -211,7 +210,7 @@ const Page = () => {
                           anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
                           badgeContent={
                             <Avatar
-                              alt="Travis Howard"
+                              alt={auth?.user?.name}
                               src="/static/images/avatar/2.jpg"
                               sx={{ boxShadow: "-6px 7px 8px rgba(0, 0, 0, 0.08)" }}
                             >
@@ -249,7 +248,7 @@ const Page = () => {
                       <Grid item xs={12} md={6}>
                         <FormLabel sx={{ mx: 2 }}>{t("Location")}</FormLabel>
                         <Select
-                          fullWidth={true}
+                          fullWidth
                           sx={{
                             mt: 1,
                             borderRadius: "50px",
@@ -266,9 +265,30 @@ const Page = () => {
                             },
                           }}
                           variant="outlined"
-                          name="city"
+                          name="country_id"
                           value={profileFormRecord?.city?.country_id}
-                          onChange={(e:any)=>{handleChange({target:{name:'city',value:{country_id:e.target.value} } })}}
+                          defaultValue={profileFormRecord?.city?.country_id}
+                          onChange={(e: any) => {
+                            handleChange({
+                              target: { name: "city", value: { country_id: e.target.value } },
+                            });
+                          }}
+                          endAdornment={
+                            profileFormRecord?.city?.country_id && (
+                              <InputAdornment position="end">
+                                <IconButton
+                                  onClick={() =>
+                                    handleChange({
+                                      target: { name: "city", value: { country_id: null } },
+                                    })
+                                  }
+                                  size="small"
+                                >
+                                  <ClearIcon />
+                                </IconButton>
+                              </InputAdornment>
+                            )
+                          }
                         >
                           {countries &&
                             countries?.map((item: ICountry) => (
@@ -285,16 +305,25 @@ const Page = () => {
                           sx={{ "& .MuiOutlinedInput-root": { borderRadius: "50px" }, mt: 1 }}
                           placeholder={`${t("Type here ..")}`}
                           variant="outlined"
-                          name="phone"
-                          value={profileFormRecord?.phone}
-                          onChange={handleChange}
+                          name="text"
+                          value={profileFormRecord?.phone || ""}
+                          onChange={(e: any) =>
+                            handleChange({
+                              target: {
+                                value: parseFloat(e?.target?.value),
+                                name: "phone",
+                              },
+                            })
+                          }
                         />
                       </Grid>
                       <Grid item xs={12} md={6}>
-                        <FormLabel sx={{ mx: 2 }}>{t("City")}</FormLabel>
+                        <InputLabel id={"city_id"} sx={{ mx: 2 }}>
+                          {t("City")}
+                        </InputLabel>
                         <Select
-                          labelId="demo-multiple-name-label"
-                          id="demo-multiple-name"
+                          labelId="city_id"
+                          id="city_id"
                           fullWidth={true}
                           sx={{
                             mt: 1,
@@ -314,12 +343,28 @@ const Page = () => {
                           variant="outlined"
                           name="city_id"
                           value={profileFormRecord?.city_id}
+                          defaultValue={profileFormRecord?.city_id}
+                          disabled={!profileFormRecord?.city?.country_id}
                           onChange={handleChange}
                           // disabled={!profileFormRecord?.city}
+                          endAdornment={
+                            profileFormRecord?.city_id && (
+                              <InputAdornment position="end">
+                                <IconButton
+                                  onClick={() =>
+                                    handleChange({ target: { name: "city_id", value: null } })
+                                  }
+                                  size="small"
+                                >
+                                  <ClearIcon />
+                                </IconButton>
+                              </InputAdornment>
+                            )
+                          }
                         >
                           {cities &&
-                            cities?.map((item: ICity) => (
-                              <MenuItem key={item?.id} value={item?.id}>
+                            cities?.map((item: ICity, index: number) => (
+                              <MenuItem key={item?.id || index} value={item?.id || item?.name}>
                                 {item?.name}
                               </MenuItem>
                             ))}
@@ -356,7 +401,6 @@ const Page = () => {
                           sx={{ borderRadius: 8, p: 1.7, width: "100%" }}
                           type="submit"
                         >
-                          {}
                           {isLoading ? <CircularProgress thickness={1.5} /> : t("Update")}
                         </Button>
                       </Grid>
@@ -368,6 +412,7 @@ const Page = () => {
             {renderForAlert()}
           </Container>
         </form>
+        }
       </Box>
     </>
   );

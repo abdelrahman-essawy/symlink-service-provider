@@ -66,10 +66,19 @@ const Page = () => {
     usePageUtilities();
 
   useEffect(() => {
-    if(auth?.user?.role === "PROVIDER") {
-    projectContext?.fetchProjects(controller.page, controller.rowsPerPage, controller.SearchString);
-    }else if(auth?.user?.role === "CLIENT"){
-      projectContext?.fetchProjects(controller.page, controller.rowsPerPage, controller.SearchString,auth?.user?.id);
+    if (auth?.user?.role === "PROVIDER") {
+      projectContext?.fetchProjects(
+        controller.page,
+        controller.rowsPerPage,
+        controller.SearchString
+      );
+    } else if (auth?.user?.role === "CLIENT") {
+      projectContext?.fetchProjects(
+        controller.page,
+        controller.rowsPerPage,
+        controller.SearchString,
+        auth?.user?.id
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [controller]);
@@ -188,16 +197,18 @@ const Page = () => {
             <Typography variant="h3" sx={{ mb: 2 }} fontWeight={"bold"}>
               {dictionary(title as TranslatedWord)}
             </Typography>
-            <RoleBasedRender componentId="button-request-a-project">
-              <Button
-                onClick={() => router.push("/bid/create-rfp")}
-                variant="contained"
-                color="warning"
-                sx={{ borderRadius: 8, mb: 2 }}
-              >
-                {dictionary("Create RFP")}
-              </Button>
-            </RoleBasedRender>
+            {auth?.user?.role === "CLIENT" && (
+              <RoleBasedRender componentId="button-request-a-project">
+                <Button
+                  onClick={() => router.push("/bid/create-rfp")}
+                  variant="contained"
+                  color="warning"
+                  sx={{ borderRadius: 8, mb: 2 }}
+                >
+                  {dictionary("Create RFP")}
+                </Button>
+              </RoleBasedRender>
+            )}
           </Grid>
           <Grid container spacing={2} justifyContent={"space-between"}>
             <Grid item xs={12}>

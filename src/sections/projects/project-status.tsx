@@ -10,11 +10,10 @@ export enum CardStatus {
 }
 
 type props = {
-  status: string;
+  status: string|undefined;
 };
 const ProjectStatusBadge = (props: props): JSX.Element => {
   const { status= "" } = props;
-  console.log(status);
   const statusColor = {
     Active: "#0AA630",
     In_progress: "rgb(50, 59, 174)",
@@ -65,9 +64,9 @@ const ProjectStatusBadge = (props: props): JSX.Element => {
         fontSize: 12,
         color: chooseColor(status),
         width: "fit-content",
-        px: 1.5,
+        px: 2.5,
         py: 0.5,
-        borderRadius: 1,
+        borderRadius: '12px',
       }}
       overflow={"hidden"}
     >

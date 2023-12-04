@@ -29,20 +29,19 @@ export const AuthLayout = (props: { children: any }) => {
         <Grid
           xs={12}
           lg={6}
-          sx={{
+          sx={{       
             bgcolor: "primary.main",
-
+            display:{ lg: "flex", xs: "none" },
             alignItems: "center",
             position: "relative",
-            color: "white",
-            display: "flex",
+            color: "white", 
             justifyContent: "center",
             "& img": {
               maxWidth: "100%",
             },
           }}
         >
-          <Box display={{ md: "flex", xs: "none" }}>
+          <Box>
             <Grid container spacing={2} justifyContent="center" alignItems="center">
               <Grid xs={12}></Grid>
               <img alt="" width="300px" src={Logo.src} />

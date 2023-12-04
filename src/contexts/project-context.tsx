@@ -1,13 +1,13 @@
 import { createContext, Dispatch, useState, useEffect } from "react";
 import axiosClient from "../configs/axios-client";
 import { IProject } from "@/@types/project";
-import { get_Projects,} from "../environment/apis"
+import { get_Projects,get_Project_id} from "../environment/apis"
 export const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
 //TODO: move this to types folder
 
 const ProjectContextProvider = ({ children }: any) => {
   const [projects, setProjects] = useState<IProject[]>([]);
-  const [Selectedproject, setSelectedProject] = useState<IProject>();
+  const [Selectedproject, setSelectedProject] = useState<IProject>({} as IProject);
   const [count, setCount] = useState<number>(3);
   const [pageSize, setPageSize] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
@@ -20,6 +20,15 @@ const ProjectContextProvider = ({ children }: any) => {
         setCount(res.data.meta.total);
         setPageSize(res.data.meta.limit);
         setTotalPages(res.data.meta.totalPages);
+      })
+      .catch((error) => {});
+  };
+
+  const getProject =  (id: string) => {
+    axiosClient
+      .get(get_Project_id(id))
+      .then((res) => {
+        setSelectedProject(res.data.data as IProject);
       })
       .catch((error) => {});
   };
@@ -55,6 +64,7 @@ const ProjectContextProvider = ({ children }: any) => {
         pageSize,
         totalPages,
         fetchProjects,
+        getProject,
         AddProject,
         EditProject,
         DeleteProject,
@@ -72,8 +82,9 @@ export type ProjectContextType = {
   count: number;
   pageSize: number;
   totalPages: number;
-  Selectedproject: any;
-  fetchProjects: (PageNumber: number , PageSize: number ,SearchString?:string,userID?:string) => void;
+  Selectedproject: IProject;
+  fetchProjects: (page: number, rowsPerPage: number, filter?: string,userID?:string) => void;
+  getProject: ( id: string) => void;
   AddProject: (project: IProject) => void;
   EditProject: (project: IProject) => void;
   DeleteProject: (project_id: string) => void;
