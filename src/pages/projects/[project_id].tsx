@@ -20,6 +20,14 @@ import ConfirmDialog from "@/components/_used-symline/dialogs/confirm-dialog";
 import { useProject } from "@/hooks/use-project";
 import ProjectContextProvider from "@/contexts/project-context";
 import ProjectStatusBadge from "@/sections/projects/project-status";
+import { IProject, RequestForProposal } from "@/@types/project";
+import WebAnswers from "@/sections/projects/answers/web-answers";
+import NetworkAnswers from "@/sections/projects/answers/network-answers";
+import MobileAnswers from "@/sections/projects/answers/mobile-answers";
+import SourceCodeAnswers from "@/sections/projects/answers/sourceCode-answers";
+import ThreatHuntingAnswers from "@/sections/projects/answers/threatHunting-answers";
+import ArchitectureConfigurationReviewAnswer from "@/sections/projects/answers/architectureConfigurationReview-answer.tsx";
+import AttachedFilles from "@/sections/projects/project-details/attached-filles";
 const Page = () => {
   const title = "Projects";
   const { i18n } = useTranslation();
@@ -27,6 +35,7 @@ const Page = () => {
   const { project_id } = router.query;
   const projectContext = useProject();
   const [value, setValue] = useState(0);
+  const [project, setProject] = useState<IProject>();
   const [open, setOpen] = useState(false);
   const [confirm, setConfirm] = useState(false);
   const handleCloseConfirm = () => setConfirm(false);
@@ -38,16 +47,20 @@ const Page = () => {
     setOpen(true);
   };
 
-  const fetchEmployee = async () => {
+  const fetchProject = async () => {
     if (project_id && typeof project_id === "string") {
-      await projectContext?.getProject(project_id);
+      try {
+        await projectContext?.getProject(project_id);
+      } catch (error) {
+        router.push("/projects");
+      }
     }
   };
 
   React.useEffect(() => {
-    fetchEmployee();
-  }, [])
-  
+    fetchProject();
+  }, [project_id]);
+
   const handletabs = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -69,12 +82,20 @@ const Page = () => {
         }}
       >
         <Container maxWidth="xl">
-          <Grid display={"flex"} alignItems={"center"} justifyContent={"start"} gap={5} sx={{ mb: 3 }}>
-            <Typography variant="h3"  fontWeight={"bold"}>
-              {dictionary("Project name")}
+          <Grid
+            display={"flex"}
+            alignItems={"center"}
+            justifyContent={"start"}
+            gap={5}
+            sx={{ mb: 3 }}
+          >
+            <Typography variant="h3" fontWeight={"bold"}>
+              {projectContext?.Selectedproject?.project_name}
             </Typography>
             <RoleBasedRender componentId="tag-project-status">
-              <ProjectStatusBadge status={projectContext?.Selectedproject?.request_for_proposal_status} />
+              <ProjectStatusBadge
+                status={projectContext?.Selectedproject?.request_for_proposal_status}
+              />
             </RoleBasedRender>
           </Grid>
 
@@ -124,25 +145,6 @@ const Page = () => {
                 />
               </RoleBasedRender>
             </Grid>
-            <RoleBasedRender componentId="button-request-to-review">
-              <Grid item xs={12} md={3} sx={{ display: "flex", justifyContent: "end" }}>
-                <Button variant="contained" color="warning" sx={{ borderRadius: 8 }}>
-                  {"Submit to review"}
-                </Button>
-              </Grid>
-            </RoleBasedRender>
-            {value === 1 && (
-              <RoleBasedRender componentId="button-upload-file">
-                <Button
-                  variant="contained"
-                  color="warning"
-                  sx={{ borderRadius: 8, alignSelf: "center" }}
-                >
-                  {dictionary("Upload file")}
-                </Button>
-              </RoleBasedRender>
-            )}
-
             <Grid item xs={12}>
               <Card elevation={0}>
                 <CustomTabPanel value={value} index={0}>
@@ -159,9 +161,10 @@ const Page = () => {
                       What is preferred testing time ?
                     </Typography>
                     <Typography variant="h6" fontWeight="light" sx={{ mb: 4 }}>
-                      During the working hours
+                      {projectContext?.Selectedproject?.time_type_meta_data?.name}
                     </Typography>
-                    <Typography variant="h6" fontWeight="bold" sx={{ mb: 1 }}>
+
+                    {/* <Typography variant="h6" fontWeight="bold" sx={{ mb: 1 }}>
                       In case of emergency , what is the contact details of the person the assessor
                       should have a contact with :
                     </Typography>
@@ -187,8 +190,8 @@ const Page = () => {
                     </Grid>
                     <Typography variant="body1" fontWeight="bold" color="primary" sx={{ mb: 1 }}>
                       First person:
-                    </Typography>
-                    <Grid container spacing={0} justifyContent={"space-between"}>
+                    </Typography> */}
+                    {/* <Grid container spacing={0} justifyContent={"space-between"}>
                       <Grid item xs={12} md={4}>
                         <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
                           Name: Jone Doe
@@ -204,77 +207,32 @@ const Page = () => {
                           Mobile Number: 9876543210
                         </Typography>
                       </Grid>
-                    </Grid>
-                    <Typography
-                      variant="h6"
-                      fontWeight="bold"
-                      color="primary"
-                      sx={{ p: 1, mb: 3, borderRadius: 1, bgcolor: "primary.lightest" }}
-                    >
-                      Web
-                    </Typography>
-                    <Typography variant="h6" fontWeight="bold" sx={{ mb: 1 }}>
-                      What is preferred testing time ?
-                    </Typography>
-                    <Typography variant="h6" fontWeight="light" sx={{ mb: 4 }}>
-                      Vulnerability assessment
-                    </Typography>
-                    <Typography variant="h6" fontWeight="bold" sx={{ mb: 1 }}>
-                      ow many web applications you want to assess ?
-                    </Typography>
-                    <Grid container spacing={0} justifyContent={"space-start"}>
-                      <Grid item xs={12} md={4}>
-                        <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
-                          Internal applications: 7
-                        </Typography>
-                      </Grid>
-                      <Grid item xs={12} md={4}>
-                        <Typography variant="h6" fontWeight="light" sx={{ mb: 4 }}>
-                          External applications: 4
-                        </Typography>
-                      </Grid>
-                      <Typography variant="h6" fontWeight="bold" sx={{ mb: 1 }}>
-                        List the scoped applications: (i.e.domain.com)
-                      </Typography>
-                      <Typography variant="h6" fontWeight="light" sx={{ mb: 4 }}>
-                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo
-                        ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis
-                        parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec,
-                        pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec
-                        pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo,
-                        rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede
-                        mollis pretium. Integer tincidunt.
-                      </Typography>
-                      <Typography variant="h6" fontWeight="bold" sx={{ mb: 1 }}>
-                        4 Is verification required to assess whether the reported Vulnerability have
-                        been fixed ?
-                      </Typography>
-                    </Grid>
+                    </Grid> */}
+
+                    {projectContext?.Selectedproject?.request_for_proposal &&
+                      projectContext?.Selectedproject?.request_for_proposal?.map(
+                        (item: RequestForProposal) =>
+                          item?.category?.name === "Web" ? (
+                            <WebAnswers key={item?.id} project={item} />
+                          ) : item?.category?.name === "Architecture composition review" ? (
+                            <ArchitectureConfigurationReviewAnswer key={item?.id} project={item} />
+                          ) : item?.category?.name === "the network" ? (
+                            <NetworkAnswers project={item} key={item?.id} />
+                          ) : item?.category?.name === "the phone" ? (
+                            <MobileAnswers project={item} key={item?.id} />
+                          ) : item?.category?.name === "Source code" ? (
+                            <SourceCodeAnswers project={item} key={item?.id} />
+                          ) : item?.category?.name === "Threat hunting" ? (
+                            <ThreatHuntingAnswers project={item} key={item?.id} />
+                          ) : (
+                            <></>
+                          )
+                      )}
                   </CardContent>
                 </CustomTabPanel>
 
                 <CustomTabPanel value={value} index={1}>
-                  <SharedTable
-                    endpoint="http://localhost:3000/attached-files.json"
-                    showActions={true}
-                    renderRowActions={(row: any) => {
-                      return (
-                        <Box sx={{ display: "flex", flexDirection: "row", gap: 1 }}>
-                          <VisibilityIcon
-                            color="primary"
-                            sx={{ cursor: "pointer", "&:hover": { color: "primary.dark" } }}
-                            onClick={handleOpen}
-                          />
-                          <DeleteIcon
-                            color="primary"
-                            sx={{ cursor: "pointer", "&:hover": { color: "primary.dark" } }}
-                            onClick={handleOpenConfirm}
-                          />
-                        </Box>
-                      );
-                    }}
-                    fakeData={attachedFiles}
-                  />
+                      <AttachedFilles />
                 </CustomTabPanel>
 
                 <CustomTabPanel value={value} index={2} padding={"0"}>

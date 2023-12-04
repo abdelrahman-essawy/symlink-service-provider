@@ -58,7 +58,7 @@ export const DataTable = (props: any) => {
     onRowsPerPageChange = () => {},
     onSelectAll,
     onSelectOne,
-    onRowClick = () => {},
+    onRowClick,
     name,
     page = 1,
     handleSuspend = () => {},

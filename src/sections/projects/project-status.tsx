@@ -10,7 +10,7 @@ export enum CardStatus {
 }
 
 type props = {
-  status: string;
+  status: string|undefined;
 };
 const ProjectStatusBadge = (props: props): JSX.Element => {
   const { status= "" } = props;

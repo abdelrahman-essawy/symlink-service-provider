@@ -7,7 +7,7 @@ export const ProjectContext = createContext<ProjectContextType | undefined>(unde
 
 const ProjectContextProvider = ({ children }: any) => {
   const [projects, setProjects] = useState<IProject[]>([]);
-  const [Selectedproject, setSelectedProject] = useState<IProject>();
+  const [Selectedproject, setSelectedProject] = useState<IProject>({} as IProject);
   const [count, setCount] = useState<number>(3);
   const [pageSize, setPageSize] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
@@ -28,7 +28,7 @@ const ProjectContextProvider = ({ children }: any) => {
     axiosClient
       .get(get_Project_id(id))
       .then((res) => {
-        setSelectedProject(res.data.data);
+        setSelectedProject(res.data.data as IProject);
       })
       .catch((error) => {});
   };
@@ -82,8 +82,8 @@ export type ProjectContextType = {
   count: number;
   pageSize: number;
   totalPages: number;
-  Selectedproject: any;
-  fetchProjects: (page: number, rowsPerPage: number, filter?: string) => void;
+  Selectedproject: IProject;
+  fetchProjects: (page: number, rowsPerPage: number, filter?: string,userID?:string) => void;
   getProject: ( id: string) => void;
   AddProject: (project: IProject) => void;
   EditProject: (project: IProject) => void;
