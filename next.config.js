@@ -13,6 +13,7 @@ const nextConfig = {
     defaultLocale: "en",
     localeDetection: false,
   },
+  trailingSlash: true,
   webpack: (config) => {
     config.module.rules.push({
       test: /\.node/,
