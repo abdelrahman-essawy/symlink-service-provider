@@ -39,18 +39,6 @@ const Page = () => {
       <Head>
         <title>{title} | Symlink</title>
       </Head>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-        py: 8,
-        bgcolor: "primary.lightest",
-        borderTopLeftRadius: i18n.language == 'ar' ? 25 : 0,
-        borderBottomLeftRadius: i18n.language == 'ar' ? 25 : 25,
-        borderTopRightRadius: i18n.language == 'ar' ? 0 : 25,
-        borderBottomRightRadius: i18n.language == 'ar' ? 0 : 25,
-        }}
-      >
         <Typography variant="h4">{t(title)}</Typography>
         <Container maxWidth="xl">
           <Grid container rowSpacing={2} columnSpacing={2}>
@@ -171,7 +159,6 @@ const Page = () => {
             </Grid>
           </Card>
         </Container>
-      </Box>
     </>
   );
 };

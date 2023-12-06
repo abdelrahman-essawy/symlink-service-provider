@@ -130,18 +130,25 @@ export async function downloadFileUsingFetch(url: string, fileName: string) {
   URL.revokeObjectURL(blobURL);
 }
 
-export const showErrorMessage = (err:any)=>{
-  if (err?.response?.status == 400) {
-    if (err?.response?.data?.Message || err?.response?.data?.message) {
-      return err?.response?.data?.Message || err?.response?.data?.message;
+export const showErrorMessage:(err:any)=>string =(err:any) =>{
+  if (err?.response?.status == 400 || err?.response?.status == 422) {
+    if ((err?.response?.data?.message?.message ||  err?.response?.data?.message?.Message) && typeof err?.response?.data?.message?.message== "string") {
+      return(err?.response?.data?.message?.message|| err?.response?.data?.message?.Message);
     }
-  } else if (err?.response?.status == 500) {
-    if (err?.response?.data?.Message) {
-      return err?.response?.data?.Message;
+    else if (err?.response?.data?.message?.message && typeof err?.response?.data?.message?.message === 'object') {
+      return(err?.response?.data?.message?.message[0]);
     }
-  } else {
-    return "unknown error occurred";
-  }
+  } else if (err?.response?.status == 400)
+    if (Object.keys(err?.response?.data?.errors)?.length > 0) {
+      const errors = err?.response?.data?.errors;
+      const firstError = Object.keys(errors)[0];
+      return(`${firstError}: ${errors[firstError]}`);
+    } else if (err.response.status == 500) {
+      return(err?.response?.data?.message);
+    } else {
+      return "unknown error occurred";
+    }
+  
 }
 
 export const Captalize = (word: | any) => {

@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { withAuthGuard } from "../../hocs/with-auth-guard";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Stack, useMediaQuery } from "@mui/material";
+import { Stack, useMediaQuery, Box } from "@mui/material";
 
 const SIDE_NAV_WIDTH = 280;
 
@@ -42,11 +42,36 @@ export const DashboardLayout = withAuthGuard((props: { children: any }) => {
     <>
       <TopNav onNavOpen={() => setOpenNav(true)} />
       <SideNav onClose={() => setOpenNav(false)} open={openNav} />
-      <LayoutRoot style={{
-            paddingLeft: useMediaQuery("(min-width:1200px)") ? i18n.language === "en" ? SIDE_NAV_WIDTH : 0 : 0,
-            paddingRight: useMediaQuery("(min-width:1200px)") ? i18n.language === "en" ?  0: SIDE_NAV_WIDTH : 0,
-      }}>
-        <LayoutContainer>{children}</LayoutContainer>
+      <LayoutRoot
+        style={{
+          paddingLeft: useMediaQuery("(min-width:1200px)")
+            ? i18n.language === "en"
+              ? SIDE_NAV_WIDTH
+              : 0
+            : 0,
+          paddingRight: useMediaQuery("(min-width:1200px)")
+            ? i18n.language === "en"
+              ? 0
+              : SIDE_NAV_WIDTH
+            : 0,
+        }}
+      >
+        <LayoutContainer>
+          <Box
+            component="main"
+            sx={{
+              flexGrow: 1,
+              py: 5,
+              bgcolor: "primary.lightest",
+              borderTopLeftRadius: i18n.language == "ar" ? 25 : 0,
+              borderBottomLeftRadius: i18n.language == "ar" ? 25 : 25,
+              borderTopRightRadius: i18n.language == "ar" ? 0 : 25,
+              borderBottomRightRadius: i18n.language == "ar" ? 0 : 25,
+            }}
+          >
+            {children}
+          </Box>
+        </LayoutContainer>
       </LayoutRoot>
     </>
   );

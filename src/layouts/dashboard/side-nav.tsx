@@ -153,9 +153,6 @@ export const SideNav = (props: { open: any; onClose: any; }) => {
       </Box>
     </Scrollbar>
   );
-  useEffect(() => {
-    console.log(theme.direction)
-  },[theme.direction]);       
   if (lgUp) {
     return (
       <Drawer

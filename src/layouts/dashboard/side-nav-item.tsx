@@ -149,7 +149,7 @@ export const SideNavItem = (props: { active?: boolean; disabled: boolean; extern
                     }),
                     "&:hover": {
 
-
+                      backgroundColor: "primary.main",
 
                     },
                     ...(active && {

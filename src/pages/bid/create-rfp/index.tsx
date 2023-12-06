@@ -42,21 +42,26 @@ import { IAssessmentProject, IQuestion, RFP } from "@/@types/assessments";
 import CircularProgress from "@mui/material/CircularProgress";
 import useAlert from "@/hooks/useAlert";
 import { ICategory } from "@/@types/project";
+import { showErrorMessage } from "@/utils/helperFunctions";
 const Page = () => {
   const { i18n } = useTranslation();
   const title = "Create RFP";
   const [formRecord, setFormRecord] = useState<RFP>({
     project_name: "",
     time_type_id: "",
+    expiration_date: "",
+    firstFullName: "",
+    firstEmail: "",
+    firstMobile: "",
+    secondFullName: "",
+    secondEmail: "",
+    secondMobile: "",
     projects: [],
   });
   const { t } = useTranslation();
   const router = useRouter();
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [open, setOpen] = useState(false);
-  const [dialogName, setDialogName] = useState("");
-  const [value, setValue] = useState(0);
-  const [activeStep, setActiveStep] = React.useState(0);
   const [inputs, setInputs] = useState<ICategory[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { showAlert, renderForAlert } = useAlert();
@@ -150,18 +155,7 @@ const Page = () => {
         router.push("/projects")
       }
     } catch (err:any) {
-      if (err?.response?.status == 400) {
-        if (err?.response?.data?.message) {
-          showAlert(err?.response?.data?.message, "error");
-        }
-      } else if (err.response.status == 400)
-        if (Object.keys(err?.response?.data?.errors)?.length > 0) {
-          const errors = err?.response?.data?.errors;
-          const firstError = Object.keys(errors)[0];
-          showAlert(`${firstError}: ${errors[firstError]}`, "error");
-        } else if (err.response.status == 500) {
-          showAlert(err?.response?.data?.message, "error");
-        } else return err;
+      showAlert(showErrorMessage(err),'error');
     }
     setIsLoading(false);
   };
@@ -172,19 +166,6 @@ const Page = () => {
         <title>{title} | Symline</title>
       </Head>
       <form onSubmit={handelsubmit}>
-        <Box
-          component="main"
-          sx={{
-            flexGrow: 1,
-            py: 8,
-            bgcolor: "primary.lightest",
-            borderTopLeftRadius: i18n.language == "ar" ? 25 : 0,
-            borderBottomLeftRadius: i18n.language == "ar" ? 25 : 25,
-            borderTopRightRadius: i18n.language == "ar" ? 0 : 25,
-            borderBottomRightRadius: i18n.language == "ar" ? 0 : 25,
-            direction: i18n.language == "ar" ? "ltr" : "rtl",
-          }}
-        >
           <Container maxWidth="xl">
             <Typography variant="h3" sx={{ mb: 2 }} fontWeight={"bold"}>
               {dictionary(title as TranslatedWord)}
@@ -273,7 +254,6 @@ const Page = () => {
                       >
                         <ListItemButton
                           onClick={() => {
-                            console.log(item?.name_en || item?.name);
                             addInput(item?.name_en || item?.name, item.id);
                           }}
                           sx={{
@@ -305,6 +285,13 @@ const Page = () => {
 
               <GeneralQuestions
                 time_type_id={formRecord?.time_type_id}
+                expiration_date={formRecord?.expiration_date}
+                firstFullName={formRecord?.firstFullName}
+                firstEmail={formRecord?.firstEmail}
+                firstMobile={formRecord?.firstMobile}
+                secondFullName={formRecord?.secondFullName}
+                secondEmail={formRecord?.secondEmail}
+                secondMobile={formRecord?.secondMobile}
                 handleonchange={handleChange}
               />
 
@@ -343,7 +330,6 @@ const Page = () => {
               </Grid>
             </Grid>
           </Container>
-        </Box>
         {renderForAlert()}
       </form>
     </>

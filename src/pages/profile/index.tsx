@@ -26,6 +26,13 @@ import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import axiosClient from "@/configs/axios-client";
 import useAlert from "@/hooks/use-alert";
 import { useAuth } from "@/hooks/use-auth";
+import PersonIcon from "@mui/icons-material/Person";
+import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
+import PhonelinkLockIcon from "@mui/icons-material/PhonelinkLock";
+import PasswordIcon from "@mui/icons-material/Password";
+import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 export interface IUserProfile {
   id: string;
   created_at: string;
@@ -181,18 +188,7 @@ const Page = () => {
       <Head>
         <title>{title} | Symline</title>
       </Head>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          py: 8,
-          bgcolor: "primary.lightest",
-          borderTopLeftRadius: i18n.language == "ar" ? 25 : 0,
-          borderBottomLeftRadius: i18n.language == "ar" ? 25 : 25,
-          borderTopRightRadius: i18n.language == "ar" ? 0 : 25,
-          borderBottomRightRadius: i18n.language == "ar" ? 0 : 25,
-        }}
-      >
+
 {  !isLoadingData&&
       <form onSubmit={handleSubmit}>
           <Container maxWidth="xl">
@@ -243,6 +239,13 @@ const Page = () => {
                           name="name"
                           value={profileFormRecord?.name}
                           onChange={handleChange}
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <PersonIcon />
+                              </InputAdornment>
+                            ),
+                          }}
                         />
                       </Grid>
                       <Grid item xs={12} md={6}>
@@ -315,6 +318,13 @@ const Page = () => {
                               },
                             })
                           }
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <PhoneAndroidIcon />
+                              </InputAdornment>
+                            ),
+                          }}
                         />
                       </Grid>
                       <Grid item xs={12} md={6}>
@@ -380,6 +390,13 @@ const Page = () => {
                           name="email"
                           value={profileFormRecord?.email}
                           onChange={handleChange}
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <AlternateEmailIcon />
+                              </InputAdornment>
+                            ),
+                          }}
                         />
                       </Grid>
                       <Grid item xs={12} md={6}>
@@ -392,6 +409,13 @@ const Page = () => {
                           name="linkedin"
                           value={profileFormRecord?.linkedin}
                           onChange={handleChange}
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <LinkedInIcon />
+                              </InputAdornment>
+                            ),
+                          }}
                         />
                       </Grid>
                       <Grid item xs={12} md={3} sx={{ display: "flex", justifyContent: "end" }}>
@@ -413,7 +437,6 @@ const Page = () => {
           </Container>
         </form>
         }
-      </Box>
     </>
   );
 };
