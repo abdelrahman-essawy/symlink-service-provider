@@ -6,6 +6,13 @@ export interface IQuestion {
   export interface RFP {
     project_name: string;
     time_type_id: string;
+    expiration_date: string;
+    firstFullName: string;
+    firstEmail: string;
+    firstMobile: string;
+    secondFullName: string;
+    secondEmail: string;
+    secondMobile: string;
     projects: IAssessmentProject[];
   }
   

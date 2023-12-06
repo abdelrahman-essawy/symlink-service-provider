@@ -97,7 +97,7 @@ export const SideNav = (props: { open: any; onClose: any; }) => {
             }}
           >
             {items.map((item: any, key) => {
-              const active = item.path ? (pathname === item.path) : false;
+              const active = item.path ? (pathname === item.path + "/") : false;
 
               return (
                 <RoleBasedRender key={key} componentId={item?.id ?? ``}>
@@ -153,9 +153,6 @@ export const SideNav = (props: { open: any; onClose: any; }) => {
       </Box>
     </Scrollbar>
   );
-  useEffect(() => {
-    console.log(theme.direction)
-  },[theme.direction]);       
   if (lgUp) {
     return (
       <Drawer

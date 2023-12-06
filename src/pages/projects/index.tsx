@@ -54,7 +54,7 @@ const Page = () => {
     { text: "RFP name", value: "project_name" },
     { text: "Status", value: "request_for_proposal_status" },
     { text: "Creation date", value: "created_at" },
-    { text: "Updated date", value: "updated_at" },
+    { text: "Expiration date", value: "expiration_date" },
     { text: "Actions", value: "Actions" },
   ];
 
@@ -131,16 +131,12 @@ const Page = () => {
         year: "numeric",
         month: "numeric",
         day: "numeric",
-        hour: "numeric",
-        minute: "numeric",
       }),
-    onRenderupdated_at: (item: any) =>
-      getLocalTime(item.updated_at).toLocaleDateString("en-US", {
+    onRenderexpiration_date: (item: any) =>
+      getLocalTime(item.expiration_date).toLocaleDateString("en-US", {
         year: "numeric",
         month: "numeric",
         day: "numeric",
-        hour: "numeric",
-        minute: "numeric",
       }),
     onRenderrequest_for_proposal_status: (item: any) => {
       return item?.request_for_proposal_status ? (

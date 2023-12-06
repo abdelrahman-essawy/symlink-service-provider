@@ -8,6 +8,13 @@ export interface IProject {
   user_id: string
   time_type_id: string
   user: User
+  expiration_date: string
+  firstFullName: string
+  firstEmail: string
+  firstMobile: string
+  secondFullName: string
+  secondEmail: string
+  secondMobile: string
   time_type_meta_data: TimeTypeMetaData
   request_for_proposal: RequestForProposal[]
 }

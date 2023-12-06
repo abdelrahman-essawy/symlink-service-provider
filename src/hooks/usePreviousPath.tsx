@@ -8,7 +8,7 @@ export default function usePreviousPath() {
   const [previousPath, setPreviousPath] = useState<string>(sessionStorage.getItem("previousPath") || '/');
   const [isinnerPath,setIsinnerPath] = useState(false);
   const [isProfilePath,setIsProfilePath] = useState(false);
-  const innerPathsList = ["/bid/create-rfp","/bid/rfp-name","/profile","/certificate","/experience","/educational-info"]
+  const innerPathsList = ["/bid/create-rfp","/bid/rfp-name","/profile","/certificate","/experience","/educational-info","/projects/[project_id]"]
   const innerProfilePathsList = ["/profile","/certificate","/experience","/educational-info"]
   const checkIfInnerPath = ()=>{
     if(innerPathsList?.includes(router.pathname)){
@@ -41,6 +41,7 @@ export default function usePreviousPath() {
     return () => {
       router.events.off('routeChangeStart', handleRouteChange);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.events, router.pathname]);
 
   return {previousPath,isinnerPath,isProfilePath};

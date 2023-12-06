@@ -7,7 +7,7 @@ import { DataTable } from "@/components/shared/DataTable";
 import { useProject } from "@/hooks/use-project";
 import { IProject } from "@/@types/project";
 import { useRouter } from "next/navigation";
-import { getLocalTime } from "@/utils/helperFunctions";
+import { getLocalTime, showErrorMessage } from "@/utils/helperFunctions";
 import ProjectStatusBadge from "@/sections/projects/project-status";
 import { CardTableActions } from "@/sections/projects/Project-table-actions";
 import { useAuth } from "@/hooks/use-auth";
@@ -16,7 +16,9 @@ import EyeIcon from "@/assets/icons/eyeIcon";
 import TrashIcon from "@/assets/icons/trashIcon";
 import RoleBasedRender from "@/hocs/RoleBasedRender";
 import { dictionary } from "@/configs/i18next";
-function AttachedFilles() {
+import UploadButton from "@/components/shared/upload-button";
+import axiosClient from "@/configs/axios-client";
+function AttachedFilles({ projectId }: { projectId: any }) {
   const { i18n } = useTranslation();
   const { push } = useRouter();
   const auth = useAuth();
@@ -24,7 +26,7 @@ function AttachedFilles() {
   const { showAlert, renderForAlert } = useAlert();
   const [open, setOpen] = useState(false);
   const [record, setRecord] = useState<any>(null);
-  const [selectedProjectId, setSelectedProjectId] = useState<string>("");
+  const [selectedFileId, setSelectedFileId] = useState<string>("");
   const [showView, setShowView] = useState(false);
   const [editMood, setEditMode] = useState(false);
   const [openConfirm, setOpenConfirm] = useState(false);
@@ -39,40 +41,33 @@ function AttachedFilles() {
   const { handlePageChange, handleRowsPerPageChange, handleSearch, controller, setController } =
     usePageUtilities();
 
+const fetchAttachedFiles = async() => {
+await  projectContext?.fetchAttachedFile(
+    projectId
+  );
+};
+
   useEffect(() => {
-    if (auth?.user?.role === "PROVIDER") {
-      projectContext?.fetchProjects(
-        controller.page,
-        controller.rowsPerPage,
-        controller.SearchString
-      );
-    } else if (auth?.user?.role === "CLIENT") {
-      projectContext?.fetchProjects(
-        controller.page,
-        controller.rowsPerPage,
-        controller.SearchString,
-        auth?.user?.id
-      );
-    }
+    fetchAttachedFiles();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [controller]);
 
-  const handleEditProject = (Project: any) => {
-    setRecord(Project);
+  const handleEditFile = (File: any) => {
+    setRecord(File);
     setEditMode(true);
     setOpen(true);
   };
-  const handleDeleteProject = (ProjectId: string) => {
-    setSelectedProjectId(ProjectId);
+  const handleDeleteFile = (FileId: string) => {
+    setSelectedFileId(FileId);
     setOpenConfirm(true);
   };
-  const DeleteProject = () => {
+  const DeleteFile = () => {
     setOpenConfirm(false);
-    projectContext?.DeleteProject(selectedProjectId);
-    showAlert(t("Project has been deleted successfully").toString(), "success");
+    projectContext?.DeleteFile(selectedFileId);
+    showAlert(t("File has been deleted successfully").toString(), "success");
   };
-  const handleViewProject = (Project: IProject) => {
-    setRecord(Project);
+  const handleViewFile = (File: any) => {
+    setRecord(File);
     setShowView(true);
   };
   const handleSorting = (sortingObj: any) => {
@@ -81,22 +76,49 @@ function AttachedFilles() {
       OrderBy: sortingObj,
     });
   };
+  const [loading, setLoading] = useState(false);
+
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    setLoading(true);
+    const file = event.target.files?.[0];
+    console.log(file);
+    if (file) {
+      // Call your API endpoint to post the file data
+      const formData = new FormData();
+      formData.set("multi_RFP_id", projectId);
+      formData.set("file", file);
+      formData.set("name", file?.name);
+      formData.set("type", file?.type);
+      try {
+        const res = await axiosClient.post("/attached-files", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+        if (res.status == 201 || res.status == 200) {
+          showAlert("File uploaded successfully", "success");
+          fetchAttachedFiles();
+        } 
+        
+      } catch (error) {
+        console.log(showErrorMessage(error));
+        showAlert(`${showErrorMessage(error)}`, "error");
+      }
+    }
+    //Reset input fields
+    event.target.value = "";
+    setLoading(false);
+  };
   const additionalTableProps = {
     onRendercreated_at: (item: any) =>
       getLocalTime(item.created_at).toLocaleDateString("en-US", {
         year: "numeric",
         month: "numeric",
         day: "numeric",
-        hour: "numeric",
-        minute: "numeric",
       }),
     onRenderupdated_at: (item: any) =>
       getLocalTime(item.updated_at).toLocaleDateString("en-US", {
         year: "numeric",
         month: "numeric",
         day: "numeric",
-        hour: "numeric",
-        minute: "numeric",
       }),
     onRenderActions: (college: any) => (
       <Box sx={{ display: "flex", gap: 0, alignItems: "baseline" }}>
@@ -115,19 +137,21 @@ function AttachedFilles() {
   };
   return (
     <>
-      <RoleBasedRender componentId="button-request-to-review">
-        <Grid item xs={12} md={3} sx={{ display: "flex", justifyContent: "end" }}>
-          <Button variant="contained" color="warning" sx={{ borderRadius: 8 }}>
-            {"Submit to review"}
-          </Button>
-        </Grid>
-      </RoleBasedRender>
+      <Grid container sx={{ my: 2 }}>
+        <RoleBasedRender componentId="button-request-to-review">
+          <Grid item xs={12} sx={{ display: "flex", justifyContent: "end" }}>
+            <Button variant="contained" color="warning" sx={{ borderRadius: 8 }}>
+              {"Submit to review"}
+            </Button>
+          </Grid>
+        </RoleBasedRender>
 
-      <RoleBasedRender componentId="button-upload-file">
-        <Button variant="contained" color="warning" sx={{ borderRadius: 8, alignSelf: "center" }}>
-          {dictionary("Upload file")}
-        </Button>
-      </RoleBasedRender>
+        <RoleBasedRender componentId="button-upload-file">
+          <Grid item xs={12} sx={{ display: "flex", justifyContent: "end" }}>
+          <UploadButton loading={loading} handleFileUpload={handleFileUpload} btnTitle="Upload file" />
+          </Grid>
+        </RoleBasedRender>
+      </Grid>
       <DataTable
         headers={headers}
         name="AttachedFilles"
@@ -140,6 +164,7 @@ function AttachedFilles() {
         onRowsPerPageChange={handleRowsPerPageChange}
         {...additionalTableProps}
       />
+      {renderForAlert()}
     </>
   );
 }

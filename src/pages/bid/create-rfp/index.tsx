@@ -48,15 +48,19 @@ const Page = () => {
   const [formRecord, setFormRecord] = useState<RFP>({
     project_name: "",
     time_type_id: "",
+    expiration_date: "",
+    firstFullName: "",
+    firstEmail: "",
+    firstMobile: "",
+    secondFullName: "",
+    secondEmail: "",
+    secondMobile: "",
     projects: [],
   });
   const { t } = useTranslation();
   const router = useRouter();
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [open, setOpen] = useState(false);
-  const [dialogName, setDialogName] = useState("");
-  const [value, setValue] = useState(0);
-  const [activeStep, setActiveStep] = React.useState(0);
   const [inputs, setInputs] = useState<ICategory[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { showAlert, renderForAlert } = useAlert();
@@ -263,7 +267,6 @@ const Page = () => {
                       >
                         <ListItemButton
                           onClick={() => {
-                            console.log(item?.name_en || item?.name);
                             addInput(item?.name_en || item?.name, item.id);
                           }}
                           sx={{
@@ -295,6 +298,13 @@ const Page = () => {
 
               <GeneralQuestions
                 time_type_id={formRecord?.time_type_id}
+                expiration_date={formRecord?.expiration_date}
+                firstFullName={formRecord?.firstFullName}
+                firstEmail={formRecord?.firstEmail}
+                firstMobile={formRecord?.firstMobile}
+                secondFullName={formRecord?.secondFullName}
+                secondEmail={formRecord?.secondEmail}
+                secondMobile={formRecord?.secondMobile}
                 handleonchange={handleChange}
               />
 

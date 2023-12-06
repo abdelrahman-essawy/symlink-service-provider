@@ -1,7 +1,7 @@
 import { createContext, Dispatch, useState, useEffect } from "react";
 import axiosClient from "../configs/axios-client";
 import { IProject } from "@/@types/project";
-import { get_Projects,get_Project_id} from "../environment/apis"
+import { get_Projects,get_Project_id,get_attached_file} from "../environment/apis"
 export const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
 //TODO: move this to types folder
 
@@ -15,6 +15,17 @@ const ProjectContextProvider = ({ children }: any) => {
   const fetchProjects =  (PageNumber: number , PageSize: number ,SearchString?:string,userID?:string) => {
     axiosClient
       .get(get_Projects(PageNumber, PageSize, SearchString,userID))
+      .then((res) => {
+        setProjects(res.data.data);
+        setCount(res.data.meta.total);
+        setPageSize(res.data.meta.limit);
+        setTotalPages(res.data.meta.totalPages);
+      })
+      .catch((error) => {});
+  };
+  const fetchAttachedFile =  (projectID:string) => {
+    axiosClient
+      .get(get_attached_file(projectID))
       .then((res) => {
         setProjects(res.data.data);
         setCount(res.data.meta.total);
@@ -55,6 +66,10 @@ const ProjectContextProvider = ({ children }: any) => {
     setCount(count - 1);
   };
 
+  const DeleteFile = (FileID:string) => {
+
+  };
+
   return (
     <ProjectContext.Provider
       value={{
@@ -64,6 +79,8 @@ const ProjectContextProvider = ({ children }: any) => {
         pageSize,
         totalPages,
         fetchProjects,
+        fetchAttachedFile,
+        DeleteFile,
         getProject,
         AddProject,
         EditProject,
@@ -84,6 +101,8 @@ export type ProjectContextType = {
   totalPages: number;
   Selectedproject: IProject;
   fetchProjects: (page: number, rowsPerPage: number, filter?: string,userID?:string) => void;
+  fetchAttachedFile: (projectID:string) => void;
+  DeleteFile: (FileID:string) => void;
   getProject: ( id: string) => void;
   AddProject: (project: IProject) => void;
   EditProject: (project: IProject) => void;

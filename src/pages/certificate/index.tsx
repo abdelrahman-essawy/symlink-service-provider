@@ -30,6 +30,7 @@ import { LoadingButton } from "@mui/lab";
 import ConfirmDialog from "@/components/_used-symline/dialogs/confirm-dialog";
 import axiosClient from "@/configs/axios-client";
 import useAlert from "@/hooks/use-alert";
+import UploadButton from "@/components/shared/upload-button";
 
 // import PdfViewerDialog from "@/components/PdfViewerDialog";
 
@@ -69,7 +70,6 @@ const Page = () => {
   //pdf Model
   const [dialogOpen, setDialogOpen] = useState(false);
   //upload files
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     setLoading(true);
@@ -77,10 +77,12 @@ const Page = () => {
     if (file) {
       // Call your API endpoint to post the file data
       const formData = new FormData();
-      formData.set("file",file );
-      const res = await axiosClient.post("/provider/add-certificate", formData,{headers:{'Content-Type': 'multipart/form-data'}});
+      formData.set("file", file);
+      const res = await axiosClient.post("/provider/add-certificate", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       if (res.status == 201 || res.status == 200) {
-        showAlert("Excel file uploaded successfully", "success");
+        showAlert("File uploaded successfully", "success");
         //Reset input fields
       } else {
         showAlert("An error happened", "error");
@@ -94,109 +96,92 @@ const Page = () => {
       <Head>
         <title>{title} | Symline</title>
       </Head>
-        <Container maxWidth="xl">
-          <Typography variant="h3" sx={{ mb: 2 }} fontWeight={"bold"}>
-            {dictionary(title as TranslatedWord)}
-          </Typography>
-          <Grid container spacing={2} justifyContent={"space-between"}>
-            <Grid item xs={12} md={6}></Grid>
-            <Grid item xs={12} md={3} sx={{ display: "flex", justifyContent: "end" }}>
-              <input
-                type="file"
-                ref={fileInputRef}
-                style={{ display: "none" }}
-                onChange={handleFileUpload}
-              />
-              <Button
-                // loading={upload}
-                
-                variant="contained"
-                color="warning"
-                size="large"
-                onClick={() => fileInputRef?.current?.click()}
-              >
-                <Typography sx={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>
-                  {t("Upload")}
-                </Typography>
-              </Button>
-            </Grid>
-            <Grid item xs={12}>
-              <Card elevation={0} sx={{ p: 3 }}>
-                <CardContent sx={{ p: 1 }}>
-                  <Grid container spacing={2} justifyContent={"space-between"}>
-                    {DATA.map((certificate: any) => {
-                      return (
-                        <Grid key={certificate.id} item xs={12}>
-                          <Grid
-                            container
-                            spacing={0}
-                            direction={"row"}
-                            justifyContent={"space-between"}
-                            textAlign={"left"}
-                          >
-                            <Grid
-                              item
-                              xs={12}
-                              sx={{
-                                px: 1,
-                                borderRadius: 1,
-                                bgcolor: "primary.lightest",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "space-between",
-                              }}
-                            >
-                              <Typography variant="h6" fontWeight="bold" color="primary">
-                                {certificate.title}
-                              </Typography>
-                              <Box>
-                                <IconButton sx={{ mx: 1 }}>
-                                  <DeleteForeverIcon onClick={handleOpenConfirm} />
-                                </IconButton>
-                              </Box>
-                            </Grid>
-                          </Grid>
-                          <Box
-                            sx={{
-                              border: "1px solid #C4C4C4",
-                              width: "180px",
-                              display: "flex",
-                              justifyContent: "center",
-                              alignItems: "center",
-                              px: 1,
-                              m: 2,
-                              height: "100px",
-                              borderRadius: "20px",
-                              cursor: "pointer",
-                              boxShadow: "0 4px 8px 0 rgba(0,0,0,0.08)",
-                            }}
-                            onClick={
-                              certificate.title == "Certificate 1.pdf"
-                                ? handleOpenPdf
-                                : handleOpenCertificate
-                            }
-                          >
-                            <Image
-                              alt={certificate.title}
-                              src={certificate.img}
-                              width={70}
-                              height={70}
-                            />
-                          </Box>
-                        </Grid>
-                      );
-                    })}
-                  </Grid>
-                </CardContent>
-                <CustomTabPanel value={value} index={2}>
-                  {" "}
-                  three
-                </CustomTabPanel>
-              </Card>
-            </Grid>
+      <Container maxWidth="xl">
+        <Typography variant="h3" sx={{ mb: 2 }} fontWeight={"bold"}>
+          {dictionary(title as TranslatedWord)}
+        </Typography>
+        <Grid container spacing={2} justifyContent={"space-between"}>
+          <Grid item xs={12} md={6}></Grid>
+          <Grid item xs={12} md={3} sx={{ display: "flex", justifyContent: "end" }}>
+            <UploadButton loading={loading} handleFileUpload={handleFileUpload} btnTitle="upload" />
           </Grid>
-          {renderForAlert()}
-        </Container>
+          <Grid item xs={12}>
+            <Card elevation={0} sx={{ p: 3 }}>
+              <CardContent sx={{ p: 1 }}>
+                <Grid container spacing={2} justifyContent={"space-between"}>
+                  {DATA.map((certificate: any) => {
+                    return (
+                      <Grid key={certificate.id} item xs={12}>
+                        <Grid
+                          container
+                          spacing={0}
+                          direction={"row"}
+                          justifyContent={"space-between"}
+                          textAlign={"left"}
+                        >
+                          <Grid
+                            item
+                            xs={12}
+                            sx={{
+                              px: 1,
+                              borderRadius: 1,
+                              bgcolor: "primary.lightest",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            <Typography variant="h6" fontWeight="bold" color="primary">
+                              {certificate.title}
+                            </Typography>
+                            <Box>
+                              <IconButton sx={{ mx: 1 }}>
+                                <DeleteForeverIcon onClick={handleOpenConfirm} />
+                              </IconButton>
+                            </Box>
+                          </Grid>
+                        </Grid>
+                        <Box
+                          sx={{
+                            border: "1px solid #C4C4C4",
+                            width: "180px",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            px: 1,
+                            m: 2,
+                            height: "100px",
+                            borderRadius: "20px",
+                            cursor: "pointer",
+                            boxShadow: "0 4px 8px 0 rgba(0,0,0,0.08)",
+                          }}
+                          onClick={
+                            certificate.title == "Certificate 1.pdf"
+                              ? handleOpenPdf
+                              : handleOpenCertificate
+                          }
+                        >
+                          <Image
+                            alt={certificate.title}
+                            src={certificate.img}
+                            width={70}
+                            height={70}
+                          />
+                        </Box>
+                      </Grid>
+                    );
+                  })}
+                </Grid>
+              </CardContent>
+              <CustomTabPanel value={value} index={2}>
+                {" "}
+                three
+              </CustomTabPanel>
+            </Card>
+          </Grid>
+        </Grid>
+        {renderForAlert()}
+      </Container>
       <ViewerPdf
         open={openPdf}
         handleClose={handleClosePdf}
