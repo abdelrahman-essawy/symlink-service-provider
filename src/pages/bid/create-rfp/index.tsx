@@ -42,6 +42,7 @@ import { IAssessmentProject, IQuestion, RFP } from "@/@types/assessments";
 import CircularProgress from "@mui/material/CircularProgress";
 import useAlert from "@/hooks/useAlert";
 import { ICategory } from "@/@types/project";
+import { showErrorMessage } from "@/utils/helperFunctions";
 const Page = () => {
   const { i18n } = useTranslation();
   const title = "Create RFP";
@@ -154,21 +155,7 @@ const Page = () => {
         router.push("/projects")
       }
     } catch (err:any) {
-      if (err?.response?.status == 400 ||err?.response?.status == 422) {
-        if (err?.response?.data?.message?.message && typeof err?.response?.data?.message?.message== "string") {
-          showAlert(err?.response?.data?.message, "error");
-        }
-        if (err?.response?.data?.message?.message&& typeof err?.response?.data?.message?.message== "object") {
-          showAlert(err?.response?.data?.message?.message[0], "error");
-        }
-      } else if (err.response.status == 400)
-        if (Object.keys(err?.response?.data?.errors)?.length > 0) {
-          const errors = err?.response?.data?.errors;
-          const firstError = Object.keys(errors)[0];
-          showAlert(`${firstError}: ${errors[firstError]}`, "error");
-        } else if (err.response.status == 500) {
-          showAlert(err?.response?.data?.message, "error");
-        } else return err;
+      showAlert(showErrorMessage(err),'error');
     }
     setIsLoading(false);
   };

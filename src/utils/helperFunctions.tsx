@@ -138,7 +138,7 @@ export const showErrorMessage:(err:any)=>string =(err:any) =>{
     else if (err?.response?.data?.message?.message && typeof err?.response?.data?.message?.message === 'object') {
       return(err?.response?.data?.message?.message[0]);
     }
-  } else if (err.response.status == 400)
+  } else if (err?.response?.status == 400)
     if (Object.keys(err?.response?.data?.errors)?.length > 0) {
       const errors = err?.response?.data?.errors;
       const firstError = Object.keys(errors)[0];

@@ -32,8 +32,8 @@ function AttachedFilles({ projectId }: { projectId: any }) {
   const [openConfirm, setOpenConfirm] = useState(false);
   const { t } = useTranslation();
   const headers = [
-    { text: "name", value: "project_name" },
-    { text: "Type", value: "request_for_proposal_status" },
+    { text: "name", value: "name" },
+    { text: "Type", value: "type" },
     { text: "Date added", value: "created_at" },
     { text: "Commitment", value: "Commitment" },
     { text: "Actions", value: "Actions" },
@@ -42,9 +42,7 @@ function AttachedFilles({ projectId }: { projectId: any }) {
     usePageUtilities();
 
 const fetchAttachedFiles = async() => {
-await  projectContext?.fetchAttachedFile(
-    projectId
-  );
+await  projectContext?.fetchAttachedFile(controller?.page,controller?.rowsPerPage,projectId);
 };
 
   useEffect(() => {
@@ -81,14 +79,12 @@ await  projectContext?.fetchAttachedFile(
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     setLoading(true);
     const file = event.target.files?.[0];
-    console.log(file);
     if (file) {
       // Call your API endpoint to post the file data
       const formData = new FormData();
       formData.set("multi_RFP_id", projectId);
       formData.set("file", file);
       formData.set("name", file?.name);
-      formData.set("type", file?.type);
       try {
         const res = await axiosClient.post("/attached-files", formData, {
           headers: { "Content-Type": "multipart/form-data" },
@@ -108,27 +104,15 @@ await  projectContext?.fetchAttachedFile(
     setLoading(false);
   };
   const additionalTableProps = {
-    onRendercreated_at: (item: any) =>
-      getLocalTime(item.created_at).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "numeric",
-        day: "numeric",
-      }),
-    onRenderupdated_at: (item: any) =>
-      getLocalTime(item.updated_at).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "numeric",
-        day: "numeric",
-      }),
-    onRenderActions: (college: any) => (
+    onRenderActions: (file: any) => (
       <Box sx={{ display: "flex", gap: 0, alignItems: "baseline" }}>
         <Tooltip arrow placement="top" title="Show details">
-          <IconButton onClick={() => console.log(college)}>
+          <IconButton onClick={() => console.log(file)}>
             <EyeIcon />
           </IconButton>
         </Tooltip>
         <Tooltip arrow placement="top" title="Delete">
-          <IconButton onClick={() => console.log(college)}>
+          <IconButton onClick={() => console.log(file)}>
             <TrashIcon />
           </IconButton>
         </Tooltip>
@@ -155,7 +139,7 @@ await  projectContext?.fetchAttachedFile(
       <DataTable
         headers={headers}
         name="AttachedFilles"
-        items={projectContext?.projects}
+        items={projectContext?.files}
         totalItems={projectContext?.count}
         totalPages={projectContext?.totalPages}
         page={controller?.page || 1}
