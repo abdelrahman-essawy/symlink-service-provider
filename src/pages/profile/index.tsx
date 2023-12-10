@@ -30,9 +30,14 @@ import PersonIcon from "@mui/icons-material/Person";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import PhonelinkLockIcon from "@mui/icons-material/PhonelinkLock";
 import PasswordIcon from "@mui/icons-material/Password";
-import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
+import PhoneAndroidIcon from "@mui/icons-material/PhoneAndroid";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import PhoneInputWithCountrySelect from "react-phone-number-input";
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css";
+import styles from "@/styles/index.module.scss";
+
 export interface IUserProfile {
   id: string;
   created_at: string;
@@ -85,12 +90,12 @@ const Page = () => {
 
   const fetchUserProfile = async () => {
     try {
-    setIsLoadingData(true);
-    const res = await axiosClient.get("/profile");
-    setProfileFormRecord(res.data.data);
-    setIsLoadingData(false);
+      setIsLoadingData(true);
+      const res = await axiosClient.get("/profile");
+      setProfileFormRecord(res.data.data);
+      setIsLoadingData(false);
     } catch (error: any) {
-      showAlert(error.response.data.message);
+      showAlert(error?.response?.data?.message);
     }
   };
 
@@ -100,16 +105,12 @@ const Page = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profileFormRecord?.city?.country_id]);
 
-  React.useEffect(() => {
-    console.log(profileFormRecord);
-  }, [profileFormRecord]);
-
   const fetchCountries = async () => {
     try {
       const res = await axiosClient.get("/addresses/country?page=1&limit=10");
       setCountries(res.data.data);
     } catch (error: any) {
-      showAlert(error.response.data.message);
+      showAlert(error?.response?.data?.message);
     }
   };
 
@@ -120,7 +121,7 @@ const Page = () => {
       );
       setCities(res.data.data);
     } catch (error: any) {
-      showAlert(error.response.data.message);
+      showAlert(error?.response?.data?.message);
     }
   };
   React.useEffect(() => {
@@ -149,11 +150,11 @@ const Page = () => {
     setProfileFormRecord(data as IUserProfile);
   }
 
-  const handlePhoneChange = (event: any) => {
+  const handlePhoneChange = (value: string | number, name: string) => {
     handleChange({
       target: {
-        name: "phoneNumber",
-        value: event,
+        name,
+        value: value,
       },
     });
   };
@@ -189,8 +190,8 @@ const Page = () => {
         <title>{title} | Symline</title>
       </Head>
 
-{  !isLoadingData&&
-      <form onSubmit={handleSubmit}>
+      {!isLoadingData && (
+        <form onSubmit={handleSubmit}>
           <Container maxWidth="xl">
             <Typography variant="h3" sx={{ mb: 2 }} fontWeight={"bold"}>
               {t("Profile")}
@@ -303,29 +304,16 @@ const Page = () => {
                       </Grid>
                       <Grid item xs={12} md={6}>
                         <FormLabel sx={{ mx: 2 }}>{t("Phone Number")}</FormLabel>
-                        <TextField
-                          fullWidth={true}
-                          sx={{ "& .MuiOutlinedInput-root": { borderRadius: "50px" }, mt: 1 }}
-                          placeholder={`${t("Type here ..")}`}
-                          variant="outlined"
-                          name="text"
-                          value={profileFormRecord?.phone || ""}
-                          onChange={(e: any) =>
-                            handleChange({
-                              target: {
-                                value: parseFloat(e?.target?.value),
-                                name: "phone",
-                              },
-                            })
-                          }
-                          InputProps={{
-                            startAdornment: (
-                              <InputAdornment position="start">
-                                <PhoneAndroidIcon />
-                              </InputAdornment>
-                            ),
-                          }}
-                        />
+                        <Box sx={{ direction: "rtl" }}>
+                          <PhoneInputWithCountrySelect
+                            placeholder={t("Enter phone number")}
+                            name="phone"
+                            value={profileFormRecord?.phone || ""}
+                            onChange={(e: any) => handlePhoneChange(e, "phone")}
+                            defaultCountry="SA"
+                            className={styles.inputPhone}
+                          />
+                        </Box>
                       </Grid>
                       <Grid item xs={12} md={6}>
                         <InputLabel id={"city_id"} sx={{ mx: 2 }}>
@@ -436,7 +424,7 @@ const Page = () => {
             {renderForAlert()}
           </Container>
         </form>
-        }
+      )}
     </>
   );
 };

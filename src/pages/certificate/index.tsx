@@ -16,7 +16,7 @@ import {
   OutlinedInput,
   IconButton,
 } from "@mui/material";
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { DashboardLayout } from "../../layouts/dashboard/layout";
 import { useTranslation } from "react-i18next";
 import CustomTabPanel from "@/components/_used-symline/tabs/tabsPanel";
@@ -26,31 +26,29 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ExperienceDialog from "@/components/_used-symline/dialogs/experience-dialog";
 import ViewerPdf from "@/components/_used-symline/dialogs/pdf-viewer";
 import ViewImagesDialog from "@/components/_used-symline/dialogs/view-images";
-import { LoadingButton } from "@mui/lab";
-import ConfirmDialog from "@/components/_used-symline/dialogs/confirm-dialog";
 import axiosClient from "@/configs/axios-client";
 import useAlert from "@/hooks/use-alert";
 import UploadButton from "@/components/shared/upload-button";
+import { useAuth } from "@/hooks/use-auth";
+import { showErrorMessage } from "@/utils/helperFunctions";
+import pdf from "@/assets/pdf.svg";
+import png from "@/assets/png.svg";
+import jpg from "@/assets/jpg.svg";
+import { Certifcate } from "@/contexts/auth-context";
+import ConfirmationPopup from "@/components/confirmation-popup";
 
-// import PdfViewerDialog from "@/components/PdfViewerDialog";
-
-const DATA = [
-  { id: 1, title: "Certificate 1.pdf", img: require("../../assets/pdf.svg") },
-  { id: 1, title: "Certificate 2.png", img: require("../../assets/png.svg") },
-  { id: 1, title: "Certificate 3.jpg", img: require("../../assets/jpg.svg") },
-];
 const Page = () => {
-  const { i18n } = useTranslation();
   const title = "Certificate";
   const { t } = useTranslation();
+  const auth = useAuth();
   const { showAlert, renderForAlert } = useAlert();
   const [open, setOpen] = useState(false);
   const [openCertificate, setOpenCertificate] = useState(false);
   const [openPdf, setOpenPdf] = useState(false);
+  const [fileLink, setFileLink] = useState<null | string>(null);
   const [dialogName, setDialogName] = useState("");
   const [value, setValue] = useState(0);
   const [file, setFile] = React.useState({ name: "Choose File" });
-
   const [loading, setLoading] = React.useState(false);
   const [confirm, setConfirm] = useState(false);
   const handleCloseConfirm = () => setConfirm(false);
@@ -59,11 +57,14 @@ const Page = () => {
   };
 
   const handleCloseCertificate = () => setOpenCertificate(false);
-  const handleOpenCertificate = () => {
+
+  const handleOpenCertificate = (imageLink: string) => {
+    setFileLink(imageLink);
     setOpenCertificate(true);
   };
   const handleClosePdf = () => setOpenPdf(false);
-  const handleOpenPdf = () => {
+  const handleOpenPdf = (pdfLink: string) => {
+    setFileLink(pdfLink);
     setOpenPdf(true);
   };
   const handleClose = () => setOpen(false);
@@ -78,26 +79,51 @@ const Page = () => {
       // Call your API endpoint to post the file data
       const formData = new FormData();
       formData.set("file", file);
-      const res = await axiosClient.post("/provider/add-certificate", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      if (res.status == 201 || res.status == 200) {
+      try {
+        await axiosClient.post("/provider/add-certificate", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
         showAlert("File uploaded successfully", "success");
-        //Reset input fields
-      } else {
-        showAlert("An error happened", "error");
+        getProviderInfo();
+      } catch (error) {
+        showAlert(showErrorMessage(error), "error");
       }
     }
     event.target.value = "";
     setLoading(false);
   };
+
+  const getProviderInfo = async () => {
+    const res = await auth?.getProviderInfo();
+    if (res?.status == 200 || res?.status == 201) {
+    } else {
+      showAlert(res, "error");
+    }
+  };
+
+  useEffect(() => {
+    getProviderInfo();
+  }, []);
+
+  const iconRender = useCallback((type: string) => {
+    if (type == "image/jpeg" || type == "image/jpg") {
+      return jpg.src;
+    } else if (type == "image/png") {
+      return png.src;
+    } else if (type == "application/pdf") {
+      return pdf.src;
+    } else {
+      return pdf.src;
+    }
+  }, []);
+
   return (
     <>
       <Head>
         <title>{title} | Symline</title>
       </Head>
       <Container maxWidth="xl">
-        <Typography variant="h3" sx={{ mb: 2 }} fontWeight={"bold"}>
+        <Typography variant="h3" fontWeight={"bold"}>
           {dictionary(title as TranslatedWord)}
         </Typography>
         <Grid container spacing={2} justifyContent={"space-between"}>
@@ -106,10 +132,10 @@ const Page = () => {
             <UploadButton loading={loading} handleFileUpload={handleFileUpload} btnTitle="upload" />
           </Grid>
           <Grid item xs={12}>
-            <Card elevation={0} sx={{ p: 3 }}>
+            <Card elevation={1} sx={{ p: 3 }}>
               <CardContent sx={{ p: 1 }}>
                 <Grid container spacing={2} justifyContent={"space-between"}>
-                  {DATA.map((certificate: any) => {
+                  {auth?.providerInfo?.certifcate?.map((certificate: Certifcate) => {
                     return (
                       <Grid key={certificate.id} item xs={12}>
                         <Grid
@@ -132,7 +158,7 @@ const Page = () => {
                             }}
                           >
                             <Typography variant="h6" fontWeight="bold" color="primary">
-                              {certificate.title}
+                              {certificate?.id}
                             </Typography>
                             <Box>
                               <IconButton sx={{ mx: 1 }}>
@@ -156,14 +182,18 @@ const Page = () => {
                             boxShadow: "0 4px 8px 0 rgba(0,0,0,0.08)",
                           }}
                           onClick={
-                            certificate.title == "Certificate 1.pdf"
-                              ? handleOpenPdf
-                              : handleOpenCertificate
+                            certificate.type == "application/pdf"
+                              ? () => {
+                                  handleOpenPdf(certificate?.file);
+                                }
+                              : () => {
+                                  handleOpenCertificate(certificate?.file);
+                                }
                           }
                         >
                           <Image
-                            alt={certificate.title}
-                            src={certificate.img}
+                            alt={certificate.id}
+                            src={iconRender(certificate?.type)}
                             width={70}
                             height={70}
                           />
@@ -173,29 +203,28 @@ const Page = () => {
                   })}
                 </Grid>
               </CardContent>
-              <CustomTabPanel value={value} index={2}>
-                {" "}
-                three
-              </CustomTabPanel>
             </Card>
           </Grid>
         </Grid>
         {renderForAlert()}
       </Container>
-      <ViewerPdf
-        open={openPdf}
-        handleClose={handleClosePdf}
-        document={"https://pdfobject.com/pdf/sample.pdf"}
+      <ViewerPdf open={openPdf} handleClose={handleClosePdf} document={fileLink} />
+      <ViewImagesDialog
+        open={openCertificate}
+        handleClose={handleCloseCertificate}
+        imageLink={fileLink}
       />
-      <ViewImagesDialog open={openCertificate} handleClose={handleCloseCertificate} />
-      <ConfirmDialog
+      <ConfirmationPopup
         open={confirm}
         handleClose={handleCloseConfirm}
-        message="Are you sure you want to delete this file ?"
+        message={t("Are you sure you want to delete this file ?")}
+        title={t("Delete certificate")}
+        confirmFuntion={() => {
+          console.log("deleted");
+        }}
+        setOpen={setConfirm}
       />
-
       <ExperienceDialog name={dialogName} open={open} handleClose={handleClose} />
-      {/* <PdfViewerDialog open={dialogOpen} onClose={handleCloseDialog} pdfUrl={'https://drive.google.com/file/d/105_LItMhs7CqoIGRzY7W2x2c9P-LGUBS/view?usp=sharing'} /> */}
     </>
   );
 };

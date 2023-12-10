@@ -100,5 +100,5 @@ export const get_financials_drivers_balance = (page: number = 1, rowsPerPage: nu
 //-----------------------------------------------------SYMLINK----------------------------------------------------
 
 export const get_Project_id = (id: string) => `/multi-rfp/${id}`;
-export const get_Projects = (page: number = 1, rowsPerPage: number = 10, searchString?: string, user_id?: string) => `/multi-rfp?page=${page}&limit=${rowsPerPage}&created_at%3Ddesc${user_id?`&filters=user_id%3D${user_id}`:""}`;
+export const get_Projects = (endpoint:string,page: number = 1, rowsPerPage: number = 10, searchString?: string) => `/multi-rfp/${endpoint}?page=${page}&limit=${rowsPerPage}&created_at%3Ddesc`;
 export const get_attached_file = (page:number,limit:number,id?:string) => `/attached-files/${id}?limit=${limit}&page=${page}`;

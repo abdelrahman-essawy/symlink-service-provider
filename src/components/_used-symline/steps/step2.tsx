@@ -73,7 +73,7 @@ export default function Step2() {
               <Grid spacing={3} container alignItems="center" justifyContent="flex-start">
                   <Grid item xs={12} >
                   <FormLabel sx={{ mx: 2 }}>
-                        {t('(this option will be hidden from the bidders by default unless you want to be shown in the review page before publishing your proposal)')}
+                        {t('((this option will be hidden from the bidders by default unless you want to be shown in the review page before publishing your proposal) from the bidders by default unless you want to be shown in the review page before publishing your proposal)')}
                       </FormLabel>
                       <TextField fullWidth={true} multiline rows={3} sx={{ '& .MuiOutlinedInput-root': { borderRadius: '10px' }, mt: 1 }} placeholder={`${t('Type here ..')}`} variant="outlined" />
                    
@@ -89,7 +89,7 @@ export default function Step2() {
               <Grid spacing={3} container alignItems="center" justifyContent="flex-start">
                   <Grid item xs={12} >
                   <FormLabel sx={{ mx: 2 }}>
-                        {t('(this option will be hidden from the bidders by default unless you want to be shown in the review page before publishing your proposal)')}
+                        {t('((this option will be hidden from the bidders by default unless you want to be shown in the review page before publishing your proposal) from the bidders by default unless you want to be shown in the review page before publishing your proposal)')}
                       </FormLabel>
                       <TextField fullWidth={true} multiline rows={3} sx={{ '& .MuiOutlinedInput-root': { borderRadius: '10px' }, mt: 1 }} placeholder={`${t('Description')}`} variant="outlined" />
                    

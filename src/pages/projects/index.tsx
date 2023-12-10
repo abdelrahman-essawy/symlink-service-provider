@@ -2,9 +2,6 @@ import Head from "next/head";
 import { Box, Button, Card, Container, Grid, Typography } from "@mui/material";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import SharedTable from "@/components/SharedTable";
-import projects from "../../../public/projects.json";
-import projectsForSP from "../../../public/projects-for-sp.json";
 import { dictionary, TranslatedWord } from "@/configs/i18next";
 import router from "next/router";
 import RoleBasedRender from "@/hocs/RoleBasedRender";
@@ -50,6 +47,7 @@ const Page = () => {
   const [openConfirm, setOpenConfirm] = useState(false);
   const [showView, setShowView] = useState(false);
   const auth = useAuth();
+  
   const headers = [
     { text: "RFP name", value: "project_name" },
     { text: "Status", value: "request_for_proposal_status" },
@@ -68,17 +66,18 @@ const Page = () => {
   useEffect(() => {
     if (auth?.user?.role === "PROVIDER") {
       projectContext?.fetchProjects(
-        controller.page,
-        controller.rowsPerPage,
-        controller.SearchString
-      );
-    } else if (auth?.user?.role === "CLIENT") {
-      projectContext?.fetchProjects(
+        'provider-All-MultiRFP',
         controller.page,
         controller.rowsPerPage,
         controller.SearchString,
-        auth?.user?.id
       );
+    } else if (auth?.user?.role === "CLIENT") {
+      projectContext?.fetchProjects(
+        'client-All-MultiRFP',
+        controller.page,
+        controller.rowsPerPage,
+        controller.SearchString
+        );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [controller]);

@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useReducer, useRef, useState } fr
 import PropTypes from 'prop-types';
 import React from 'react';
 import axiosClient from '../configs/axios-client'
+import { showErrorMessage } from '@/utils/helperFunctions';
 
 
 type UserType = {
@@ -13,6 +14,18 @@ type UserType = {
   email: string;
   role: "CLIENT" | "PROVIDER" | "ADMIN"
 };
+
+type IProviderInfo = {
+  info: string
+  certifcate: Certifcate[]
+  projects: any[]
+};
+
+export interface Certifcate {
+  id: string
+  file: string
+  type: string
+}
 
 type ActionType = { type: string, payload: any }
 
@@ -27,17 +40,20 @@ type initialValue = {
   isAuthenticated: boolean,
   isLoading: boolean,
   user: any,
+  providerInfo: IProviderInfo,
   signIn: (username: string, password: string) => Promise<void>,
   signUp: (avatarFile: any, email :  string,  password:  string , role:  string) => Promise<void>,
   signOut: () => void,
   updateProfile: (formData:FormData) => Promise<any>,
   ToggleReceiveOrders:()=>void,
+  getProviderInfo:()=>Promise<any>|void,
 };
 
 const initialState = {
   isAuthenticated: false,
   isLoading: true,
-  user: null
+  user: null,
+  providerInfo:null
 };
 
 const handlers = {
@@ -100,7 +116,8 @@ export const AuthProvider = ({ children }: any) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const initialized = useRef(false);
   const [authUser, setAuthUser] = useState<UserType | undefined>(undefined);
-
+  const [providerInfo, setProviderInfo] = useState<IProviderInfo | undefined>(undefined);
+  
   const initialize = async () => {
     // Prevent from calling twice in development mode with React.StrictMode enabled
     if (initialized.current) {
@@ -242,14 +259,27 @@ export const AuthProvider = ({ children }: any) => {
     });
   };
 
+  const getProviderInfo = async() => {
+    try {
+      const res = await axiosClient.get(`provider/info`);
+      console.log(res?.data?.data)
+      setProviderInfo(res?.data?.data)
+      return res;
+    } catch (error) {
+      showErrorMessage(error);
+    }
+  };
+  
   return (
     <AuthContext.Provider
       value={{
         ...state,
         signIn,
         signUp,
+        providerInfo,
         signOut,
         updateProfile,
+        getProviderInfo,
         ToggleReceiveOrders
       }}
     >
