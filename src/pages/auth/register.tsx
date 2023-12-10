@@ -85,7 +85,6 @@ const Page = () => {
       </Head>
       <Box
         sx={{
-          flex: "1 1 auto",
           alignItems: "center",
           display: "flex",
           justifyContent: "center",
@@ -95,12 +94,11 @@ const Page = () => {
           sx={{
             maxWidth: 550,
             px: 3,
-            py: "100px",
             width: "100%",
           }}
         >
           <div>
-            <Stack spacing={1} sx={{ mb: 3 ,direction:i18n.language == 'ar' ? "ltr":"rtl" }}>
+            {/* <Stack spacing={1} sx={{ mb: 3 ,direction:i18n.language == 'ar' ? "ltr":"rtl" }}>
               <Typography variant="h4">{t("Register")}</Typography>
               <Typography color="text.secondary" variant="body2">
                 {t("Already have an account?")}
@@ -109,7 +107,7 @@ const Page = () => {
                   {t("Log in")}
                 </Link>
               </Typography>
-            </Stack>
+            </Stack> */}
             <form noValidate onSubmit={formik.handleSubmit}>
               <Stack spacing={3}>
               <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center' }}>
@@ -118,7 +116,7 @@ const Page = () => {
                   anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
                   badgeContent={
                     <Avatar
-                      alt="Travis Howard"
+                      alt="New Account"
                       src="/static/images/avatar/2.jpg"
                       sx={{ boxShadow: "-6px 7px 8px rgba(0, 0, 0, 0.08)" }}
                     >

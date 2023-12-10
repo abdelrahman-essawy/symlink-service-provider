@@ -45,7 +45,7 @@ const Page = () => {
     onSubmit: async (values, helpers) => {
       try {
         await auth?.signIn(values.username, values.password);
-        router.push("/");
+        router.push("/projects");
       } catch (err: any) {
         helpers.setStatus({ success: false });
         helpers.setErrors({ submit: err?.response?.data?.message || "Unknown error occurred" });
@@ -71,7 +71,6 @@ const Page = () => {
       <Box
         sx={{
           backgroundColor: "background.paper",
-          flex: "1 1 auto",
           alignItems: "center",
           display: "flex",
           justifyContent: "center",
@@ -81,7 +80,6 @@ const Page = () => {
           sx={{
             maxWidth: 550,
             px: 3,
-            py: "100px",
             width: "100%",
           }}
         >
@@ -90,13 +88,13 @@ const Page = () => {
               <form noValidate onSubmit={formik.handleSubmit}>
                 <Grid container spacing={3} justifyContent="center" alignItems="center">
                   <Grid item xs={12}>
-                    <Stack spacing={2} sx={{ mb: 3 ,direction:i18n.language == 'ar' ? "ltr":"rtl" }}>
+                    {/* <Stack spacing={2} sx={{ mb: 3 ,direction:i18n.language == 'ar' ? "ltr":"rtl" }}>
                       <Typography variant="h4">{t("Login")}</Typography>
                       <Typography color="text.secondary" variant="body2">
                         {t("Don't have an account")} &nbsp;
                         <Link href="/auth/register">{t("Register")}</Link>
                       </Typography>
-                    </Stack>
+                    </Stack> */}
                     <TextField
                       error={!!(formik.touched.username && formik.errors.username)}
                       fullWidth

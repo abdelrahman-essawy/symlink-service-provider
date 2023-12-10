@@ -100,7 +100,7 @@ export default function ThreatHuntingAnswers({ assessment }: any) {
             <Grid item xs={12}>
               <FormLabel sx={{ mx: 2 }}>
                 {t(
-                  "(this option will be hidden from the bidders by default unless you want to be shown in the review page before publishing your proposal)"
+                  "((this option will be hidden from the bidders by default unless you want to be shown in the review page before publishing your proposal) from the bidders by default unless you want to be shown in the review page before publishing your proposal)"
                 )}
               </FormLabel>
               <TextField
@@ -123,7 +123,7 @@ export default function ThreatHuntingAnswers({ assessment }: any) {
             <Grid item xs={12}>
               <FormLabel sx={{ mx: 2 }}>
                 {t(
-                  "(this option will be hidden from the bidders by default unless you want to be shown in the review page before publishing your proposal)"
+                  "((this option will be hidden from the bidders by default unless you want to be shown in the review page before publishing your proposal) from the bidders by default unless you want to be shown in the review page before publishing your proposal)"
                 )}
               </FormLabel>
               <TextField

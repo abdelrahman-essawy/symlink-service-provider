@@ -132,7 +132,7 @@ export default function Mobile({ onChange, onChangeNumber, projects, index }: IP
           </Typography>
           <FormLabel sx={{ mx: 0.5 }}>
             {t(
-              "(this option will be hidden from the bidders by default unless you want to be shown in the review page before publishing your proposal)"
+              "((this option will be hidden from the bidders by default unless you want to be shown in the review page before publishing your proposal) from the bidders by default unless you want to be shown in the review page before publishing your proposal)"
             )}
           </FormLabel>
           <TextField

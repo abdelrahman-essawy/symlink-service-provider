@@ -13,9 +13,9 @@ const ProjectContextProvider = ({ children }: any) => {
   const [pageSize, setPageSize] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
 
-  const fetchProjects =  (PageNumber: number , PageSize: number ,SearchString?:string,userID?:string) => {
+  const fetchProjects =  (endpoint:string, PageNumber: number , PageSize: number ,SearchString?:string) => {
     axiosClient
-      .get(get_Projects(PageNumber, PageSize, SearchString,userID))
+      .get(get_Projects(endpoint,PageNumber, PageSize, SearchString))
       .then((res) => {
         setProjects(res.data.data);
         setCount(res.data.meta.itemCount);
@@ -28,7 +28,6 @@ const ProjectContextProvider = ({ children }: any) => {
     axiosClient
       .get(get_attached_file(page,rowsPerPage,projectID))
       .then((res) => {
-        console.log(res);
         setFiles(res.data.data);
         setCount(res.data.meta.itemCount);
         setPageSize(res.data.meta.take);
@@ -104,7 +103,7 @@ export type ProjectContextType = {
   pageSize: number;
   totalPages: number;
   Selectedproject: IProject;
-  fetchProjects: (page: number, rowsPerPage: number, filter?: string,userID?:string) => void;
+  fetchProjects:  (endpoint:string, PageNumber: number , PageSize: number ,SearchString?:string) => void;
   fetchAttachedFile: (page: number, rowsPerPage: number,projectID:string) => void;
   DeleteFile: (FileID:string) => void;
   getProject: ( id: string) => void;
