@@ -60,27 +60,30 @@ export const AuthLayout = (props: { children: any }) => {
             display: "flex",
             flexDirection: "column",
             position: "relative",
+            justifyContent: "center",
           }}
         >
-          <Grid
+          <Box
             sx={{
               display: "flex",
               justifyContent: "end",
               alignItems: "end",
               width: "98%",
               mt: 1,
+              position: "absolute",
+              top:"0"
             }}
           >
             <IconButton sx={{ zIndex: 3 }}>
               <LocalizationSwitcher />
             </IconButton>
-          </Grid>
+          </Box>
           <Grid sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
             <ButtonGroup
               variant="outlined"
               sx={{
                 direction: "ltr",
-                pt: "110px",
+                pt: "20px",
                 borderRadius: "0px",
                 width: { lg: "65%", xs: "80%", sm: "60%" },
                 mb: 3,
