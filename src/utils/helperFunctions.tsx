@@ -133,7 +133,11 @@ export async function downloadFileUsingFetch(url: string, fileName: string) {
 export const showErrorMessage:(err:any)=>string =(err:any) =>{
   if (err?.response?.status == 400 || err?.response?.status == 422) {
     if ((err?.response?.data?.message?.message ||  err?.response?.data?.message?.Message) && typeof err?.response?.data?.message?.message== "string") {
+      console.log(err?.response?.data?.message?.message);
       return(err?.response?.data?.message?.message|| err?.response?.data?.message?.Message);
+    }
+   else if ((err?.response?.data?.message ||  err?.response?.data?.Message) && (typeof err?.response?.data?.message== "string" || typeof err?.response?.data?.Message)) {
+    return(err?.response?.data?.message|| err?.response?.data?.Message);
     }
     else if (err?.response?.data?.message?.message && typeof err?.response?.data?.message?.message === 'object') {
       return(err?.response?.data?.message?.message[0]);
