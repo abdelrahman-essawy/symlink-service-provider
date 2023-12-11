@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { Box, Card, Container, Typography, Button, Grid, CardContent } from "@mui/material";
+import { Card, Container, Typography, Button, Grid, CardContent } from "@mui/material";
 import React from "react";
 import { DashboardLayout } from "../../layouts/dashboard/layout";
 import { useTranslation } from "react-i18next";
@@ -7,20 +7,17 @@ import HeaderTabs from "@/components/_used-symline/tabs/headerTabs";
 import CustomTabPanel from "@/components/_used-symline/tabs/tabsPanel";
 import SharedTable from "@/components/SharedTable";
 import { useRouter } from "next/router";
-import attachedFiles from "../../../public/attached-files.json";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import RoleBasedRender from "@/hocs/RoleBasedRender";
 import { useState } from "react";
 import { dictionary } from "@/configs/i18next";
 import bids from "../../../public/bids.json";
-import DeleteIcon from "@mui/icons-material/Delete";
 import ViewImagesDialog from "@/components/_used-symline/dialogs/view-images";
 import Chat from "@/components/_used-symline/chat/chat";
 import ConfirmDialog from "@/components/_used-symline/dialogs/confirm-dialog";
 import { useProject } from "@/hooks/use-project";
 import ProjectContextProvider from "@/contexts/project-context";
 import ProjectStatusBadge from "@/sections/projects/project-status";
-import { IProject, RequestForProposal } from "@/@types/project";
+import { RequestForProposal } from "@/@types/project";
 import WebAnswers from "@/sections/projects/answers/web-answers";
 import NetworkAnswers from "@/sections/projects/answers/network-answers";
 import MobileAnswers from "@/sections/projects/answers/mobile-answers";
@@ -28,26 +25,38 @@ import SourceCodeAnswers from "@/sections/projects/answers/sourceCode-answers";
 import ThreatHuntingAnswers from "@/sections/projects/answers/threatHunting-answers";
 import ArchitectureConfigurationReviewAnswer from "@/sections/projects/answers/architectureConfigurationReview-answer.tsx";
 import AttachedFilles from "@/sections/projects/project-details/attached-filles";
-import { getLocalTime } from "@/utils/helperFunctions";
-import { queryClient } from "../_app";
+import { getLocalTime, showErrorMessage } from "@/utils/helperFunctions";
+import BidModal from "@/components/modals/BidModal";
+import useAlert from "@/hooks/useAlert";
+import BidContextProvider from "@/contexts/bid-context";
+import { usePageUtilities } from "@/hooks/use-page-utilities";
+import { useBid } from "@/hooks/use-bid";
+import { DataTable } from "@/components/shared/DataTable";
+
+const listOfBidsHeaders = [
+    { text: "RFP name", value: "project_name" },
+    { text: "Status", value: "request_for_proposal_status" },
+    { text: "Creation date", value: "created_at" },
+    { text: "Expiration date", value: "expiration_date" },
+    { text: "Actions", value: "Actions" },
+]
 const Page = () => {
-  const title = "Projects";
-  const { i18n, t } = useTranslation();
+  const title = "Project-details";
+  const { t } = useTranslation();
   const router = useRouter();
   const { project_id } = router.query;
   const projectContext = useProject();
+  const bidContext = useBid();
   const [value, setValue] = useState(0);
-  const [project, setProject] = useState<IProject>();
   const [open, setOpen] = useState(false);
+  const { showAlert, renderForAlert } = useAlert();
+  const [openBidModle, setOpenBidModle] = useState(false);
   const [confirm, setConfirm] = useState(false);
   const handleCloseConfirm = () => setConfirm(false);
-  const handleOpenConfirm = () => {
-    setConfirm(true);
-  };
   const handleClose = () => setOpen(false);
-  const handleOpen = () => {
-    setOpen(true);
-  };
+
+  const { handlePageChange, handleRowsPerPageChange, handleSearch, controller, setController } =
+    usePageUtilities();
 
   const fetchProject = async () => {
     if (project_id && typeof project_id === "string") {
@@ -59,9 +68,24 @@ const Page = () => {
     }
   };
 
+  const fetchListBids = async () => {
+    try {
+      await bidContext?.fetchlistoffers(controller?.page, controller?.rowsPerPage);
+    } catch (error) {
+      showAlert(showErrorMessage(error).toString(), "error");
+    }
+  };
+
   React.useEffect(() => {
     fetchProject();
   }, [project_id]);
+
+
+  React.useEffect(() => {
+
+    fetchListBids();
+
+  }, [controller]);
 
   const handletabs = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -135,6 +159,50 @@ const Page = () => {
               />
             </RoleBasedRender>
           </Grid>
+          <RoleBasedRender componentId="button-bid-rfp">
+            <Grid
+              item
+              xs={2}
+              sm={2}
+              sx={{ display: "flex", justifyContent: { sm: "end", xs: "start" } }}
+            >
+              <Button
+                onClick={() => setOpenBidModle(true)}
+                variant="contained"
+                color="warning"
+                sx={{ borderRadius: 8, px: 6 }}
+                size="large"
+              >
+                {dictionary("Bid")}
+              </Button>
+            </Grid>
+          </RoleBasedRender>
+          {/* <RoleBasedRender
+              componentId="buttons-accept-reject-rfp"
+            >
+              <Grid item xs={2} md={2} sx={{ display: "flex", justifyContent: { sm: 'end', xs: 'start' } }}>
+                <Button
+
+                  variant="contained"
+                  color="warning"
+                  sx={{ borderRadius: 8 }}
+                >
+                  {dictionary("Accept")}
+                </Button>
+                <Button
+
+                  variant="contained"
+                  sx={{
+                    borderRadius: 8,
+                    color: "#ffffff",
+                    backgroundColor: "#6576d9",
+                  }}
+                >
+                  {dictionary("Reject")}
+                </Button>
+              </Grid>
+
+            </RoleBasedRender> */}
           <Grid item xs={12}>
             <Card elevation={0}>
               <CustomTabPanel value={value} index={0}>
@@ -243,7 +311,7 @@ const Page = () => {
               </CustomTabPanel>
 
               <CustomTabPanel value={value} index={3}>
-                <SharedTable
+                {/* <SharedTable
                   endpoint="http://localhost:3000/bids.json"
                   fakeData={bids}
                   showActions={true}
@@ -266,11 +334,24 @@ const Page = () => {
                     onClick: () => router.push(`/bid/rfp-name`),
                     sx: { cursor: "pointer" },
                   })}
-                />
+                /> */}
+                  <DataTable
+                        headers={listOfBidsHeaders}
+                        name="Project"
+                        items={bidContext?.offers}
+                        totalItems={bidContext?.count}
+                        totalPages={bidContext?.totalPages}
+                        page={controller?.page || 1}
+                        rowsPerPage={controller?.rowsPerPage}
+                        onPageChange={handlePageChange}
+                        onRowsPerPageChange={handleRowsPerPageChange}
+                        // {...additionalTableProps}
+                      />
               </CustomTabPanel>
             </Card>
           </Grid>
         </Grid>
+        {renderForAlert()}
       </Container>
       <ViewImagesDialog open={open} handleClose={handleClose} />
       <ConfirmDialog
@@ -278,13 +359,23 @@ const Page = () => {
         handleClose={handleCloseConfirm}
         message="Are you sure you want to delete this file ?"
       />
+      <BidModal
+        open={openBidModle}
+        handleClose={() => {
+          setOpenBidModle(false);
+        }}
+        multi_RFP_id={project_id}
+        showMessage={showAlert}
+      />
     </>
   );
 };
 
 Page.getLayout = (page: any) => (
   <DashboardLayout>
-    <ProjectContextProvider>{page}</ProjectContextProvider>
+    <BidContextProvider>
+      <ProjectContextProvider>{page}</ProjectContextProvider>
+    </BidContextProvider>
   </DashboardLayout>
 );
 

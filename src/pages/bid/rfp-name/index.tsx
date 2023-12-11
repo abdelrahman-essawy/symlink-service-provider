@@ -24,7 +24,6 @@ import RoleBasedRender from "@/hocs/RoleBasedRender";
 import Chat from "@/components/_used-symline/chat/chat";
 
 const Page = () => {
-  const { i18n } = useTranslation();
   const title = "RFP name";
   const { t } = useTranslation();
   const [value, setValue] = React.useState(0);
