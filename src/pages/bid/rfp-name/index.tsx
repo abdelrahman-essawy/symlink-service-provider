@@ -24,7 +24,6 @@ import RoleBasedRender from "@/hocs/RoleBasedRender";
 import Chat from "@/components/_used-symline/chat/chat";
 
 const Page = () => {
-  const { i18n } = useTranslation();
   const title = "RFP name";
   const { t } = useTranslation();
   const [value, setValue] = React.useState(0);
@@ -42,25 +41,12 @@ const Page = () => {
       <Head>
         <title>{title} | Symline</title>
       </Head>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          py: 8,
-          bgcolor: "primary.lightest",
-          borderTopLeftRadius: i18n.language == 'ar' ? 25 : 0,
-          borderBottomLeftRadius: i18n.language == 'ar' ? 25 : 25,
-          borderTopRightRadius: i18n.language == 'ar' ? 0 : 25,
-          borderBottomRightRadius: i18n.language == 'ar' ? 0 : 25,
-        }}
-      >
         <Container maxWidth="xl">
           <Typography variant="h3" sx={{ mb: 2 }} fontWeight={"bold"}>
             {dictionary(title as TranslatedWord)}
           </Typography>
           <Grid container spacing={2} justifyContent={"space-between"} alignItems={"end"} >
             <Grid item xs={12} sm={10}>
-
               <HeaderTabs
                 value={value}
                 handleChange={handletabs}
@@ -256,8 +242,6 @@ const Page = () => {
             </Grid>
           </Grid>
         </Container>
-      </Box>
-
       <BidModal open={open} handleClose={handleClose} />
     </>
   );

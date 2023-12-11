@@ -2,9 +2,9 @@ import Head from "next/head";
 import { CacheProvider } from "@emotion/react";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { CssBaseline, ThemeProvider } from "@mui/material";
+import { CssBaseline, Direction, ThemeProvider } from "@mui/material";
 import "simplebar-react/dist/simplebar.min.css";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { AuthProvider, AuthConsumer } from "../contexts/auth-context";
 import { useNProgress } from "../hooks/use-nprogress";
 import { createEmotionCache } from "../utils/create-emotion-cache";
@@ -30,11 +30,19 @@ const App = (props: { Component: any; emotionCache?: any; pageProps: any }) => {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
 
   useNProgress();
-
+  const [direction, setDirection] = useState<Direction>('ltr');
   const getLayout = Component.getLayout ?? ((page: any) => page);
+  const [theme, setTheme] = useState(createTheme(direction));
 
-  const theme = createTheme();
-
+  useEffect(() => {
+    const direction = sessionStorage.getItem("direction") == "rtl" ? "rtl" : "ltr";
+    const language = sessionStorage.getItem("language") == "ar" ? "ar" : "en";
+    axiosClient.defaults.headers.common['Accept-Language'] = sessionStorage.getItem("language") == "ar" ? "ar" : "en"
+    i18n.changeLanguage(language);
+    document.dir = direction;
+    theme.direction = direction;
+    setTheme(theme);
+    }, [theme]);
   return (
     <CacheProvider value={emotionCache}>
       <Head>

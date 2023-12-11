@@ -1,7 +1,8 @@
-import { createContext, useContext, useEffect, useReducer, useRef } from 'react';
+import { createContext, useContext, useEffect, useReducer, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import React from 'react';
 import axiosClient from '../configs/axios-client'
+import { showErrorMessage } from '@/utils/helperFunctions';
 
 
 type UserType = {
@@ -9,30 +10,50 @@ type UserType = {
   username: string,
   name: string,
   avatar: string,
-  role: "CLIENT" | "SERVICE_PROVIDER" | "ADMIN"
+  phone: any;
+  email: string;
+  role: "CLIENT" | "PROVIDER" | "ADMIN"
 };
+
+type IProviderInfo = {
+  info: string
+  certifcate: Certifcate[]
+  projects: any[]
+};
+
+export interface Certifcate {
+  id: string
+  file: string
+  type: string
+}
 
 type ActionType = { type: string, payload: any }
 
 const HANDLERS = {
   INITIALIZE: 'INITIALIZE',
   SIGN_IN: 'SIGN_IN',
-  SIGN_OUT: 'SIGN_OUT'
+  SIGN_OUT: 'SIGN_OUT',
+  UPLOAD_AVATAR: 'UPLOAD_AVATAR'
 };
 
 type initialValue = {
   isAuthenticated: boolean,
   isLoading: boolean,
   user: any,
+  providerInfo: IProviderInfo,
   signIn: (username: string, password: string) => Promise<void>,
-  signOut: () => Promise<void>,
+  signUp: (avatarFile: any, email :  string,  password:  string , role:  string) => Promise<void>,
+  signOut: () => void,
+  updateProfile: (formData:FormData) => Promise<any>,
   ToggleReceiveOrders:()=>void,
+  getProviderInfo:()=>Promise<any>|void,
 };
 
 const initialState = {
   isAuthenticated: false,
   isLoading: true,
-  user: null
+  user: null,
+  providerInfo:null
 };
 
 const handlers = {
@@ -55,6 +76,15 @@ const handlers = {
       )
     };
   },
+  [HANDLERS.UPLOAD_AVATAR]: (state: any, action: { payload: any }) => {
+    const user = action.payload;
+
+    return {
+      ...state,
+      isAuthenticated: true,
+      user,
+    };
+  },
   [HANDLERS.SIGN_IN]: (state: any, action: { payload: any; }) => {
     const user = action.payload;
 
@@ -70,7 +100,7 @@ const handlers = {
       isAuthenticated: false,
       user: null
     };
-  }
+  },
 };
 
 const reducer = (state: any, action: ActionType) => (
@@ -85,7 +115,9 @@ export const AuthContext = createContext<initialValue | undefined>(undefined);
 export const AuthProvider = ({ children }: any) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const initialized = useRef(false);
-
+  const [authUser, setAuthUser] = useState<UserType | undefined>(undefined);
+  const [providerInfo, setProviderInfo] = useState<IProviderInfo | undefined>(undefined);
+  
   const initialize = async () => {
     // Prevent from calling twice in development mode with React.StrictMode enabled
     if (initialized.current) {
@@ -97,26 +129,31 @@ export const AuthProvider = ({ children }: any) => {
     let isAuthenticated = false;
 
     try {
-      isAuthenticated = window.sessionStorage.getItem('authenticated') === 'true';
+      isAuthenticated = window.sessionStorage.getItem("authenticated") === "true";
     } catch (err) {
       console.error(err);
     }
 
     if (isAuthenticated) {
-      const user: UserType = state.user;
-      console.log(state.user);
+      const json = window.sessionStorage.getItem("user");
+      const user = json == undefined ? undefined : JSON.parse(json);
+      const token = window.sessionStorage.getItem("token");
+      axiosClient.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      axiosClient.defaults.headers.common['Accept-Language'] = sessionStorage.getItem("language") == "ar" ? "ar" : "en"
+      setAuthUser(user);
       dispatch({
         type: HANDLERS.INITIALIZE,
-        payload: user
+        payload: user,
       });
     } else {
       dispatch({
         type: HANDLERS.INITIALIZE,
-        payload: null
+        payload: null,
       });
     }
   };
 
+  
   useEffect(
     () => {
       initialize();
@@ -126,83 +163,94 @@ export const AuthProvider = ({ children }: any) => {
   );
 
   const signIn = async (username: string, password: string) => {
-    const user: UserType = {
-      id: '',
-      avatar: '',
-      name: '',
-      username: '',
-      role: 'CLIENT'
-    };
-    const res = await axiosClient.post('/auth/signin', { username, password });
+    delete axiosClient.defaults.headers.common["Authorization"];
+    const res = await axiosClient.post('/auth/signin', { username, password },{'headers':
+    { 
+     "Content-Type": 'application/json'
+   }});
 
-    if (res.status == 200) {
-      const { data } = res.data;
+    if (res.status == 200 || res.status == 201) {
+      const { data: user } = res.data;
       window.sessionStorage.setItem('authenticated', 'true');
-      window.sessionStorage.setItem('token', data.access_token);
-      axiosClient.defaults.headers.common['Authorization'] = `Bearer ${data.access_token}`;
-      user.id = data.id;
-      user.avatar = data.avatar;
-      user.name = data.name;
-      user.username = data.username;
-      user.role = data.role;
+      window.sessionStorage.setItem('token', user.access_token);
+      window.sessionStorage.setItem("user", JSON.stringify(user));
+      axiosClient.defaults.headers.common['Authorization'] = `Bearer ${user.access_token}`;
+      axiosClient.defaults.headers.common['Accept-Language'] = sessionStorage.getItem("language") == "ar" ? "ar" : "en";
+      user.id = user.id;
+      user.avatar = user.avatar;
+      user.name = user.name;
+      user.username = user.username;
+      user.role = user.role;
+      setAuthUser(user);
+      dispatch({
+        type: HANDLERS.SIGN_IN,
+        payload: user
+      });
     }
     else {
       throw new Error('Please check your username and password');
     }
-    // console.log(username);
-
-    // const addDataToSessionStorage = (user: UserType) => {
-    //   sessionStorage.setItem('authenticated', 'true');
-    //   sessionStorage.setItem('token', 'fake-token');
-    // }
-
-    // switch (username) {
-    //   case 'admin':
-    //     user.id = '1';
-    //     user.avatar = 'https://i.pravatar.cc/300';
-    //     user.name = 'Admin';
-    //     user.username = 'admin';
-    //     user.role = 'ADMIN';
-    //     addDataToSessionStorage(user);
-    //     break;
-    //   case 'client':
-    //     user.id = '2';
-    //     user.avatar = 'https://i.pravatar.cc/300';
-    //     user.name = 'Client';
-    //     user.username = 'client';
-    //     user.role = 'CLIENT';
-    //     addDataToSessionStorage(user);
-    //     break;
-    //   case 'service_provider':
-    //     user.id = '3';
-    //     user.avatar = 'https://i.pravatar.cc/300';
-    //     user.name = 'Service Provider';
-    //     user.username = 'service_provider';
-    //     user.role = 'SERVICE_PROVIDER';
-    //     addDataToSessionStorage(user);
-    //     break;
-    //   default:
-    //     throw new Error('Please check your username and password');
-    // }
-
-
-
-    dispatch({
-      type: HANDLERS.SIGN_IN,
-      payload: user
-    });
   };
 
-  const signUp = async (username: any, name: any, password: any) => {
-    throw new Error('Sign up is not implemented');
+  const signUp = async (avatarFile: any, email :  string,  password:  string, role:  string) => {
+    let bodyFormData = new FormData();
+    bodyFormData.append("email", email);
+    bodyFormData.append("password", password);
+    bodyFormData.append("role", role);
+    bodyFormData.append("avatarFile", avatarFile);
+
+    delete axiosClient.defaults.headers.common["Authorization"];
+
+    try {
+      const res = await axiosClient.post("/auth/register", bodyFormData,{'headers':
+       {
+        "Content-Type": 'mulitpart/form-data'
+      }});
+      console.log(res.data);
+      if (res.status == 200 || res.status == 201) {
+        return res;
+      }
+      
+    } catch (error:any) {
+      console.log(error);
+      throw new Error(`${error?.response?.data?.message?.message[0]}`);
+    }
+
+
   };
 
   const signOut = () => {
-    dispatch({
-      type: HANDLERS.SIGN_OUT,
-      payload: null
-    });
+    window.sessionStorage.removeItem("authenticated");
+    window.sessionStorage.removeItem("token");
+    window.sessionStorage.removeItem("user");
+    delete axiosClient.defaults.headers.common["Authorization"];
+    delete axiosClient.defaults.headers.common['Accept-Language'];
+    // dispatch({
+    //   type: HANDLERS.SIGN_OUT,
+    //   payload: null,
+    // });
   };
+
+  const updateProfile = async (formData:FormData): Promise<any>=>{
+    try{  
+      const res = await axiosClient.put("/profile", formData, {headers: { 'Content-Type': 'application/multipart'}});
+      if (authUser){
+        authUser.avatar = res?.data?.data.avatar;
+        authUser.name = res?.data?.data.name;
+        authUser.email = res?.data?.data.email;
+        authUser.phone = res?.data?.data.phone;
+        window.sessionStorage.setItem("user", JSON.stringify(authUser));
+        setAuthUser(authUser);
+        dispatch({
+          type: HANDLERS.UPLOAD_AVATAR,
+          payload: authUser,
+        });
+      }
+      return res;
+    }catch(err: any){
+      return err;
+    }
+  }
   const ToggleReceiveOrders = () => {
     const receiveOrders = !(state?.user?.receiveOrders);
     dispatch({
@@ -211,13 +259,27 @@ export const AuthProvider = ({ children }: any) => {
     });
   };
 
+  const getProviderInfo = async() => {
+    try {
+      const res = await axiosClient.get(`provider/info`);
+      console.log(res?.data?.data)
+      setProviderInfo(res?.data?.data)
+      return res;
+    } catch (error) {
+      showErrorMessage(error);
+    }
+  };
+  
   return (
     <AuthContext.Provider
       value={{
         ...state,
         signIn,
         signUp,
+        providerInfo,
         signOut,
+        updateProfile,
+        getProviderInfo,
         ToggleReceiveOrders
       }}
     >

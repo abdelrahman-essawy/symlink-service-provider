@@ -4,7 +4,7 @@ import { PATH_PERMISSIONS } from "./pathsPermission";
 export const TROLES = {
   ADMIN: "ADMIN",
   CLIENT: "CLIENT",
-  SERVICE_PROVIDER: "SERVICE_PROVIDER",
+  PROVIDER: "PROVIDER",
 } as const;
 
 export type ExtractValuesFromObjectType<T> = T extends {}
@@ -55,7 +55,7 @@ export const permissionSchema: PermissionsSchema = {
       "menu-item-service-provider-receive-orders"
     ],
   },
-  SERVICE_PROVIDER: {
+  PROVIDER: {
     ...sharedPermissions,
     canViewBids: true,
     canViewSettingsCreateCompany: true,

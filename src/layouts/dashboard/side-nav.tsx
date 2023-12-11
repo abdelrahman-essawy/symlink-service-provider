@@ -5,12 +5,8 @@ import ArrowTopRightOnSquareIcon from '@heroicons/react/24/solid/ArrowTopRightOn
 import ChevronUpDownIcon from '@heroicons/react/24/solid/ChevronUpDownIcon';
 import {
   Box,
-  Divider,
   Drawer,
   Stack,
-  SvgIcon,
-  Typography,
-  ButtonBase,
   useMediaQuery
 } from '@mui/material';
 import React ,{useEffect, useState} from 'react';
@@ -51,7 +47,7 @@ export const SideNav = (props: { open: any; onClose: any; }) => {
           height: '100%'
         }}
       >
-        <Box sx={{ p: 3 }}>
+        <Box sx={{ px: 1.5 }}>
           <Box
             component={NextLink}
             href="/"
@@ -63,7 +59,7 @@ export const SideNav = (props: { open: any; onClose: any; }) => {
 
             }}
           >
-            <img src={"/assets/Logo_2.svg"} className="App-logo" alt="logo" style={{maxWidth:"90%"}}  />
+            <img src={"/assets/Logo_2.svg"} className="App-logo" alt="logo" style={{maxWidth:"80%"}}  />
           </Box>
         </Box>
         {/* <Divider sx={{ borderColor: 'grey.700' }} /> */}
@@ -71,8 +67,7 @@ export const SideNav = (props: { open: any; onClose: any; }) => {
           component="nav"
           sx={{
             flexGrow: 1,
-            px: 2,
-            py: 3
+            p: 2,
           }}
         >
        <Stack
@@ -158,9 +153,6 @@ export const SideNav = (props: { open: any; onClose: any; }) => {
       </Box>
     </Scrollbar>
   );
-  useEffect(() => {
-    console.log(theme.direction)
-  },[theme.direction]);       
   if (lgUp) {
     return (
       <Drawer

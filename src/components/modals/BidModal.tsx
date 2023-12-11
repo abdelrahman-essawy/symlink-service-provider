@@ -1,75 +1,63 @@
 import * as React from "react";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { useState } from 'react';
-import Modal from "@mui/material/Modal";
 import { useTranslation } from "react-i18next";
-import dayjs, { Dayjs } from 'dayjs';
 import { useFormik } from "formik";
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import * as Yup from "yup";
+import * as yup from "yup";
 import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
 import MenuItem from "@mui/material/MenuItem";
 import Box from "@mui/material/Box";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import InputLabel from "@mui/material/InputLabel";
-import InputAdornment from "@mui/material/InputAdornment";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { Checkbox, TextField, FormControlLabel, Dialog, Grid ,SelectChangeEvent, Card, CardContent, CardHeader } from "@mui/material";
-import { KeyboardEvent } from 'react';
+import {
+  Checkbox,
+  FormControlLabel,
+  Dialog,
+  Grid,
+  Card,
+  CardContent,
+  CardHeader,
+  FormHelperText,
+  TextField,
+} from "@mui/material";
+import axiosClient from "@/configs/axios-client";
+import { showErrorMessage } from "@/utils/helperFunctions";
 
-const style = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 450,
-  bgcolor: "background.paper",
-  borderRadius: 2,
-  boxShadow: 24,
-  p: 4,
-};
+const validationSchema = yup.object({
+  price: yup.number().required().positive("Price should be number"),
+  duration: yup.string().required("Duration is required"),
+  duration_num: yup.number().required().positive("Duration should be number"),
+  is_anonymous: yup.boolean().nullable(),
+});
 
-export default function BasicModal({ open, handleClose }: any) {
+export default function BasicModal({ open, handleClose, multi_RFP_id, showMessage }: any) {
   const { t } = useTranslation();
-  const [dateFrom, setDateFrom] = React.useState<Dayjs | null>(dayjs());
-  const [dateTo, setDateTo] = React.useState<Dayjs | null>(dayjs());
-
-  const [date, setDate] = useState('');
-
-  const handleSelectDate = (event: SelectChangeEvent) => {
-    setDate(event.target.value as string);
-  };
-
-  const handleKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
-    const keyCode = event.keyCode || event.which;
-    const keyValue = String.fromCharCode(keyCode);
-    const isNumeric = /^\d+$/.test(keyValue);
-
-    if (!isNumeric) {
-      event.preventDefault();
-    }
-  };
 
   const formik = useFormik({
     initialValues: {
-      title: "",
-      message: "",
+      price: 0,
+      duration: "",
+      duration_num: 0,
+      is_anonymous: false,
     },
-    validationSchema: Yup.object({}),
+    validationSchema: validationSchema,
     onSubmit: async (values) => {
-      console.log(values);
+      try {
+        await axiosClient.post(`/offers/add-offer-to-project`, { ...values, multi_RFP_id });
+        showMessage("Your offer has been successfully sent to the client! 🚀", "success");
+        formik.resetForm();
+        handleClose();
+      } catch (error) {
+        showMessage(showErrorMessage(error).toString(), "error");
+      }
     },
   });
 
   return (
-    <div>
+    <Box>
       <Dialog
         maxWidth="xs"
-        sx={{ whiteSpace: "nowrap", }}
+        sx={{ whiteSpace: "nowrap" }}
         fullWidth
         scroll="paper"
         PaperProps={{ sx: { borderRadius: 2.5 } }}
@@ -78,23 +66,23 @@ export default function BasicModal({ open, handleClose }: any) {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-
-        <Card sx={{ overflowY: 'auto' }}>
-          <CardHeader sx={{ p: 0, m: 0 }}
+        <Card>
+          <CardHeader
             action={
               <HighlightOffRoundedIcon
                 onClick={handleClose}
                 sx={{
-                  position: "relative",
-                  transform: 'translate(-100%, 80%)',
-                  color: "#C4C4C4",
+                  position: "absolute",
                   cursor: "pointer",
+                  top: 15,
+                  right: 15,
                 }}
+                color="primary"
               />
             }
           />
           <Typography
-            sx={{ textAlign: "center", mt: 2 }}
+            sx={{ textAlign: "center" }}
             id="modal-modal-title"
             variant="h6"
             component="h2"
@@ -102,99 +90,124 @@ export default function BasicModal({ open, handleClose }: any) {
             {t("Put your bid")}
           </Typography>
           <CardContent>
-            <Box sx={{}}>
+            <Box>
               <form onSubmit={formik.handleSubmit}>
                 <Box
                   sx={{
                     display: "flex",
                     flexDirection: "column",
-                    px: 4,
-                    gap: 1,
+                    px: 2,
+                    gap: 0.5,
                     justifyContent: "center",
                     alignItems: "flex-start",
                   }}
                 >
-                  <Typography variant="subtitle2" fontWeight="bold">{t("Pick duration")}</Typography>
-                  <Grid container spacing={1} justifyContent="space-between"  sx={{ direction: 'rtl'}} >
-                  
-                    <Grid item xs={12} md={5.5} sx={{order: {xs: 2, md: 1}}}>
-                    <Select
-                      dir="rtl"
-                      value={date}
-                      onChange={handleSelectDate}
-                      sx={{ borderRadius: "50px" }}
-                  fullWidth
-                      displayEmpty
-                      inputProps={{ "aria-label": "Without label" }}
-                    >
-                      <MenuItem value="">
-                        {t("Pick duration")}
-                      </MenuItem>
-                      <MenuItem value={"Hour"}>{t("Hour")}</MenuItem>
-                      <MenuItem value={"Day"}>{t("Day")}</MenuItem>
-                      <MenuItem value={"Week"}>{t("Week")}</MenuItem>
-                      <MenuItem value={"Month"}>{t("Month")}</MenuItem>
-                      <MenuItem value={"Year"}>{t(" Year")}</MenuItem>
+                  <Typography sx={{ mx: 1 }} variant="subtitle2" fontWeight="bold">
+                    {t("Pick duration")}
+                  </Typography>
+                  <Grid
+                    container
+                    spacing={0}
+                    justifyContent="space-between"
+                    sx={{ direction: "rtl" }}
+                  >
+                    <Grid item xs={8} md={9}>
+                      <TextField
+                        type="number"
+                        fullWidth
+                        placeholder={`${t("Number here ")}`}
+                        sx={{
+                          "& .MuiInputBase-root": { borderRadius: "0px 50px 50px 0px", py: 0.4 },
+                        }}
+                        id="outlined-adornment-amount"
+                        name="duration_num"
+                        value={formik.values.duration_num}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        error={Boolean(formik.errors.duration_num) && formik.touched.duration_num}
+                        helperText={formik.touched.duration_num && formik.errors.duration_num}
+                      />
+                    </Grid>
 
-                    </Select>
-                      </Grid>
-                  
-                      <Grid item xs={12} md={5.5} sx={{order: {xs: 1, md: 2}}}>
-                    <OutlinedInput
-                      type="text"
-                      fullWidth
-                      onKeyPress={handleKeyPress}
-                      placeholder={`${t('Number here ...')}`}
-
-                      dir="rtl"
-                      sx={{ borderRadius: "50px",  }}
-                      id="outlined-adornment-amount"
-                    />
+                    <Grid item xs={4} md={3}>
+                      <FormControl
+                        fullWidth
+                        error={formik.touched.duration && Boolean(formik.errors.duration)}
+                      >
+                        <Select
+                          sx={{ borderRadius: "50px 0px 0px 50px" }}
+                          fullWidth
+                          displayEmpty
+                          inputProps={{ "aria-label": "Without label" }}
+                          value={formik.values.duration}
+                          name="duration"
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                        >
+                          <MenuItem disabled value="">
+                            {t("Pick duration")}
+                          </MenuItem>
+                          <MenuItem value={"hour"}>{t("Hour")}</MenuItem>
+                          <MenuItem value={"day"}>{t("Day")}</MenuItem>
+                          <MenuItem value={"week"}>{t("Week")}</MenuItem>
+                          <MenuItem value={"month"}>{t("Month")}</MenuItem>
+                          <MenuItem value={"year"}>{t(" Year")}</MenuItem>
+                        </Select>
+                        <FormHelperText>
+                          {formik.touched.duration && formik.errors.duration}
+                        </FormHelperText>
+                      </FormControl>
                     </Grid>
                   </Grid>
-               
-                  <Typography variant="subtitle2" fontWeight="bold">{t("Put your price")}</Typography>
-                  <FormControl fullWidth >
-                    <OutlinedInput
-                      type="text"
-                      onKeyPress={handleKeyPress}
 
+                  <Typography sx={{ mx: 1 }} variant="subtitle2" fontWeight="bold">
+                    {t("Put your price")}
+                  </Typography>
+                  <FormControl fullWidth>
+                    <TextField
+                      type="number"
                       placeholder="00.0"
                       sx={{ borderRadius: "50px" }}
                       id="outlined-adornment-amount"
-                      startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                      name="price"
+                      value={formik?.values?.price}
+                      onChange={formik?.handleChange}
+                      onBlur={formik?.handleBlur}
+                      error={formik.touched.price && !!formik.errors.price}
+                      helperText={formik.touched.price && formik.errors.price}
                     />
                   </FormControl>
-                  <FormControlLabel
 
-                    control={<Checkbox defaultChecked />}
-                    label={t("Put your deal as anonymous")}
-                    labelPlacement="end"
+                  <FormControl fullWidth sx={{ mt: 2, p: 0, mx: 0 }}>
+                    <FormControlLabel
+                      control={<Checkbox />}
+                      label={t("Put your deal as anonymous")}
+                      labelPlacement="end"
+                      value={formik.values.is_anonymous}
+                      name="is_anonymous"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                    />
+                    <FormHelperText>{formik.errors.is_anonymous}</FormHelperText>
+                  </FormControl>
 
-                  />
-                  <FormControl fullWidth >
-
-
+                  <FormControl fullWidth>
                     <Button
                       fullWidth
                       color="primary"
-                      sx={{ mt: 3, borderRadius: "50px", p: 1.7, color: 'white' }}
+                      sx={{ mt: 3, borderRadius: "50px", color: "white" }}
                       type="submit"
                       variant="contained"
                     >
                       {t("Send")}
                     </Button>
-
                   </FormControl>
                 </Box>
               </form>
             </Box>
-
           </CardContent>
         </Card>
       </Dialog>
-    </div>
+    </Box>
   );
 }
-
-

@@ -1,23 +1,46 @@
 import Head from "next/head";
 import { Box, Container, Button, Typography } from "@mui/material";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import React, {useState} from "react";
+import { useState, useEffect } from "react";
 import { DashboardLayout } from "../../layouts/dashboard/layout";
 import { useTranslation } from "react-i18next";
-import { Card } from "@mui/material";
+import { Card, TextField } from "@mui/material";
 import EducationDialog from "@/components/_used-symline/dialogs/education-dialog";
+import { useAuth } from "@/hooks/use-auth";
+import useAlert from "@/hooks/use-alert";
+import axiosClient from "@/configs/axios-client";
+import { showErrorMessage } from "@/utils/helperFunctions";
 
 const Page = () => {
   const title = "Educational info";
   const { t } = useTranslation();
   const { i18n } = useTranslation();
+  const auth = useAuth();
+  const { showAlert, renderForAlert } = useAlert();
+  const [educational_info, setEducational_info] = useState<string | undefined>(
+    auth?.providerInfo?.info
+  );
+  
+  const getProviderInfo = async () => {
+    const res = await auth?.getProviderInfo();
+    if (res?.status == 200 || res?.status == 201) {
+      setEducational_info(res?.data?.data?.providerInfo?.info);
+    } else {
+      showAlert(res, "error");
+    }
+  };
 
-  const [open, setOpen] = useState(false);
+  useEffect(() => {
+    getProviderInfo();
+  }, []);
 
-  const handleClose = () => setOpen(false);
-  const handleOpen= () => {
-    setOpen(true);
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    try {
+      await axiosClient.put(`/provider/update-eductional-info`, {educational_info});
+      showAlert("Your educational info has been updated successfully", "success");
+    } catch (error) {
+      showAlert(showErrorMessage(error), "error");
+    }
   };
 
   return (
@@ -25,65 +48,51 @@ const Page = () => {
       <Head>
         <title>{title} | Symlink</title>
       </Head>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          py: 8,
-          bgcolor: "primary.lightest",
-          borderTopLeftRadius: i18n.language == 'ar' ? 25 : 0,
-          borderBottomLeftRadius: i18n.language == 'ar' ? 25 : 25,
-          borderTopRightRadius: i18n.language == 'ar' ? 0 : 25,
-          borderBottomRightRadius: i18n.language == 'ar' ? 0 : 25,
-        }}
-      >
-        <Container maxWidth="xl">
-          <Typography variant="h4">{t(title)}</Typography>
+      <Container maxWidth="xl">
+        <Typography variant="h4">{t(title)}</Typography>
 
-          <Card sx={{ mt: 3, p: 3 }}>
-            <Box sx={{ width: "100%", typography: "body1", mb: 1 }}>
-              <Typography variant="body1">
-                {"("}
-                {t("This option will be hidden")}
-                {")"}
-              </Typography>
-            </Box>
-            <Box
-              sx={{
-                width: "100%",
-                typography: "body1",
-                p: 2,
-                border: "1px solid #C4C4C4",
-                borderRadius: 2,
-              }}
-            >
-              <Typography variant="body1">
-                {t("Programming Languages for Backend Development")}
-              </Typography>
-              <Box sx={{ m: 2 }}>
-                <Typography variant="body1">{t("Lorem Test")}</Typography>
-                <Typography variant="body1">{t("Lorem Test")}</Typography>
-              </Box>
-              <Box sx={{ m: 2 }}>
-                <Typography variant="body1">{t("Lorem Test")}</Typography>
-                <Typography variant="body1">{t("Lorem Test")}</Typography>
-              </Box>
+        <Card sx={{ mt: 3, p: 3 }}>
+          <Box sx={{ width: "100%", typography: "body1", mb: 1 }}>
+            <Typography variant="body1">
+              {t(
+                "(this option will be hidden from the bidders by default unless you want to be shown in the review page before publishing your proposal)"
+              )}
+            </Typography>
+          </Box>
+          <form onSubmit={handleSubmit}>
+            <Box>
+              <TextField
+                sx={{
+                  direction: "rtl",
+                  "& .muirtl-1w2efko-MuiInputBase-root-MuiFilledInput-root": {
+                    borderRadius: "12px !important",
+                    padding: "0px !important",
+                  },
+                }}
+                fullWidth
+                id="Bio"
+                placeholder={`${t("Type here your educational info")}`}
+                value={educational_info||auth?.providerInfo?.info}
+                onChange={(e) => {
+                  setEducational_info(e.target.value);
+                }}
+                multiline
+                rows={7}
+              />
             </Box>
             <Button
-            onClick={handleOpen}
               size="large"
               color="warning"
-              sx={{ mt: 3, borderRadius: "50px" }}
+              sx={{ mt: 3, borderRadius: "34px", px: 5 }}
               type="submit"
               variant="contained"
             >
               {t("Update")}
             </Button>
-          </Card>
-        </Container>
-      </Box>
-      <EducationDialog open={open} handleClose={handleClose}/>
-
+          </form>
+        </Card>
+        {renderForAlert()}
+      </Container>
     </>
   );
 };

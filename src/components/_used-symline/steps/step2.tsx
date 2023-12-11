@@ -21,7 +21,7 @@ export default function Step2() {
           <Grid container spacing={0} alignItems="center" flexDirection={'row'} justifyContent={'start'} textAlign={'left'}>
             <Grid item xs={12} >
               <Typography variant="body1" fontWeight="bold" sx={{ mb: 3, mt: 3, }}>
-                {t("Type of the assessment ?")}
+                {t("Assessment Type?")}
               </Typography>
              
               <Grid spacing={0} container alignItems="end" justifyContent="flex-start">
@@ -73,7 +73,7 @@ export default function Step2() {
               <Grid spacing={3} container alignItems="center" justifyContent="flex-start">
                   <Grid item xs={12} >
                   <FormLabel sx={{ mx: 2 }}>
-                        {t('(this option will be hidden from the bidders by default unless you want to be shown in the review page before publishing your proposal)')}
+                        {t('((this option will be hidden from the bidders by default unless you want to be shown in the review page before publishing your proposal) from the bidders by default unless you want to be shown in the review page before publishing your proposal)')}
                       </FormLabel>
                       <TextField fullWidth={true} multiline rows={3} sx={{ '& .MuiOutlinedInput-root': { borderRadius: '10px' }, mt: 1 }} placeholder={`${t('Type here ..')}`} variant="outlined" />
                    
@@ -89,7 +89,7 @@ export default function Step2() {
               <Grid spacing={3} container alignItems="center" justifyContent="flex-start">
                   <Grid item xs={12} >
                   <FormLabel sx={{ mx: 2 }}>
-                        {t('(this option will be hidden from the bidders by default unless you want to be shown in the review page before publishing your proposal)')}
+                        {t('((this option will be hidden from the bidders by default unless you want to be shown in the review page before publishing your proposal) from the bidders by default unless you want to be shown in the review page before publishing your proposal)')}
                       </FormLabel>
                       <TextField fullWidth={true} multiline rows={3} sx={{ '& .MuiOutlinedInput-root': { borderRadius: '10px' }, mt: 1 }} placeholder={`${t('Description')}`} variant="outlined" />
                    

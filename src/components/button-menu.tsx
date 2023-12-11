@@ -78,7 +78,7 @@ export const MenuButton = (props: any) => {
         open={open}
         onClose={handleClose}
       >
-        {items.map((child: any, index: number) => {
+        {items?.map((child: any, index: number) => {
             return (
                 <MenuItem key={index} onClick={child.onClick} disabled={child.disabled} >
                     {t(child.label)}

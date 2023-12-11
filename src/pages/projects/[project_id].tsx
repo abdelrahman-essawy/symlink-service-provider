@@ -1,314 +1,382 @@
 import Head from "next/head";
-import {
-  Box,
-  Card,
-  Container,
-  Typography,
-  Button,
-  Grid,
-  CardContent,
-} from "@mui/material";
+import { Card, Container, Typography, Button, Grid, CardContent } from "@mui/material";
 import React from "react";
 import { DashboardLayout } from "../../layouts/dashboard/layout";
 import { useTranslation } from "react-i18next";
 import HeaderTabs from "@/components/_used-symline/tabs/headerTabs";
 import CustomTabPanel from "@/components/_used-symline/tabs/tabsPanel";
-import SharedTable, {  progressTagHandler } from "@/components/SharedTable";
+import SharedTable from "@/components/SharedTable";
 import { useRouter } from "next/router";
-import attachedFiles from "../../../public/attached-files.json";
-import VisibilityIcon from '@mui/icons-material/Visibility';
 import RoleBasedRender from "@/hocs/RoleBasedRender";
 import { useState } from "react";
 import { dictionary } from "@/configs/i18next";
 import bids from "../../../public/bids.json";
-import DeleteIcon from '@mui/icons-material/Delete';
 import ViewImagesDialog from "@/components/_used-symline/dialogs/view-images";
 import Chat from "@/components/_used-symline/chat/chat";
 import ConfirmDialog from "@/components/_used-symline/dialogs/confirm-dialog";
-const Page = () => {
-  const title = "Projects";
-  const { i18n } = useTranslation();
+import { useProject } from "@/hooks/use-project";
+import ProjectContextProvider from "@/contexts/project-context";
+import ProjectStatusBadge from "@/sections/projects/project-status";
+import { RequestForProposal } from "@/@types/project";
+import WebAnswers from "@/sections/projects/answers/web-answers";
+import NetworkAnswers from "@/sections/projects/answers/network-answers";
+import MobileAnswers from "@/sections/projects/answers/mobile-answers";
+import SourceCodeAnswers from "@/sections/projects/answers/sourceCode-answers";
+import ThreatHuntingAnswers from "@/sections/projects/answers/threatHunting-answers";
+import ArchitectureConfigurationReviewAnswer from "@/sections/projects/answers/architectureConfigurationReview-answer.tsx";
+import AttachedFilles from "@/sections/projects/project-details/attached-filles";
+import { getLocalTime, showErrorMessage } from "@/utils/helperFunctions";
+import BidModal from "@/components/modals/BidModal";
+import useAlert from "@/hooks/useAlert";
+import BidContextProvider from "@/contexts/bid-context";
+import { usePageUtilities } from "@/hooks/use-page-utilities";
+import { useBid } from "@/hooks/use-bid";
+import { DataTable } from "@/components/shared/DataTable";
 
+const listOfBidsHeaders = [
+    { text: "RFP name", value: "project_name" },
+    { text: "Status", value: "request_for_proposal_status" },
+    { text: "Creation date", value: "created_at" },
+    { text: "Expiration date", value: "expiration_date" },
+    { text: "Actions", value: "Actions" },
+]
+const Page = () => {
+  const title = "Project-details";
+  const { t } = useTranslation();
+  const router = useRouter();
+  const { project_id } = router.query;
+  const projectContext = useProject();
+  const bidContext = useBid();
   const [value, setValue] = useState(0);
   const [open, setOpen] = useState(false);
+  const { showAlert, renderForAlert } = useAlert();
+  const [openBidModle, setOpenBidModle] = useState(false);
   const [confirm, setConfirm] = useState(false);
   const handleCloseConfirm = () => setConfirm(false);
-  const handleOpenConfirm = () => {
-    setConfirm(true);
-  };
   const handleClose = () => setOpen(false);
-  const handleOpen= () => {
-    setOpen(true);
+
+  const { handlePageChange, handleRowsPerPageChange, handleSearch, controller, setController } =
+    usePageUtilities();
+
+  const fetchProject = async () => {
+    if (project_id && typeof project_id === "string") {
+      try {
+        await projectContext?.getProject(project_id);
+      } catch (error) {
+        router.push("/projects");
+      }
+    }
   };
+
+  const fetchListBids = async () => {
+    try {
+      await bidContext?.fetchlistoffers(controller?.page, controller?.rowsPerPage);
+    } catch (error) {
+      showAlert(showErrorMessage(error).toString(), "error");
+    }
+  };
+
+  React.useEffect(() => {
+    fetchProject();
+  }, [project_id]);
+
+
+  React.useEffect(() => {
+
+    fetchListBids();
+
+  }, [controller]);
 
   const handletabs = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
-  const router = useRouter()
   return (
     <>
       <Head>
         <title>{title} | Symline</title>
       </Head>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          py: 8,
-          bgcolor: "primary.lightest",
-          borderTopLeftRadius: i18n.language == 'ar' ? 25 : 0,
-          borderBottomLeftRadius: i18n.language == 'ar' ? 25 : 25,
-          borderTopRightRadius: i18n.language == 'ar' ? 0 : 25,
-          borderBottomRightRadius: i18n.language == 'ar' ? 0 : 25,
-        }}
-      >
-        <Container maxWidth="xl">
-          <Grid display={"flex"} alignItems={"center"} justifyContent={"start"} gap={10}>
-            <Typography variant="h3" sx={{ mb: 2 }} fontWeight={"bold"}>
-              {dictionary("Project name")}
-            </Typography>
-            <RoleBasedRender
-              componentId="tag-project-status">
-              {progressTagHandler("waiting for selection")}
+      <Container maxWidth="xl">
+        <Grid
+          display={"flex"}
+          alignItems={"center"}
+          justifyContent={"start"}
+          gap={5}
+          sx={{ mb: 3 }}
+        >
+          <Typography variant="h3" fontWeight={"bold"}>
+            {projectContext?.Selectedproject?.project_name}
+          </Typography>
+          <RoleBasedRender componentId="tag-project-status">
+            <ProjectStatusBadge
+              status={projectContext?.Selectedproject?.request_for_proposal_status}
+            />
+          </RoleBasedRender>
+        </Grid>
+
+        <Grid container spacing={2} justifyContent={"space-between"}>
+          <Grid item xs={12} md={8}>
+            <RoleBasedRender componentId="headertabs-service-provider-projects">
+              <HeaderTabs
+                value={value}
+                handleChange={handletabs}
+                tabs={[
+                  {
+                    title: "Questions",
+                  },
+                  {
+                    title: "Attached filles",
+                    amount: 5,
+                  },
+                  {
+                    title: "Discussion",
+                    amount: 0,
+                  },
+                ]}
+              />
+            </RoleBasedRender>
+
+            <RoleBasedRender componentId="headertabs-client-projects">
+              <HeaderTabs
+                value={value}
+                handleChange={handletabs}
+                tabs={[
+                  {
+                    title: "Questions",
+                  },
+                  {
+                    title: "Attached filles",
+                    amount: 5,
+                  },
+                  {
+                    title: "Discussion",
+                    amount: 0,
+                  },
+                  {
+                    title: "List of bids",
+                    amount: 6,
+                  },
+                ]}
+              />
             </RoleBasedRender>
           </Grid>
-
-          <Grid container spacing={2} justifyContent={"space-between"}>
-            <Grid item xs={12} md={8}>
-              <RoleBasedRender
-                componentId="headertabs-service-provider-projects">
-                <HeaderTabs
-                  value={value}
-                  handleChange={handletabs}
-                  tabs={
-                    [{
-                      title: "Discussion",
-                      amount: 0
-                    }, {
-                      title: "Attached filles",
-                      amount: 5
-                    },
-                    {
-                      title: "Questions",
-                      amount: 3
-                    },
-                    ]
-                  }
-                />
-              </RoleBasedRender>
-
-              <RoleBasedRender
-                componentId="headertabs-client-projects">
-                <HeaderTabs
-                  value={value}
-                  handleChange={handletabs}
-                  tabs={
-                    [{
-                      title: "Discussion",
-                      amount: 0
-                    }, {
-                      title: "Attached filles",
-                      amount: 5
-                    },
-                    {
-                      title: "Questions",
-                      amount: 3
-                    },
-                    {
-                      title: "List of bids",
-                      amount: 6
-                    },
-                    ]
-                  }
-                />
-              </RoleBasedRender>
+          <RoleBasedRender componentId="button-bid-rfp">
+            <Grid
+              item
+              xs={2}
+              sm={2}
+              sx={{ display: "flex", justifyContent: { sm: "end", xs: "start" } }}
+            >
+              <Button
+                onClick={() => setOpenBidModle(true)}
+                variant="contained"
+                color="warning"
+                sx={{ borderRadius: 8, px: 6 }}
+                size="large"
+              >
+                {dictionary("Bid")}
+              </Button>
             </Grid>
-            <RoleBasedRender
-              componentId="button-request-to-review">
-              <Grid item xs={12} md={3} sx={{ display: "flex", justifyContent: "end" }}>
-                <Button variant="contained" color="warning" sx={{ borderRadius: 8 }}>
-                  {"Submit to review"}
+          </RoleBasedRender>
+          {/* <RoleBasedRender
+              componentId="buttons-accept-reject-rfp"
+            >
+              <Grid item xs={2} md={2} sx={{ display: "flex", justifyContent: { sm: 'end', xs: 'start' } }}>
+                <Button
+
+                  variant="contained"
+                  color="warning"
+                  sx={{ borderRadius: 8 }}
+                >
+                  {dictionary("Accept")}
+                </Button>
+                <Button
+
+                  variant="contained"
+                  sx={{
+                    borderRadius: 8,
+                    color: "#ffffff",
+                    backgroundColor: "#6576d9",
+                  }}
+                >
+                  {dictionary("Reject")}
                 </Button>
               </Grid>
-            </RoleBasedRender>
-            {value === 1 &&
-              <RoleBasedRender
-                componentId="button-upload-file"
-              >
-                <Button variant="contained" color="warning" sx={{ borderRadius: 8, alignSelf: "center" }}>
-                  {dictionary("Upload file")}
-                </Button>
-              </RoleBasedRender>
-            }
 
+            </RoleBasedRender> */}
+          <Grid item xs={12}>
+            <Card elevation={0}>
+              <CustomTabPanel value={value} index={0}>
+                <CardContent sx={{ p: 1, direction: "rtl" }}>
+                  <Typography
+                    variant="h6"
+                    fontWeight="bold"
+                    color="primary"
+                    sx={{ p: 1, mb: 3, borderRadius: 1, bgcolor: "primary.lightest" }}
+                  >
+                    {t("General Questions")}
+                  </Typography>
+                  <Typography variant="h6" fontWeight="bold" sx={{ mb: 1 }}>
+                    {t(" What is preferred testing time ?")}
+                  </Typography>
+                  <Typography variant="h6" fontWeight="light" sx={{ mb: 4 }}>
+                    {projectContext?.Selectedproject?.time_type_meta_data?.name}
+                  </Typography>
 
-            <Grid item xs={12}>
-              <Card elevation={0}>
-                <CustomTabPanel value={value} index={0} padding={'0'}>
-                  <Chat />
-              
-                </CustomTabPanel>
-                <CustomTabPanel value={value} index={2}>
-                  <CardContent sx={{ p: 1 , direction: 'rtl'}}>
-                    <Typography
-                      variant="h6"
-                      fontWeight="bold"
-                      color="primary"
-                      sx={{ p: 1, mb: 3, borderRadius: 1, bgcolor: "primary.lightest" }}
-                    >
-                      General Questions
-                    </Typography>
-                    <Typography variant="h6" fontWeight="bold" sx={{ mb: 1 }}>
-                      What is preferred testing time ?
-                    </Typography>
-                    <Typography variant="h6" fontWeight="light" sx={{ mb: 4 }}>
-                      During the working hours
-                    </Typography>
-                    <Typography variant="h6" fontWeight="bold" sx={{ mb: 1 }}>
-                      In case of emergency , what is the contact details of the person the assessor
-                      should have a contact with :
-                    </Typography>
-                    <Typography variant="body1" fontWeight="bold" color="primary" sx={{ mb: 1 }}>
-                      First person:
-                    </Typography>
-                    <Grid container spacing={1} justifyContent={"space-between"}>
-                      <Grid item xs={12} md={4}>
-                        <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
-                          Name: Jone Doe
-                        </Typography>
-                      </Grid>
-                      <Grid item xs={12} md={4}>
-                        <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
-                          Email: johndoel@gmail.com
-                        </Typography>
-                      </Grid>
-                      <Grid item xs={12} md={4}>
-                        <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
-                          Mobile Number: 9876543210
-                        </Typography>
-                      </Grid>
-                    </Grid>
-                    <Typography variant="body1" fontWeight="bold" color="primary" sx={{ mb: 1 }}>
-                      First person:
-                    </Typography>
-                    <Grid container spacing={0} justifyContent={"space-between"}>
-                      <Grid item xs={12} md={4}>
-                        <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
-                          Name: Jone Doe
-                        </Typography>
-                      </Grid>
-                      <Grid item xs={12} md={4}>
-                        <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
-                          Email: johndoel@gmail.com
-                        </Typography>
-                      </Grid>
-                      <Grid item xs={12} md={4}>
-                        <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
-                          Mobile Number: 9876543210
-                        </Typography>
-                      </Grid>
-                    </Grid>
-                    <Typography
-                      variant="h6"
-                      fontWeight="bold"
-                      color="primary"
-                      sx={{ p: 1, mb: 3, borderRadius: 1, bgcolor: "primary.lightest" }}
-                    >
-                      Web
-                    </Typography>
-                    <Typography variant="h6" fontWeight="bold" sx={{ mb: 1 }}>
-                      What is preferred testing time ?
-                    </Typography>
-                    <Typography variant="h6" fontWeight="light" sx={{ mb: 4 }}>
-                      Vulnerability assessment
-                    </Typography>
-                    <Typography variant="h6" fontWeight="bold" sx={{ mb: 1 }}>
-                      ow many web applications you want to assess ?
-                    </Typography>
-                    <Grid container spacing={0} justifyContent={"space-start"}>
-                      <Grid item xs={12} md={4}>
-                        <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
-                          Internal applications: 7
-                        </Typography>
-                      </Grid>
-                      <Grid item xs={12} md={4}>
-                        <Typography variant="h6" fontWeight="light" sx={{ mb: 4 }}>
-                          External applications: 4
-                        </Typography>
-                      </Grid>
-                      <Typography variant="h6" fontWeight="bold" sx={{ mb: 1 }}>
-                        List the scoped applications: (i.e.domain.com)
-                      </Typography>
-                      <Typography variant="h6" fontWeight="light" sx={{ mb: 4 }}>
-                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo
-                        ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis
-                        parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec,
-                        pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec
-                        pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo,
-                        rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede
-                        mollis pretium. Integer tincidunt.
-                      </Typography>
-                      <Typography variant="h6" fontWeight="bold" sx={{ mb: 1 }}>
-                        4 Is verification required to assess whether the reported Vulnerability have
-                        been fixed ?
-                      </Typography>
-                    </Grid>
-                  </CardContent>
-                </CustomTabPanel>
-                <CustomTabPanel value={value} index={1}>
-                  <SharedTable endpoint="http://localhost:3000/attached-files.json"
-                    showActions={true}
-                    renderRowActions={(row: any) => {
-                      return (
-                        <Box sx={{ display: "flex", flexDirection: "row", gap: 1 }}>
-                          <VisibilityIcon color="primary" sx={{cursor:"pointer" , '&:hover': {color: 'primary.dark'}}}  onClick={handleOpen}/>
-                          <DeleteIcon color="primary" sx={{cursor:"pointer" , '&:hover': {color: 'primary.dark'}}} onClick={handleOpenConfirm} />
-                        </Box>
-                      )
-                    }}
-
-                    fakeData={attachedFiles} />
-                </CustomTabPanel>
-                <CustomTabPanel value={value} index={3}>
-                  <SharedTable
-                    endpoint="http://localhost:3000/bids.json"
-                    fakeData={bids}
-                    showActions={true}
-                    renderRowActions={(row) => (
-                      <Button
-                        variant="contained"
-                        color="warning"
-                        sx={{
-                          borderRadius: 8,
-                          backgroundColor: "#FFF8E6",
-                          border: 1,
-                          borderColor: "#FFD777",
-                        }}
-                        onClick={() => { }}
-                      >
-                        {dictionary("Accept")}
-                      </Button>
-                    )}
-                    muiTableBodyRowProps={(row) => ({
-                      onClick: () => router.push(`/bid/rfp-name`),
-                      sx: { cursor: "pointer" },
+                  <Typography variant="body1" fontWeight="bold" sx={{ mb: 1, mt: 3, px: 1 }}>
+                    {t("Select expire date")}
+                  </Typography>
+                  <Typography variant="h6" fontWeight="light" sx={{ mb: 4 }}>
+                    {getLocalTime(
+                      projectContext?.Selectedproject.expiration_date || ""
+                    ).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "numeric",
+                      day: "numeric",
                     })}
-                  />
-                </CustomTabPanel>
+                  </Typography>
 
-              </Card>
-            </Grid>
+                  <Typography variant="h6" fontWeight="bold" sx={{ mb: 1 }}>
+                    {t(`In case of emergency , what is the contact details of the person the assessor
+                      should have a contact with :`)}
+                  </Typography>
+                  <Typography variant="body1" fontWeight="bold" color="primary" sx={{ mb: 1 }}>
+                    {t("First person:")}
+                  </Typography>
+                  <Grid container spacing={1} justifyContent={"space-between"}>
+                    <Grid item xs={12} md={4}>
+                      <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
+                        {`Name: ${projectContext?.Selectedproject?.firstFullName}`}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                      <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
+                        {`Email: ${projectContext?.Selectedproject?.firstEmail}`}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                      <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
+                        {`Mobile Number: ${projectContext?.Selectedproject?.firstMobile}`}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                  <Typography variant="body1" fontWeight="bold" color="primary" sx={{ mb: 1 }}>
+                    {t("Second person:")}
+                  </Typography>
+                  <Grid container spacing={0} justifyContent={"space-between"}>
+                    <Grid item xs={12} md={4}>
+                      <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
+                        {`Name: ${projectContext?.Selectedproject?.secondFullName}`}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                      <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
+                        {`Email: ${projectContext?.Selectedproject?.secondEmail}`}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                      <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
+                        {`Mobile Number: ${projectContext?.Selectedproject?.secondMobile}`}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+
+                  {projectContext?.Selectedproject?.request_for_proposal &&
+                    projectContext?.Selectedproject?.request_for_proposal?.map(
+                      (item: RequestForProposal) =>
+                        item?.category?.name === "Web" ? (
+                          <WebAnswers key={item?.id} project={item} />
+                        ) : item?.category?.name === "Architecture composition review" ? (
+                          <ArchitectureConfigurationReviewAnswer key={item?.id} project={item} />
+                        ) : item?.category?.name === "the network" ? (
+                          <NetworkAnswers project={item} key={item?.id} />
+                        ) : item?.category?.name === "the phone" ? (
+                          <MobileAnswers project={item} key={item?.id} />
+                        ) : item?.category?.name === "Source code" ? (
+                          <SourceCodeAnswers project={item} key={item?.id} />
+                        ) : item?.category?.name === "Threat hunting" ? (
+                          <ThreatHuntingAnswers project={item} key={item?.id} />
+                        ) : (
+                          <></>
+                        )
+                    )}
+                </CardContent>
+              </CustomTabPanel>
+
+              <CustomTabPanel value={value} index={1}>
+                <AttachedFilles projectId={project_id} />
+              </CustomTabPanel>
+
+              <CustomTabPanel value={value} index={2} padding={"0"}>
+                <Chat />
+              </CustomTabPanel>
+
+              <CustomTabPanel value={value} index={3}>
+                {/* <SharedTable
+                  endpoint="http://localhost:3000/bids.json"
+                  fakeData={bids}
+                  showActions={true}
+                  renderRowActions={(row) => (
+                    <Button
+                      variant="contained"
+                      color="warning"
+                      sx={{
+                        borderRadius: 8,
+                        backgroundColor: "#FFF8E6",
+                        border: 1,
+                        borderColor: "#FFD777",
+                      }}
+                      onClick={() => {}}
+                    >
+                      {dictionary("Accept")}
+                    </Button>
+                  )}
+                  muiTableBodyRowProps={(row) => ({
+                    onClick: () => router.push(`/bid/rfp-name`),
+                    sx: { cursor: "pointer" },
+                  })}
+                /> */}
+                  <DataTable
+                        headers={listOfBidsHeaders}
+                        name="Project"
+                        items={bidContext?.offers}
+                        totalItems={bidContext?.count}
+                        totalPages={bidContext?.totalPages}
+                        page={controller?.page || 1}
+                        rowsPerPage={controller?.rowsPerPage}
+                        onPageChange={handlePageChange}
+                        onRowsPerPageChange={handleRowsPerPageChange}
+                        // {...additionalTableProps}
+                      />
+              </CustomTabPanel>
+            </Card>
           </Grid>
-        </Container>
-
-      </Box>
-      <ViewImagesDialog open={open} handleClose={handleClose}/>
-
-        <ConfirmDialog open={ confirm} handleClose={ handleCloseConfirm} message="Are you sure you want to delete this file ?"/>
+        </Grid>
+        {renderForAlert()}
+      </Container>
+      <ViewImagesDialog open={open} handleClose={handleClose} />
+      <ConfirmDialog
+        open={confirm}
+        handleClose={handleCloseConfirm}
+        message="Are you sure you want to delete this file ?"
+      />
+      <BidModal
+        open={openBidModle}
+        handleClose={() => {
+          setOpenBidModle(false);
+        }}
+        multi_RFP_id={project_id}
+        showMessage={showAlert}
+      />
     </>
   );
 };
 
-Page.getLayout = (page: any) => <DashboardLayout>{page}</DashboardLayout>;
+Page.getLayout = (page: any) => (
+  <DashboardLayout>
+    <BidContextProvider>
+      <ProjectContextProvider>{page}</ProjectContextProvider>
+    </BidContextProvider>
+  </DashboardLayout>
+);
 
 export default Page;

@@ -189,9 +189,12 @@ export function createComponents(palette: Palette): Components<Omit<Theme, 'comp
         input: {
           fontSize: 14,
           padding: '14px !important',
-
           fontWeight: 500,
-          lineHeight: '24px'
+          lineHeight: '24px',
+          '&:-webkit-autofill': {
+            transition: 'background-color 5000s ease-in-out 0s',
+            backgroundColor: 'inherit !important',
+          },
         }
       }
     },
