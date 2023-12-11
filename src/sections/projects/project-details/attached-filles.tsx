@@ -131,6 +131,7 @@ function AttachedFilles({ projectId }: { projectId: any }) {
             <EyeIcon />
           </IconButton>
         </Tooltip>
+        
         <Tooltip arrow placement="top" title="Delete">
           <IconButton onClick={handleOpenConfirm}>
             <TrashIcon />

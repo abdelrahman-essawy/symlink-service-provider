@@ -2,7 +2,7 @@ import { Box, Grid, Typography } from "@mui/material";
 
 function Noitems({ title, icon }: any) {
   return (
-    <Box minHeight={600} display={"flex"} alignItems={"center"} justifyContent={"center"}>
+    <Box minHeight={520} display={"flex"} alignItems={"center"} justifyContent={"center"}>
       <Grid
         xs={12}
         className="no-orders"

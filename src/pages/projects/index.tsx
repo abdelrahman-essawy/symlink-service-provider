@@ -1,29 +1,23 @@
 import Head from "next/head";
-import { Box, Button, Card, Container, Grid, Typography } from "@mui/material";
+import {  Button, Card, Container, Grid, Typography } from "@mui/material";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { dictionary, TranslatedWord } from "@/configs/i18next";
 import router from "next/router";
 import RoleBasedRender from "@/hocs/RoleBasedRender";
-import { useEffect, useMemo, useState } from "react";
-import { Stack, Tooltip, Avatar, Switch } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Stack } from "@mui/material";
 import { usePageUtilities } from "@/hooks/use-page-utilities";
 import useAlert from "@/hooks/useAlert";
-import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
-import IconButton from "@mui/material/IconButton";
 import { DashboardLayout } from "@/layouts/dashboard/layout";
 import { DataTable } from "@/components/shared/DataTable";
-import Link from "next/link";
 import ConfirmationPopup from "@/components/confirmation-popup";
-import projectContextProvider from "@/contexts/project-context";
 import { useProject } from "@/hooks/use-project";
 import ProjectContextProvider from "@/contexts/project-context";
 import { IProject } from "@/@types/project";
 import { useRouter } from "next/navigation";
 import { getLocalTime } from "@/utils/helperFunctions";
 import ProjectStatusBadge from "@/sections/projects/project-status";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import { MenuButton } from "@/components/button-menu";
 import { TActionMenuButton } from "@/components/shared/MenuItems";
 import { sharedStyles } from "@/utils/sharedStyles";
 import { CardTableActions } from "@/sections/projects/Project-table-actions";
@@ -196,7 +190,6 @@ const Page = () => {
           <Grid container spacing={2} justifyContent={"space-between"}>
             <Grid item xs={12}>
               <Card sx={{ p: 2 }}>
-                <RoleBasedRender componentId="table-service-provider-projects">
                   {projectContext?.count == undefined || projectContext?.count > 0 ? (
                     <Stack spacing={2}>
                       <SearchBar onSearchChange={handleSearch} />
@@ -219,32 +212,6 @@ const Page = () => {
                       icon={<FolderCopyIcon sx={{ color: "gray", fontSize: "4.2em" }} />}
                     />
                   )}
-                </RoleBasedRender>
-
-                <RoleBasedRender componentId="table-client-projects">
-                  {projectContext?.count == undefined || projectContext?.count > 0 ? (
-                    <Stack spacing={1}>
-                      <SearchBar onSearchChange={handleSearch} />
-                      <DataTable
-                        headers={headers}
-                        name="Project"
-                        items={projectContext?.projects}
-                        totalItems={projectContext?.count}
-                        totalPages={projectContext?.totalPages}
-                        page={controller?.page || 1}
-                        rowsPerPage={controller?.rowsPerPage}
-                        onPageChange={handlePageChange}
-                        onRowsPerPageChange={handleRowsPerPageChange}
-                        {...additionalTableProps}
-                      />
-                    </Stack>
-                  ) : (
-                    <Noitems
-                      title={"No Project yet"}
-                      icon={<FolderCopyIcon sx={{ color: "gray", fontSize: "4.2em" }} />}
-                    />
-                  )}
-                </RoleBasedRender>
               </Card>
             </Grid>
           </Grid>
