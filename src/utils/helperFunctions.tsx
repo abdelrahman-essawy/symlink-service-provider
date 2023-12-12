@@ -131,7 +131,12 @@ export async function downloadFileUsingFetch(url: string, fileName: string) {
 }
 
 export const showErrorMessage:(err:any)=>string =(err:any) =>{
-  if (err?.response?.status == 400 || err?.response?.status == 422) {
+
+  if(err?.response?.status == 404 ){
+    return "404 Not Found";
+  }
+
+  else if (err?.response?.status == 400 || err?.response?.status == 422) {
     if ((err?.response?.data?.message?.message ||  err?.response?.data?.message?.Message) && typeof err?.response?.data?.message?.message== "string") {
       console.log(err?.response?.data?.message?.message);
       return(err?.response?.data?.message?.message|| err?.response?.data?.message?.Message);
@@ -142,12 +147,9 @@ export const showErrorMessage:(err:any)=>string =(err:any) =>{
     else if (err?.response?.data?.message?.message && typeof err?.response?.data?.message?.message === 'object') {
       return(err?.response?.data?.message?.message[0]);
     }
-  } else if (err?.response?.status == 400)
-    if (Object.keys(err?.response?.data?.errors)?.length > 0) {
-      const errors = err?.response?.data?.errors;
-      const firstError = Object.keys(errors)[0];
-      return(`${firstError}: ${errors[firstError]}`);
-    } else if (err.response.status == 500) {
+  }  
+  
+  else if (err?.response?.status == 500) {
       return(err?.response?.data?.message);
     } else {
       return "unknown error occurred";

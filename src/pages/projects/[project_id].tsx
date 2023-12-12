@@ -1,11 +1,10 @@
 import Head from "next/head";
 import { Card, Container, Typography, Button, Grid, CardContent } from "@mui/material";
-import React from "react";
+import React, { useCallback } from "react";
 import { DashboardLayout } from "../../layouts/dashboard/layout";
 import { useTranslation } from "react-i18next";
 import HeaderTabs from "@/components/_used-symline/tabs/headerTabs";
 import CustomTabPanel from "@/components/_used-symline/tabs/tabsPanel";
-import SharedTable from "@/components/SharedTable";
 import { useRouter } from "next/router";
 import RoleBasedRender from "@/hocs/RoleBasedRender";
 import { useState } from "react";
@@ -32,14 +31,17 @@ import BidContextProvider from "@/contexts/bid-context";
 import { usePageUtilities } from "@/hooks/use-page-utilities";
 import { useBid } from "@/hooks/use-bid";
 import { DataTable } from "@/components/shared/DataTable";
+import { IOffer } from "@/@types/bid";
+import axiosClient from "@/configs/axios-client";
+import ConfirmationPopup from "@/components/confirmation-popup";
 
 const listOfBidsHeaders = [
-    { text: "RFP name", value: "project_name" },
-    { text: "Status", value: "request_for_proposal_status" },
-    { text: "Creation date", value: "created_at" },
-    { text: "Expiration date", value: "expiration_date" },
-    { text: "Actions", value: "Actions" },
-]
+  { text: "Bidder name", value: "user_id" },
+  { text: "Cost", value: "price" },
+  { text: "Duration", value: "duration" },
+  { text: "Commitment", value: "expiration_date" },
+  { text: "Actions", value: "Actions" },
+];
 const Page = () => {
   const title = "Project-details";
   const { t } = useTranslation();
@@ -51,12 +53,27 @@ const Page = () => {
   const [open, setOpen] = useState(false);
   const { showAlert, renderForAlert } = useAlert();
   const [openBidModle, setOpenBidModle] = useState(false);
+  const [SelectedOfferId, setSelectedOfferId] = useState('');
   const [confirm, setConfirm] = useState(false);
   const handleCloseConfirm = () => setConfirm(false);
   const handleClose = () => setOpen(false);
 
   const { handlePageChange, handleRowsPerPageChange, handleSearch, controller, setController } =
     usePageUtilities();
+
+  const fetchAttachedFiles = async () => {
+    if (project_id && typeof project_id === "string") {
+      try {
+        await projectContext?.fetchAttachedFile(
+          controller?.page,
+          controller?.rowsPerPage,
+          project_id
+        );
+      } catch (error) {
+        showAlert(showErrorMessage(error).toString(),'error');
+      }
+    }
+  };
 
   const fetchProject = async () => {
     if (project_id && typeof project_id === "string") {
@@ -69,10 +86,13 @@ const Page = () => {
   };
 
   const fetchListBids = async () => {
-    try {
-      await bidContext?.fetchlistoffers(controller?.page, controller?.rowsPerPage);
-    } catch (error) {
-      showAlert(showErrorMessage(error).toString(), "error");
+    if (project_id && typeof project_id === "string") {
+      try {
+        await bidContext?.fetchlistOffers(project_id, controller?.page, controller?.rowsPerPage);
+
+      } catch (error) {
+        showAlert(showErrorMessage(error).toString(), "error");
+      }
     }
   };
 
@@ -80,15 +100,55 @@ const Page = () => {
     fetchProject();
   }, [project_id]);
 
-
   React.useEffect(() => {
-
-    fetchListBids();
-
+    fetchAttachedFiles(); //1
+    //depends on tap value
+    fetchListBids(); //2
   }, [controller]);
 
   const handletabs = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
+  };
+
+//for bids table
+const handleAcceptRequest =  (offerID:any) => {
+  setSelectedOfferId(offerID);
+  setConfirm(true);
+};
+const ConfirmAcceptance = async() => {
+  try {
+    await axiosClient?.post(`/offers/acceptOffer`,{offer_id:SelectedOfferId,multi_RFP_id:project_id})
+    showAlert("Offer has been accepted successfully - Let's begin this exciting journey", "success");
+  } catch (error) {
+    showAlert(showErrorMessage(error).toString(), 'error');
+  }
+  setConfirm(false);
+}
+  const additionalTablePropsForListOfBids = {
+    onRenderActions: (item: IOffer) => {
+      return (
+        <Button
+          variant="contained"
+          color="warning"
+          sx={{
+            borderRadius: 8,
+            backgroundColor: "#FFF8E6",
+            border: 1,
+            borderColor: "#FFD777",
+          }}
+          onClick={() => {
+            handleAcceptRequest(item?.id);
+          }}
+        >
+          {dictionary("Accept")}
+        </Button>
+      );
+    },
+    onRenderduration: (item: IOffer) => {
+      return (
+        <Typography variant="body2">{` ${item?.duration_num}   ${item?.duration}  `}</Typography>
+      );
+    },
   };
   return (
     <>
@@ -125,7 +185,7 @@ const Page = () => {
                   },
                   {
                     title: "Attached filles",
-                    amount: 5,
+                    amount: projectContext?.countFiles,
                   },
                   {
                     title: "Discussion",
@@ -145,7 +205,7 @@ const Page = () => {
                   },
                   {
                     title: "Attached filles",
-                    amount: 5,
+                    amount: projectContext?.countFiles,
                   },
                   {
                     title: "Discussion",
@@ -153,7 +213,7 @@ const Page = () => {
                   },
                   {
                     title: "List of bids",
-                    amount: 6,
+                    amount: bidContext?.countOffers,
                   },
                 ]}
               />
@@ -303,7 +363,14 @@ const Page = () => {
               </CustomTabPanel>
 
               <CustomTabPanel value={value} index={1}>
-                <AttachedFilles projectId={project_id} />
+                <AttachedFilles
+                  RefreshAttachedFiles={fetchAttachedFiles}
+                  projectId={project_id}
+                  controller={controller}
+                  handlePageChange={handlePageChange}
+                  handleRowsPerPageChange={handleRowsPerPageChange}
+                  attachedFiles={projectContext?.files}
+                />
               </CustomTabPanel>
 
               <CustomTabPanel value={value} index={2} padding={"0"}>
@@ -311,42 +378,18 @@ const Page = () => {
               </CustomTabPanel>
 
               <CustomTabPanel value={value} index={3}>
-                {/* <SharedTable
-                  endpoint="http://localhost:3000/bids.json"
-                  fakeData={bids}
-                  showActions={true}
-                  renderRowActions={(row) => (
-                    <Button
-                      variant="contained"
-                      color="warning"
-                      sx={{
-                        borderRadius: 8,
-                        backgroundColor: "#FFF8E6",
-                        border: 1,
-                        borderColor: "#FFD777",
-                      }}
-                      onClick={() => {}}
-                    >
-                      {dictionary("Accept")}
-                    </Button>
-                  )}
-                  muiTableBodyRowProps={(row) => ({
-                    onClick: () => router.push(`/bid/rfp-name`),
-                    sx: { cursor: "pointer" },
-                  })}
-                /> */}
-                  <DataTable
-                        headers={listOfBidsHeaders}
-                        name="Project"
-                        items={bidContext?.offers}
-                        totalItems={bidContext?.count}
-                        totalPages={bidContext?.totalPages}
-                        page={controller?.page || 1}
-                        rowsPerPage={controller?.rowsPerPage}
-                        onPageChange={handlePageChange}
-                        onRowsPerPageChange={handleRowsPerPageChange}
-                        // {...additionalTableProps}
-                      />
+                <DataTable
+                  headers={listOfBidsHeaders}
+                  name="Project"
+                  items={bidContext?.offers}
+                  totalItems={bidContext?.countOffers}
+                  totalPages={bidContext?.totalPages}
+                  page={controller?.page || 1}
+                  rowsPerPage={controller?.rowsPerPage}
+                  onPageChange={handlePageChange}
+                  onRowsPerPageChange={handleRowsPerPageChange}
+                  {...additionalTablePropsForListOfBids}
+                />
               </CustomTabPanel>
             </Card>
           </Grid>
@@ -354,11 +397,14 @@ const Page = () => {
         {renderForAlert()}
       </Container>
       <ViewImagesDialog open={open} handleClose={handleClose} />
-      <ConfirmDialog
-        open={confirm}
-        handleClose={handleCloseConfirm}
-        message="Are you sure you want to delete this file ?"
-      />
+      <ConfirmationPopup
+          open={confirm}
+          handleClose={handleCloseConfirm}
+          message={t("Are you sure you want to accept this Offer ?")}
+          title={t("Offer Accepttance")}
+          confirmFuntion={ConfirmAcceptance}
+          setOpen={setConfirm}
+        />
       <BidModal
         open={openBidModle}
         handleClose={() => {
