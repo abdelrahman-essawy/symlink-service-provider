@@ -1,7 +1,6 @@
 import { Box, Button, Grid,  Tooltip, IconButton } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { usePageUtilities } from "@/hooks/use-page-utilities";
 import useAlert from "@/hooks/useAlert";
 import { DataTable } from "@/components/shared/DataTable";
 import { useProject } from "@/hooks/use-project";
@@ -18,7 +17,16 @@ import FilePresentIcon from "@mui/icons-material/FilePresent";
 import PhotoIcon from "@mui/icons-material/Photo";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 
-function AttachedFilles({ projectId }: { projectId: any }) {
+export interface IProps{
+  RefreshAttachedFiles:() => void;
+  projectId:any;
+  handlePageChange:(event: any, newPage: number) => void;
+  handleRowsPerPageChange:(event: any) => void;
+  controller:any;
+  attachedFiles?:any[];
+}
+
+function AttachedFilles({ RefreshAttachedFiles,projectId,controller,handlePageChange,handleRowsPerPageChange,attachedFiles }: IProps) {
   const projectContext = useProject();
   const { showAlert, renderForAlert } = useAlert();
 
@@ -54,17 +62,7 @@ function AttachedFilles({ projectId }: { projectId: any }) {
     setOpenPdf(true);
   };
 
-  const { handlePageChange, handleRowsPerPageChange, handleSearch, controller, setController } =
-    usePageUtilities();
 
-  const fetchAttachedFiles = async () => {
-    await projectContext?.fetchAttachedFile(controller?.page, controller?.rowsPerPage, projectId);
-  };
-
-  useEffect(() => {
-    fetchAttachedFiles();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [controller]);
 
   const handleDeleteFile = (FileId: string) => {
     setSelectedFileId(FileId);
@@ -93,7 +91,7 @@ function AttachedFilles({ projectId }: { projectId: any }) {
         });
         if (res.status == 201 || res.status == 200) {
           showAlert("File uploaded successfully", "success");
-          fetchAttachedFiles();
+          RefreshAttachedFiles();
         }
       } catch (error) {
         console.log(showErrorMessage(error));
@@ -201,8 +199,8 @@ function AttachedFilles({ projectId }: { projectId: any }) {
       <DataTable
         headers={headers}
         name="AttachedFilles"
-        items={projectContext?.files}
-        totalItems={projectContext?.count}
+        items={attachedFiles}
+        totalItems={projectContext?.countFiles}
         totalPages={projectContext?.totalPages}
         page={controller?.page || 1}
         rowsPerPage={controller?.rowsPerPage}

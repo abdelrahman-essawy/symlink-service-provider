@@ -25,6 +25,7 @@ export interface Certifcate {
   id: string
   file: string
   type: string
+  name?:string
 }
 
 type ActionType = { type: string, payload: any }

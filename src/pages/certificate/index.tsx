@@ -158,7 +158,7 @@ const Page = () => {
                             }}
                           >
                             <Typography variant="h6" fontWeight="bold" color="primary">
-                              {certificate?.id}
+                              {certificate?.name||certificate?.id}
                             </Typography>
                             <Box>
                               <IconButton sx={{ mx: 1 }}>
