@@ -32,6 +32,9 @@ const Page = () => {
     getProviderInfo();
   }, []);
 
+  useEffect(() => {
+    setEducational_info(auth?.providerInfo?.info)
+  },[auth?.providerInfo?.info]);
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
@@ -71,7 +74,7 @@ const Page = () => {
                 fullWidth
                 id="Bio"
                 placeholder={`${t("Type here your educational info")}`}
-                value={educational_info||auth?.providerInfo?.info}
+                value={educational_info}
                 onChange={(e) => {
                   setEducational_info(e.target.value);
                 }}
