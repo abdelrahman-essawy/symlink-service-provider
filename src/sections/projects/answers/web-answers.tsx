@@ -41,7 +41,7 @@ export default function WebAnswers({  project }: IProps) {
             )}
           </Typography>
           <Typography variant="h6" fontWeight="light" >
-              {project?.how_can_the_assessor_access_it || "-" }
+              {project?.how_can_the_assessor_access_it || " - " }
             </Typography>
       </Grid>
       <Grid item xs={12} sx={{ mb: 1, mt: 2 }} gap={1.5} display={"flex"} flexDirection={"column"}>

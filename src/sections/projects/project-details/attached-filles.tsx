@@ -111,7 +111,8 @@ function AttachedFilles({ RefreshAttachedFiles,projectId,controller,handlePageCh
       month: "numeric",
       day: "numeric",
     }),
-    onRenderActions: (file: any) => (
+    onRenderActions: false? 
+    (file: any) => (
       <Box sx={{ display: "flex", gap: 0, alignItems: "baseline" }}>
         <Tooltip arrow placement="top" title="View files">
           <IconButton
@@ -138,7 +139,35 @@ function AttachedFilles({ RefreshAttachedFiles,projectId,controller,handlePageCh
           </IconButton>
         </Tooltip>
       </Box>
-    ),
+    ) :
+    (file: any) => (
+      <Box sx={{ display: "flex", gap: 0, alignItems: "baseline" }}>
+        <Tooltip arrow placement="top" title="View files">
+          <IconButton
+            onClick={() => {
+              if (typeof file?.type === "string") {
+                if (file?.type?.includes("application/pdf")) {
+                  handleOpenPdf(file?.url);
+                } else if (file?.type?.includes("image")) {
+                  handleOpenfile(file?.url);
+                } else {
+                  //open the file outside
+                  window.open(file?.url, "_blank");
+                }
+              }
+            }}
+          >
+            <EyeIcon />
+          </IconButton>
+        </Tooltip>
+        
+        <Tooltip arrow placement="top" title="Delete">
+          <IconButton onClick={handleOpenConfirm}>
+            <TrashIcon />
+          </IconButton>
+        </Tooltip>
+      </Box>
+    ) ,
     onRendertype: useCallback((file: any) => {
       if (file?.type?.includes("image")) {
         return (

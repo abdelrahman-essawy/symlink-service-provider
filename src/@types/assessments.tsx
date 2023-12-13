@@ -30,6 +30,7 @@ export interface IQuestion {
     necessary_resident_be_on_site: boolean;
     how_many_times_on_site: number;
     How_many_user_roles: number;
+    how_can_the_assessor_access_it: string;
     how_to_access_the_application: string;
     how_many_IPS_should_be_tested_in_servers: number;
     how_many_IPS_should_be_tested_in_workstations: number;
