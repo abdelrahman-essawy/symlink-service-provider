@@ -131,6 +131,7 @@ const ConfirmAcceptance = async() => {
 }
   const additionalTablePropsForListOfBids = {
     onRenderActions: (item: IOffer) => {
+    if(projectContext?.Selectedproject?.request_for_proposal_status == "PENDING")
       return (
         <Button
           variant="contained"
@@ -148,6 +149,18 @@ const ConfirmAcceptance = async() => {
           {dictionary("Accept")}
         </Button>
       );
+      if(item?.is_accepted){
+        return( <Typography
+         >
+           {t("Accepted")}
+         </Typography>)
+       }
+       else{
+        return( <Typography
+          >
+            {t(" - ")}
+          </Typography>)
+       }
     },
     onRenderduration: (item: IOffer) => {
       return (
@@ -224,7 +237,8 @@ const ConfirmAcceptance = async() => {
               />
             </RoleBasedRender>
           </Grid>
-          <RoleBasedRender componentId="button-bid-rfp">
+          {projectContext?.Selectedproject?.request_for_proposal_status == "PENDING" &&
+            <RoleBasedRender componentId="button-bid-rfp">
             <Grid
               item
               xs={2}
@@ -241,7 +255,7 @@ const ConfirmAcceptance = async() => {
                 {dictionary("Bid")}
               </Button>
             </Grid>
-          </RoleBasedRender>
+          </RoleBasedRender>}
           {/* <RoleBasedRender
               componentId="buttons-accept-reject-rfp"
             >

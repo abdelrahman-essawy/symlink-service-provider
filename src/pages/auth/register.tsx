@@ -34,7 +34,7 @@ import FormControl from "@mui/material/FormControl";
 const Page = () => {
   const router = useRouter();
   const auth = useAuth();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [selectedFile, setSelectedFile] = useState<any>(null);
   const [previewUrl, setPreviewUrl] = useState<any>(null);
   const [showPassword, setShowPassword] = useState(false);
@@ -49,11 +49,11 @@ const Page = () => {
   };
   const Roles = [
     {
-      id: "1",
+      id: "PROVIDER",
       name: "Expert",
     },
     {
-      id: "2",
+      id: "CLIENT",
       name: "Company",
     },
   ];
@@ -197,9 +197,10 @@ const Page = () => {
                                 <FormControlLabel
                                   sx={{ width: "100%" }}
                                   value={role?.id}
-                                  control={<Radio color="warning" />}
+                                  control={<Radio color="warning" required />}
                                   label={t(role?.name)}
                                   color="warning"
+                                  
                                 />
                               </Grid>
                             );
