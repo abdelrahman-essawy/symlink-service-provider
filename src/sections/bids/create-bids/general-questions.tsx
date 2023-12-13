@@ -103,7 +103,7 @@ function GeneralQuestions({
                   sx={{ mb: 1, mt: 3, px: 1 }}
                   id="time_type_id"
                 >
-                  {t("What is the allowed  testing time ?")}
+                  {t("What is the allowed testing time ?")}
                 </Typography>
                 <RadioGroup
                   row

@@ -55,9 +55,9 @@ export default function Mobile({ onChange, onChangeNumber, projects, index }: IP
             </Typography>
             <RadioGroup
               row
-              aria-labelledby="assessments_type_id"
-              name="assessments_type_id"
-              value={projects[index]?.assessments_type_id}
+              aria-labelledby="apis_size_id"
+              name="apis_size_id"
+              value={projects[index]?.apis_size_id}
               onChange={(e: any) => onChange(e, index)}
             >
               <Grid container>

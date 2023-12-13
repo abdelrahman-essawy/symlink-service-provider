@@ -3,7 +3,6 @@ import {
   FormLabel,
   Grid,
   Typography,
-  Checkbox,
   FormControlLabel,
   TextField,
 } from "@mui/material";
@@ -101,7 +100,8 @@ export default function Web({ onChange, onChangeNumber, projects, index }: IProp
             sx={{ "& .MuiOutlinedInput-root": { borderRadius: "50px" }, mt: 1 }}
             placeholder={`${t("Type here ..")}`}
             variant="outlined"
-            value={projects[index]?.how_to_access_the_application}
+            name="how_can_the_assessor_access_it"
+            value={projects[index]?.how_can_the_assessor_access_it}
             onChange={(e: any) => onChange(e, index)}
           />
         </Grid>
@@ -115,6 +115,7 @@ export default function Web({ onChange, onChangeNumber, projects, index }: IProp
             sx={{ "& .MuiOutlinedInput-root": { borderRadius: "50px" }, mt: 1 }}
             placeholder={`${t("Type here ..")}`}
             variant="outlined"
+            name="how_to_access_the_application"
             value={projects[index]?.how_to_access_the_application}
             onChange={(e: any) => onChange(e, index)}
           />
@@ -184,7 +185,7 @@ export default function Web({ onChange, onChangeNumber, projects, index }: IProp
             <Grid item xs={12}>
               <FormLabel sx={{ mx: 0.5 }}>
                 {t(
-                  "((this option will be hidden from the bidders by default unless you want to be shown in the review page before publishing your proposal) from the bidders by default unless you want to be shown in the review page before publishing your proposal)"
+                  "(this option will be hidden from the bidders by default unless you want to be shown in the review page before publishing your proposal) from the bidders by default unless you want to be shown in the review page before publishing your proposal)"
                 )}
               </FormLabel>
               <TextField
