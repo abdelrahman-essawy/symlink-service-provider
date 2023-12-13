@@ -1,139 +1,225 @@
-import Head from 'next/head';
-import { Box, Card, Container, createTheme, Stack, Tab, Grid, CardHeader, Tabs, CardContent, Typography, Button, OutlinedInput, IconButton } from '@mui/material';
-import React, { useState, useRef } from 'react';
-import { DashboardLayout } from '../../layouts/dashboard/layout';
-import { useTranslation } from 'react-i18next';
-import CustomTabPanel from '@/components/_used-symline/tabs/tabsPanel';
-import { dictionary, TranslatedWord } from '@/configs/i18next';
-import BorderColorIcon from '@mui/icons-material/BorderColor';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import ExperienceDialog from '@/components/_used-symline/dialogs/experience-dialog';
+import Head from "next/head";
+import {
+  Box,
+  Card,
+  Container,
+  Grid,
+  CardContent,
+  Typography,
+  Button,
+  IconButton,
+} from "@mui/material";
+import React, { useState, useEffect, useCallback } from "react";
+import { DashboardLayout } from "../../layouts/dashboard/layout";
+import { useTranslation } from "react-i18next";
+import { dictionary, TranslatedWord } from "@/configs/i18next";
+import BorderColorIcon from "@mui/icons-material/BorderColor";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import ExperienceDialog from "@/components/_used-symline/dialogs/experience-dialog";
 import ConfirmDialog from "@/components/_used-symline/dialogs/confirm-dialog";
-
+import useAlert from "@/hooks/use-alert";
+import { useAuth } from "@/hooks/use-auth";
+import { getLocalTime, showErrorMessage } from "@/utils/helperFunctions";
+import Noitems from "@/components/shared/no-items";
+import FolderCopyIcon from "@mui/icons-material/FolderCopy";
+import { project } from "@/contexts/auth-context";
+import ConfirmationPopup from "@/components/confirmation-popup";
+import axiosClient from "@/configs/axios-client";
 const Page = () => {
-
-  const { i18n } = useTranslation();
-  const title = 'Experience';
-  const { t } = useTranslation();
+  const title = "Experience";
+  const { t, i18n } = useTranslation();
+  const auth = useAuth();
   const [open, setOpen] = useState(false);
-  const [dialogName,setDialogName] = useState('');
-  const [value, setValue] = useState(0);
+  const [dialogName, setDialogName] = useState("");
+  const [selectedProjectId, setSelectedProjectId] = useState("");
+  const [selectedProject, setSelectedProject] = useState<project| undefined>(undefined);
+  const { showAlert, renderForAlert } = useAlert();
   const [confirm, setConfirm] = useState(false);
   const handleCloseConfirm = () => setConfirm(false);
-  const handleOpenConfirm = () => {
-    setConfirm(true);
-  };
-  const handleClose = () => setOpen(false);
-  const handleOpenAdd = () => {
-    setDialogName('Add experience');
-    setOpen(true);
-  };
-  const handleOpenEdit = () => {
-    setDialogName('Edit experience');
-    setOpen(true);
 
+  const handleClose = () => setOpen(false);
+
+  const handleOpenAdd = () => {
+    setDialogName("Add experience");
+    setSelectedProject(undefined);
+    setOpen(true);
   };
-  const handletabs = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
+  const handleOpenEdit = useCallback(
+    (project:project) => {
+      setDialogName("Edit experience");
+      setSelectedProject(project);
+      setOpen(true);
+    },
+    [],
+  )
+  
+
+  const getProviderInfo = async () => {
+    try {
+      await auth?.getProviderInfo();
+    } catch (error) {
+      showAlert(showErrorMessage(error), "error");
+    }
   };
-  return <>
-    <Head>
-      <title>
-        {title} | Symline
-      </title>
-    </Head>
+
+  useEffect(() => {
+    getProviderInfo();
+  }, []);
+
+  const handleOpenConfirmDeleteProject = useCallback((id: string) => {
+    setSelectedProjectId(id);
+    setConfirm(true);
+  }, []);
+
+  const handleDeleteProject = useCallback(
+    async () => {
+      console.log(selectedProjectId);
+      try {
+        await axiosClient.delete(`/provider/project/${selectedProjectId}`);
+        showAlert("Certificate deleted successfully", "success");
+        getProviderInfo();
+      } catch (error) {
+        showAlert(showErrorMessage(error).toString(), "error");
+      }
+      setConfirm(false);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [selectedProjectId]
+  );
+  return (
+    <>
+      <Head>
+        <title>{title} | Symline</title>
+      </Head>
       <Container maxWidth="xl">
-        <Typography variant="h3" sx={{ mb: 2 }} fontWeight={'bold'}>
-          {dictionary(title as TranslatedWord)}
-        </Typography>
-        <Grid container spacing={2} justifyContent={'space-between'}>
-          <Grid item xs={12} md={6} >
+        <Grid
+          container
+          sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}
+        >
+          <Grid item xs={6} md={8} sx={{ display: "flex", justifyContent: "start" }}>
+            <Typography variant="h4" fontWeight={"bold"}>
+              {dictionary(title as TranslatedWord)}
+            </Typography>
           </Grid>
-          <Grid item xs={12} md={3} sx={{ display: 'flex', justifyContent: 'end' }}>
-            <Button onClick={handleOpenAdd} variant='contained' color="warning" sx={{ borderRadius: 8 }}>
-              {t('Add')}
+
+          <Grid item xs={6} md={3} sx={{ display: "flex", justifyContent: "end" }}>
+            <Button
+              size="large"
+              color="warning"
+              sx={{ borderRadius: "34px", px: 5 }}
+              type="submit"
+              variant="contained"
+              onClick={handleOpenAdd}
+            >
+              {t("Add")}
             </Button>
           </Grid>
+        </Grid>
+        <Grid container spacing={2} justifyContent={"space-between"}>
           <Grid item xs={12}>
-            <Card elevation={0} sx={{ p: 3 }}>
-              <CardContent sx={{ p: 1 }}>
-                <Grid container spacing={2} justifyContent={'space-between'}>
-                  <Grid item xs={12} >
-
-                    <Grid container spacing={0} direction={'row'} justifyContent={'space-between'} textAlign={'left'}>
-                      <Grid item xs={12} sx={{ px: 1, borderRadius: 1, bgcolor: "primary.lightest", display: 'flex', alignItems: "center", justifyContent: "space-between" }}>
-
-                        <Typography variant="h6" fontWeight="bold" color="primary">Project name</Typography>
-                        <Box>
-
-                          <IconButton sx={{ mx: 1 }}><DeleteForeverIcon onClick={handleOpenConfirm} /></IconButton>
-                          <IconButton><BorderColorIcon onClick={handleOpenEdit}/></IconButton>
-
-                        </Box>
+            <Card elevation={1} sx={{ p: 2.5 }}>
+              <CardContent sx={{ p: 0 }}>
+                {auth?.providerInfo?.projects?.length ? (
+                  <Grid container spacing={2} justifyContent={"space-between"}>
+                    {auth?.providerInfo?.projects?.map((project: project) => (
+                      <Grid key={project.id} item xs={12}>
+                        <Grid
+                          container
+                          spacing={0}
+                          direction={"row"}
+                          justifyContent={"space-between"}
+                          textAlign={"left"}
+                        >
+                          <Grid
+                            item
+                            xs={12}
+                            sx={{
+                              px: 1,
+                              borderRadius: 1,
+                              bgcolor: "primary.lightest",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            <Typography variant="h6" fontWeight="bold" color="primary">
+                              {project?.name}
+                            </Typography>
+                            <Box>
+                              <IconButton sx={{ mx: 1 }}>
+                                <DeleteForeverIcon onClick={()=>handleOpenConfirmDeleteProject(project?.id)} />
+                              </IconButton>
+                              <IconButton>
+                                <BorderColorIcon onClick={()=>handleOpenEdit(project)} />
+                              </IconButton>
+                            </Box>
+                          </Grid>
+                        </Grid>
+                        <Typography variant="h6" fontWeight="bold" sx={{ mb: 1, mt: 3, px: 1 }}>
+                          {t("Date")}
+                        </Typography>
+                        <Typography variant="body1" fontWeight="light" sx={{ mb: 4, px: 1 }}>
+                          {getLocalTime(project?.start_date).toLocaleDateString(
+                            i18n.language == "en" ? "en-US" : "ar-EG",
+                            {
+                              weekday: "long",
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                            }
+                          )}{" "}
+                          {t("To")}{" "}
+                          {getLocalTime(project?.end_date).toLocaleDateString(
+                            i18n.language == "en" ? "en-US" : "ar-EG",
+                            {
+                              weekday: "long",
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                            }
+                          )}
+                        </Typography>
+                        <Typography variant="h6" fontWeight="bold" sx={{ mb: 1, px: 1 }}>
+                          {t("About project")}
+                        </Typography>
+                        <Typography variant="body1" fontWeight="light" sx={{ mb: 1, px: 1 }}>
+                          {project.description}
+                        </Typography>
                       </Grid>
-
-                    </Grid>
-                    <Typography variant="h6" fontWeight="bold" sx={{ mb: 1, mt: 3, px: 1 }}>
-                      Date
-                    </Typography>
-                    <Typography variant="body1" fontWeight="light" sx={{ mb: 4, px: 1 }}>
-                      10 Apr 2023 to 22 April 2023
-                    </Typography>
-                    <Typography variant="h6" fontWeight="bold" sx={{ mb: 1, px: 1 }}>
-                      About project
-                    </Typography>
-                    <Typography variant="body1" fontWeight="light" sx={{ mb: 1, px: 1 }}>
-                      Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.
-
-                    </Typography>
+                    ))}
                   </Grid>
-                  <Grid item xs={12} >
-
-                    <Grid container spacing={0} direction={'row'} justifyContent={'space-between'} textAlign={'left'}>
-                      <Grid item xs={12} sx={{ px: 1, borderRadius: 1, bgcolor: "primary.lightest", display: 'flex', alignItems: "center", justifyContent: "space-between" }}>
-
-                        <Typography variant="h6" fontWeight="bold" color="primary">Project name</Typography>
-                        <Box>
-
-                          <IconButton sx={{ mx: 1 }}><DeleteForeverIcon /></IconButton>
-                          <IconButton><BorderColorIcon onClick={handleOpenEdit} /></IconButton>
-
-                        </Box>
-                      </Grid>
-
-                    </Grid>
-                    <Typography variant="h6" fontWeight="bold" sx={{ mb: 1, mt: 3, px: 1 }}>
-                      Date
-                    </Typography>
-                    <Typography variant="body1" fontWeight="light" sx={{ mb: 4, px: 1 }}>
-                      10 Apr 2023 to 22 April 2023
-                    </Typography>
-                    <Typography variant="h6" fontWeight="bold" sx={{ mb: 1, px: 1 }}>
-                      About project
-                    </Typography>
-                    <Typography variant="body1" fontWeight="light" sx={{ mb: 1, px: 1 }}>
-                      Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.
-
-                    </Typography>
-                  </Grid>
-                </Grid>
+                ) : (
+                  <Noitems
+                    title={"No Projects yet"}
+                    icon={<FolderCopyIcon sx={{ color: "gray", fontSize: "4.2em" }} />}
+                  />
+                )}
               </CardContent>
-              <CustomTabPanel value={value} index={2}> three</CustomTabPanel>
             </Card>
           </Grid>
         </Grid>
-
+        {renderForAlert()}
+        <ConfirmationPopup
+          open={confirm}
+          handleClose={handleCloseConfirm}
+          message={t("Are you sure you want to delete this Project ?")}
+          title={t("Delete Project")}
+          confirmFuntion={handleDeleteProject}
+          setOpen={setConfirm}
+        />
+        <ExperienceDialog
+          title={dialogName}
+          open={open}
+          handleClose={handleClose}
+          showAlert={showAlert}
+          refreshProviderInfo={getProviderInfo}
+          editValues={selectedProject}
+        />
       </Container>
-    <ConfirmDialog open={ confirm} handleClose={ handleCloseConfirm} message="Are you sure you want to delete this experience ?"/>
-    <ExperienceDialog name={dialogName} open={open} handleClose={handleClose}/>
-  </>
-}
+    </>
+  );
+};
 
-
-Page.getLayout = (page: any) => (
-  <DashboardLayout>
-    {page}
-  </DashboardLayout>
-);
+Page.getLayout = (page: any) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default Page;
