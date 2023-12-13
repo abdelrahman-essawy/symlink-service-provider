@@ -83,7 +83,7 @@ export const AuthLayout = (props: { children: any }) => {
               xs={7}
             >
               <ButtonGroup
-                variant="outlined"
+                variant="contained"
                 sx={{
                   direction: "ltr",
                   pt: "20px",
@@ -91,7 +91,7 @@ export const AuthLayout = (props: { children: any }) => {
                 }}
                 fullWidth
                 disableElevation
-                // color={router?.pathname =='/auth/login'?"warning":"primary"}
+                color="warning"
               >
                 <Button
                   onClick={() => {
@@ -100,14 +100,11 @@ export const AuthLayout = (props: { children: any }) => {
                     }
                   }}
                   sx={{
-                    background: router?.pathname == "/auth/login" ? "#EEC86F" : "",
-                    "&:hover": {
-                      color: "#fff",
-                      background: "#EEC86F",
-                    },
+                    background: router?.pathname == "/auth/register" ? "none" : "",
+                    border: "1px solid  #EEC86F"
                   }}
                 >
-                  {t("Login")}
+                  {t("Sign in")}
                 </Button>
                 <Button
                   onClick={() => {
@@ -116,15 +113,11 @@ export const AuthLayout = (props: { children: any }) => {
                     }
                   }}
                   sx={{
-                    color: router?.pathname == "/auth/register" ? "#fff" : "",
-                    background: router?.pathname == "/auth/register" ? "#4338CA" : "",
-                    "&:hover": {
-                      color: "#fff",
-                      background: "#6366f1c2",
-                    },
+                    background: router?.pathname == "/auth/login" ? "none" : "",
+                    border: "1px solid  #EEC86F"
                   }}
                 >
-                  {t("Rgister")}
+                  {t("Create Account")}
                 </Button>
               </ButtonGroup>
             </Grid>

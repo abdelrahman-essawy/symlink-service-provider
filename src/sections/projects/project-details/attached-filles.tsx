@@ -16,6 +16,8 @@ import ConfirmationPopup from "@/components/confirmation-popup";
 import FilePresentIcon from "@mui/icons-material/FilePresent";
 import PhotoIcon from "@mui/icons-material/Photo";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+import Noitems from "@/components/shared/no-items";
+import FolderCopyIcon from "@mui/icons-material/FolderCopy";
 
 export interface IProps{
   RefreshAttachedFiles:() => void;
@@ -196,6 +198,7 @@ function AttachedFilles({ RefreshAttachedFiles,projectId,controller,handlePageCh
           setOpen={setConfirm}
         />
       </Grid>
+      {projectContext?.countFiles == undefined || projectContext?.countFiles > 0 ? (
       <DataTable
         headers={headers}
         name="AttachedFilles"
@@ -208,6 +211,12 @@ function AttachedFilles({ RefreshAttachedFiles,projectId,controller,handlePageCh
         onRowsPerPageChange={handleRowsPerPageChange}
         {...additionalTableProps}
       />
+      ) : (
+        <Noitems
+          title={"No Files yet"}
+          icon={<FolderCopyIcon sx={{ color: "gray", fontSize: "4.2em" }} />}
+        />
+      )}
       {renderForAlert()}
     </>
   );

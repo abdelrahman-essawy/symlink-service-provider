@@ -34,6 +34,8 @@ import { DataTable } from "@/components/shared/DataTable";
 import { IOffer } from "@/@types/bid";
 import axiosClient from "@/configs/axios-client";
 import ConfirmationPopup from "@/components/confirmation-popup";
+import Noitems from "@/components/shared/no-items";
+import FolderCopyIcon from "@mui/icons-material/FolderCopy";
 
 const listOfBidsHeaders = [
   { text: "Bidder name", value: "user_id" },
@@ -98,12 +100,14 @@ const Page = () => {
 
   React.useEffect(() => {
     fetchProject();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project_id]);
 
   React.useEffect(() => {
-    fetchAttachedFiles(); //1
     //depends on tap value
+    fetchAttachedFiles(); //1
     fetchListBids(); //2
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [controller]);
 
   const handletabs = (event: React.SyntheticEvent, newValue: number) => {
@@ -117,7 +121,8 @@ const handleAcceptRequest =  (offerID:any) => {
 };
 const ConfirmAcceptance = async() => {
   try {
-    await axiosClient?.post(`/offers/acceptOffer`,{offer_id:SelectedOfferId,multi_RFP_id:project_id})
+    await axiosClient?.post(`/offers/${SelectedOfferId}/${project_id}/acceptOffer`);
+    fetchProject();
     showAlert("Offer has been accepted successfully - Let's begin this exciting journey", "success");
   } catch (error) {
     showAlert(showErrorMessage(error).toString(), 'error');
@@ -378,9 +383,10 @@ const ConfirmAcceptance = async() => {
               </CustomTabPanel>
 
               <CustomTabPanel value={value} index={3}>
+              {bidContext?.countOffers == undefined || bidContext?.countOffers != 0 ? (
                 <DataTable
                   headers={listOfBidsHeaders}
-                  name="Project"
+                  name="bids"
                   items={bidContext?.offers}
                   totalItems={bidContext?.countOffers}
                   totalPages={bidContext?.totalPages}
@@ -390,6 +396,12 @@ const ConfirmAcceptance = async() => {
                   onRowsPerPageChange={handleRowsPerPageChange}
                   {...additionalTablePropsForListOfBids}
                 />
+                ) : (
+                  <Noitems
+                    title={"No Bid yet"}
+                    icon={<FolderCopyIcon sx={{ color: "gray", fontSize: "4.2em" }} />}
+                  />
+                )}
               </CustomTabPanel>
             </Card>
           </Grid>

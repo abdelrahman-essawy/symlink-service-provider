@@ -1,7 +1,7 @@
 import { createContext, Dispatch, useState, useEffect } from "react";
 import axiosClient from "../configs/axios-client";
 import { IBid, IOffer } from "@/@types/bid";
-import { get_Bids,get_Bid_id,get_attached_file,get_list_of_offer} from "../environment/apis"
+import { get_Bids,get_Bid_id,get_list_of_offer} from "../environment/apis"
 export const BidContext = createContext<BidContextType | undefined>(undefined);
 //TODO: move this to types folder
 
