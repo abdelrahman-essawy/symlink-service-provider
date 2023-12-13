@@ -111,7 +111,7 @@ export default function BasicModal({ open, handleClose, multi_RFP_id, showMessag
                     justifyContent="space-between"
                     sx={{ direction: "rtl" }}
                   >
-                    <Grid item xs={8} md={9}>
+                    <Grid item xs={8} md={8.5}>
                       <TextField
                         type="number"
                         fullWidth
@@ -129,7 +129,7 @@ export default function BasicModal({ open, handleClose, multi_RFP_id, showMessag
                       />
                     </Grid>
 
-                    <Grid item xs={4} md={3}>
+                    <Grid item xs={4} md={3.5}>
                       <FormControl
                         fullWidth
                         error={formik.touched.duration && Boolean(formik.errors.duration)}
@@ -145,7 +145,7 @@ export default function BasicModal({ open, handleClose, multi_RFP_id, showMessag
                           onBlur={formik.handleBlur}
                         >
                           <MenuItem disabled value="">
-                            {t("Pick duration")}
+                            {t("duration")}
                           </MenuItem>
                           <MenuItem value={"hour"}>{t("Hour")}</MenuItem>
                           <MenuItem value={"day"}>{t("Day")}</MenuItem>

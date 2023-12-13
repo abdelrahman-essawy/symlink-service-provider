@@ -1,7 +1,6 @@
 import { Box, Button, Grid,  Tooltip, IconButton } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { usePageUtilities } from "@/hooks/use-page-utilities";
 import useAlert from "@/hooks/useAlert";
 import { DataTable } from "@/components/shared/DataTable";
 import { useProject } from "@/hooks/use-project";
@@ -17,8 +16,19 @@ import ConfirmationPopup from "@/components/confirmation-popup";
 import FilePresentIcon from "@mui/icons-material/FilePresent";
 import PhotoIcon from "@mui/icons-material/Photo";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+import Noitems from "@/components/shared/no-items";
+import FolderCopyIcon from "@mui/icons-material/FolderCopy";
 
-function AttachedFilles({ projectId }: { projectId: any }) {
+export interface IProps{
+  RefreshAttachedFiles:() => void;
+  projectId:any;
+  handlePageChange:(event: any, newPage: number) => void;
+  handleRowsPerPageChange:(event: any) => void;
+  controller:any;
+  attachedFiles?:any[];
+}
+
+function AttachedFilles({ RefreshAttachedFiles,projectId,controller,handlePageChange,handleRowsPerPageChange,attachedFiles }: IProps) {
   const projectContext = useProject();
   const { showAlert, renderForAlert } = useAlert();
 
@@ -54,17 +64,7 @@ function AttachedFilles({ projectId }: { projectId: any }) {
     setOpenPdf(true);
   };
 
-  const { handlePageChange, handleRowsPerPageChange, handleSearch, controller, setController } =
-    usePageUtilities();
 
-  const fetchAttachedFiles = async () => {
-    await projectContext?.fetchAttachedFile(controller?.page, controller?.rowsPerPage, projectId);
-  };
-
-  useEffect(() => {
-    fetchAttachedFiles();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [controller]);
 
   const handleDeleteFile = (FileId: string) => {
     setSelectedFileId(FileId);
@@ -93,7 +93,7 @@ function AttachedFilles({ projectId }: { projectId: any }) {
         });
         if (res.status == 201 || res.status == 200) {
           showAlert("File uploaded successfully", "success");
-          fetchAttachedFiles();
+          RefreshAttachedFiles();
         }
       } catch (error) {
         console.log(showErrorMessage(error));
@@ -111,7 +111,8 @@ function AttachedFilles({ projectId }: { projectId: any }) {
       month: "numeric",
       day: "numeric",
     }),
-    onRenderActions: (file: any) => (
+    onRenderActions: false? 
+    (file: any) => (
       <Box sx={{ display: "flex", gap: 0, alignItems: "baseline" }}>
         <Tooltip arrow placement="top" title="View files">
           <IconButton
@@ -138,7 +139,35 @@ function AttachedFilles({ projectId }: { projectId: any }) {
           </IconButton>
         </Tooltip>
       </Box>
-    ),
+    ) :
+    (file: any) => (
+      <Box sx={{ display: "flex", gap: 0, alignItems: "baseline" }}>
+        <Tooltip arrow placement="top" title="View files">
+          <IconButton
+            onClick={() => {
+              if (typeof file?.type === "string") {
+                if (file?.type?.includes("application/pdf")) {
+                  handleOpenPdf(file?.url);
+                } else if (file?.type?.includes("image")) {
+                  handleOpenfile(file?.url);
+                } else {
+                  //open the file outside
+                  window.open(file?.url, "_blank");
+                }
+              }
+            }}
+          >
+            <EyeIcon />
+          </IconButton>
+        </Tooltip>
+        
+        <Tooltip arrow placement="top" title="Delete">
+          <IconButton onClick={handleOpenConfirm}>
+            <TrashIcon />
+          </IconButton>
+        </Tooltip>
+      </Box>
+    ) ,
     onRendertype: useCallback((file: any) => {
       if (file?.type?.includes("image")) {
         return (
@@ -198,11 +227,12 @@ function AttachedFilles({ projectId }: { projectId: any }) {
           setOpen={setConfirm}
         />
       </Grid>
+      {projectContext?.countFiles == undefined || projectContext?.countFiles > 0 ? (
       <DataTable
         headers={headers}
         name="AttachedFilles"
-        items={projectContext?.files}
-        totalItems={projectContext?.count}
+        items={attachedFiles}
+        totalItems={projectContext?.countFiles}
         totalPages={projectContext?.totalPages}
         page={controller?.page || 1}
         rowsPerPage={controller?.rowsPerPage}
@@ -210,6 +240,12 @@ function AttachedFilles({ projectId }: { projectId: any }) {
         onRowsPerPageChange={handleRowsPerPageChange}
         {...additionalTableProps}
       />
+      ) : (
+        <Noitems
+          title={"No Files yet"}
+          icon={<FolderCopyIcon sx={{ color: "gray", fontSize: "4.2em" }} />}
+        />
+      )}
       {renderForAlert()}
     </>
   );

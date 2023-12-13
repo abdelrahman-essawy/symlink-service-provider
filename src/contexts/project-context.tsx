@@ -9,7 +9,8 @@ const ProjectContextProvider = ({ children }: any) => {
   const [projects, setProjects] = useState<IProject[]>([]);
   const [files, setFiles] = useState<any[]>([]);
   const [Selectedproject, setSelectedProject] = useState<IProject>({} as IProject);
-  const [count, setCount] = useState<number>(3);
+  const [count, setCount] = useState<number>(0);
+  const [countFiles, setCountFiles] = useState<number>(0);
   const [pageSize, setPageSize] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
 
@@ -29,7 +30,7 @@ const ProjectContextProvider = ({ children }: any) => {
       .get(get_attached_file(page,rowsPerPage,projectID))
       .then((res) => {
         setFiles(res.data.data);
-        setCount(res.data.meta.itemCount);
+        setCountFiles(res.data.meta.itemCount);
         setPageSize(res.data.meta.take);
         setTotalPages(res.data.meta.pageCount);
       })
@@ -78,6 +79,7 @@ const ProjectContextProvider = ({ children }: any) => {
         files,
         Selectedproject,
         count,
+        countFiles,
         pageSize,
         totalPages,
         fetchProjects,
@@ -100,6 +102,7 @@ export type ProjectContextType = {
   projects: IProject[];
   files: any[];
   count: number;
+  countFiles: number;
   pageSize: number;
   totalPages: number;
   Selectedproject: IProject;

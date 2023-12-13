@@ -107,14 +107,14 @@ const Page = () => {
           <Grid item xs={12}>
             <Card sx={{ p: 2 }}>
               <RoleBasedRender componentId="table-service-provider-bids">
-                {bidContext?.count == undefined || bidContext?.count > 0 ? (
+                {bidContext?.countBids == undefined || bidContext?.countBids > 0 ? (
                   <Stack spacing={2}>
                     <SearchBar onSearchChange={handleSearch} />
                     <DataTable
                       headers={headers}
                       name="Bid"
                       items={bidContext?.bids}
-                      totalItems={bidContext?.count}
+                      totalItems={bidContext?.countBids}
                       totalPages={bidContext?.totalPages}
                       page={controller?.page || 1}
                       rowsPerPage={controller?.rowsPerPage}

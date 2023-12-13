@@ -275,7 +275,6 @@ const Page = () => {
           </Card>
         </Container>
       </Box>
-      <ExperienceDialog name={dialogName} open={open} handleClose={handleClose} />
     </>
   );
 };

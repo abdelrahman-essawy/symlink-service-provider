@@ -18,13 +18,22 @@ type UserType = {
 type IProviderInfo = {
   info: string
   certifcate: Certifcate[]
-  projects: any[]
+  projects: project[]
 };
+
+ export type project = {
+  id: string
+  name: string
+  start_date: string
+  end_date: string
+  description: string
+}
 
 export interface Certifcate {
   id: string
   file: string
   type: string
+  name?:string
 }
 
 type ActionType = { type: string, payload: any }

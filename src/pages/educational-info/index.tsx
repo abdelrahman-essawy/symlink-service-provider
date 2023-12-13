@@ -13,7 +13,6 @@ import { showErrorMessage } from "@/utils/helperFunctions";
 const Page = () => {
   const title = "Educational info";
   const { t } = useTranslation();
-  const { i18n } = useTranslation();
   const auth = useAuth();
   const { showAlert, renderForAlert } = useAlert();
   const [educational_info, setEducational_info] = useState<string | undefined>(
