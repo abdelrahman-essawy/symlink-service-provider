@@ -39,7 +39,6 @@ function AttachedFilles({ RefreshAttachedFiles,projectId,controller,handlePageCh
     { text: "name", value: "name" },
     { text: "Type", value: "type" },
     { text: "Date added", value: "created_at" },
-    { text: "Commitment", value: "Commitment" },
     { text: "Actions", value: "Actions" },
   ];
 

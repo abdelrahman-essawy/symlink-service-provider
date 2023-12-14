@@ -20,7 +20,7 @@ import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
 import moment from "moment";
 import styles from "@/styles/index.module.scss";
 import axiosClient from "@/configs/axios-client";
-import { getDateString, getLocalTime, getUtcTime, showErrorMessage } from "@/utils/helperFunctions";
+import {  getUtcTime, showErrorMessage } from "@/utils/helperFunctions";
 import { project } from "@/contexts/auth-context";
 
 interface IProps {
@@ -34,9 +34,7 @@ interface IProps {
 const validationSchema = yup.object({
   name: yup.string().required("Project Name Required"),
   start_date: yup.date().typeError("Enter a start date").required("Enter a start date"),
-  end_date: yup
-    .date()
-    .min(yup.ref("start_date"), "End date must be after start date")
+  end_date: yup.date().min(yup.ref("start_date"), "End date must be after start date")
     .typeError("Enter an end date")
     .required("Enter an end date"),
   description: yup.string().nullable(),

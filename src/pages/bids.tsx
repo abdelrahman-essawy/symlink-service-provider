@@ -20,6 +20,7 @@ import Noitems from "@/components/shared/no-items";
 import FolderCopyIcon from "@mui/icons-material/FolderCopy";
 import { useAuth } from "@/hooks/use-auth";
 import Link from "next/link";
+import ProjectStatusBadge from "@/sections/projects/project-status";
 
 const Page = () => {
   const title = "Bids";
@@ -62,6 +63,11 @@ const Page = () => {
         month: "numeric",
         day: "numeric",
       }),
+      onRenderrequest_for_proposal_status: (item: any) => {
+        return item?.request_for_proposal_status ? (
+          <ProjectStatusBadge status={item?.request_for_proposal_status} />
+        ) : null;
+      },
     onRenderActions: (item: any) => (
       <Button
         variant="contained"
