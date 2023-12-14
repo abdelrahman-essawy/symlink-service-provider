@@ -389,6 +389,7 @@ const ConfirmAcceptance = async() => {
                   handlePageChange={handlePageChange}
                   handleRowsPerPageChange={handleRowsPerPageChange}
                   attachedFiles={projectContext?.files}
+                  userId={projectContext?.Selectedproject?.user_id}
                 />
               </CustomTabPanel>
 
