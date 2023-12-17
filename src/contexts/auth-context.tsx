@@ -1,88 +1,86 @@
-import { createContext, useContext, useEffect, useReducer, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
-import React from 'react';
-import axiosClient from '../configs/axios-client'
-import { showErrorMessage } from '@/utils/helperFunctions';
-
+import { createContext, useContext, useEffect, useReducer, useRef, useState } from "react";
+import PropTypes from "prop-types";
+import React from "react";
+import axiosClient from "../configs/axios-client";
+import { showErrorMessage } from "@/utils/helperFunctions";
 
 type UserType = {
-  id: string,
-  username: string,
-  name: string,
-  avatar: string,
+  id: string;
+  username: string;
+  name: string;
+  avatar: string;
   phone: any;
   email: string;
-  role: "CLIENT" | "PROVIDER" | "ADMIN"
+  role: "CLIENT" | "PROVIDER" | "ADMIN";
 };
 
 type IProviderInfo = {
-  info: string
-  certifcate: Certifcate[]
-  projects: project[]
+  info: string;
+  certifcate: Certifcate[];
+  projects: project[];
 };
 
- export type project = {
-  id: string
-  name: string
-  start_date: string
-  end_date: string
-  description: string
-}
+export type project = {
+  id: string;
+  name: string;
+  start_date: string;
+  end_date: string;
+  description: string;
+};
 
 export interface Certifcate {
-  id: string
-  file: string
-  type: string
-  name?:string
+  id: string;
+  file: string;
+  type: string;
+  name?: string;
 }
 
-type ActionType = { type: string, payload: any }
+type ActionType = { type: string; payload: any };
 
 const HANDLERS = {
-  INITIALIZE: 'INITIALIZE',
-  SIGN_IN: 'SIGN_IN',
-  SIGN_OUT: 'SIGN_OUT',
-  UPLOAD_AVATAR: 'UPLOAD_AVATAR'
+  INITIALIZE: "INITIALIZE",
+  SIGN_IN: "SIGN_IN",
+  SIGN_OUT: "SIGN_OUT",
+  UPLOAD_AVATAR: "UPLOAD_AVATAR",
 };
 
 type initialValue = {
-  isAuthenticated: boolean,
-  isLoading: boolean,
-  user: any,
-  providerInfo: IProviderInfo,
-  signIn: (username: string, password: string) => Promise<void>,
-  signUp: (avatarFile: any, email :  string,  password:  string , role:  string) => Promise<void>,
-  signOut: () => void,
-  updateProfile: (formData:FormData) => Promise<any>,
-  ToggleReceiveOrders:()=>void,
-  getProviderInfo:()=>Promise<any>|void,
+  isAuthenticated: boolean;
+  isLoading: boolean;
+  user: any;
+  providerInfo: IProviderInfo;
+  signIn: (username: string, password: string) => Promise<void>;
+  signUp: (avatarFile: any, email: string, password: string, role: string) => Promise<void>;
+  signOut: () => void;
+  requestRestPassword: (email: string) => Promise<void>;
+  updateProfile: (formData: FormData) => Promise<any>;
+  ToggleReceiveOrders: () => void;
+  getProviderInfo: () => Promise<any> | void;
 };
 
 const initialState = {
   isAuthenticated: false,
   isLoading: true,
   user: null,
-  providerInfo:null
+  providerInfo: null,
 };
 
 const handlers = {
-  [HANDLERS.INITIALIZE]: (state: any, action: { payload: any; }) => {
+  [HANDLERS.INITIALIZE]: (state: any, action: { payload: any }) => {
     const user = action.payload;
 
     return {
       ...state,
-      ...(
-        // if payload (user) is provided, then is authenticated
-        user
-          ? ({
+      ...// if payload (user) is provided, then is authenticated
+      (user
+        ? {
             isAuthenticated: true,
             isLoading: false,
-            user
-          })
-          : ({
-            isLoading: false
-          })
-      )
+            user,
+          }
+        : {
+            isLoading: false,
+          }),
     };
   },
   [HANDLERS.UPLOAD_AVATAR]: (state: any, action: { payload: any }) => {
@@ -94,27 +92,26 @@ const handlers = {
       user,
     };
   },
-  [HANDLERS.SIGN_IN]: (state: any, action: { payload: any; }) => {
+  [HANDLERS.SIGN_IN]: (state: any, action: { payload: any }) => {
     const user = action.payload;
 
     return {
       ...state,
       isAuthenticated: true,
-      user
+      user,
     };
   },
   [HANDLERS.SIGN_OUT]: (state: any) => {
     return {
       ...state,
       isAuthenticated: false,
-      user: null
+      user: null,
     };
   },
 };
 
-const reducer = (state: any, action: ActionType) => (
-  handlers[action.type] ? handlers[action.type](state, action) : state
-);
+const reducer = (state: any, action: ActionType) =>
+  handlers[action.type] ? handlers[action.type](state, action) : state;
 
 // The role of this context is to propagate authentication state through the App tree.
 
@@ -126,7 +123,7 @@ export const AuthProvider = ({ children }: any) => {
   const initialized = useRef(false);
   const [authUser, setAuthUser] = useState<UserType | undefined>(undefined);
   const [providerInfo, setProviderInfo] = useState<IProviderInfo | undefined>(undefined);
-  
+
   const initialize = async () => {
     // Prevent from calling twice in development mode with React.StrictMode enabled
     if (initialized.current) {
@@ -148,7 +145,8 @@ export const AuthProvider = ({ children }: any) => {
       const user = json == undefined ? undefined : JSON.parse(json);
       const token = window.sessionStorage.getItem("token");
       axiosClient.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      axiosClient.defaults.headers.common['Accept-Language'] = sessionStorage.getItem("language") == "ar" ? "ar" : "en"
+      axiosClient.defaults.headers.common["Accept-Language"] =
+        sessionStorage.getItem("language") == "ar" ? "ar" : "en";
       setAuthUser(user);
       dispatch({
         type: HANDLERS.INITIALIZE,
@@ -162,7 +160,6 @@ export const AuthProvider = ({ children }: any) => {
     }
   };
 
-  
   useEffect(
     () => {
       initialize();
@@ -173,18 +170,24 @@ export const AuthProvider = ({ children }: any) => {
 
   const signIn = async (username: string, password: string) => {
     delete axiosClient.defaults.headers.common["Authorization"];
-    const res = await axiosClient.post('/auth/signin', { username, password },{'headers':
-    { 
-     "Content-Type": 'application/json'
-   }});
+    const res = await axiosClient.post(
+      "/auth/signin",
+      { username, password },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     if (res.status == 200 || res.status == 201) {
       const { data: user } = res.data;
-      window.sessionStorage.setItem('authenticated', 'true');
-      window.sessionStorage.setItem('token', user.access_token);
+      window.sessionStorage.setItem("authenticated", "true");
+      window.sessionStorage.setItem("token", user.access_token);
       window.sessionStorage.setItem("user", JSON.stringify(user));
-      axiosClient.defaults.headers.common['Authorization'] = `Bearer ${user.access_token}`;
-      axiosClient.defaults.headers.common['Accept-Language'] = sessionStorage.getItem("language") == "ar" ? "ar" : "en";
+      axiosClient.defaults.headers.common["Authorization"] = `Bearer ${user.access_token}`;
+      axiosClient.defaults.headers.common["Accept-Language"] =
+        sessionStorage.getItem("language") == "ar" ? "ar" : "en";
       user.id = user.id;
       user.avatar = user.avatar;
       user.name = user.name;
@@ -193,15 +196,14 @@ export const AuthProvider = ({ children }: any) => {
       setAuthUser(user);
       dispatch({
         type: HANDLERS.SIGN_IN,
-        payload: user
+        payload: user,
       });
-    }
-    else {
-      throw new Error('Please check your username and password');
+    } else {
+      throw new Error("Please check your username and password");
     }
   };
 
-  const signUp = async (avatarFile: any, email :  string,  password:  string, role:  string) => {
+  const signUp = async (avatarFile: any, email: string, password: string, role: string) => {
     let bodyFormData = new FormData();
     bodyFormData.append("email", email);
     bodyFormData.append("password", password);
@@ -211,21 +213,18 @@ export const AuthProvider = ({ children }: any) => {
     delete axiosClient.defaults.headers.common["Authorization"];
 
     try {
-      const res = await axiosClient.post("/auth/register", bodyFormData,{'headers':
-       {
-        "Content-Type": 'mulitpart/form-data'
-      }});
+      const res = await axiosClient.post("/auth/register", bodyFormData, {
+        headers: {
+          "Content-Type": "mulitpart/form-data",
+        },
+      });
       console.log(res.data);
       if (res.status == 200 || res.status == 201) {
         return res;
       }
-      
-    } catch (error:any) {
-      console.log(error);
+    } catch (error: any) {
       throw new Error(`${error?.response?.data?.message?.message[0]}`);
     }
-
-
   };
 
   const signOut = () => {
@@ -233,17 +232,23 @@ export const AuthProvider = ({ children }: any) => {
     window.sessionStorage.removeItem("token");
     window.sessionStorage.removeItem("user");
     delete axiosClient.defaults.headers.common["Authorization"];
-    delete axiosClient.defaults.headers.common['Accept-Language'];
-    // dispatch({
-    //   type: HANDLERS.SIGN_OUT,
-    //   payload: null,
-    // });
+    delete axiosClient.defaults.headers.common["Accept-Language"];
   };
 
-  const updateProfile = async (formData:FormData): Promise<any>=>{
-    try{  
-      const res = await axiosClient.put("/profile", formData, {headers: { 'Content-Type': 'application/multipart'}});
-      if (authUser){
+  const requestRestPassword = async (email: string) => {
+    try {
+      await axiosClient.post(`/auth/request-reset-password`, { email });
+    } catch (error: any) {
+      return error;
+    }
+  };
+
+  const updateProfile = async (formData: FormData): Promise<any> => {
+    try {
+      const res = await axiosClient.put("/profile", formData, {
+        headers: { "Content-Type": "application/multipart" },
+      });
+      if (authUser) {
         authUser.avatar = res?.data?.data.avatar;
         authUser.name = res?.data?.data.name;
         authUser.email = res?.data?.data.email;
@@ -256,29 +261,29 @@ export const AuthProvider = ({ children }: any) => {
         });
       }
       return res;
-    }catch(err: any){
+    } catch (err: any) {
       return err;
     }
-  }
+  };
   const ToggleReceiveOrders = () => {
-    const receiveOrders = !(state?.user?.receiveOrders);
+    const receiveOrders = !state?.user?.receiveOrders;
     dispatch({
       type: HANDLERS.SIGN_IN,
-      payload: {...state?.user,receiveOrders}
+      payload: { ...state?.user, receiveOrders },
     });
   };
 
-  const getProviderInfo = async() => {
+  const getProviderInfo = async () => {
     try {
       const res = await axiosClient.get(`provider/info`);
-      console.log(res?.data?.data)
-      setProviderInfo(res?.data?.data)
+      console.log(res?.data?.data);
+      setProviderInfo(res?.data?.data);
       return res;
     } catch (error) {
       showErrorMessage(error);
     }
   };
-  
+
   return (
     <AuthContext.Provider
       value={{
@@ -287,9 +292,10 @@ export const AuthProvider = ({ children }: any) => {
         signUp,
         providerInfo,
         signOut,
+        requestRestPassword,
         updateProfile,
         getProviderInfo,
-        ToggleReceiveOrders
+        ToggleReceiveOrders,
       }}
     >
       {children}
@@ -298,7 +304,7 @@ export const AuthProvider = ({ children }: any) => {
 };
 
 AuthProvider.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
 };
 
 export const AuthConsumer = AuthContext.Consumer;
