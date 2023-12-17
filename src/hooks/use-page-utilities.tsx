@@ -31,6 +31,13 @@ export const usePageUtilities = () => {
     const txt = event.target.value.toString();
     setSearch(txt);
   };
+
+  const handleSorting = (sortingObj: any) => {
+    setController({
+      ...controller,
+      OrderBy: sortingObj,
+    });
+  };
   useEffect(() => {
     setController({
       ...controller,
@@ -41,6 +48,7 @@ export const usePageUtilities = () => {
   }, [debouncedSearch]);
   return {
     handlePageChange,
+    handleSorting,
     handleRowsPerPageChange,
     handleSearch,
     controller,

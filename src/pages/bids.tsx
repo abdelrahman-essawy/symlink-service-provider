@@ -28,6 +28,7 @@ const Page = () => {
   const { t } = useTranslation();
   const { push } = useRouter();
   const auth = useAuth();
+  const [isLoadingBids, setIsLoadingBids] = useState(false);
 
   const headers = [
     { text: "RFP name", value: "project_name" },
@@ -38,19 +39,21 @@ const Page = () => {
     { text: "Actions", value: "Actions" },
   ];
 
-
   const { handlePageChange, handleRowsPerPageChange, handleSearch, controller, setController } =
     usePageUtilities();
 
+  const fetchBids = async () => {
+    setIsLoadingBids(true);
+    await bidContext?.fetchBids(controller.page, controller.rowsPerPage, controller.SearchString);
+    setIsLoadingBids(false);
+  };
   useEffect(() => {
-    bidContext?.fetchBids(controller.page, controller.rowsPerPage, controller.SearchString);
     // eslint-disable-next-line react-hooks/exhaustive-deps
+    fetchBids();
   }, [controller]);
 
   const additionalTableProps = {
-    onRenderfirstFullName: (item: IBid) =>
-      <Link href={item?.user_id}>{item?.firstFullName}</Link>
-    ,
+    onRenderfirstFullName: (item: IBid) => <Link href={item?.user_id}>{item?.firstFullName}</Link>,
     onRendercreated_at: (item: any) =>
       getLocalTime(item.created_at).toLocaleDateString("en-US", {
         year: "numeric",
@@ -73,13 +76,15 @@ const Page = () => {
         variant="contained"
         color="warning"
         sx={{
-          borderRadius: '16px',
+          borderRadius: "16px",
           backgroundColor: "#FFF8E6",
           border: 1,
           borderColor: "#FFD777",
           px: 4,
         }}
-        onClick={() => {push(`/projects/${item?.id}`)}}
+        onClick={() => {
+          push(`/projects/${item?.id}`);
+        }}
       >
         {dictionary("Bid")}
       </Button>
@@ -113,12 +118,11 @@ const Page = () => {
           <Grid item xs={12}>
             <Card sx={{ p: 2 }}>
               <RoleBasedRender componentId="table-service-provider-bids">
-                {bidContext?.countBids == undefined || bidContext?.countBids > 0 ? (
                   <Stack spacing={2}>
                     <SearchBar onSearchChange={handleSearch} />
                     <DataTable
                       headers={headers}
-                      name="Bid"
+                      name="Bids"
                       items={bidContext?.bids}
                       totalItems={bidContext?.countBids}
                       totalPages={bidContext?.totalPages}
@@ -127,14 +131,9 @@ const Page = () => {
                       onPageChange={handlePageChange}
                       onRowsPerPageChange={handleRowsPerPageChange}
                       {...additionalTableProps}
+                      isLoading={isLoadingBids}
                     />
                   </Stack>
-                ) : (
-                  <Noitems
-                    title={"No Bid yet"}
-                    icon={<FolderCopyIcon sx={{ color: "gray", fontSize: "4.2em" }} />}
-                  />
-                )}
               </RoleBasedRender>
             </Card>
           </Grid>

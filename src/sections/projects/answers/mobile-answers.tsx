@@ -31,7 +31,7 @@ export default function MobileAnswers({  project }: IProps) {
               {t("What is the average size of these apps ?")}
             </Typography>
             <Typography variant="h6" fontWeight="light" >
-              {project?.average_applications_meta_data?.name|| "-"}
+              {project?.apis_size_meta_data?.name|| "-"}
             </Typography>
       </Grid>
       <Grid item xs={12} sx={{ mb: 1, mt: 2 }} gap={1.5} display={"flex"} flexDirection={"column"}>

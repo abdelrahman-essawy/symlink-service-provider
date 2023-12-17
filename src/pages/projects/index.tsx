@@ -1,5 +1,5 @@
 import Head from "next/head";
-import {  Button, Card, Container, Grid, Typography } from "@mui/material";
+import { Button, Card, Container, Grid, Typography } from "@mui/material";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { dictionary, TranslatedWord } from "@/configs/i18next";
@@ -22,8 +22,6 @@ import { TActionMenuButton } from "@/components/shared/MenuItems";
 import { sharedStyles } from "@/utils/sharedStyles";
 import { CardTableActions } from "@/sections/projects/Project-table-actions";
 import { SearchBar } from "@/sections/shared/search-bar";
-import Noitems from "@/components/shared/no-items";
-import FolderCopyIcon from "@mui/icons-material/FolderCopy";
 import { useAuth } from "@/hooks/use-auth";
 
 const Page = () => {
@@ -41,7 +39,7 @@ const Page = () => {
   const [openConfirm, setOpenConfirm] = useState(false);
   const [showView, setShowView] = useState(false);
   const auth = useAuth();
-  
+  const [isLoadingProjects, setIsLoadingProjects] = useState(false);
   const headers = [
     { text: "RFP name", value: "project_name" },
     { text: "Status", value: "request_for_proposal_status" },
@@ -50,29 +48,30 @@ const Page = () => {
     { text: "Actions", value: "Actions" },
   ];
 
-  const onClose = () => {
-    setOpen(false);
-    setShowView(false);
-  };
-  const { handlePageChange, handleRowsPerPageChange, handleSearch, controller, setController } =
+  const { handlePageChange, handleRowsPerPageChange, handleSearch, controller,handleSorting } =
     usePageUtilities();
 
-  useEffect(() => {
+  const fetchProjects = async () => {
+    setIsLoadingProjects(true);
     if (auth?.user?.role === "PROVIDER") {
-      projectContext?.fetchProjects(
-        'provider-All-MultiRFP',
-        controller.page,
-        controller.rowsPerPage,
-        controller.SearchString,
-      );
-    } else if (auth?.user?.role === "CLIENT") {
-      projectContext?.fetchProjects(
-        'client-All-MultiRFP',
+      await projectContext?.fetchProjects(
+        "provider-All-MultiRFP",
         controller.page,
         controller.rowsPerPage,
         controller.SearchString
-        );
+      );
+    } else if (auth?.user?.role === "CLIENT") {
+      await projectContext?.fetchProjects(
+        "client-All-MultiRFP",
+        controller.page,
+        controller.rowsPerPage,
+        controller.SearchString
+      );
     }
+    setIsLoadingProjects(false);
+  };
+  useEffect(() => {
+    fetchProjects();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [controller]);
 
@@ -146,76 +145,70 @@ const Page = () => {
     {
       label: "Edit",
       onClick: (e: any, id: string | undefined) => {
+        e.preventDefault();
         e.stopPropagation();
         handleEditProject(id);
       },
       sx: sharedStyles("editButton"),
     },
   ];
-  const handleSorting = (sortingObj: any) => {
-    setController({
-      ...controller,
-      OrderBy: sortingObj,
-    });
-  };
+
+  useEffect(()=>{
+    console.log(controller);
+  },[controller])
   return (
     <>
       <Head>
         <title>{title} | Symline</title>
       </Head>
-        <Container maxWidth="xl">
-          <ConfirmationPopup
-            message={"Are you sure to delete this College?"}
-            confirmFuntion={DeleteProject}
-            open={openConfirm}
-            setOpen={setOpenConfirm}
-          />
-          <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
-            <Typography variant="h3" sx={{ mb: 2 }} fontWeight={"bold"}>
-              {dictionary(title as TranslatedWord)}
-            </Typography>
-            {auth?.user?.role === "CLIENT" && (
-              <RoleBasedRender componentId="button-request-a-project">
-                <Button
-                  onClick={() => router.push("/bid/create-rfp")}
-                  variant="contained"
-                  color="warning"
-                  sx={{ borderRadius: 8, mb: 2 }}
-                >
-                  {dictionary("Create RFP")}
-                </Button>
-              </RoleBasedRender>
-            )}
+      <Container maxWidth="xl">
+        <ConfirmationPopup
+          message={"Are you sure to delete this College?"}
+          confirmFuntion={DeleteProject}
+          open={openConfirm}
+          setOpen={setOpenConfirm}
+        />
+        <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
+          <Typography variant="h3" sx={{ mb: 2 }} fontWeight={"bold"}>
+            {dictionary(title as TranslatedWord)}
+          </Typography>
+          {auth?.user?.role === "CLIENT" && (
+            <RoleBasedRender componentId="button-request-a-project">
+              <Button
+                onClick={() => router.push("/bid/create-rfp")}
+                variant="contained"
+                color="warning"
+                sx={{ borderRadius: 8, mb: 2 }}
+              >
+                {dictionary("Create RFP")}
+              </Button>
+            </RoleBasedRender>
+          )}
+        </Grid>
+        <Grid container spacing={2} justifyContent={"space-between"}>
+          <Grid item xs={12}>
+            <Card sx={{ p: 2 }}>
+              <Stack spacing={2}>
+                <SearchBar onSearchChange={handleSearch} />
+                <DataTable
+                  headers={headers}
+                  name="Projects"
+                  items={projectContext?.projects}
+                  totalItems={projectContext?.count}
+                  totalPages={projectContext?.totalPages}
+                  page={controller?.page || 1}
+                  rowsPerPage={controller?.rowsPerPage}
+                  onPageChange={handlePageChange}
+                  onRowsPerPageChange={handleRowsPerPageChange}
+                  {...additionalTableProps}
+                  isLoading={isLoadingProjects}
+                  handleSendSortBy={handleSorting}
+                />
+              </Stack>
+            </Card>
           </Grid>
-          <Grid container spacing={2} justifyContent={"space-between"}>
-            <Grid item xs={12}>
-              <Card sx={{ p: 2 }}>
-                  {projectContext?.count == undefined || projectContext?.count > 0 ? (
-                    <Stack spacing={2}>
-                      <SearchBar onSearchChange={handleSearch} />
-                      <DataTable
-                        headers={headers}
-                        name="Project"
-                        items={projectContext?.projects}
-                        totalItems={projectContext?.count}
-                        totalPages={projectContext?.totalPages}
-                        page={controller?.page || 1}
-                        rowsPerPage={controller?.rowsPerPage}
-                        onPageChange={handlePageChange}
-                        onRowsPerPageChange={handleRowsPerPageChange}
-                        {...additionalTableProps}
-                      />
-                    </Stack>
-                  ) : (
-                    <Noitems
-                      title={"No Project yet"}
-                      icon={<FolderCopyIcon sx={{ color: "gray", fontSize: "4.2em" }} />}
-                    />
-                  )}
-              </Card>
-            </Grid>
-          </Grid>
-        </Container>
+        </Grid>
+      </Container>
     </>
   );
 };
