@@ -153,6 +153,11 @@ const Page = () => {
                   type="email"
                   value={formik.values.email}
                   autoComplete="off"
+                  sx={{
+                    "& .muirtl-q7i02f-MuiFormHelperText-root": {
+                      textAlign: "initial",
+                    },
+                  }}
                 />
                 <TextField
                   error={!!(formik.touched.password && formik.errors.password)}
@@ -178,6 +183,11 @@ const Page = () => {
                   }}
                   value={formik.values.password}
                   autoComplete="off"
+                  sx={{
+                    "& .muirtl-q7i02f-MuiFormHelperText-root": {
+                      textAlign: "initial",
+                    },
+                  }}
                 />
 
                 <Grid item xs={12}>
@@ -200,7 +210,6 @@ const Page = () => {
                                   control={<Radio color="warning" required />}
                                   label={t(role?.name)}
                                   color="warning"
-                                  
                                 />
                               </Grid>
                             );

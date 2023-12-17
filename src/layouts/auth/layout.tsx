@@ -78,49 +78,50 @@ export const AuthLayout = (props: { children: any }) => {
               <LocalizationSwitcher />
             </IconButton>
           </Box>
-          <Box  sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-            <Grid
-              xs={7}
+          <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+            <ButtonGroup
+              variant="contained"
+              sx={{
+                maxWidth: { md: 550, xs: "90%", sm: "75%" },
+                direction: "ltr",
+                display:
+                  router?.pathname == "/auth/login" || router?.pathname == "/auth/register"
+                    ? "flex"
+                    : "none",
+                pt: "20px",
+                mb: 3,
+              }}
+              fullWidth
+              disableElevation
+              color="warning"
             >
-              <ButtonGroup
-                variant="contained"
-                sx={{
-                  direction: "ltr",
-                  pt: "20px",
-                  mb: 3,
+              <Button
+                onClick={() => {
+                  if (!(router?.pathname == "/auth/login")) {
+                    router.push("/auth/login");
+                  }
                 }}
-                fullWidth
-                disableElevation
-                color="warning"
+                sx={{
+                  background: router?.pathname == "/auth/register" ? "none" : "",
+                  border: "1px solid  #EEC86F",
+                }}
               >
-                <Button
-                  onClick={() => {
-                    if (!(router?.pathname == "/auth/login")) {
-                      router.push("/auth/login");
-                    }
-                  }}
-                  sx={{
-                    background: router?.pathname == "/auth/register" ? "none" : "",
-                    border: "1px solid  #EEC86F"
-                  }}
-                >
-                  {t("Sign in")}
-                </Button>
-                <Button
-                  onClick={() => {
-                    if (!(router?.pathname == "/auth/register")) {
-                      router.push("/auth/register");
-                    }
-                  }}
-                  sx={{
-                    background: router?.pathname == "/auth/login" ? "none" : "",
-                    border: "1px solid  #EEC86F"
-                  }}
-                >
-                  {t("Create Account")}
-                </Button>
-              </ButtonGroup>
-            </Grid>
+                {t("Sign in")}
+              </Button>
+              <Button
+                onClick={() => {
+                  if (!(router?.pathname == "/auth/register")) {
+                    router.push("/auth/register");
+                  }
+                }}
+                sx={{
+                  background: router?.pathname == "/auth/login" ? "none" : "",
+                  border: "1px solid  #EEC86F",
+                }}
+              >
+                {t("Create Account")}
+              </Button>
+            </ButtonGroup>
           </Box>
           {children}
         </Grid>
