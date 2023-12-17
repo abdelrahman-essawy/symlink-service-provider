@@ -28,6 +28,7 @@ const Page = () => {
   const auth = useAuth();
   const [method, setMethod] = useState("username");
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   const handleMouseDownPassword = () => setShowPassword(!showPassword);
@@ -39,10 +40,11 @@ const Page = () => {
       submit: null,
     },
     validationSchema: Yup.object({
-      username: Yup.string().max(255).required("username is required"),
-      password: Yup.string().max(255).required("Password is required"),
+      username: Yup.string().required("username is required"),
+      password: Yup.string().required("Password is required"),
     }),
     onSubmit: async (values, helpers) => {
+      setIsLoading(true);
       try {
         await auth?.signIn(values.username, values.password);
         router.push("/projects");
@@ -51,6 +53,7 @@ const Page = () => {
         helpers.setErrors({ submit: err?.response?.data?.message || "Unknown error occurred" });
         helpers.setSubmitting(false);
       }
+      setIsLoading(false);
     },
   });
 
@@ -74,6 +77,7 @@ const Page = () => {
           alignItems: "center",
           display: "flex",
           justifyContent: "center",
+          direction:"ltr"
         }}
       >
         <Box
