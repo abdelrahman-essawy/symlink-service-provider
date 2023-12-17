@@ -42,12 +42,14 @@ const App = (props: { Component: any; emotionCache?: any; pageProps: any }) => {
     document.dir = direction;
     theme.direction = direction;
     setTheme(theme);
-    }, [theme]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
   return (
     <CacheProvider value={emotionCache}>
       <Head>
         <title>Dashboard</title>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
+        <meta name="description" content="symlink" />
       </Head>
       <I18nextProvider i18n={i18n}>
         <LocalizationProvider dateAdapter={AdapterDateFns}>

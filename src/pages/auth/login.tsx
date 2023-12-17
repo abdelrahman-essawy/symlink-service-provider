@@ -23,7 +23,7 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
 const Page = () => {
-  const { t , i18n} = useTranslation();
+  const { t, i18n } = useTranslation();
   const router = useRouter();
   const auth = useAuth();
   const [method, setMethod] = useState("username");
@@ -88,24 +88,22 @@ const Page = () => {
               <form noValidate onSubmit={formik.handleSubmit}>
                 <Grid container spacing={3} justifyContent="center" alignItems="center">
                   <Grid item xs={12}>
-                    {/* <Stack spacing={2} sx={{ mb: 3 ,direction:i18n.language == 'ar' ? "ltr":"rtl" }}>
-                      <Typography variant="h4">{t("Login")}</Typography>
-                      <Typography color="text.secondary" variant="body2">
-                        {t("Don't have an account")} &nbsp;
-                        <Link href="/auth/register">{t("Register")}</Link>
-                      </Typography>
-                    </Stack> */}
                     <TextField
                       error={!!(formik.touched.username && formik.errors.username)}
                       fullWidth
                       helperText={formik.touched.username && formik.errors.username}
                       placeholder={`${t("username")}`}
                       name="username"
-                      sx={{ mb: 3 }}
                       onBlur={formik.handleBlur}
                       onChange={formik.handleChange}
                       type="username"
                       value={formik.values.username}
+                      sx={{
+                        mb: 3,
+                        "& .muirtl-q7i02f-MuiFormHelperText-root": {
+                          textAlign: "initial",
+                        },
+                      }}
                     />
                     <TextField
                       error={!!(formik.touched.password && formik.errors.password)}
@@ -117,6 +115,11 @@ const Page = () => {
                       onChange={formik.handleChange}
                       value={formik.values.password}
                       type={showPassword ? "text" : "password"}
+                      sx={{
+                        "& .muirtl-q7i02f-MuiFormHelperText-root": {
+                          textAlign: "initial",
+                        },
+                      }}
                       InputProps={{
                         endAdornment: (
                           <InputAdornment position="end">
@@ -141,7 +144,7 @@ const Page = () => {
                       }}
                       color={"primary"}
                     >
-                      <NextLink href="/auth/login" style={{ textDecoration: "none" }}>
+                      <NextLink href="/auth/forget-password" style={{ textDecoration: "none" }}>
                         {t("Forgot password ?")}
                       </NextLink>
                     </Typography>

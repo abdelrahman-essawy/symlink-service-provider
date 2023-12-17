@@ -1,4 +1,4 @@
-import { Box, Button, Grid,  Tooltip, IconButton } from "@mui/material";
+import { Box, Button, Grid, Tooltip, IconButton } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import useAlert from "@/hooks/useAlert";
@@ -18,17 +18,27 @@ import PhotoIcon from "@mui/icons-material/Photo";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import Noitems from "@/components/shared/no-items";
 import FolderCopyIcon from "@mui/icons-material/FolderCopy";
+import { useAuth } from "@/hooks/use-auth";
 
-export interface IProps{
-  RefreshAttachedFiles:() => void;
-  projectId:any;
-  handlePageChange:(event: any, newPage: number) => void;
-  handleRowsPerPageChange:(event: any) => void;
-  controller:any;
-  attachedFiles?:any[];
+export interface IProps {
+  RefreshAttachedFiles: () => void;
+  projectId: any;
+  handlePageChange: (event: any, newPage: number) => void;
+  handleRowsPerPageChange: (event: any) => void;
+  controller: any;
+  userId: string | undefined ;
+  attachedFiles?: any[];
 }
 
-function AttachedFilles({ RefreshAttachedFiles,projectId,controller,handlePageChange,handleRowsPerPageChange,attachedFiles }: IProps) {
+function AttachedFilles({
+  RefreshAttachedFiles,
+  projectId,
+  controller,
+  handlePageChange,
+  handleRowsPerPageChange,
+  attachedFiles,
+  userId,
+}: IProps) {
   const projectContext = useProject();
   const { showAlert, renderForAlert } = useAlert();
 
@@ -39,18 +49,15 @@ function AttachedFilles({ RefreshAttachedFiles,projectId,controller,handlePageCh
     { text: "name", value: "name" },
     { text: "Type", value: "type" },
     { text: "Date added", value: "created_at" },
-    { text: "Commitment", value: "Commitment" },
     { text: "Actions", value: "Actions" },
   ];
 
+  const auth = useAuth();
   const [openCertificate, setOpenCertificate] = useState(false);
   const [openPdf, setOpenPdf] = useState(false);
   const [fileLink, setFileLink] = useState<null | string>(null);
   const [confirm, setConfirm] = useState(false);
   const handleCloseConfirm = () => setConfirm(false);
-  const handleOpenConfirm = () => {
-    setConfirm(true);
-  };
 
   const handleClosefile = () => setOpenCertificate(false);
 
@@ -64,17 +71,24 @@ function AttachedFilles({ RefreshAttachedFiles,projectId,controller,handlePageCh
     setOpenPdf(true);
   };
 
-
-
   const handleDeleteFile = (FileId: string) => {
     setSelectedFileId(FileId);
-    // setOpenConfirm(true);
+    setConfirm(true);
   };
-  const DeleteFile = () => {
-    // setOpenConfirm(false);
-    projectContext?.DeleteFile(selectedFileId);
-    showAlert(t("File has been deleted successfully").toString(), "success");
-  };
+  const DeleteFile = useCallback(
+    async () => {
+      try {
+        await axiosClient.delete(`/attached-files/${selectedFileId}`);
+        showAlert("attachedfiles deleted successfully", "success");
+        RefreshAttachedFiles();
+      } catch (error) {
+        showAlert(showErrorMessage(error).toString(), "error");
+      }
+      setConfirm(false);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [selectedFileId]
+  );
 
   const [loading, setLoading] = useState(false);
 
@@ -104,70 +118,53 @@ function AttachedFilles({ RefreshAttachedFiles,projectId,controller,handlePageCh
     event.target.value = "";
     setLoading(false);
   };
+
+  const handelRenderFiles = useCallback((file: any) => {
+    if (typeof file?.type === "string") {
+      if (file?.type?.includes("application/pdf")) {
+        handleOpenPdf(file?.url);
+      } else if (file?.type?.includes("image")) {
+        handleOpenfile(file?.url);
+      } else {
+        //open the file outside
+        window.open(file?.url, "_blank");
+      }
+    }
+  }, []);
+
   const additionalTableProps = {
     onRendercreated_at: (item: any) =>
-    getLocalTime(item.created_at).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "numeric",
-      day: "numeric",
-    }),
-    onRenderActions: false? 
-    (file: any) => (
-      <Box sx={{ display: "flex", gap: 0, alignItems: "baseline" }}>
-        <Tooltip arrow placement="top" title="View files">
-          <IconButton
-            onClick={() => {
-              if (typeof file?.type === "string") {
-                if (file?.type?.includes("application/pdf")) {
-                  handleOpenPdf(file?.url);
-                } else if (file?.type?.includes("image")) {
-                  handleOpenfile(file?.url);
-                } else {
-                  //open the file outside
-                  window.open(file?.url, "_blank");
-                }
-              }
-            }}
-          >
-            <EyeIcon />
-          </IconButton>
-        </Tooltip>
-        
-        <Tooltip arrow placement="top" title="Delete">
-          <IconButton onClick={handleOpenConfirm}>
-            <TrashIcon />
-          </IconButton>
-        </Tooltip>
-      </Box>
-    ) :
-    (file: any) => (
-      <Box sx={{ display: "flex", gap: 0, alignItems: "baseline" }}>
-        <Tooltip arrow placement="top" title="View files">
-          <IconButton
-            onClick={() => {
-              if (typeof file?.type === "string") {
-                if (file?.type?.includes("application/pdf")) {
-                  handleOpenPdf(file?.url);
-                } else if (file?.type?.includes("image")) {
-                  handleOpenfile(file?.url);
-                } else {
-                  //open the file outside
-                  window.open(file?.url, "_blank");
-                }
-              }
-            }}
-          >
-            <EyeIcon />
-          </IconButton>
-        </Tooltip>
-        
-        <Tooltip arrow placement="top" title="Delete">
-          <IconButton onClick={handleOpenConfirm}>
-            <TrashIcon />
-          </IconButton>
-        </Tooltip>
-      </Box>
-    ) ,
+      getLocalTime(item.created_at).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+      }),
+    onRenderActions:
+      userId === auth?.user?.id
+        ? (file: any) => (
+            <Box sx={{ display: "flex", gap: 0, alignItems: "baseline" }}>
+              <Tooltip arrow placement="top" title="View files">
+                <IconButton onClick={() => handelRenderFiles(file)}>
+                  <EyeIcon />
+                </IconButton>
+              </Tooltip>
+
+              <Tooltip arrow placement="top" title="Delete">
+                <IconButton onClick={() => handleDeleteFile(file?.id)}>
+                  <TrashIcon />
+                </IconButton>
+              </Tooltip>
+            </Box>
+          )
+        : (file: any) => (
+            <Box sx={{ display: "flex", gap: 0, alignItems: "baseline" }}>
+              <Tooltip arrow placement="top" title="View files">
+                <IconButton onClick={() => handelRenderFiles(file)}>
+                  <EyeIcon />
+                </IconButton>
+              </Tooltip>
+            </Box>
+          ),
     onRendertype: useCallback((file: any) => {
       if (file?.type?.includes("image")) {
         return (
@@ -184,7 +181,7 @@ function AttachedFilles({ RefreshAttachedFiles,projectId,controller,handlePageCh
       } else {
         return (
           <Tooltip arrow title={file.type} placement="top">
-            <FilePresentIcon color="primary"  />
+            <FilePresentIcon color="primary" />
           </Tooltip>
         );
       }
@@ -193,14 +190,6 @@ function AttachedFilles({ RefreshAttachedFiles,projectId,controller,handlePageCh
   return (
     <>
       <Grid container sx={{ my: 2 }}>
-        <RoleBasedRender componentId="button-request-to-review">
-          <Grid item xs={12} sx={{ display: "flex", justifyContent: "end" }}>
-            <Button variant="contained" color="warning" sx={{ borderRadius: 8 }}>
-              {"Submit to review"}
-            </Button>
-          </Grid>
-        </RoleBasedRender>
-
         <RoleBasedRender componentId="button-upload-file">
           <Grid item xs={12} sx={{ display: "flex", justifyContent: "end" }}>
             <UploadButton
@@ -221,25 +210,23 @@ function AttachedFilles({ RefreshAttachedFiles,projectId,controller,handlePageCh
           handleClose={handleCloseConfirm}
           message={t("Are you sure you want to delete this file ?")}
           title={t("Delete Attach file")}
-          confirmFuntion={() => {
-            console.log("deleted");
-          }}
+          confirmFuntion={DeleteFile}
           setOpen={setConfirm}
         />
       </Grid>
       {projectContext?.countFiles == undefined || projectContext?.countFiles > 0 ? (
-      <DataTable
-        headers={headers}
-        name="AttachedFilles"
-        items={attachedFiles}
-        totalItems={projectContext?.countFiles}
-        totalPages={projectContext?.totalPages}
-        page={controller?.page || 1}
-        rowsPerPage={controller?.rowsPerPage}
-        onPageChange={handlePageChange}
-        onRowsPerPageChange={handleRowsPerPageChange}
-        {...additionalTableProps}
-      />
+        <DataTable
+          headers={headers}
+          name="AttachedFilles"
+          items={attachedFiles}
+          totalItems={projectContext?.countFiles}
+          totalPages={projectContext?.totalPages}
+          page={controller?.page || 1}
+          rowsPerPage={controller?.rowsPerPage}
+          onPageChange={handlePageChange}
+          onRowsPerPageChange={handleRowsPerPageChange}
+          {...additionalTableProps}
+        />
       ) : (
         <Noitems
           title={"No Files yet"}
