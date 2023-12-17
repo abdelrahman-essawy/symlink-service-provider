@@ -110,6 +110,14 @@ const Page = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [controller]);
 
+  
+  React.useEffect(() => {
+    //depends on tap value
+    fetchAttachedFiles(); //1
+    fetchListBids(); //2
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [controller]);
+
   const handletabs = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };

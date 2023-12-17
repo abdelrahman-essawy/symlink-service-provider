@@ -25,7 +25,6 @@ interface IProps {
 export default function Mobile({ onChange, onChangeNumber, projects, index }: IProps) {
   const { i18n } = useTranslation();
   const { t } = useTranslation();
-  const router = useRouter();
   const [appSize, setAppSize] = useState<IMetaData[]>([]);
   const fetchGernalApisSize = async () => {
     try {
