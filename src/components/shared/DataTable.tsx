@@ -2,9 +2,10 @@ import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import { format } from "date-fns";
+import { visuallyHidden } from "@mui/utils";
 import {
   alpha,
-  Avatar,
+  TableSortLabel,
   Theme,
   Box,
   Card,
@@ -22,9 +23,10 @@ import {
   tableCellClasses,
   styled,
   SxProps,
+  Skeleton,
 } from "@mui/material";
 import { Scrollbar } from "@/components/scrollbar";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import LeftIcon from "@/assets/icons/left";
 import RightIcon from "@/assets/icons/right";
@@ -34,7 +36,8 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-
+import Noitems from "@/components/shared/no-items";
+import FolderCopyIcon from "@mui/icons-material/FolderCopy";
 const PaginationBox = styled(Box)(() => ({
   borderRadius: "9px",
   border: "1px solid rgba(196,196,196, 1)",
@@ -45,12 +48,12 @@ const PaginationBox = styled(Box)(() => ({
 }));
 export const DataTable = (props: any) => {
   const {
+    isLoading = false,
     items = [],
     menu = [],
     headers = [],
-    count,
     totalPages = 1,
-    totalItems = 1,
+    totalItems = undefined,
     pageSize = 10,
     onDeselectAll,
     onDeselectOne,
@@ -64,7 +67,9 @@ export const DataTable = (props: any) => {
     handleSuspend = () => {},
     rowsPerPage,
     selected,
+    handleSendSortBy = (sorting:any) => {},
   } = props;
+  const [sorting, setSorting]: any = useState({});
   const getItem = (item: any, header: any): any => {
     const name = "onRender" + header.value;
     if (props[name]) {
@@ -81,6 +86,61 @@ export const DataTable = (props: any) => {
       }
     }
   };
+  const noNeedSorting = (headerText: string): Boolean => {
+    if (name == "Employees") {
+      if (
+        headerText == "Role" ||
+        headerText == "Action" ||
+        headerText == "Department" ||
+        headerText == "Create Date"
+      ) {
+        return false;
+      }
+      return true;
+    } else if (name == "Transactions") {
+      if (
+        headerText == "Type" ||
+        headerText == "Actions" ||
+        headerText == "Creation Date & Time" ||
+        headerText == "Holder Name" ||
+        headerText == "Card No."
+      ) {
+        return false;
+      }
+      return true;
+    } else if (["Companies", "CardProgram"].includes(name)) {
+      return false;
+    }
+    if (
+      headerText == "Edit" ||
+      headerText == "Employee Name" ||
+      headerText == "Status" ||
+      headerText == "Actions" ||
+      headerText == "Action"
+    ) {
+      return false;
+    }
+    return true;
+  };
+  const handleSorting = (header: any) => {
+    const newVal: any = { ...sorting };
+    if (newVal[header.value] === "asc") {
+      newVal[header.value] = "desc";
+    } else if (newVal[header.value] === "desc") {
+      delete newVal[header.value];
+    } else {
+      newVal[header.value] = "asc";
+    }
+    setSorting(newVal);
+  };
+
+  useEffect(() => {
+    //change Items Order from Api
+    if (handleSendSortBy) {
+      handleSendSortBy(sorting);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sorting]);
   const { t } = useTranslation();
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -142,6 +202,16 @@ export const DataTable = (props: any) => {
       </MenuButton>
     );
   };
+
+  if (!isLoading && !totalItems == undefined) {
+    return (
+      <Noitems
+        title={`No ${name} yet`}
+        icon={<FolderCopyIcon sx={{ color: "gray", fontSize: "4.2em" }} />}
+      />
+    );
+  }
+
   return (
     <>
       <Card sx={{ borderRadius: "15px" }}>
@@ -153,34 +223,85 @@ export const DataTable = (props: any) => {
                   {headers?.map((header: any) => {
                     return (
                       <StyledTableCell key={header} sx={{ textAlign: "start", p: 3 }}>
-                        {t(header?.text)}
+                        {
+                          // here you can Add the column header that don't need to sorting
+                          noNeedSorting(header.text) ? (
+                            <TableSortLabel
+                              active={sorting.hasOwnProperty(header.value)}
+                              direction={sorting[header.value]}
+                              onClick={(event) => handleSorting(header)}
+                              sx={{
+                                textTransform: "none",
+                                textAlign: "center !important",
+                                lineHeight: "1.5rem",
+                              }}
+                            >
+                              {header.text}
+                              <Box component="span" sx={visuallyHidden}>
+                                {sorting[header.value] === "desc"
+                                  ? "sorted descending"
+                                  : "sorted ascending"}
+                              </Box>
+                            </TableSortLabel>
+                          ) : (
+                            <Typography
+                              sx={{
+                                textTransform: "none",
+                                fontWeight: 700,
+                                fontSize: "0.78rem",
+                                lineHeight: "1.5rem",
+                                textAlign: "start",
+                              }}
+                            >
+                              {header.text}
+                            </Typography>
+                          )
+                        }
                       </StyledTableCell>
                     );
                   })}
                 </TableRow>
               </TableHead>
               <TableBody>
-                {items?.map((item: any, index: number) => (
-                  <TableRow
-                    hover
-                    key={index}
-                    sx={{
-                      // borderRadius: handleBorderRadius(index),
-                      cursor: onRowClick ? "pointer" : "auto",
-                    }}
-                    onClick={(e) => (onRowClick ? onRowClick(e, item) : null)}
-                  >
-                    {headers?.map((header: any) => {
-                      return (
-                        <TableCell key={header}>
-                          <Stack alignItems="center" direction="row" spacing={1}>
-                            {getItem(item, header)}
-                          </Stack>
-                        </TableCell>
-                      );
-                    })}
-                  </TableRow>
-                ))}
+                {!isLoading ? (
+                  items?.map((item: any, index: number) => (
+                    <TableRow
+                      hover
+                      key={index}
+                      sx={{
+                        // borderRadius: handleBorderRadius(index),
+                        cursor: onRowClick ? "pointer" : "auto",
+                      }}
+                      onClick={(e) => (onRowClick ? onRowClick(e, item) : null)}
+                    >
+                      {headers?.map((header: any) => {
+                        return (
+                          <TableCell key={header}>
+                            <Stack alignItems="center" direction="row" spacing={1}>
+                              {getItem(item, header)}
+                            </Stack>
+                          </TableCell>
+                        );
+                      })}
+                    </TableRow>
+                  ))
+                ) : (
+                  <>
+                    {Array.from({ length: 3 }).map((_: any, index: number) => (
+                      <TableRow key={index}>
+                        {headers?.map((header: any) => {
+                          return (
+                            <TableCell key={header}>
+                              <Stack alignItems="center" direction="row" spacing={1}>
+                                <Skeleton width={100} key={header} />
+                              </Stack>
+                            </TableCell>
+                          );
+                        })}
+                      </TableRow>
+                    ))}
+                  </>
+                )}
               </TableBody>
             </Table>
           </Box>
@@ -248,8 +369,9 @@ export const DataTable = (props: any) => {
 DataTable.propTypes = {
   count: PropTypes.number,
   name: PropTypes.string,
+  isLoading: PropTypes.bool,
   totalPages: PropTypes.number,
-  totalItems: PropTypes.number,
+  totalItems: PropTypes.any,
   items: PropTypes.array,
   headers: PropTypes.array,
   onDeselectAll: PropTypes.func,
@@ -260,6 +382,7 @@ DataTable.propTypes = {
   onSelectOne: PropTypes.func,
   page: PropTypes.number,
   handleSuspend: PropTypes.func,
+  handleSendSortBy: PropTypes.func,
   rowsPerPage: PropTypes.number,
   selected: PropTypes.array,
 };
