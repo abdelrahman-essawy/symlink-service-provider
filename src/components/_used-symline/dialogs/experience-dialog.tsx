@@ -188,7 +188,7 @@ export default function ExperienceDialog({
                       helperText={formik.touched.name && formik.errors.name}
                       sx={{
                         "& .muirtl-q7i02f-MuiFormHelperText-root": {
-                          textAlign: "initial",
+                          textAlign: "left",
                         },
                       }}
                     />
@@ -247,7 +247,7 @@ export default function ExperienceDialog({
                           borderRadius: "50px",
                         },
                         "& .muirtl-q7i02f-MuiFormHelperText-root": {
-                          textAlign: "initial",
+                          textAlign: "left",
                         },
                       }}
                       inputProps={{

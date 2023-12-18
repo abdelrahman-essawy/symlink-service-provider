@@ -90,7 +90,7 @@ const Page = () => {
                     value={formik.values.email}
                     sx={{
                       "& .muirtl-q7i02f-MuiFormHelperText-root": {
-                        textAlign: "initial",
+                        textAlign: "left",
                       },
                     }}
                   />
@@ -139,7 +139,7 @@ const Page = () => {
           </div>
         </Box>
       </Box>
-      {renderForAlert(4000)}
+      {renderForAlert(6000)}
     </>
   );
 };
