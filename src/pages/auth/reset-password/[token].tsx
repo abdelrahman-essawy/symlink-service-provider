@@ -126,7 +126,7 @@ const Page = () => {
                     }}
                     sx={{
                       "& .muirtl-q7i02f-MuiFormHelperText-root": {
-                        textAlign: "initial",
+                        textAlign: "left",
                       },
                     }}
                   />
@@ -155,7 +155,7 @@ const Page = () => {
                     }}
                     sx={{
                       "& .muirtl-q7i02f-MuiFormHelperText-root": {
-                        textAlign: "initial",
+                        textAlign: "left",
                       },
                     }}
                   />

@@ -100,9 +100,9 @@ export const get_financials_drivers_balance = (page: number = 1, rowsPerPage: nu
 //-----------------------------------------------------SYMLINK----------------------------------------------------
 //RFP----------------------------------------------------
 export const get_Project_id = (id: string) => `/multi-rfp/${id}`;
-export const get_Projects = (endpoint:string,page: number = 1, rowsPerPage: number = 10, searchString?: string) => `/multi-rfp/${endpoint}?page=${page}&limit=${rowsPerPage}&created_at%3Ddesc`;
+export const get_Projects = (endpoint:string,page: number = 1, rowsPerPage: number = 10, searchString?: string) => `/multi-rfp/${endpoint}?page=${page}&limit=${rowsPerPage}&sort_by_date=ASC`;
 export const get_attached_file = (page:number,limit:number,id?:string) => `/attached-files/${id}?limit=${limit}&page=${page}`;
 //Bids----------------------------------------------------
-export const get_Bids = (page: number = 1, rowsPerPage: number = 10, searchString?: string) => `/multi-rfp/provider-all-offers?page=${page}&limit=${rowsPerPage}&created_at%3Ddesc`;
-export const get_list_of_offer = (multi_RFP_id :string,page: number = 1, rowsPerPage: number = 10, searchString?: string) => `/offers/${multi_RFP_id}/all-offers-for-project?page=${page}&limit=${rowsPerPage}&created_at%3Ddesc`;
+export const get_Bids = (page: number = 1, rowsPerPage: number = 10, searchString?: string) => `/multi-rfp/provider-all-offers?page=${page}&limit=${rowsPerPage}&sort_by_date=ASC`;
+export const get_list_of_offer = (multi_RFP_id :string,page: number = 1, rowsPerPage: number = 10, searchString?: string) => `/offers/${multi_RFP_id}/all-offers-for-project?page=${page}&limit=${rowsPerPage}&sort_by_date=ASC`;
 export const get_Bid_id = (id: string) => `/multi-rfp/${id}`;

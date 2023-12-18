@@ -121,7 +121,7 @@ const Page = () => {
                       type={showPassword ? "text" : "password"}
                       sx={{
                         "& .muirtl-q7i02f-MuiFormHelperText-root": {
-                          textAlign: "initial",
+                          textAlign: "left",
                         },
                       }}
                       InputProps={{

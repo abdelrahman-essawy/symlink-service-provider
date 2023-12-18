@@ -69,14 +69,14 @@ const RenderAssessments = ({
                         />
                       ) : assessment === "Architecture composition review" ? (
                         <ArchitectureCompositionReview />
-                      ) : assessment === "the network" ? (
+                      ) : assessment === "Network" ? (
                         <Network
                           projects={projects}
                           onChange={onChange}
                           index={index}
                           onChangeNumber={onChangeNumber}
                         />
-                      ) : assessment === "the phone" ? (
+                      ) : assessment === "Mobile Application" ? (
                         <Mobile
                           projects={projects}
                           onChange={onChange}

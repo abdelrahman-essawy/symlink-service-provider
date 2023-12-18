@@ -1,16 +1,10 @@
 import PropTypes from "prop-types";
-import NextLink from "next/link";
-import Image from "next/image";
-
 import { Box, Typography, Unstable_Grid2 as Grid, IconButton, Button, Card } from "@mui/material";
 import React from "react";
 import Logo from "../../../public/assets/Logo.svg";
 import { useTranslation } from "react-i18next";
-// TODO: Change subtitle text
-import BgImg from "../../../public/assets/Logo.svg";
 import LocalizationSwitcher from "@/components/LocalizationSwitcher";
 import ButtonGroup from "@mui/material/ButtonGroup";
-import Link from "next/link";
 import { useRouter } from "next/router";
 export const AuthLayout = (props: { children: any }) => {
   const { children } = props;
@@ -46,7 +40,6 @@ export const AuthLayout = (props: { children: any }) => {
         >
           <Box>
             <Grid container spacing={2} justifyContent="center" alignItems="center">
-              <Grid xs={12}></Grid>
               <img alt="" width="300px" src={Logo.src} />
             </Grid>
           </Box>
@@ -82,7 +75,7 @@ export const AuthLayout = (props: { children: any }) => {
             <ButtonGroup
               variant="contained"
               sx={{
-                maxWidth: { md: 550, xs: "90%", sm: "75%" },
+                maxWidth: { md: 510, xs: "90%", sm: "75%" },
                 direction: "ltr",
                 display:
                   router?.pathname == "/auth/login" || router?.pathname == "/auth/register"
