@@ -291,43 +291,45 @@ function GeneralQuestions({
                   {t("Terms")}
                 </Typography>
               </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  label={
-                    <Typography variant="body1" color="initial">
-                      {t(
-                        `Whitebox (whitelist the assessor's IP of the and provide testing users for every role in the application)`
-                      )}
-                    </Typography>
-                  }
-                  control={
-                    <Checkbox
-                      checked={true}
-                      onChange={(event: any) =>
-                        handleChange({ target: { name: "term1", value: event.target.checked } })
-                      }
-                      color="warning"
-                    />
-                  }
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  label={
-                    <Typography variant="body1" color="initial">
-                      {t(`Blackbox (the assessor has no knowledge of the application/ network)`)}
-                    </Typography>
-                  }
-                  control={
-                    <Checkbox
-                      checked={true}
-                      onChange={(event: any) =>
-                        handleChange({ target: { name: "term1", value: event.target.checked } })
-                      }
-                      color="warning"
-                    />
-                  }
-                />
+              <Grid container sx={{py:"15px"}}>
+                <Grid item xs={12}>
+                  <FormControlLabel
+                    label={
+                      <Typography variant="body1" color="initial">
+                        {t(
+                          `Whitebox (whitelist the assessor's IP of the and provide testing users for every role in the application)`
+                        )}
+                      </Typography>
+                    }
+                    control={
+                      <Checkbox
+                        checked={true}
+                        onChange={(event: any) =>
+                          handleChange({ target: { name: "term1", value: event.target.checked } })
+                        }
+                        color="warning"
+                      />
+                    }
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <FormControlLabel
+                    label={
+                      <Typography variant="body1" color="initial">
+                        {t(`Blackbox (the assessor has no knowledge of the application/ network)`)}
+                      </Typography>
+                    }
+                    control={
+                      <Checkbox
+                        checked={true}
+                        onChange={(event: any) =>
+                          handleChange({ target: { name: "term1", value: event.target.checked } })
+                        }
+                        color="warning"
+                      />
+                    }
+                  />
+                </Grid>
               </Grid>
             </Grid>
           </Grid>

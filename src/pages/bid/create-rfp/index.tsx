@@ -151,11 +151,11 @@ const Page = () => {
     setIsLoading(true);
     try {
       const res = await axiosClient.post("multi-rfp", formRecord);
-      if(res.status === 200 || res.status === 201) {
-        router.push("/projects")
+      if (res.status === 200 || res.status === 201) {
+        router.push("/projects");
       }
-    } catch (err:any) {
-      showAlert(showErrorMessage(err),'error');
+    } catch (err: any) {
+      showAlert(showErrorMessage(err), "error");
     }
     setIsLoading(false);
   };
@@ -166,170 +166,176 @@ const Page = () => {
         <title>{title} | Symline</title>
       </Head>
       <form onSubmit={handelsubmit}>
-          <Container maxWidth="xl">
-            <Typography variant="h3" sx={{ mb: 2 }} fontWeight={"bold"}>
-              {dictionary(title as TranslatedWord)}
-            </Typography>
+        <Container maxWidth="xl">
+          <Typography variant="h3" sx={{ mb: 2 }} fontWeight={"bold"}>
+            {dictionary(title as TranslatedWord)}
+          </Typography>
 
+          <Grid
+            container
+            spacing={3}
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "start",
+            }}
+          >
+            <Grid item xs={12} md={8} justifyContent="flex-end" display="flex">
+              <TextField
+                fullWidth={true}
+                sx={{
+                  "& .MuiOutlinedInput-root": { borderRadius: "50px" },
+                  mt: 0,
+                  "& .muirtl-b3016c-MuiInputAdornment-root.MuiInputAdornment-positionStart.muirtl-b3016c-MuiInputAdornment-root:not(.MuiInputAdornment-hiddenLabel)":
+                    {
+                      marginTop: 0,
+                      marginX: 1,
+                      padding: "0",
+                    },
+                }}
+                placeholder={`${t("Project name")}`}
+                variant="filled"
+                size="medium"
+                margin="dense"
+                name={"project_name"}
+                required
+                value={formRecord?.project_name}
+                onChange={handleChange}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <WorkOutlineIcon />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Grid>
             <Grid
-              container
-              spacing={3}
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "start",
-              }}
+              item
+              md={4}
+              xs={12}
+              sx={{ justifyContent: { xs: "center", md: "end" } }}
+              display="flex"
             >
-              <Grid item xs={12} md={8} justifyContent="flex-end" display="flex">
-                <TextField
-                  fullWidth={true}
-                  sx={{
-                    "& .MuiOutlinedInput-root": { borderRadius: "50px" },
-                    mt: 0,
-                    "& .muirtl-b3016c-MuiInputAdornment-root.MuiInputAdornment-positionStart.muirtl-b3016c-MuiInputAdornment-root:not(.MuiInputAdornment-hiddenLabel)":
-                      {
-                        marginTop: 0,
-                        marginX: 1,
-                        padding: "0",
-                      },
-                  }}
-                  placeholder={`${t("Project name")}`}
-                  variant="filled"
-                  size="medium"
-                  margin="dense"
-                  name={"project_name"}
-                  required
-                  value={formRecord?.project_name}
-                  onChange={handleChange}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <WorkOutlineIcon />
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              </Grid>
-              <Grid
-                item
-                md={4}
-                xs={12}
-                sx={{ justifyContent: { xs: "center", md: "end" } }}
-                display="flex"
+              <Button
+                variant="contained"
+                onClick={handleClickList}
+                aria-describedby={id}
+                aria-label="add"
+                color="warning"
+                size="large"
+                sx={{
+                  borderRadius: 20,
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "start",
+                  gap: 0.5,
+                }}
               >
-                <Button
-                  variant="contained"
-                  onClick={handleClickList}
-                  aria-describedby={id}
-                  aria-label="add"
-                  color="warning"
-                  size="large"
-                  sx={{
-                    borderRadius: 20,
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "start",
-                    gap: 0.5,
-                  }}
-                >
-                  {t("Add assessment")} <AddIcon />
-                </Button>
-                <Popover
-                  id={id}
-                  open={openList}
-                  anchorEl={anchorEl}
-                  onClose={handleCloseList}
-                  anchorOrigin={{
-                    horizontal: "left",
-                    vertical: "bottom",
-                  }}
-                  PaperProps={{ sx: { width: 300, borderRadius: 3 } }}
-                >
-                  <List sx={{ p: 1.5 }}>
-                    {assessments.map((item: any, index) => (
-                      <ListItem
-                        key={item?.id}
-                        disablePadding
-                        divider={index != assessments?.length - 1}
+                {t("Add assessment")} <AddIcon />
+              </Button>
+              <Popover
+                id={id}
+                open={openList}
+                anchorEl={anchorEl}
+                onClose={handleCloseList}
+                anchorOrigin={{
+                  horizontal: "left",
+                  vertical: "bottom",
+                }}
+                PaperProps={{ sx: { width: 300, borderRadius: 3 } }}
+              >
+                <List sx={{ p: 1.5 }}>
+                  {assessments.map((item: any, index) => (
+                    <ListItem
+                      key={item?.id}
+                      disablePadding
+                      divider={index != assessments?.length - 1}
+                    >
+                      <ListItemButton
+                        onClick={() => {
+                          addInput(item?.name_en || item?.name, item.id);
+                        }}
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                        }}
                       >
-                        <ListItemButton
-                          onClick={() => {
-                            addInput(item?.name_en || item?.name, item.id);
-                          }}
+                        <ListItemText
+                          primary={`${t(item?.name)}`}
                           sx={{
                             display: "flex",
                             justifyContent: "space-between",
                             alignItems: "center",
                           }}
-                        >
-                          <ListItemText
-                            primary={`${t(item?.name)}`}
-                            sx={{
-                              display: "flex",
-                              justifyContent: "space-between",
-                              alignItems: "center",
-                            }}
-                          />
-                          <Badge
-                            badgeContent={countAssessments(item?.name_en || item?.name)}
-                            color="warning"
-                            overlap="circular"
-                            anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-                          ></Badge>
-                        </ListItemButton>
-                      </ListItem>
-                    ))}
-                  </List>
-                </Popover>
-              </Grid>
-
-              <GeneralQuestions
-                time_type_id={formRecord?.time_type_id}
-                expiration_date={formRecord?.expiration_date}
-                firstFullName={formRecord?.firstFullName}
-                firstEmail={formRecord?.firstEmail}
-                firstMobile={formRecord?.firstMobile}
-                secondFullName={formRecord?.secondFullName}
-                secondEmail={formRecord?.secondEmail}
-                secondMobile={formRecord?.secondMobile}
-                handleonchange={handleChange}
-              />
-
-              {inputs.map((item, index) => (
-                <RenderAssessments
-                  key={item?.id}
-                  projects={formRecord?.projects}
-                  onChange={handleChangeProjects}
-                  onChangeNumber={handleChangeNumberInProjects}
-                  assessment={item?.name}
-                  index={index}
-                  removeInput={removeInput}
-                  order={inputs?.filter((input) => input.name == item.name).indexOf(item)}
-                />
-              ))}
-              <Grid item xs={12} display={"flex"} sx={{ justifyContent: { xs: "center", md: "start" } }}>
-                <Button
-                  variant="contained"
-                  type="submit"
-                  aria-describedby={id}
-                  aria-label="add"
-                  color="warning"
-                  size="large"
-                  disabled={!(formRecord?.projects?.length > 0)}
-                  sx={{
-                    borderRadius: 20,
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "start",
-                    gap: 0.5,
-                    width:"200px",
-                  }}
-                >
-                  {isLoading ? <CircularProgress thickness={1.5} /> : t("Create")}
-                </Button>
-              </Grid>
+                        />
+                        <Badge
+                          badgeContent={countAssessments(item?.name_en || item?.name)}
+                          color="warning"
+                          overlap="circular"
+                          anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+                          sx={{"& .muirtl-4xw9my-MuiBadge-badge":{color:"#000",fontSize:"15px"}}}
+                        />
+                      </ListItemButton>
+                    </ListItem>
+                  ))}
+                </List>
+              </Popover>
             </Grid>
-          </Container>
+
+            <GeneralQuestions
+              time_type_id={formRecord?.time_type_id}
+              expiration_date={formRecord?.expiration_date}
+              firstFullName={formRecord?.firstFullName}
+              firstEmail={formRecord?.firstEmail}
+              firstMobile={formRecord?.firstMobile}
+              secondFullName={formRecord?.secondFullName}
+              secondEmail={formRecord?.secondEmail}
+              secondMobile={formRecord?.secondMobile}
+              handleonchange={handleChange}
+            />
+
+            {inputs.map((item, index) => (
+              <RenderAssessments
+                key={item?.id}
+                projects={formRecord?.projects}
+                onChange={handleChangeProjects}
+                onChangeNumber={handleChangeNumberInProjects}
+                assessment={item?.name}
+                index={index}
+                removeInput={removeInput}
+                order={inputs?.filter((input) => input.name == item.name).indexOf(item)}
+              />
+            ))}
+            <Grid
+              item
+              xs={12}
+              display={"flex"}
+              sx={{ justifyContent: { xs: "center", md: "start" } }}
+            >
+              <Button
+                variant="contained"
+                type="submit"
+                aria-describedby={id}
+                aria-label="add"
+                color="warning"
+                size="large"
+                disabled={!(formRecord?.projects?.length > 0)}
+                sx={{
+                  borderRadius: 20,
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "start",
+                  gap: 0.5,
+                  width: "200px",
+                }}
+              >
+                {isLoading ? <CircularProgress thickness={1.5} /> : t("Create")}
+              </Button>
+            </Grid>
+          </Grid>
+        </Container>
         {renderForAlert()}
       </form>
     </>
