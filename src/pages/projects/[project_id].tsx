@@ -374,9 +374,9 @@ const ConfirmAcceptance = async() => {
                           <WebAnswers key={item?.id} project={item} />
                         ) : item?.category?.name === "Architecture composition review" ? (
                           <ArchitectureConfigurationReviewAnswer key={item?.id} project={item} />
-                        ) : item?.category?.name === "the network" ? (
+                        ) : item?.category?.name === "Network" ? (
                           <NetworkAnswers project={item} key={item?.id} />
-                        ) : item?.category?.name === "the phone" ? (
+                        ) : item?.category?.name === "Mobile Application" ? (
                           <MobileAnswers project={item} key={item?.id} />
                         ) : item?.category?.name === "Source code" ? (
                           <SourceCodeAnswers project={item} key={item?.id} />
