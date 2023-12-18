@@ -1,21 +1,16 @@
-import Head from 'next/head';
-import { useEffect, useState } from 'react';
-import { subDays, subHours } from 'date-fns';
-import { Box, Container, Unstable_Grid2 as Grid } from '@mui/material';
-import React from 'react';
-import { DashboardLayout } from '../layouts/dashboard/layout';
-import { OverviewLatestOrders } from '../sections/overview/overview-latest-orders';
-import { OverviewLatestVehicles } from '../sections/overview/overview-latest-vehicles';
-import OrderContextProvider from '@/contexts/order-context';
+import Head from "next/head";
+import { useEffect, useState } from "react";
+import { subDays, subHours } from "date-fns";
+import { Box, Container, Unstable_Grid2 as Grid } from "@mui/material";
+import React from "react";
+import { DashboardLayout } from "../layouts/dashboard/layout";
 const now = new Date();
-import { useTranslation } from 'react-i18next';
-import { useRouter } from 'next/router';
-
+import { useTranslation } from "react-i18next";
+import { useRouter } from "next/router";
 
 const Page = () => {
-
   const router = useRouter();
-  router.push('/projects');
+  router.push("/projects");
   const { t } = useTranslation();
   return (
     <>
@@ -59,11 +54,7 @@ const Page = () => {
       {/* </Box> */}
     </>
   );
-}
-Page.getLayout = (page: any) => (
-  <DashboardLayout>
-    <OrderContextProvider> {page}</OrderContextProvider>
-  </DashboardLayout>
-);
+};
+Page.getLayout = (page: any) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default Page;
