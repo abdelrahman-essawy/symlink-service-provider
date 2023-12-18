@@ -42,7 +42,8 @@ const MenuButton = ({
     event.stopPropagation();
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
+  const handleClose = (event: any) => {
+    event.stopPropagation();
     setAnchorEl(null);
   };
 
@@ -85,7 +86,7 @@ const MenuButton = ({
                     key={index}
                     onClick={(e) => {
                       child.onClick(e, id, isSuspended);
-                      handleClose();
+                      handleClose(e);
                     }}
                     disabled={child.disabled}
                   >
