@@ -23,6 +23,8 @@ import { sharedStyles } from "@/utils/sharedStyles";
 import { CardTableActions } from "@/sections/projects/Project-table-actions";
 import { SearchBar } from "@/sections/shared/search-bar";
 import { useAuth } from "@/hooks/use-auth";
+import MenuButton from "@/components/shared/ButtonMenu";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
 const Page = () => {
   const { i18n } = useTranslation();
@@ -48,7 +50,7 @@ const Page = () => {
     { text: "Actions", value: "Actions" },
   ];
 
-  const { handlePageChange, handleRowsPerPageChange, handleSearch, controller,handleSorting } =
+  const { handlePageChange, handleRowsPerPageChange, handleSearch, controller, handleSorting } =
     usePageUtilities();
 
   const fetchProjects = async () => {
@@ -136,7 +138,17 @@ const Page = () => {
       ) : null;
     },
     onRenderActions: (item: any) => {
-      return <CardTableActions card={item} />;
+      return (
+        <MenuButton
+          actions={menuItemsEmployees}
+          sx={sharedStyles("actions")}
+          onClick={(event: React.MouseEvent<HTMLElement>) => {
+            event.stopPropagation();
+          }}
+        >
+          <MoreHorizIcon />
+        </MenuButton>
+      );
     },
     onRowClick: (e: any, item: IProject) => push(`projects/${item.id}`),
   };
@@ -153,9 +165,9 @@ const Page = () => {
     },
   ];
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log(controller);
-  },[controller])
+  }, [controller]);
   return (
     <>
       <Head>

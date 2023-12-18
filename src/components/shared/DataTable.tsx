@@ -194,8 +194,8 @@ export const DataTable = (props: any) => {
         id={id}
         isSuspended={isSuspended}
         sx={sharedStyles("actions")}
-        onClick={(e: any) => {
-          e.stopPropagation();
+        onClick={(event: React.MouseEvent<HTMLElement>) => {
+          event.stopPropagation();
         }}
       >
         <MoreHorizIcon />
@@ -203,7 +203,7 @@ export const DataTable = (props: any) => {
     );
   };
 
-  if (!isLoading && !totalItems == undefined) {
+  if (!isLoading && !totalItems == undefined && !(totalItems >= 1)) {
     return (
       <Noitems
         title={`No ${name} yet`}
