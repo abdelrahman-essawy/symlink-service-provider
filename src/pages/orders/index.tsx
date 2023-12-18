@@ -185,7 +185,7 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>{t("Orders")} | Pronto</title>
+        <title>{t("Orders")} | Symlink</title>
       </Head>
       <Box
         component="main"

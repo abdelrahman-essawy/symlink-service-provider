@@ -18,7 +18,6 @@ import React from "react";
 import { useAuth } from "../../hooks/use-auth";
 import { AuthLayout } from "../../layouts/auth/layout";
 import { useTranslation } from "react-i18next";
-import Link from "next/link";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
@@ -101,7 +100,7 @@ const Page = () => {
                       sx={{
                         mb: 3,
                         "& .muirtl-q7i02f-MuiFormHelperText-root": {
-                          textAlign: "initial",
+                          textAlign: "right",
                         },
                       }}
                     />
@@ -117,7 +116,7 @@ const Page = () => {
                       type={showPassword ? "text" : "password"}
                       sx={{
                         "& .muirtl-q7i02f-MuiFormHelperText-root": {
-                          textAlign: "left",
+                          textAlign: "right",
                         },
                       }}
                       InputProps={{

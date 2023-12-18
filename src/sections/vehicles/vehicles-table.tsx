@@ -114,7 +114,7 @@ export const VehiclesTable = (props: any) => {
                     <TableCell>
                       <Stack alignItems="center" direction="row" spacing={2}>
                         <Avatar
-                          src={"https://pronto.zbony.com/v1/" + vehicle?.__images__[0]?.image}
+                          src={"https://Symlink.zbony.com/v1/" + vehicle?.__images__[0]?.image}
                         >
                           {getInitials(vehicle?.__images__[0]?.image ?? "NA")}
                         </Avatar>

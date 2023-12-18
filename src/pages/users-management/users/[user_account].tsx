@@ -37,7 +37,7 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>User | Pronto</title>
+        <title>User | Symlink</title>
       </Head>
       <Box
         component="main"

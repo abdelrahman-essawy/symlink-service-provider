@@ -63,7 +63,7 @@ export const OverviewLatestVehicles = (props: any) => {
                     ? (
                       <Box
                         component="img"
-                        src={"https://pronto.zbony.com/v1/" + vehicle?.__images__[0]?.image}
+                        src={"https://Symlink.zbony.com/v1/" + vehicle?.__images__[0]?.image}
                         sx={{
                           borderRadius: 1,
                           height: 48,

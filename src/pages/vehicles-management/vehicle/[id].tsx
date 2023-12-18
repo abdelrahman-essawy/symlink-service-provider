@@ -40,11 +40,11 @@ const Page = () => {
 
   const vehicleImages = vehicle?.__images__;
   const licenseImages = vehicle?.__license_images__;
-  const galleryPath = "https://pronto.zbony.com/v1/";
+  const galleryPath = "https://Symlink.zbony.com/v1/";
   return (
     <>
       <Head>
-        <title>Vehicle | Pronto</title>
+        <title>Vehicle | Symlink</title>
       </Head>
       <Box
         component="main"
@@ -80,7 +80,7 @@ const Page = () => {
                 <Avatar sx={{ width: 150, height: 150 }}>
                   {vehicle.__images__ && vehicle?.__images__[0] && (
                     <img
-                      src={"https://pronto.zbony.com/v1/" + vehicle?.__images__[0]?.image}
+                      src={"https://Symlink.zbony.com/v1/" + vehicle?.__images__[0]?.image}
                       alt={vehicle.brand_id}
                       loading="lazy"
                       width={200}
