@@ -88,11 +88,6 @@ const Page = () => {
                     onChange={formik.handleChange}
                     type="email"
                     value={formik.values.email}
-                    sx={{
-                      "& .muirtl-q7i02f-MuiFormHelperText-root": {
-                        textAlign: "left",
-                      },
-                    }}
                   />
 
                   {formik.errors.submit && (

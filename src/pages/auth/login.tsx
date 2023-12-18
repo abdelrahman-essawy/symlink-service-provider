@@ -99,9 +99,6 @@ const Page = () => {
                       value={formik.values.username}
                       sx={{
                         mb: 3,
-                        "& .muirtl-q7i02f-MuiFormHelperText-root": {
-                          textAlign: "right",
-                        },
                       }}
                     />
                     <TextField
@@ -114,11 +111,6 @@ const Page = () => {
                       onChange={formik.handleChange}
                       value={formik.values.password}
                       type={showPassword ? "text" : "password"}
-                      sx={{
-                        "& .muirtl-q7i02f-MuiFormHelperText-root": {
-                          textAlign: "right",
-                        },
-                      }}
                       InputProps={{
                         endAdornment: (
                           <InputAdornment position="end">
@@ -137,7 +129,6 @@ const Page = () => {
                       sx={{
                         mx: 2,
                         mt: 2,
-
                         fontSize: 14,
                         fontWeight: 700,
                       }}
