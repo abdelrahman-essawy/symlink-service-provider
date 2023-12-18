@@ -124,11 +124,6 @@ const Page = () => {
                         </InputAdornment>
                       ),
                     }}
-                    sx={{
-                      "& .muirtl-q7i02f-MuiFormHelperText-root": {
-                        textAlign: "left",
-                      },
-                    }}
                   />
                   <TextField
                     error={!!(formik.touched.confirmPassword && formik.errors.confirmPassword)}
@@ -152,11 +147,6 @@ const Page = () => {
                           </IconButton>
                         </InputAdornment>
                       ),
-                    }}
-                    sx={{
-                      "& .muirtl-q7i02f-MuiFormHelperText-root": {
-                        textAlign: "left",
-                      },
                     }}
                   />
                   {formik.errors.submit && (

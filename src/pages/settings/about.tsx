@@ -30,7 +30,7 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>{title} | Pronto</title>
+        <title>{title} | Symlink</title>
       </Head>
 
         <Container maxWidth="xl">

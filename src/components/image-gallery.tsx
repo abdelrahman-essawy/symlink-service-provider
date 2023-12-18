@@ -53,7 +53,7 @@ export default function ImageGallery(props: any) {
                       onClick={handleOpen}
                       src={path + item.image}
                       srcSet={path + item.image}
-                      alt={"Pronto Image"}
+                      alt={"Symlink Image"}
                       loading="lazy"
                     />
                   </ImageListItem>
@@ -66,7 +66,7 @@ export default function ImageGallery(props: any) {
       {/* Image preview Modal */}
       <Dialog open={open} onClose={handleClose}>
         <DialogContent>
-          <img style={{ width: "100%" }} src={previewImage} alt="Pronto Image" loading="lazy" />
+          <img style={{ width: "100%" }} src={previewImage} alt="Symlink Image" loading="lazy" />
         </DialogContent>
       </Dialog>
     </>

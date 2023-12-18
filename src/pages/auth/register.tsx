@@ -158,11 +158,6 @@ const Page = () => {
                   type="email"
                   value={formik.values.email}
                   autoComplete="off"
-                  sx={{
-                    "& .muirtl-q7i02f-MuiFormHelperText-root": {
-                      textAlign: "left",
-                    },
-                  }}
                 />
                 <TextField
                   error={!!(formik.touched.password && formik.errors.password)}
@@ -188,11 +183,6 @@ const Page = () => {
                   }}
                   value={formik.values.password}
                   autoComplete="off"
-                  sx={{
-                    "& .muirtl-q7i02f-MuiFormHelperText-root": {
-                      textAlign: "left",
-                    },
-                  }}
                 />
 
                 <Grid item xs={12}>

@@ -75,7 +75,7 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>{t('ContactMessages')} | Pronto</title>
+        <title>{t('ContactMessages')} | Symlink</title>
       </Head>
       <Box
         component="main"

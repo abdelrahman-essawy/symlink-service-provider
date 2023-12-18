@@ -18,7 +18,6 @@ import React from "react";
 import { useAuth } from "../../hooks/use-auth";
 import { AuthLayout } from "../../layouts/auth/layout";
 import { useTranslation } from "react-i18next";
-import Link from "next/link";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
@@ -104,9 +103,6 @@ const Page = () => {
                       value={formik.values.username}
                       sx={{
                         mb: 3,
-                        "& .muirtl-q7i02f-MuiFormHelperText-root": {
-                          textAlign: "initial",
-                        },
                       }}
                     />
                     <TextField
@@ -119,11 +115,6 @@ const Page = () => {
                       onChange={formik.handleChange}
                       value={formik.values.password}
                       type={showPassword ? "text" : "password"}
-                      sx={{
-                        "& .muirtl-q7i02f-MuiFormHelperText-root": {
-                          textAlign: "left",
-                        },
-                      }}
                       InputProps={{
                         endAdornment: (
                           <InputAdornment position="end">
@@ -142,7 +133,6 @@ const Page = () => {
                       sx={{
                         mx: 2,
                         mt: 2,
-
                         fontSize: 14,
                         fontWeight: 700,
                       }}

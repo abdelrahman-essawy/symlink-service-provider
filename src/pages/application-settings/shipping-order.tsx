@@ -32,7 +32,7 @@ const Page = () => {
     return <>
         <Head>
             <title>
-                {title} | Pronto
+                {title} | Symlink
             </title>
         </Head>
         <Box

@@ -39,7 +39,7 @@ const Page = () =>  {
   <>
     <Head>
       <title>
-        {t("Account")} | Pronto
+        {t("Account")} | Symlink
       </title>
     </Head>
     <Box

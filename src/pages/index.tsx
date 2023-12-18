@@ -21,7 +21,7 @@ const Page = () => {
     <>
       {/* <Head> */}
       {/*   <title> */}
-      {/*     {t("Overview")} | Pronto */}
+      {/*     {t("Overview")} | Symlink */}
       {/*   </title> */}
       {/* </Head> */}
       {/* <Box */}
