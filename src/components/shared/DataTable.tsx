@@ -203,7 +203,7 @@ export const DataTable = (props: any) => {
     );
   };
 
-  if (!isLoading && !totalItems == undefined && !(totalItems >= 1)) {
+  if (!isLoading && (totalItems == undefined || (totalItems == 0))) {
     return (
       <Noitems
         title={`No ${name} yet`}

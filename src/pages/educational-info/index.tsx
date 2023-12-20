@@ -15,9 +15,7 @@ const Page = () => {
   const { t } = useTranslation();
   const auth = useAuth();
   const { showAlert, renderForAlert } = useAlert();
-  const [educational_info, setEducational_info] = useState<string | undefined>(
-    auth?.providerInfo?.info
-  );
+  const [educational_info, setEducational_info] = useState<string>();
   
   const getProviderInfo = async () => {
     const res = await auth?.getProviderInfo();
@@ -37,8 +35,9 @@ const Page = () => {
   },[auth?.providerInfo?.info]);
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    const trimed_educational_info =  typeof educational_info == "string" ? (educational_info).trim() : undefined;
     try {
-      await axiosClient.put(`/provider/update-eductional-info`, {educational_info});
+      await axiosClient.put(`/provider/update-eductional-info`, {educational_info:trimed_educational_info});
       showAlert("Your educational info has been updated successfully", "success");
     } catch (error) {
       showAlert(showErrorMessage(error), "error");

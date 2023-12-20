@@ -21,11 +21,11 @@ import {
   TextField,
 } from "@mui/material";
 import axiosClient from "@/configs/axios-client";
-import { showErrorMessage } from "@/utils/helperFunctions";
-
+import { convertToHours, showErrorMessage } from "@/utils/helperFunctions";
+type duration = "hours" | "days" | "weeks" | "months" | "years";
 const validationSchema = yup.object({
-  price: yup.number().required().positive("Price should be number"),
-  duration: yup.string().required("Duration is required"),
+  price: yup.number().min(1,"Price should be non zero number").required().positive("Price should be number"),
+  duration: yup.string().oneOf(["hours" , "days" , "weeks" , "months" , "years"],`should be one of "hours" | "days" | "weeks" | "months" | "years"`).required("Duration is required"),
   duration_num: yup.number().required().positive("Duration should be number"),
   is_anonymous: yup.boolean().nullable(),
 });
@@ -43,7 +43,12 @@ export default function BasicModal({ open, handleClose, multi_RFP_id, showMessag
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
-        await axiosClient.post(`/offers/add-offer-to-project`, { ...values, multi_RFP_id });
+        const number_of_hours = convertToHours(parseFloat(`${values?.duration_num}`),values?.duration as duration)
+        await axiosClient.post(`/offers/add-offer-to-project`, {
+          price: parseFloat(`${values.price}`),
+          is_anonymous: values.is_anonymous,
+          number_of_hours,
+           multi_RFP_id });
         showMessage("Your offer has been successfully sent to the client! 🚀", "success");
         formik.resetForm();
         handleClose();
@@ -113,7 +118,7 @@ export default function BasicModal({ open, handleClose, multi_RFP_id, showMessag
                   >
                     <Grid item xs={8} md={8.5}>
                       <TextField
-                        type="number"
+                        type="text"
                         fullWidth
                         placeholder={`${t("Number here ")}`}
                         sx={{
@@ -147,11 +152,11 @@ export default function BasicModal({ open, handleClose, multi_RFP_id, showMessag
                           <MenuItem disabled value="">
                             {t("duration")}
                           </MenuItem>
-                          <MenuItem value={"hour"}>{t("Hour")}</MenuItem>
-                          <MenuItem value={"day"}>{t("Day")}</MenuItem>
-                          <MenuItem value={"week"}>{t("Week")}</MenuItem>
-                          <MenuItem value={"month"}>{t("Month")}</MenuItem>
-                          <MenuItem value={"year"}>{t(" Year")}</MenuItem>
+                          <MenuItem value={"hours"}>{t("Hour")}</MenuItem>
+                          <MenuItem value={"days"}>{t("Day")}</MenuItem>
+                          <MenuItem value={"weeks"}>{t("Week")}</MenuItem>
+                          <MenuItem value={"months"}>{t("Month")}</MenuItem>
+                          <MenuItem value={"years"}>{t(" Year")}</MenuItem>
                         </Select>
                         <FormHelperText>
                           {formik.touched.duration && formik.errors.duration}
@@ -165,7 +170,7 @@ export default function BasicModal({ open, handleClose, multi_RFP_id, showMessag
                   </Typography>
                   <FormControl fullWidth>
                     <TextField
-                      type="number"
+                      type="text"
                       placeholder="00.0"
                       sx={{ borderRadius: "50px" }}
                       id="outlined-adornment-amount"

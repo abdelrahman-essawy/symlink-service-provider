@@ -13,7 +13,7 @@ import {
   TextField,
   Typography,
   Select,
-  FormLabel,
+  FormHelperText,
   Grid,
   Avatar,
   Badge,
@@ -66,8 +66,15 @@ const Page = () => {
     },
     validationSchema: Yup.object({
       email: Yup.string().email("Must be a valid email").max(255).required("Email is required"),
-      role: Yup.string().required("role is required"),
-      password: Yup.string().max(255).required("Password is required"),
+      role: Yup.string()
+        .oneOf(["PROVIDER", "CLIENT"], 'Role must be either "client" or "provider"')
+        .required("role is required"),
+      password: Yup.string()
+        .matches(
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/,
+          "Password too weak. It must contain at least one uppercase letter, one lowercase letter, one number, and be at least 8 characters long."
+        )
+        .required("Password is required"),
     }),
     onSubmit: async (values, helpers) => {
       try {
@@ -200,12 +207,16 @@ const Page = () => {
                                   control={<Radio color="warning" required />}
                                   label={t(role?.name)}
                                   color="warning"
+                                  
                                 />
                               </Grid>
                             );
                           })}
                       </Grid>
                     </RadioGroup>
+                    <FormHelperText sx={{ color: "red" }}>
+                      {formik.touched.role && formik.errors.role}
+                    </FormHelperText>
                   </FormControl>
                 </Grid>
               </Stack>

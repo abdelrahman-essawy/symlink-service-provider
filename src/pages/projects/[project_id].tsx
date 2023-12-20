@@ -1,5 +1,14 @@
 import Head from "next/head";
-import { Card, Container, Typography, Button, Grid, CardContent } from "@mui/material";
+import {
+  Card,
+  Container,
+  Typography,
+  Button,
+  Grid,
+  CardContent,
+  Avatar,
+  Stack,
+} from "@mui/material";
 import React, { useCallback } from "react";
 import { DashboardLayout } from "../../layouts/dashboard/layout";
 import { useTranslation } from "react-i18next";
@@ -24,7 +33,7 @@ import SourceCodeAnswers from "@/sections/projects/answers/sourceCode-answers";
 import ThreatHuntingAnswers from "@/sections/projects/answers/threatHunting-answers";
 import ArchitectureConfigurationReviewAnswer from "@/sections/projects/answers/architectureConfigurationReview-answer.tsx";
 import AttachedFilles from "@/sections/projects/project-details/attached-filles";
-import { getLocalTime, showErrorMessage } from "@/utils/helperFunctions";
+import { convertFromHours, getLocalTime, showErrorMessage } from "@/utils/helperFunctions";
 import BidModal from "@/components/modals/BidModal";
 import useAlert from "@/hooks/useAlert";
 import BidContextProvider from "@/contexts/bid-context";
@@ -36,9 +45,10 @@ import axiosClient from "@/configs/axios-client";
 import ConfirmationPopup from "@/components/confirmation-popup";
 import Noitems from "@/components/shared/no-items";
 import FolderCopyIcon from "@mui/icons-material/FolderCopy";
+import Link from "next/link";
 
 const listOfBidsHeaders = [
-  { text: "Bidder name", value: "user_id" },
+  { text: "Bidder name", value: "BidderName" },
   { text: "Cost", value: "price" },
   { text: "Duration", value: "duration" },
   { text: "Commitment", value: "expiration_date" },
@@ -55,7 +65,7 @@ const Page = () => {
   const [open, setOpen] = useState(false);
   const { showAlert, renderForAlert } = useAlert();
   const [openBidModle, setOpenBidModle] = useState(false);
-  const [SelectedOfferId, setSelectedOfferId] = useState('');
+  const [SelectedOfferId, setSelectedOfferId] = useState("");
   const [confirm, setConfirm] = useState(false);
   const handleCloseConfirm = () => setConfirm(false);
   const handleClose = () => setOpen(false);
@@ -72,7 +82,7 @@ const Page = () => {
           project_id
         );
       } catch (error) {
-        showAlert(showErrorMessage(error).toString(),'error');
+        showAlert(showErrorMessage(error).toString(), "error");
       }
     }
   };
@@ -91,7 +101,6 @@ const Page = () => {
     if (project_id && typeof project_id === "string") {
       try {
         await bidContext?.fetchlistOffers(project_id, controller?.page, controller?.rowsPerPage);
-
       } catch (error) {
         showAlert(showErrorMessage(error).toString(), "error");
       }
@@ -100,80 +109,97 @@ const Page = () => {
 
   React.useEffect(() => {
     fetchProject();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project_id]);
 
   React.useEffect(() => {
     //depends on tap value
     fetchAttachedFiles(); //1
     fetchListBids(); //2
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [controller]);
 
-  
   React.useEffect(() => {
     //depends on tap value
     fetchAttachedFiles(); //1
     fetchListBids(); //2
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [controller]);
 
   const handletabs = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
-//for bids table
-const handleAcceptRequest =  (offerID:any) => {
-  setSelectedOfferId(offerID);
-  setConfirm(true);
-};
-const ConfirmAcceptance = async() => {
-  try {
-    await axiosClient?.post(`/offers/${SelectedOfferId}/${project_id}/acceptOffer`);
-    fetchProject();
-    showAlert("Offer has been accepted successfully - Let's begin this exciting journey", "success");
-  } catch (error) {
-    showAlert(showErrorMessage(error).toString(), 'error');
-  }
-  setConfirm(false);
-}
-  const additionalTablePropsForListOfBids = {
-    onRenderActions: (item: IOffer) => {
-    if(projectContext?.Selectedproject?.request_for_proposal_status == "PENDING")
-      return (
-        <Button
-          variant="contained"
-          color="warning"
-          sx={{
-            borderRadius: 8,
-            backgroundColor: "#FFF8E6",
-            border: 1,
-            borderColor: "#FFD777",
-          }}
-          onClick={() => {
-            handleAcceptRequest(item?.id);
-          }}
-        >
-          {dictionary("Accept")}
-        </Button>
+  //for bids table
+  const handleAcceptRequest = (offerID: any) => {
+    setSelectedOfferId(offerID);
+    setConfirm(true);
+  };
+  const ConfirmAcceptance = async () => {
+    try {
+      await axiosClient?.post(`/offers/${SelectedOfferId}/${project_id}/acceptOffer`);
+      fetchProject();
+      showAlert(
+        "Offer has been accepted successfully - Let's begin this exciting journey",
+        "success"
       );
-      if(item?.is_accepted){
-        return( <Typography
-         >
-           {t("Accepted")}
-         </Typography>)
-       }
-       else{
-        return( <Typography
+    } catch (error) {
+      showAlert(showErrorMessage(error).toString(), "error");
+    }
+    setConfirm(false);
+  };
+  const additionalTablePropsForListOfBids = {
+    onRenderBidderName: (item: IOffer) => {
+      if (!item?.is_anonymous) {
+        return (
+          <Link href={`/expert-details/${item?.user_id}`} style={{ textDecoration: "none" }}>
+            <Stack alignItems="center" direction="row" gap={0.5}>
+              <Avatar src={item?.user?.avatar} />
+              <Typography variant="subtitle2" color="initial">
+                {item?.user?.name || item?.user?.email}
+              </Typography>
+            </Stack>
+          </Link>
+        );
+      } else {
+        return (
+          <Stack alignItems="center" direction="row" gap={0.5}>
+            <Avatar  />
+            <Typography variant="subtitle2" color="initial">
+              {t(`Anonymous`)}
+            </Typography>
+          </Stack>
+        );
+      }
+    },
+
+    onRenderActions: (item: IOffer) => {
+      if (projectContext?.Selectedproject?.request_for_proposal_status == "PENDING")
+        return (
+          <Button
+            variant="contained"
+            color="warning"
+            sx={{
+              borderRadius: 8,
+              backgroundColor: "#FFF8E6",
+              border: 1,
+              borderColor: "#FFD777",
+            }}
+            onClick={() => {
+              handleAcceptRequest(item?.id);
+            }}
           >
-            {t(" - ")}
-          </Typography>)
-       }
+            {dictionary("Accept")}
+          </Button>
+        );
+      if (item?.is_accepted) {
+        return <Typography>{t("Accepted")}</Typography>;
+      } else {
+        return <Typography>{t(" - ")}</Typography>;
+      }
     },
     onRenderduration: (item: IOffer) => {
-      return (
-        <Typography variant="body2">{` ${item?.duration_num}   ${item?.duration}  `}</Typography>
-      );
+      return <Typography variant="body2">{convertFromHours(item?.number_of_hours)}</Typography>;
     },
   };
   return (
@@ -245,25 +271,26 @@ const ConfirmAcceptance = async() => {
               />
             </RoleBasedRender>
           </Grid>
-          {projectContext?.Selectedproject?.request_for_proposal_status == "PENDING" &&
+          {projectContext?.Selectedproject?.request_for_proposal_status == "PENDING" && (
             <RoleBasedRender componentId="button-bid-rfp">
-            <Grid
-              item
-              xs={2}
-              sm={2}
-              sx={{ display: "flex", justifyContent: { sm: "end", xs: "start" } }}
-            >
-              <Button
-                onClick={() => setOpenBidModle(true)}
-                variant="contained"
-                color="warning"
-                sx={{ borderRadius: 8, px: 6 }}
-                size="large"
+              <Grid
+                item
+                xs={2}
+                sm={2}
+                sx={{ display: "flex", justifyContent: { sm: "end", xs: "start" } }}
               >
-                {dictionary("Bid")}
-              </Button>
-            </Grid>
-          </RoleBasedRender>}
+                <Button
+                  onClick={() => setOpenBidModle(true)}
+                  variant="contained"
+                  color="warning"
+                  sx={{ borderRadius: 8, px: 6 }}
+                  size="large"
+                >
+                  {dictionary("Bid")}
+                </Button>
+              </Grid>
+            </RoleBasedRender>
+          )}
           {/* <RoleBasedRender
               componentId="buttons-accept-reject-rfp"
             >
@@ -406,22 +433,22 @@ const ConfirmAcceptance = async() => {
               </CustomTabPanel>
 
               <CustomTabPanel value={value} index={3}>
-              {bidContext?.countOffers == undefined || bidContext?.countOffers != 0 ? (
-                <DataTable
-                  headers={listOfBidsHeaders}
-                  name="bids"
-                  items={bidContext?.offers}
-                  totalItems={bidContext?.countOffers}
-                  totalPages={bidContext?.totalPages}
-                  page={controller?.page || 1}
-                  rowsPerPage={controller?.rowsPerPage}
-                  onPageChange={handlePageChange}
-                  onRowsPerPageChange={handleRowsPerPageChange}
-                  {...additionalTablePropsForListOfBids}
-                />
+                {bidContext?.countOffers == undefined || bidContext?.countOffers != 0 ? (
+                  <DataTable
+                    headers={listOfBidsHeaders}
+                    name="bids"
+                    items={bidContext?.offers}
+                    totalItems={bidContext?.countOffers}
+                    totalPages={bidContext?.totalPages}
+                    page={controller?.page || 1}
+                    rowsPerPage={controller?.rowsPerPage}
+                    onPageChange={handlePageChange}
+                    onRowsPerPageChange={handleRowsPerPageChange}
+                    {...additionalTablePropsForListOfBids}
+                  />
                 ) : (
                   <Noitems
-                    title={"No Bid yet"}
+                    title={"No bids yet"}
                     icon={<FolderCopyIcon sx={{ color: "gray", fontSize: "4.2em" }} />}
                   />
                 )}
@@ -433,13 +460,13 @@ const ConfirmAcceptance = async() => {
       </Container>
       <ViewImagesDialog open={open} handleClose={handleClose} />
       <ConfirmationPopup
-          open={confirm}
-          handleClose={handleCloseConfirm}
-          message={t("Are you sure you want to accept this Offer ?")}
-          title={t("Offer Accepttance")}
-          confirmFuntion={ConfirmAcceptance}
-          setOpen={setConfirm}
-        />
+        open={confirm}
+        handleClose={handleCloseConfirm}
+        message={t("Are you sure you want to accept this Offer ?")}
+        title={t("Offer Accepttance")}
+        confirmFuntion={ConfirmAcceptance}
+        setOpen={setConfirm}
+      />
       <BidModal
         open={openBidModle}
         handleClose={() => {

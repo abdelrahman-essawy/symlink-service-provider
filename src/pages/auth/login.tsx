@@ -1,7 +1,6 @@
 import { useCallback, useState } from "react";
 import Head from "next/head";
 import NextLink from "next/link";
-import { useRouter } from "next/navigation";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import {
@@ -20,6 +19,7 @@ import { AuthLayout } from "../../layouts/auth/layout";
 import { useTranslation } from "react-i18next";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import { useRouter } from "next/navigation";
 
 const Page = () => {
   const { t, i18n } = useTranslation();

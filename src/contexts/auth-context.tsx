@@ -3,37 +3,7 @@ import PropTypes from "prop-types";
 import React from "react";
 import axiosClient from "../configs/axios-client";
 import { showErrorMessage } from "@/utils/helperFunctions";
-
-type UserType = {
-  id: string;
-  username: string;
-  name: string;
-  avatar: string;
-  phone: any;
-  email: string;
-  role: "CLIENT" | "PROVIDER" | "ADMIN";
-};
-
-type IProviderInfo = {
-  info: string;
-  certifcate: Certifcate[];
-  projects: project[];
-};
-
-export type project = {
-  id: string;
-  name: string;
-  start_date: string;
-  end_date: string;
-  description: string;
-};
-
-export interface Certifcate {
-  id: string;
-  file: string;
-  type: string;
-  name?: string;
-}
+import { IProviderInfo, UserType } from "@/@types/user";
 
 type ActionType = { type: string; payload: any };
 

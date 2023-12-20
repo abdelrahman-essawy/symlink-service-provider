@@ -37,42 +37,12 @@ import PhoneInputWithCountrySelect from "react-phone-number-input";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import styles from "@/styles/index.module.scss";
+import { ICity, ICountry, IUserProfile } from "@/@types/user";
 
-export interface IUserProfile {
-  id: string;
-  created_at: string;
-  updated_at: string;
-  deleted_at: any;
-  account: string;
-  username: string;
-  linkedin: any;
-  name: any;
-  password: string;
-  email: string;
-  email_verified_at: any;
-  phone: any;
-  phone_verified_at: any;
-  avatar: string;
-  gender: any;
-  fcm_token: any;
-  language: string;
-  is_active: boolean;
-  city_id: any;
-  roles: string[];
-  city: ICity;
-}
+
 
 const toBeSent = ["name", "email", "linkedin", "city_id", "phone"];
-interface ICountry {
-  name: string;
-  id: string;
-}
-interface ICity {
-  name: string;
-  id: string;
-  country_id: string;
-  country: ICountry[];
-}
+
 const Page = () => {
   const { i18n } = useTranslation();
   const title = "Profile";

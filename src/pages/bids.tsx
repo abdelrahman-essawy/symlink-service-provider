@@ -32,7 +32,7 @@ const Page = () => {
 
   const headers = [
     { text: "RFP name", value: "project_name" },
-    { text: "Client name", value: "firstFullName" },
+    { text: "Client name", value: "ClientName" },
     { text: "Status", value: "request_for_proposal_status" },
     { text: "Creation date", value: "created_at" },
     { text: "Expiration date", value: "expiration_date" },
@@ -53,7 +53,7 @@ const Page = () => {
   }, [controller]);
 
   const additionalTableProps = {
-    onRenderfirstFullName: (item: IBid) => <Link href={item?.user_id}>{item?.firstFullName}</Link>,
+    onRenderClientName: (item: IBid) => <Link href={item?.user_id}>{item?.firstFullName}</Link>,
     onRendercreated_at: (item: any) =>
       getLocalTime(item.created_at).toLocaleDateString("en-US", {
         year: "numeric",

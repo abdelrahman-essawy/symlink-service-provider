@@ -1,15 +1,13 @@
 import NextLink from 'next/link';
 import { usePathname } from 'next/navigation';
 import PropTypes from 'prop-types';
-import ArrowTopRightOnSquareIcon from '@heroicons/react/24/solid/ArrowTopRightOnSquareIcon';
-import ChevronUpDownIcon from '@heroicons/react/24/solid/ChevronUpDownIcon';
 import {
   Box,
   Drawer,
   Stack,
   useMediaQuery
 } from '@mui/material';
-import React ,{useEffect, useState} from 'react';
+import React  from 'react';
 import { Scrollbar } from '../../components/scrollbar';
 import { items,profileItems } from './config';
 import { SideNavItem } from './side-nav-item';
@@ -18,16 +16,12 @@ import RoleBasedRender from '@/hocs/RoleBasedRender';
 import usePreviousPath from '@/hooks/usePreviousPath';
 import { useTranslation } from 'react-i18next';
 import { SideNavInnerItem } from './Inner-path-item';
-import { useTheme } from '@mui/material';
-import { createTheme } from "@/theme";
 export const SideNav = (props: { open: any; onClose: any; }) => {
   const { open, onClose } = props;
   const pathname = usePathname();
-  const theme = useTheme();
   const { i18n } = useTranslation();
   const lgUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
   const {previousPath,isinnerPath,isProfilePath} = usePreviousPath();
-  const {t} = useTranslation();
   const content = (
     <Scrollbar
       sx={{

@@ -21,7 +21,7 @@ import moment from "moment";
 import styles from "@/styles/index.module.scss";
 import axiosClient from "@/configs/axios-client";
 import {  getUtcTime, showErrorMessage } from "@/utils/helperFunctions";
-import { project } from "@/contexts/auth-context";
+import { project } from "@/@types/user";
 
 interface IProps {
   open: boolean;
