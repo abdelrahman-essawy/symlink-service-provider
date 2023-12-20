@@ -165,6 +165,9 @@ const Page = () => {
     },
   ];
 
+  useEffect(() => {
+    console.log(controller);
+  }, [controller]);
   return (
     <>
       <Head>
@@ -198,7 +201,6 @@ const Page = () => {
           <Grid item xs={12}>
             <Card sx={{ p: 2 }}>
               <Stack spacing={2}>
-                <SearchBar onSearchChange={handleSearch} />
                 <DataTable
                   headers={headers}
                   name="Projects"
@@ -212,6 +214,8 @@ const Page = () => {
                   {...additionalTableProps}
                   isLoading={isLoadingProjects}
                   handleSendSortBy={handleSorting}
+                  handleSearch={handleSearch}
+                  withSearch={true}
                 />
               </Stack>
             </Card>
