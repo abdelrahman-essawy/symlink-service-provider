@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { Box, Card, Container, Grid, Typography, Divider, Avatar } from "@mui/material";
+import { Box, Card, Container, Grid, Typography, TextField, Avatar } from "@mui/material";
 import Image from "next/image";
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { DashboardLayout } from "../../layouts/dashboard/layout";
@@ -175,9 +175,28 @@ const Page = () => {
                 </Grid>
                 <Box>
                   {expert?.info ? (
-                    <Typography variant="body1" fontWeight="light" sx={{ mb: 1, mt: 3, px: 1 }}>
-                      {expert?.info}
-                    </Typography>
+                                <Box>
+                                <TextField
+                                  sx={{
+                                    direction: "rtl",
+                                    "&  .MuiInputBase-root": {
+                                      borderRadius: "12px !important",
+                                      padding: "0px !important",
+                                      border:"none",
+                                      color:"#000  !important"
+                                    },
+                                    "&  .muirtl-w5cbyv-MuiInputBase-input-MuiFilledInput-input.Mui-disabled ":{
+                                      opacity: 1,
+                                      "-webkit-text-fill-color": "#000",
+                                  },
+                                  }}
+                                  fullWidth
+                                  value={expert?.info}
+                                  multiline
+                                  rows={3}
+                                  disabled
+                                />
+                              </Box>
                   ) : (
                     <Noitems
                       title={"No Educational info"}
