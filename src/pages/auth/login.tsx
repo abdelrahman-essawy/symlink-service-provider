@@ -76,7 +76,6 @@ const Page = () => {
           alignItems: "center",
           display: "flex",
           justifyContent: "center",
-          direction:"ltr"
         }}
       >
         <Box
