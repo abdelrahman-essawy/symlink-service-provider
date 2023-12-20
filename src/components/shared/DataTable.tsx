@@ -38,6 +38,7 @@ import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Noitems from "@/components/shared/no-items";
 import FolderCopyIcon from "@mui/icons-material/FolderCopy";
+import { SearchBar } from "@/sections/shared/search-bar";
 const PaginationBox = styled(Box)(() => ({
   borderRadius: "9px",
   border: "1px solid rgba(196,196,196, 1)",
@@ -67,7 +68,9 @@ export const DataTable = (props: any) => {
     handleSuspend = () => {},
     rowsPerPage,
     selected,
+    withSearch=false,
     handleSendSortBy = (sorting:any) => {},
+    handleSearch = (sorting:string) => {},
   } = props;
   const [sorting, setSorting]: any = useState({});
   const getItem = (item: any, header: any): any => {
@@ -214,6 +217,7 @@ export const DataTable = (props: any) => {
 
   return (
     <>
+     {withSearch? <SearchBar onSearchChange={handleSearch} />:null}
       <Card sx={{ borderRadius: "15px" }}>
         <Scrollbar>
           <Box sx={{ minWidth: 800, minHeight: 150 }}>
@@ -370,6 +374,7 @@ DataTable.propTypes = {
   count: PropTypes.number,
   name: PropTypes.string,
   isLoading: PropTypes.bool,
+  withSearch: PropTypes.bool,
   totalPages: PropTypes.number,
   totalItems: PropTypes.any,
   items: PropTypes.array,
@@ -383,6 +388,7 @@ DataTable.propTypes = {
   page: PropTypes.number,
   handleSuspend: PropTypes.func,
   handleSendSortBy: PropTypes.func,
+  handleSearch: PropTypes.func,
   rowsPerPage: PropTypes.number,
   selected: PropTypes.array,
 };

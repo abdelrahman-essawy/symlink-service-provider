@@ -119,7 +119,6 @@ const Page = () => {
             <Card sx={{ p: 2 }}>
               <RoleBasedRender componentId="table-service-provider-bids">
                   <Stack spacing={2}>
-                    <SearchBar onSearchChange={handleSearch} />
                     <DataTable
                       headers={headers}
                       name="Bids"
@@ -132,6 +131,8 @@ const Page = () => {
                       onRowsPerPageChange={handleRowsPerPageChange}
                       {...additionalTableProps}
                       isLoading={isLoadingBids}
+                      handleSearch={handleSearch}
+                      withSearch={true}
                     />
                   </Stack>
               </RoleBasedRender>
