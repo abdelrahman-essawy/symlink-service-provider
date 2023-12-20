@@ -173,9 +173,6 @@ const Page = () => {
                     </Typography>
                   </Grid>
                 </Grid>
-                <Typography variant="body1" fontWeight="light" sx={{ mb: 1, mt: 3, px: 1 }}>
-                  {expert?.info}
-                </Typography>
                 <Box>
                   {expert?.info ? (
                     <Typography variant="body1" fontWeight="light" sx={{ mb: 1, mt: 3, px: 1 }}>
