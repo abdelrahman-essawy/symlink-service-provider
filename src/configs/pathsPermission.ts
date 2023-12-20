@@ -19,7 +19,7 @@ export const PATH_PERMISSIONS = {
   "/support": "canViewSupport",
   "/wallet": "canViewWallet",
 
-  "/service-providers/[service_provider_id]": "canViewServiceProviderProfile",
+  "/expert-details/[id]": "canViewServiceProviderProfile",
 
   "/expertise": "canViewExpertise",
 

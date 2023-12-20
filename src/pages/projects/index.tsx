@@ -165,9 +165,6 @@ const Page = () => {
     },
   ];
 
-  useEffect(() => {
-    console.log(controller);
-  }, [controller]);
   return (
     <>
       <Head>

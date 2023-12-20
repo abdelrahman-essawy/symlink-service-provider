@@ -6,7 +6,6 @@ import { DashboardLayout } from "../../layouts/dashboard/layout";
 import { useTranslation } from "react-i18next";
 import { dictionary, TranslatedWord } from "@/configs/i18next";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import ExperienceDialog from "@/components/_used-symline/dialogs/experience-dialog";
 import ViewerPdf from "@/components/_used-symline/dialogs/pdf-viewer";
 import ViewImagesDialog from "@/components/_used-symline/dialogs/view-images";
 import axiosClient from "@/configs/axios-client";
@@ -17,10 +16,10 @@ import { showErrorMessage } from "@/utils/helperFunctions";
 import pdf from "@/assets/pdf.svg";
 import png from "@/assets/png.svg";
 import jpg from "@/assets/jpg.svg";
-import { Certifcate } from "@/contexts/auth-context";
 import ConfirmationPopup from "@/components/confirmation-popup";
 import Noitems from "@/components/shared/no-items";
 import FolderCopyIcon from "@mui/icons-material/FolderCopy";
+import { Certifcate } from "@/@types/user";
 
 const Page = () => {
   const title = "Certificate";

@@ -18,15 +18,58 @@ export const orderByToString = (orderBy: any): string | void => {
     return "";
   }
 };
+// convert duration in hours to duration in (hours, days,months, years)
 
-// CASH_IN to Cash In
-export function keyToTitleCase(key: string): string {
-  if (!key) return "";
-  var text = key.toLowerCase().replace(/_/g, " ");
-  return text.replace(/(?:^|\s)\w/g, function (match) {
-    return match.toUpperCase();
-  });
-}
+export const convertFromHours = (hours: number): string => {
+  const hoursInDay = 24;
+  const daysInWeek = 7;
+  const daysInMonth = 30; // Assuming an average of 30 days in a month
+  const daysInYear = 365; // Assuming 365 days in a year
+
+  if (hours < hoursInDay) {
+    return `${hours} hours`;
+  } else if (hours < hoursInDay * daysInWeek) {
+    const days = Math.floor(hours / hoursInDay);
+    return `${days} day${days > 1 ? 's' : ''}`;
+  } else if (hours < hoursInDay * daysInWeek * daysInMonth) {
+    const weeks = Math.floor(hours / (hoursInDay * daysInWeek));
+    return `${weeks} week${weeks > 1 ? 's' : ''}`;
+  } else if (hours < hoursInDay * daysInMonth * daysInYear) {
+    const months = Math.floor(hours / (hoursInDay * daysInMonth));
+    return `${months} month${months > 1 ? 's' : ''}`;
+  } else {
+    const years = Math.floor(hours / (hoursInDay * daysInYear));
+    return `${years} year${years > 1 ? 's' : ''}`;
+  }
+};
+//convert  duration in (hours, days,weeks,months, years) to duration in hours
+export const convertToHours = (
+  duration: number,
+  durationType: "hours" | "days" | "weeks" | "months" | "years"
+): number => {
+  const hoursInDay = 24;
+  const daysInWeek = 7;
+  const daysInMonth = 30; // Assuming an average of 30 days in a month
+  const daysInYear = 365; // Assuming 365 days in a year
+
+  switch (durationType) {
+    case "hours":
+      return duration;
+    case "days":
+      return duration * hoursInDay;
+    case "weeks":
+      return duration * hoursInDay * daysInWeek;
+    case "months":
+      return duration * hoursInDay * daysInMonth;
+    case "years":
+      return duration * hoursInDay * daysInYear;
+    default:
+      throw new Error(
+        "Invalid duration type. Supported types are hours, days, weeks, months, and years."
+      );
+  }
+};
+
 //conveting to format 12.356.25
 export function formatNumber(number: number): string {
   const formatter: Intl.NumberFormat = new Intl.NumberFormat();

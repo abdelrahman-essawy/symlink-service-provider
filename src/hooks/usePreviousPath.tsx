@@ -8,7 +8,7 @@ export default function usePreviousPath() {
   const [previousPath, setPreviousPath] = useState<string>(sessionStorage.getItem("previousPath") || '/');
   const [isinnerPath,setIsinnerPath] = useState(false);
   const [isProfilePath,setIsProfilePath] = useState(false);
-  const innerPathsList = ["/bid/create-rfp","/bid/rfp-name","/profile","/certificate","/experience","/educational-info","/projects/[project_id]"]
+  const innerPathsList = ["/bid/create-rfp","/bid/rfp-name","/profile","/certificate","/experience","/educational-info","/projects/[project_id]","/expert-details/[id]"]
   const innerProfilePathsList = ["/profile","/certificate","/experience","/educational-info"]
   const checkIfInnerPath = ()=>{
     if(innerPathsList?.includes(router.pathname)){

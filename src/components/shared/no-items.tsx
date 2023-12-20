@@ -1,8 +1,8 @@
 import { Box, Grid, Typography } from "@mui/material";
 
-function Noitems({ title, icon }: any) {
+function Noitems({ title, icon, minHeight=520 }: any) {
   return (
-    <Box minHeight={520} display={"flex"} alignItems={"center"} justifyContent={"center"}>
+    <Box minHeight={minHeight} display={"flex"} alignItems={"center"} justifyContent={"center"}>
       <Grid
         xs={12}
         className="no-orders"
