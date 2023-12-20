@@ -265,7 +265,7 @@ export default function ExperienceDialog({
                     <Box>
                       <TextField
                         sx={{
-                          "& .muirtl-1w2efko-MuiInputBase-root-MuiFilledInput-root": {
+                          "& .MuiInputBase-root": {
                             borderRadius: "12px !important",
                             padding: "0px !important",
                           },

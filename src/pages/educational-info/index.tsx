@@ -16,7 +16,7 @@ const Page = () => {
   const auth = useAuth();
   const { showAlert, renderForAlert } = useAlert();
   const [educational_info, setEducational_info] = useState<string>();
-  
+
   const getProviderInfo = async () => {
     const res = await auth?.getProviderInfo();
     if (res?.status == 200 || res?.status == 201) {
@@ -31,13 +31,16 @@ const Page = () => {
   }, []);
 
   useEffect(() => {
-    setEducational_info(auth?.providerInfo?.info)
-  },[auth?.providerInfo?.info]);
+    setEducational_info(auth?.providerInfo?.info);
+  }, [auth?.providerInfo?.info]);
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    const trimed_educational_info =  typeof educational_info == "string" ? (educational_info).trim() : undefined;
+    const trimed_educational_info =
+      typeof educational_info == "string" ? educational_info.trim() : undefined;
     try {
-      await axiosClient.put(`/provider/update-eductional-info`, {educational_info:trimed_educational_info});
+      await axiosClient.put(`/provider/update-eductional-info`, {
+        educational_info: trimed_educational_info,
+      });
       showAlert("Your educational info has been updated successfully", "success");
     } catch (error) {
       showAlert(showErrorMessage(error), "error");
@@ -65,7 +68,7 @@ const Page = () => {
               <TextField
                 sx={{
                   direction: "rtl",
-                  "& .muirtl-1w2efko-MuiInputBase-root-MuiFilledInput-root": {
+                  "&  .MuiInputBase-root": {
                     borderRadius: "12px !important",
                     padding: "0px !important",
                   },
