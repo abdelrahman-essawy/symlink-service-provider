@@ -7,7 +7,7 @@ export const usePageUtilities = () => {
   const [controller, setController] = useState({
     page: 1,
     rowsPerPage: 10,
-    filter: " ",
+    filter: "",
     SearchString: "",
     OrderBy: null,
   });

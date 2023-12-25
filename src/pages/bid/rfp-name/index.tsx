@@ -21,7 +21,7 @@ import BidModal from "@/components/modals/BidModal";
 import attachedFiles from "../../../../public/attached-files.json";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import RoleBasedRender from "@/hocs/RoleBasedRender";
-import Chat from "@/components/_used-symline/chat/chat";
+import Discussion from "@/components/_used-symline/chat/chat";
 
 const Page = () => {
   const title = "RFP name";
@@ -111,7 +111,7 @@ const Page = () => {
             <Grid item xs={12} >
               <Card elevation={0} >
                 <CustomTabPanel value={value} index={0} padding={'0'}>
-                 <Chat />
+                 {/* <Discussion multi_RFP_id={} /> */}
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={1}>
                   <SharedTable endpoint="http://localhost:3000/attached-files.json"

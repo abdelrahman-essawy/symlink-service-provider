@@ -20,7 +20,7 @@ import { useState } from "react";
 import { dictionary } from "@/configs/i18next";
 import bids from "../../../public/bids.json";
 import ViewImagesDialog from "@/components/_used-symline/dialogs/view-images";
-import Chat from "@/components/_used-symline/chat/chat";
+import Discussion from "@/components/_used-symline/chat/chat";
 import ConfirmDialog from "@/components/_used-symline/dialogs/confirm-dialog";
 import { useProject } from "@/hooks/use-project";
 import ProjectContextProvider from "@/contexts/project-context";
@@ -46,6 +46,7 @@ import ConfirmationPopup from "@/components/confirmation-popup";
 import Noitems from "@/components/shared/no-items";
 import FolderCopyIcon from "@mui/icons-material/FolderCopy";
 import Link from "next/link";
+import DiscussionContextProvider from "@/contexts/discussion-context";
 
 const listOfBidsHeaders = [
   { text: "Bidder name", value: "BidderName" },
@@ -164,7 +165,7 @@ const Page = () => {
       } else {
         return (
           <Stack alignItems="center" direction="row" gap={0.5}>
-            <Avatar  />
+            <Avatar />
             <Typography variant="subtitle2" color="initial">
               {t(`Anonymous`)}
             </Typography>
@@ -429,7 +430,9 @@ const Page = () => {
               </CustomTabPanel>
 
               <CustomTabPanel value={value} index={2} padding={"0"}>
-                <Chat />
+                <DiscussionContextProvider>
+                  <Discussion multi_RFP_id={project_id as string} />
+                </DiscussionContextProvider>
               </CustomTabPanel>
 
               <CustomTabPanel value={value} index={3}>
@@ -482,7 +485,9 @@ const Page = () => {
 Page.getLayout = (page: any) => (
   <DashboardLayout>
     <BidContextProvider>
-      <ProjectContextProvider>{page}</ProjectContextProvider>
+      <DiscussionContextProvider>
+        <ProjectContextProvider>{page}</ProjectContextProvider>
+      </DiscussionContextProvider>
     </BidContextProvider>
   </DashboardLayout>
 );

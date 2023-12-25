@@ -54,6 +54,7 @@ export interface IUserProfile {
   city_id: any;
   roles: string[];
   city: ICity;
+  
 }
 export interface ICountry {
   name: string;

@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { Box, Typography, Unstable_Grid2 as Grid, IconButton, Button, Card } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import Logo from "../../../public/assets/Logo.svg";
 import { useTranslation } from "react-i18next";
 import LocalizationSwitcher from "@/components/LocalizationSwitcher";
@@ -11,6 +11,9 @@ export const AuthLayout = (props: { children: any }) => {
   const { t } = useTranslation();
   const router = useRouter();
 
+  useEffect(()=>{
+    
+  },[router?.pathname])
   return (
     <Box
       component="main"
