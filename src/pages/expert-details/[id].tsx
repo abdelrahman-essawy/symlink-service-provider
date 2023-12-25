@@ -193,7 +193,8 @@ const Page = () => {
                                   fullWidth
                                   value={expert?.info}
                                   multiline
-                                  rows={3}
+                                  minRows={2}
+                                  maxRows={7}
                                   disabled
                                 />
                               </Box>

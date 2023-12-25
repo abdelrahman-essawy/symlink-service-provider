@@ -74,7 +74,7 @@ const Page = () => {
                   },
                 }}
                 fullWidth
-                id="Bio"
+                id="Educational info"
                 placeholder={`${t("Type here your educational info")}`}
                 value={educational_info}
                 onChange={(e) => {
