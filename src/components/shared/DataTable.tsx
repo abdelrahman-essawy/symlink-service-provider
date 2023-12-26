@@ -50,6 +50,7 @@ const PaginationBox = styled(Box)(() => ({
 export const DataTable = (props: any) => {
   const {
     isLoading = false,
+    SearchString="",
     items = [],
     menu = [],
     headers = [],
@@ -205,11 +206,10 @@ export const DataTable = (props: any) => {
       </MenuButton>
     );
   };
-
   if (!isLoading && (totalItems == undefined || (totalItems == 0))) {
     return (
       <Noitems
-        title={`No ${name} yet`}
+        title={SearchString ?  `${SearchString} is not exist`: `No ${name} yet`}
         icon={<FolderCopyIcon sx={{ color: "gray", fontSize: "4.2em" }} />}
       />
     );
@@ -217,11 +217,10 @@ export const DataTable = (props: any) => {
 
   return (
     <>
-     {withSearch? <SearchBar onSearchChange={handleSearch} />:null}
       <Card sx={{ borderRadius: "15px" }}>
         <Scrollbar>
           <Box sx={{ minWidth: 800, minHeight: 150 }}>
-            <Table sx={{ whiteSpace: "nowrap", p: 3 }}>
+            <Table sx={{ whiteSpace: "nowrap", p: 3,minHeight: 150 }}>
               <TableHead>
                 <TableRow>
                   {headers?.map((header: any) => {
@@ -372,6 +371,7 @@ export const DataTable = (props: any) => {
 
 DataTable.propTypes = {
   count: PropTypes.number,
+  SearchString: PropTypes.string,
   name: PropTypes.string,
   isLoading: PropTypes.bool,
   withSearch: PropTypes.bool,

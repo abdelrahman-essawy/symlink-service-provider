@@ -18,6 +18,7 @@ import { getLocalTime } from "@/utils/helperFunctions";
 import { useAuth } from "@/hooks/use-auth";
 import Link from "next/link";
 import ProjectStatusBadge from "@/sections/projects/project-status";
+import { SearchBar } from "@/sections/shared/search-bar";
 
 const Page = () => {
   const title = "Bids";
@@ -45,8 +46,8 @@ const Page = () => {
     setIsLoadingBids(false);
   };
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     fetchBids();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [controller]);
 
   const additionalTableProps = {
@@ -116,6 +117,7 @@ const Page = () => {
             <Card sx={{ p: 2 }}>
               <RoleBasedRender componentId="table-service-provider-bids">
                   <Stack spacing={2}>
+                    <SearchBar onSearchChange={handleSearch} />
                     <DataTable
                       headers={headers}
                       name="Bids"
@@ -129,7 +131,7 @@ const Page = () => {
                       {...additionalTableProps}
                       isLoading={isLoadingBids}
                       handleSearch={handleSearch}
-                      withSearch={true}
+                      SearchString={controller?.SearchString}
                     />
                   </Stack>
               </RoleBasedRender>

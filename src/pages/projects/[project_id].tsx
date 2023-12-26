@@ -47,6 +47,7 @@ import Noitems from "@/components/shared/no-items";
 import FolderCopyIcon from "@mui/icons-material/FolderCopy";
 import Link from "next/link";
 import DiscussionContextProvider from "@/contexts/discussion-context";
+import { SearchBar } from "@/sections/shared/search-bar";
 
 const listOfBidsHeaders = [
   { text: "Bidder name", value: "BidderName" },
@@ -101,7 +102,12 @@ const Page = () => {
   const fetchListBids = async () => {
     if (project_id && typeof project_id === "string") {
       try {
-        await bidContext?.fetchlistOffers(project_id, controller?.page, controller?.rowsPerPage);
+        await bidContext?.fetchlistOffers(
+          project_id,
+          controller?.page,
+          controller?.rowsPerPage,
+          controller?.SearchString
+        );
       } catch (error) {
         showAlert(showErrorMessage(error).toString(), "error");
       }
@@ -115,20 +121,24 @@ const Page = () => {
 
   React.useEffect(() => {
     //depends on tap value
-    fetchAttachedFiles(); //1
-    fetchListBids(); //2
+    if (value === 1) {
+      fetchAttachedFiles(); //1
+    } else if (value === 3) {
+      fetchListBids(); //2
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [controller]);
+  }, [controller, value]);
 
-  React.useEffect(() => {
-    //depends on tap value
-    fetchAttachedFiles(); //1
-    fetchListBids(); //2
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [controller]);
+  // React.useEffect(() => {
+  //   //depends on tap value
+  //   fetchAttachedFiles(); //1
+  //   fetchListBids(); //2
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [controller]);
 
   const handletabs = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
+    handlePageChange(event,1);
   };
 
   //for bids table
@@ -437,18 +447,21 @@ const Page = () => {
 
               <CustomTabPanel value={value} index={3}>
                 {bidContext?.countOffers == undefined || bidContext?.countOffers != 0 ? (
-                  <DataTable
-                    headers={listOfBidsHeaders}
-                    name="bids"
-                    items={bidContext?.offers}
-                    totalItems={bidContext?.countOffers}
-                    totalPages={bidContext?.totalPages}
-                    page={controller?.page || 1}
-                    rowsPerPage={controller?.rowsPerPage}
-                    onPageChange={handlePageChange}
-                    onRowsPerPageChange={handleRowsPerPageChange}
-                    {...additionalTablePropsForListOfBids}
-                  />
+                  <>
+                    <DataTable
+                      headers={listOfBidsHeaders}
+                      name="bids"
+                      items={bidContext?.offers}
+                      totalItems={bidContext?.countOffers}
+                      totalPages={bidContext?.totalPages}
+                      page={controller?.page || 1}
+                      rowsPerPage={controller?.rowsPerPage}
+                      onPageChange={handlePageChange}
+                      onRowsPerPageChange={handleRowsPerPageChange}
+                      {...additionalTablePropsForListOfBids}
+                      SearchString={controller?.SearchString}
+                    />
+                  </>
                 ) : (
                   <Noitems
                     title={"No bids yet"}
@@ -485,7 +498,7 @@ const Page = () => {
 Page.getLayout = (page: any) => (
   <DashboardLayout>
     <BidContextProvider>
-      <DiscussionContextProvider> 
+      <DiscussionContextProvider>
         <ProjectContextProvider>{page}</ProjectContextProvider>
       </DiscussionContextProvider>
     </BidContextProvider>
