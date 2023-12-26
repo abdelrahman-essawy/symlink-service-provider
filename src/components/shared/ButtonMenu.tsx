@@ -3,7 +3,7 @@ import { SxProps } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import { useTranslation } from "react-i18next";
-import { Grid, SvgIcon, Theme, Typography,Box } from "@mui/material";
+import { Grid, SvgIcon, Theme, Typography, Box } from "@mui/material";
 import StyledMenu from "./StyledMenu";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
@@ -31,7 +31,7 @@ const MenuButton = ({
   disabled,
   expandIcon = false,
   visibility = false,
-  menuMinWidth = 180,
+  menuMinWidth = 150,
 }: IMenuButtonProps) => {
   const { t } = useTranslation();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -79,13 +79,13 @@ const MenuButton = ({
       >
         {actions?.map((child: any, index: number) => {
           return (
-            (AdminID != id || child.label != "Freeze") && (
+            <>
               <Tooltip title={child.massage || null} placement="top">
                 <Box>
                   <MenuItem
                     key={index}
                     onClick={(e) => {
-                      child.onClick(e, id, isSuspended);
+                      child.onClick(e, id);
                       handleClose(e);
                     }}
                     disabled={child.disabled}
@@ -93,19 +93,17 @@ const MenuButton = ({
                     <Grid container alignItems="center">
                       {child.icon && (
                         <SvgIcon
-                          sx={child?.anothersx ? child?.anothersx : { width: "30px", height: "30px" }}
+                          sx={
+                            child?.anothersx ? child?.anothersx : { width: "30px", height: "30px" }
+                          }
                         >
                           {child.icon}
-                          {child.label == "Freeze" ? (
-                            isSuspended == true ? (
-                              // <ApproveIconSVG />
-                              null
-                            ) : (
-                              t(child.icon)
-                            )
-                          ) : (
-                            t(child.icon)
-                          )}
+                          {child.label == "Freeze"
+                            ? isSuspended == true
+                              ? // <ApproveIconSVG />
+                                null
+                              : t(child.icon)
+                            : t(child.icon)}
                         </SvgIcon>
                       )}
                       <Typography variant="body2">
@@ -119,7 +117,7 @@ const MenuButton = ({
                   </MenuItem>
                 </Box>
               </Tooltip>
-            )
+            </>
           );
         })}
       </StyledMenu>

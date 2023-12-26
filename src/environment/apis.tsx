@@ -51,17 +51,18 @@ export const get_Projects = (
   page: number = 1,
   rowsPerPage: number = 10,
   searchString?: string
-) => `/multi-rfp/${endpoint}?page=${page}&limit=${rowsPerPage}&sort_by_date=ASC`;
+) => `/multi-rfp/${endpoint}?page=${page}&limit=${rowsPerPage}&sort_by_date=ASC${searchString?`&search_by_name=${searchString}` : ""}`;
 export const get_attached_file = (page: number, limit: number, id?: string) =>
   `/attached-files/${id}?limit=${limit}&page=${page}`;
+export const delete_RFP = (id: string) => `/multi-rfp/${id}`
 //Bids----------------------------------------------------
 export const get_Bids = (page: number = 1, rowsPerPage: number = 10, searchString?: string) =>
-  `/multi-rfp/provider-all-offers?page=${page}&limit=${rowsPerPage}&sort_by_date=ASC`;
+  `/multi-rfp/provider-all-offers?page=${page}&limit=${rowsPerPage}&sort_by_date=ASC${searchString?`&search_by_name=${searchString}` : ""}`;
 export const get_list_of_offer = (
   multi_RFP_id: string,
   page: number = 1,
   rowsPerPage: number = 10,
   searchString?: string
 ) =>
-  `/offers/${multi_RFP_id}/all-offers-for-project?page=${page}&limit=${rowsPerPage}&sort_by_date=ASC`;
+  `/offers/${multi_RFP_id}/all-offers-for-project?page=${page}&limit=${rowsPerPage}&sort_by_date=ASC${searchString?`&search_by_name=${searchString}` : ""}`;
 export const get_Bid_id = (id: string) => `/multi-rfp/${id}`;
