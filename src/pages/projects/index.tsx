@@ -11,12 +11,11 @@ import { usePageUtilities } from "@/hooks/use-page-utilities";
 import useAlert from "@/hooks/useAlert";
 import { DashboardLayout } from "@/layouts/dashboard/layout";
 import { DataTable } from "@/components/shared/DataTable";
-import ConfirmationPopup from "@/components/confirmation-popup";
 import { useProject } from "@/hooks/use-project";
 import ProjectContextProvider from "@/contexts/project-context";
 import { IProject } from "@/@types/project";
 import { useRouter } from "next/navigation";
-import { getLocalTime } from "@/utils/helperFunctions";
+import { getLocalTime, showErrorMessage } from "@/utils/helperFunctions";
 import ProjectStatusBadge from "@/sections/projects/project-status";
 import { TActionMenuButton } from "@/components/shared/MenuItems";
 import { sharedStyles } from "@/utils/sharedStyles";
@@ -25,6 +24,7 @@ import { SearchBar } from "@/sections/shared/search-bar";
 import { useAuth } from "@/hooks/use-auth";
 import MenuButton from "@/components/shared/ButtonMenu";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import ConfirmationPopup from "@/components/confirmation-popup";
 
 const Page = () => {
   const { i18n } = useTranslation();
@@ -32,13 +32,13 @@ const Page = () => {
   const projectContext = useProject();
   const { t } = useTranslation();
   const { push } = useRouter();
-  const [value, setValue] = React.useState(0);
   const { showAlert, renderForAlert } = useAlert();
   const [editMood, setEditMode] = useState(false);
   const [open, setOpen] = useState(false);
   const [record, setRecord] = useState<any>(null);
-  const [selectedProjectId, setSelectedProjectId] = useState<string>("");
+  const [selectedProjectId, setSelectedProjectId] = useState<string | undefined>(undefined);
   const [openConfirm, setOpenConfirm] = useState(false);
+  const handleCloseConfirm = () => setOpenConfirm(false);
   const [showView, setShowView] = useState(false);
   const auth = useAuth();
   const [isLoadingProjects, setIsLoadingProjects] = useState(false);
@@ -54,23 +54,25 @@ const Page = () => {
     usePageUtilities();
 
   const fetchProjects = async () => {
-    setIsLoadingProjects(true);
     if (auth?.user?.role === "PROVIDER") {
+      setIsLoadingProjects(true);
       await projectContext?.fetchProjects(
         "provider-All-MultiRFP",
         controller.page,
         controller.rowsPerPage,
         controller.SearchString
       );
+      setIsLoadingProjects(false);
     } else if (auth?.user?.role === "CLIENT") {
+      setIsLoadingProjects(true);
       await projectContext?.fetchProjects(
         "client-All-MultiRFP",
         controller.page,
         controller.rowsPerPage,
         controller.SearchString
       );
+      setIsLoadingProjects(false);
     }
-    setIsLoadingProjects(false);
   };
   useEffect(() => {
     fetchProjects();
@@ -98,25 +100,23 @@ const Page = () => {
     setOpen(true);
   };
 
-  const handleAddProject = () => {
-    setEditMode(false);
-    setRecord({});
-    setOpen(true);
-  };
-
   const handleDeleteProject = (ProjectId: string) => {
     setSelectedProjectId(ProjectId);
     setOpenConfirm(true);
   };
-  const DeleteProject = () => {
-    setOpenConfirm(false);
-    projectContext?.DeleteProject(selectedProjectId);
-    showAlert(t("Project has been deleted successfully").toString(), "success");
-  };
 
-  const handleViewProject = (Project: IProject) => {
-    setRecord(Project);
-    setShowView(true);
+  const DeleteProject = async () => {
+    if (selectedProjectId != undefined) {
+      try {
+        await projectContext?.DeleteProject(selectedProjectId);
+        showAlert(t("Project has been deleted successfully").toString(), "success");
+        fetchProjects();
+      } catch (error) {
+        showAlert(showErrorMessage(error).toString(), "error");
+      }
+      setOpenConfirm(false);
+      setSelectedProjectId(undefined);
+    }
   };
 
   const additionalTableProps = {
@@ -141,6 +141,7 @@ const Page = () => {
       return (
         <MenuButton
           actions={menuItemsEmployees}
+          id={item?.id}
           sx={sharedStyles("actions")}
           onClick={(event: React.MouseEvent<HTMLElement>) => {
             event.stopPropagation();
@@ -163,11 +164,20 @@ const Page = () => {
       },
       sx: sharedStyles("editButton"),
     },
+    {
+      label: "Delete",
+      onClick: (e: any, id: string | undefined) => {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log(id);
+        if (id) {
+          handleDeleteProject(id);
+        }
+      },
+      sx: sharedStyles("approveButton"),
+    },
   ];
 
-  useEffect(() => {
-    console.log(controller);
-  }, [controller]);
   return (
     <>
       <Head>
@@ -175,9 +185,11 @@ const Page = () => {
       </Head>
       <Container maxWidth="xl">
         <ConfirmationPopup
-          message={"Are you sure to delete this College?"}
-          confirmFuntion={DeleteProject}
           open={openConfirm}
+          handleClose={handleCloseConfirm}
+          message={t("Are you sure you want to delete this Project ?")}
+          title={t("Delete RFP")}
+          confirmFuntion={DeleteProject}
           setOpen={setOpenConfirm}
         />
         <Grid display={"flex"} alignItems={"center"} justifyContent={"space-between"}>
@@ -201,6 +213,7 @@ const Page = () => {
           <Grid item xs={12}>
             <Card sx={{ p: 2 }}>
               <Stack spacing={2}>
+                <SearchBar onSearchChange={handleSearch} />
                 <DataTable
                   headers={headers}
                   name="Projects"
@@ -215,12 +228,13 @@ const Page = () => {
                   isLoading={isLoadingProjects}
                   handleSendSortBy={handleSorting}
                   handleSearch={handleSearch}
-                  withSearch={true}
+                  SearchString={controller?.SearchString}
                 />
               </Stack>
             </Card>
           </Grid>
         </Grid>
+        {renderForAlert()}
       </Container>
     </>
   );

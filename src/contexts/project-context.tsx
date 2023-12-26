@@ -1,7 +1,7 @@
 import { createContext, Dispatch, useState, useEffect } from "react";
 import axiosClient from "../configs/axios-client";
 import { IProject } from "@/@types/project";
-import { get_Projects,get_Project_id,get_attached_file} from "../environment/apis"
+import { get_Projects,get_Project_id,get_attached_file,delete_RFP} from "../environment/apis"
 export const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
 //TODO: move this to types folder
 
@@ -61,11 +61,13 @@ const ProjectContextProvider = ({ children }: any) => {
     const EditedProject: IProject = _project;
     setProjects([EditedProject, ...restProjects]);
   };
-  //TODO: replace with BK-end function
-  const DeleteProject = (project_id: string) => {
-    const restProjects = projects?.filter((project) => project.id !== project_id);
-    setProjects([...restProjects]);
-    setCount(count - 1);
+
+  const DeleteProject = async(project_id: string) => {
+    try {
+      await axiosClient.delete(delete_RFP(project_id))
+    } catch (error) {
+      return Promise.reject(error);
+    }
   };
 
   const DeleteFile = (FileID:string) => {
@@ -112,5 +114,5 @@ export type ProjectContextType = {
   getProject: ( id: string) => void;
   AddProject: (project: IProject) => void;
   EditProject: (project: IProject) => void;
-  DeleteProject: (project_id: string) => void;
+  DeleteProject: (project_id: string) => Promise<any>;
 };

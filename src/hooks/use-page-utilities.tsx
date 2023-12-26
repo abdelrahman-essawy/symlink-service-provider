@@ -42,7 +42,7 @@ export const usePageUtilities = () => {
     setController({
       ...controller,
       page: 1,
-      filter: debouncedSearch || "",
+      SearchString: debouncedSearch || "",
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearch]);
