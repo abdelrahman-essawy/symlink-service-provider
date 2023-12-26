@@ -71,8 +71,8 @@ const Page = () => {
         .required("role is required"),
       password: Yup.string()
         .matches(
-          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/,
-          "Password too weak. It must contain at least one uppercase letter, one lowercase letter, one number, and be at least 8 characters long."
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[a-zA-Z\d!@#$%^&*]{8,}$/,
+          "Password too weak. It must contain at least one uppercase letter, one lowercase letter, one number, and one special character, and be at least 8 characters long."
         )
         .required("Password is required"),
     }),
