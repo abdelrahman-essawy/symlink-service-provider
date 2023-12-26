@@ -179,13 +179,13 @@ const Page = () => {
                                 <TextField
                                   sx={{
                                     direction: "rtl",
-                                    "&  .MuiInputBase-root": {
+                                    "& .MuiInputBase-root ,& .MuiInputBase-input,& .MuiFilledInput-input,& .Mui-disabled": {
                                       borderRadius: "12px !important",
                                       padding: "0px !important",
                                       border:"none",
                                       color:"#000  !important"
                                     },
-                                    "&  .muirtl-w5cbyv-MuiInputBase-input-MuiFilledInput-input.Mui-disabled ":{
+                                    "&  .muirtl-w5cbyv-MuiInputBase-input-MuiFilledInput-input.Mui-disabled ,& .MuiInputBase-input,& .MuiFilledInput-input,& .Mui-disabled ":{
                                       opacity: 1,
                                       "-webkit-text-fill-color": "#000",
                                   },

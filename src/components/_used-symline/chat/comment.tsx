@@ -20,6 +20,7 @@ import { IAttachment, IComment } from "@/@types/discussion";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Image from "next/image";
 import pdf from "@/assets/pdf.svg";
+import document from "@/assets/document.svg";
 import file from "@/assets/file.svg";
 import ViewerPdf from "../dialogs/pdf-viewer";
 import ViewImagesDialog from "../dialogs/view-images";
@@ -77,7 +78,7 @@ export default function Comment({
   const [repliesCount, SetRepliesCount] = React.useState<number>(replies_count);
   const auth = useAuth();
   const handleCloseCertificate = () => setOpenCertificate(false);
-
+  
   const handleOpenCertificate = (imageLink: string) => {
     setFileLink(imageLink);
     setOpenCertificate(true);
@@ -87,24 +88,32 @@ export default function Comment({
     setFileLink(pdfLink);
     setOpenPdf(true);
   };
+  React.useEffect(()=>{
+    SetRepliesCount(replies_count);
+    if(repliesCount || replies_count){
+      getReplies();
+    }
+  },[replies_count])
   const handleExpandClick = async () => {
+    await getReplies();
+    setExpanded(!expanded);
+  };
+  const getReplies = async()=>{
     try {
       const res = await discussionContext?.getDiscussionComments(multi_RFP_id, 100, 0, message_id);
       //TODO: handle pagination of replies
-      console.log(res);
       SetReplies(res?.data?.data?.replies);
     } catch (error: any) {
       console.log(error?.response?.data?.message);
     }
-    setExpanded(!expanded);
-  };
+  }
   const iconRender = React.useCallback((type: string, src: string) => {
     if (type?.includes("image")) {
       return src;
     } else if (type == "application/pdf") {
       return pdf.src;
     } else {
-      return file.src;
+      return document.src;
     }
   }, []);
   return (
