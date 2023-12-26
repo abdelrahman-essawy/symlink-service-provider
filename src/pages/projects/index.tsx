@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { Button, Card, Container, Grid, Typography } from "@mui/material";
-import React from "react";
+import React, { use } from "react";
 import { useTranslation } from "react-i18next";
 import { dictionary, TranslatedWord } from "@/configs/i18next";
 import router from "next/router";
@@ -42,13 +42,13 @@ const Page = () => {
   const [showView, setShowView] = useState(false);
   const auth = useAuth();
   const [isLoadingProjects, setIsLoadingProjects] = useState(false);
-  const headers = [
+  const [headers, setHeaders] = useState([
     { text: "RFP name", value: "project_name" },
     { text: "Status", value: "request_for_proposal_status" },
     { text: "Creation date", value: "created_at" },
     { text: "Expiration date", value: "expiration_date" },
     { text: "Actions", value: "Actions" },
-  ];
+  ]);
 
   const { handlePageChange, handleRowsPerPageChange, handleSearch, controller, handleSorting } =
     usePageUtilities();
@@ -79,6 +79,24 @@ const Page = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [controller]);
 
+  useEffect(() => {
+    if (auth?.user?.role === "PROVIDER") {
+      setHeaders([
+        { text: "RFP name", value: "project_name" },
+        { text: "Status", value: "request_for_proposal_status" },
+        { text: "Creation date", value: "created_at" },
+        { text: "Expiration date", value: "expiration_date" },
+      ])
+    }else if (auth?.user?.role === "CLIENT"){
+      setHeaders([
+        { text: "RFP name", value: "project_name" },
+        { text: "Status", value: "request_for_proposal_status" },
+        { text: "Creation date", value: "created_at" },
+        { text: "Expiration date", value: "expiration_date" },
+        { text: "Actions", value: "Actions" },
+      ])
+    }
+  },[auth?.user?.role])
   const handleSubmit = async (formdata: any) => {
     if (editMood) {
       projectContext?.EditProject(formdata);
