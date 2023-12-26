@@ -71,7 +71,7 @@ export default function Discussion({ multi_RFP_id }: { multi_RFP_id: string }) {
               </Grid>
             </Box>
           </Grid>
-          <Grid container spacing={1} sx={{ py: 0, px: 3, mt: -5 }}>
+          <Grid container spacing={1.2} sx={{ py: 0, px: 3, mt: -5 }}>
             {discussionContext?.comments?.length != undefined &&
               discussionContext?.comments?.length > 0 ? (
               <>
@@ -96,12 +96,12 @@ export default function Discussion({ multi_RFP_id }: { multi_RFP_id: string }) {
                           : comment?.user?.avatar
                       }
                     />
-                    {index < discussionContext?.comments?.length - 1 && <Divider />}
+                    {/* {index < discussionContext?.comments?.length - 1 && <Divider />} */}
                   </Grid>
                 ))}
                 {typeof discussionContext?.page != "undefined" &&
                   typeof discussionContext?.totalPages != "undefined" &&
-                  discussionContext?.page < discussionContext?.totalPages && (
+                  discussionContext?.page +1 < discussionContext?.totalPages && (
                     <Box
                       sx={{
                         display: "flex",
@@ -116,7 +116,7 @@ export default function Discussion({ multi_RFP_id }: { multi_RFP_id: string }) {
                         color="warning"
                         size="large"
                         onClick={() => {
-                          if(discussionContext?.page < discussionContext?.totalPages)
+                          if(discussionContext?.page+1 < discussionContext?.totalPages)
                           setPage((prev) => prev + 1)
                         }}
                       >
