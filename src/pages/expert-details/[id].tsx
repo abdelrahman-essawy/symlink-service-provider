@@ -180,7 +180,7 @@ const Page = () => {
                                   sx={{
                                     direction: "rtl",
                                     "& .MuiInputBase-root ,& .MuiInputBase-input,& .MuiFilledInput-input,& .Mui-disabled": {
-                                      borderRadius: "12px !important",
+                                      borderRadius: "0px !important",
                                       padding: "0px !important",
                                       border:"none",
                                       color:"#000  !important"
@@ -189,6 +189,11 @@ const Page = () => {
                                       opacity: 1,
                                       "-webkit-text-fill-color": "#000",
                                   },
+                                    "&  textarea":{
+                                      opacity: 1,
+                                      "-webkit-text-fill-color": "#000 !important",
+                                  },
+
                                   }}
                                   fullWidth
                                   value={expert?.info}
