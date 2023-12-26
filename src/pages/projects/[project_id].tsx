@@ -206,7 +206,7 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>{title} | Symline</title>
+        <title>{projectContext?.Selectedproject?.project_name || title} | Symline</title>
       </Head>
       <Container maxWidth="xl">
         <Grid
@@ -430,7 +430,7 @@ const Page = () => {
               </CustomTabPanel>
 
               <CustomTabPanel value={value} index={2} padding={"0"}>
-                <DiscussionContextProvider>
+                <DiscussionContextProvider multi_RFP_id={project_id as string}>
                   <Discussion multi_RFP_id={project_id as string} />
                 </DiscussionContextProvider>
               </CustomTabPanel>
@@ -485,7 +485,7 @@ const Page = () => {
 Page.getLayout = (page: any) => (
   <DashboardLayout>
     <BidContextProvider>
-      <DiscussionContextProvider>
+      <DiscussionContextProvider> 
         <ProjectContextProvider>{page}</ProjectContextProvider>
       </DiscussionContextProvider>
     </BidContextProvider>

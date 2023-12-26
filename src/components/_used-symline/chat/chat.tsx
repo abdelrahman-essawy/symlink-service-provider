@@ -31,6 +31,8 @@ import moment from "moment";
 import Comment from "./comment";
 import CommentForm from "./comment-Form";
 import { useDisscussion } from "@/contexts/discussion-context";
+import io from "socket.io-client";
+
 export default function Discussion({ multi_RFP_id }: { multi_RFP_id: string }) {
   const discussionContext = useDisscussion();
   const { i18n } = useTranslation();
@@ -47,7 +49,7 @@ export default function Discussion({ multi_RFP_id }: { multi_RFP_id: string }) {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [multi_RFP_id,page]);
+  }, [multi_RFP_id, page]);
   return (
     <Card elevation={1} sx={{ py: 1 }}>
       <Grid container spacing={0} justifyContent="space-between">
@@ -71,7 +73,7 @@ export default function Discussion({ multi_RFP_id }: { multi_RFP_id: string }) {
           </Grid>
           <Grid container spacing={1} sx={{ py: 0, px: 3, mt: -5 }}>
             {discussionContext?.comments?.length != undefined &&
-            discussionContext?.comments?.length > 0 ? (
+              discussionContext?.comments?.length > 0 ? (
               <>
                 {discussionContext?.comments?.map((comment: IComment, index: number) => (
                   <Grid item xs={12} key={comment?.id}>
@@ -87,7 +89,7 @@ export default function Discussion({ multi_RFP_id }: { multi_RFP_id: string }) {
                           : comment?.user?.name || comment?.user?.email
                       }
                       message={comment?.body_text}
-                      time={moment.utc(comment?.created_at.slice(0, 19)).local().calendar()}
+                      time={moment.utc(comment?.created_at?.slice(0, 19))?.local()?.calendar()}
                       avatar={
                         auth?.user?.id === comment?.user_id
                           ? auth?.user?.avatar
@@ -113,9 +115,10 @@ export default function Discussion({ multi_RFP_id }: { multi_RFP_id: string }) {
                         variant="contained"
                         color="warning"
                         size="large"
-                        onClick={() =>
-                          setPage(prev=>prev+1)
-                        }
+                        onClick={() => {
+                          if(discussionContext?.page < discussionContext?.totalPages)
+                          setPage((prev) => prev + 1)
+                        }}
                       >
                         <Typography sx={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>
                           {false ? <CircularProgress thickness={1.5} /> : t("Load More")}
