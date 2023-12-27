@@ -4,7 +4,6 @@ import { IComment, ISocketMsgData } from "@/@types/discussion";
 export const DiscussionContext = createContext<DiscussionContextType | undefined>(undefined);
 import { useContext } from "react";
 import io from "socket.io-client";
-import { comment } from "stylis";
 
 const DiscussionContextProvider = ({ multi_RFP_id, children }: any) => {
   const [comments, setComments] = useState<IComment[]>([]);
@@ -90,25 +89,6 @@ const DiscussionContextProvider = ({ multi_RFP_id, children }: any) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [multi_RFP_id, token]);
-
-  useEffect(() => {
-    if (reply != undefined) {
-      //if it was a reply then we need to to catch the parent comment and modify it
-      const indexOfParentComment = comments?.findIndex(
-        (comment) => comment.id == reply?.entity?.message?.id
-      );
-      console.log(comments);
-      const new_comment:IComment = {...comments[indexOfParentComment],replies_count:comments[indexOfParentComment]?.replies_count+1||1}
-      const rest_comments: IComment[] = comments.filter(
-        (comment) => comment.id != reply?.entity?.message?.id
-      );
-      console.log(new_comment);
-      rest_comments.splice(indexOfParentComment, 0, new_comment);
-      console.log(rest_comments);
-      setReply(undefined);
-      setComments(rest_comments);
-    }
-  }, [reply, comments]);
   return (
     <DiscussionContext.Provider
       value={{
