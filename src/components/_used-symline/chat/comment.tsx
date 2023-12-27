@@ -16,7 +16,7 @@ import AttachFileIcon from "@mui/icons-material/AttachFile";
 import { Box, Button, Divider, Grid } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
-import { IAttachment, IComment } from "@/@types/discussion";
+import { IAttachment, IComment, ISocketMsgData } from "@/@types/discussion";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Image from "next/image";
 import pdf from "@/assets/pdf.svg";
@@ -29,6 +29,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useAuth } from "@/hooks/use-auth";
 import moment from "moment";
 import { useDisscussion } from "@/contexts/discussion-context";
+import io from "socket.io-client";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -88,12 +89,14 @@ export default function Comment({
     setFileLink(pdfLink);
     setOpenPdf(true);
   };
-  React.useEffect(()=>{
-    SetRepliesCount(replies_count);
-    if(repliesCount || replies_count){
-      getReplies();
-    }
-  },[replies_count])
+  
+  // React.useEffect(()=>{
+  //   SetRepliesCount(replies_count);
+  //   if(repliesCount || replies_count){
+  //     getReplies();
+  //   }
+  // },[replies_count])
+
   const handleExpandClick = async () => {
     await getReplies();
     setExpanded(!expanded);
@@ -116,6 +119,41 @@ export default function Comment({
       return document.src;
     }
   }, []);
+
+  //soket section
+  const token = sessionStorage.getItem("token");
+  React.useEffect(() => {
+    if (multi_RFP_id) {
+      const socket = io(`http://164.90.181.17:3000/discussion?multi_rfp_id=${multi_RFP_id}`, {
+        extraHeaders: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      socket.on("connect", () => {
+        console.log("Connected to the server");
+      });
+      socket.on(`message_${message_id}`, (data: ISocketMsgData) => {
+        //create a new comment object and add it to the comments list if it was comment
+          const new_reply: IComment = data?.entity;
+          SetReplies((prev) => [new_reply, ...prev]);
+          SetRepliesCount(prev=>prev+1);
+      });
+      socket.on("connect_error", (err: any) => {
+        console.log("Connection error:", err);
+        // Handle connection error here
+      });
+      socket.on("disconnect", () => {
+        console.log("Disconnected from the server");
+      });
+
+      return () => {
+        socket.off("connect");
+        socket.off("disconnect");
+        socket.disconnect();
+      };
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [multi_RFP_id, token]);
   return (
     <Card sx={{ maxWidth: "100%", border: "1px solid #E8E8E8" }} elevation={1}>
       <CardHeader
@@ -176,10 +214,6 @@ export default function Comment({
                 <CloseIcon />
               </IconButton>
               <CommentForm
-                repliesCount={repliesCount}
-                SetRepliesCount={SetRepliesCount}
-                setReplies={SetReplies}
-                replies={replies}
                 multi_RFP_id={multi_RFP_id}
                 message_id={message_id}
                 handleClose={() => setShowReplybox(false)}

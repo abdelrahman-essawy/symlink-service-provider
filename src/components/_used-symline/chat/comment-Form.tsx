@@ -27,12 +27,8 @@ interface IProps {
   multi_RFP_id: string;
   message_id?: string | undefined;
   handleClose?: () => void;
-  setReplies?: (replies:any[]) => void;
-  SetRepliesCount?: (count:number) => void;
-  repliesCount?: number;
-  replies?: IComment[];
 }
-function CommentForm({ multi_RFP_id, message_id = undefined, handleClose,setReplies,replies,SetRepliesCount,repliesCount }: IProps) {
+function CommentForm({ multi_RFP_id, message_id = undefined, handleClose}: IProps) {
   const discussionContext = useDisscussion();
   const auth = useAuth();
   const { t } = useTranslation();
@@ -67,12 +63,7 @@ function CommentForm({ multi_RFP_id, message_id = undefined, handleClose,setRepl
       //if it was a reply
       if(handleClose){
         handleClose();
-      }
-      if(setReplies!= undefined && replies!= undefined && SetRepliesCount!= undefined && repliesCount != undefined){
-        setReplies([res,...replies]);
-        SetRepliesCount(repliesCount+1);
-      }
-      
+      }  
     } catch (error:any) {
       setError(showErrorMessage(error).toString());
     }
