@@ -8,11 +8,6 @@ const nextConfig = {
     domains: ["img.freepik.com", "veterinaire-tour-hassan.com"],
     unoptimized: true,
   },
-  i18n: {
-    locales: ["en", "ar"],
-    defaultLocale: "en",
-    localeDetection: false,
-  },
   trailingSlash: false,
   webpack: (config) => {
     config.module.rules.push({
