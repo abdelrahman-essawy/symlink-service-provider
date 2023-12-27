@@ -86,36 +86,20 @@ const Page = () => {
         { text: "Status", value: "request_for_proposal_status" },
         { text: "Creation date", value: "created_at" },
         { text: "Expiration date", value: "expiration_date" },
-      ])
-    }else if (auth?.user?.role === "CLIENT"){
+      ]);
+    } else if (auth?.user?.role === "CLIENT") {
       setHeaders([
         { text: "RFP name", value: "project_name" },
         { text: "Status", value: "request_for_proposal_status" },
         { text: "Creation date", value: "created_at" },
         { text: "Expiration date", value: "expiration_date" },
         { text: "Actions", value: "Actions" },
-      ])
+      ]);
     }
-  },[auth?.user?.role])
-  const handleSubmit = async (formdata: any) => {
-    if (editMood) {
-      projectContext?.EditProject(formdata);
-      showAlert(t("Edited", { name: t("Project") }).toString(), "success");
-    } else {
-      projectContext?.AddProject(formdata);
-      showAlert(t("Added", { name: t("Project") }).toString(), "success");
-    }
-    (async () => {
-      await setEditMode(false);
-      await setRecord({});
-    })();
-    // setOpen(false);
-  };
+  }, [auth?.user?.role]);
 
-  const handleEditProject = (Project: any) => {
-    setRecord(Project);
-    setEditMode(true);
-    setOpen(true);
+  const handleEditProject = (Projectid: string) => {
+    router?.push(`bid/edit-rfp/${Projectid}`)
   };
 
   const handleDeleteProject = (ProjectId: string) => {
@@ -178,7 +162,9 @@ const Page = () => {
       onClick: (e: any, id: string | undefined) => {
         e.preventDefault();
         e.stopPropagation();
-        handleEditProject(id);
+        if (id) {
+          handleEditProject(id);
+        }
       },
       sx: sharedStyles("editButton"),
     },

@@ -1,3 +1,5 @@
+import { ICategory, RequestForProposal } from "./project";
+
 export interface IQuestion {
     id: string;
     type: string;
@@ -14,6 +16,7 @@ export interface IQuestion {
     secondEmail: string;
     secondMobile: string;
     projects: IAssessmentProject[];
+    request_for_proposal?: RequestForProposal[]
   }
   
   export interface IAssessmentProject {
@@ -40,5 +43,6 @@ export interface IQuestion {
     details_evaluation_approach: string;
     active_directory: boolean;
     details_ips_scoped: string;
+    category?:ICategory;
   }
   
