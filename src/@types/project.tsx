@@ -1,5 +1,6 @@
 //MultiRfp
 export interface IProject {
+  projects: RequestForProposal[]
   id: string
   created_at: string
   updated_at: string

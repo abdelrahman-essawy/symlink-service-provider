@@ -41,6 +41,7 @@ export const permissionSchema: PermissionsSchema = {
   CLIENT: {
     ...sharedPermissions,
     canViewCreateRfp: true,
+    canViewEditRfp: true,
     canViewServiceProviderProfile: true,
 
     notAbleToViewComponents: [

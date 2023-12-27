@@ -11,6 +11,7 @@ export const PATH_PERMISSIONS = {
   "/projects": "canViewProjects",
   "/projects/[project_id]": "canViewProjectsDetails",
   "/bid/create-rfp": "canViewCreateRfp",
+  "/bid/edit-rfp/[id]": "canViewEditRfp",
   "/bids": "canViewBids",
   "/bid/rfp-name": "canViewBidDetails", // TODO: make it dynamic [bid_Id]
   "/experience": "canViewExperince",

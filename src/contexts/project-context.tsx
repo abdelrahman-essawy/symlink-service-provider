@@ -1,7 +1,7 @@
 import { createContext, Dispatch, useState, useEffect } from "react";
 import axiosClient from "../configs/axios-client";
 import { IProject } from "@/@types/project";
-import { get_Projects,get_Project_id,get_attached_file,delete_RFP} from "../environment/apis"
+import { get_Projects, get_Project_id, get_attached_file, delete_RFP } from "../environment/apis";
 export const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
 //TODO: move this to types folder
 
@@ -14,9 +14,14 @@ const ProjectContextProvider = ({ children }: any) => {
   const [pageSize, setPageSize] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
 
-  const fetchProjects =  (endpoint:string, PageNumber: number , PageSize: number ,SearchString?:string) => {
+  const fetchProjects = (
+    endpoint: string,
+    PageNumber: number,
+    PageSize: number,
+    SearchString?: string
+  ) => {
     axiosClient
-      .get(get_Projects(endpoint,PageNumber, PageSize, SearchString))
+      .get(get_Projects(endpoint, PageNumber, PageSize, SearchString))
       .then((res) => {
         setProjects(res.data.data);
         setCount(res.data.meta.itemCount);
@@ -25,9 +30,9 @@ const ProjectContextProvider = ({ children }: any) => {
       })
       .catch((error) => {});
   };
-  const fetchAttachedFile =  (page: number, rowsPerPage: number,projectID:string) => {
+  const fetchAttachedFile = (page: number, rowsPerPage: number, projectID: string) => {
     axiosClient
-      .get(get_attached_file(page,rowsPerPage,projectID))
+      .get(get_attached_file(page, rowsPerPage, projectID))
       .then((res) => {
         setFiles(res.data.data);
         setCountFiles(res.data.meta.itemCount);
@@ -37,13 +42,14 @@ const ProjectContextProvider = ({ children }: any) => {
       .catch((error) => {});
   };
 
-  const getProject =  (id: string) => {
-    axiosClient
-      .get(get_Project_id(id))
-      .then((res) => {
-        setSelectedProject(res.data.data as IProject);
-      })
-      .catch((error) => {});
+  const getProject = async (id: string) => {
+    try {
+      const res = await axiosClient.get(get_Project_id(id));
+      setSelectedProject(res?.data?.data as IProject);
+      return res;
+    } catch (error) {
+      return Promise.reject(error);
+    }
   };
 
   //TODO: replace with BK-end function
@@ -62,17 +68,15 @@ const ProjectContextProvider = ({ children }: any) => {
     setProjects([EditedProject, ...restProjects]);
   };
 
-  const DeleteProject = async(project_id: string) => {
+  const DeleteProject = async (project_id: string) => {
     try {
-      await axiosClient.delete(delete_RFP(project_id))
+      await axiosClient.delete(delete_RFP(project_id));
     } catch (error) {
       return Promise.reject(error);
     }
   };
 
-  const DeleteFile = (FileID:string) => {
-
-  };
+  const DeleteFile = (FileID: string) => {};
 
   return (
     <ProjectContext.Provider
@@ -108,10 +112,15 @@ export type ProjectContextType = {
   pageSize: number;
   totalPages: number;
   Selectedproject: IProject;
-  fetchProjects:  (endpoint:string, PageNumber: number , PageSize: number ,SearchString?:string) => void;
-  fetchAttachedFile: (page: number, rowsPerPage: number,projectID:string) => void;
-  DeleteFile: (FileID:string) => void;
-  getProject: ( id: string) => void;
+  fetchProjects: (
+    endpoint: string,
+    PageNumber: number,
+    PageSize: number,
+    SearchString?: string
+  ) => void;
+  fetchAttachedFile: (page: number, rowsPerPage: number, projectID: string) => void;
+  DeleteFile: (FileID: string) => void;
+  getProject: (id: string) => Promise<any>;
   AddProject: (project: IProject) => void;
   EditProject: (project: IProject) => void;
   DeleteProject: (project_id: string) => Promise<any>;
