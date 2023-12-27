@@ -52,14 +52,14 @@ const RfpForm = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editMood,categoriesIds]);
 
-  useEffect(() => {
-    console.log(inputs);
-    console.log(inputs?.length);
-  }, [inputs]);
-  useEffect(() => {
-    console.log(formRecord?.projects);
-    console.log(formRecord?.projects?.length);
-  }, [formRecord?.projects]);
+  // useEffect(() => {
+  //   console.log(inputs);
+  //   console.log(inputs?.length);
+  // }, [inputs]);
+  // useEffect(() => {
+  //   console.log(formRecord?.projects);
+  //   console.log(formRecord?.projects?.length);
+  // }, [formRecord?.projects]);
 
   const addInput = (itemName: string, itemID: string) => {
     const new_project: IAssessmentProject = {
