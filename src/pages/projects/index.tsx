@@ -60,7 +60,8 @@ const Page = () => {
         "provider-All-MultiRFP",
         controller.page,
         controller.rowsPerPage,
-        controller.SearchString
+        controller.SearchString,
+        controller?.OrderBy
       );
       setIsLoadingProjects(false);
     } else if (auth?.user?.role === "CLIENT") {
@@ -69,7 +70,8 @@ const Page = () => {
         "client-All-MultiRFP",
         controller.page,
         controller.rowsPerPage,
-        controller.SearchString
+        controller.SearchString,
+        controller?.OrderBy
       );
       setIsLoadingProjects(false);
     }
@@ -99,7 +101,7 @@ const Page = () => {
   }, [auth?.user?.role]);
 
   const handleEditProject = (Projectid: string) => {
-    router?.push(`bid/edit-rfp/${Projectid}`)
+    router?.push(`bid/edit-rfp/${Projectid}`);
   };
 
   const handleDeleteProject = (ProjectId: string) => {
@@ -139,11 +141,19 @@ const Page = () => {
         <ProjectStatusBadge status={item?.request_for_proposal_status} />
       ) : null;
     },
-    onRenderActions: (item: any) => {
+    onRenderActions: (item: IProject) => {
       return (
         <MenuButton
           actions={menuItemsEmployees}
           id={item?.id}
+          disabledfunc={(label: string) => {
+            if (label == "Edit") {
+              if (!(item?.request_for_proposal_status === "PENDING")) {
+                return "Not allowed to edit an approved projects";
+              }
+            }
+            return false;
+          }}
           sx={sharedStyles("actions")}
           onClick={(event: React.MouseEvent<HTMLElement>) => {
             event.stopPropagation();

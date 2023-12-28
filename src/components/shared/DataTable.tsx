@@ -50,7 +50,7 @@ const PaginationBox = styled(Box)(() => ({
 export const DataTable = (props: any) => {
   const {
     isLoading = false,
-    SearchString="",
+    SearchString = "",
     items = [],
     menu = [],
     headers = [],
@@ -69,11 +69,12 @@ export const DataTable = (props: any) => {
     handleSuspend = () => {},
     rowsPerPage,
     selected,
-    withSearch=false,
-    handleSendSortBy = (sorting:any) => {},
-    handleSearch = (sorting:string) => {},
+    withSearch = false,
+    handleSendSortBy = (sorting: any) => {},
+    handleSearch = (sorting: string) => {},
   } = props;
   const [sorting, setSorting]: any = useState({});
+
   const getItem = (item: any, header: any): any => {
     const name = "onRender" + header.value;
     if (props[name]) {
@@ -83,13 +84,12 @@ export const DataTable = (props: any) => {
         return format(Date.parse(item.created_at), "dd/MM/yyyy");
       } else if (header.text === "Phone") {
         return <Box sx={{ direction: "rtl" }}>{item?.phone}</Box>;
-      } else if (header.text === "Action") {
-        return Actions(item.id, item?.isSuspended);
       } else {
         return t(item[header?.value]);
       }
     }
   };
+
   const noNeedSorting = (headerText: string): Boolean => {
     if (name == "Employees") {
       if (
@@ -101,19 +101,6 @@ export const DataTable = (props: any) => {
         return false;
       }
       return true;
-    } else if (name == "Transactions") {
-      if (
-        headerText == "Type" ||
-        headerText == "Actions" ||
-        headerText == "Creation Date & Time" ||
-        headerText == "Holder Name" ||
-        headerText == "Card No."
-      ) {
-        return false;
-      }
-      return true;
-    } else if (["Companies", "CardProgram"].includes(name)) {
-      return false;
     }
     if (
       headerText == "Edit" ||
@@ -126,25 +113,21 @@ export const DataTable = (props: any) => {
     }
     return true;
   };
+  //make the sorting to be
   const handleSorting = (header: any) => {
-    const newVal: any = { ...sorting };
-    if (newVal[header.value] === "asc") {
-      newVal[header.value] = "desc";
-    } else if (newVal[header.value] === "desc") {
+    let newVal: any = { ...sorting };
+    if (newVal[header.value] === "ASC") {
+      newVal[header.value] = "DESC";
+    } else if (newVal[header.value] === "DESC") {
       delete newVal[header.value];
     } else {
-      newVal[header.value] = "asc";
+      newVal[header.value] = "ASC";
     }
+    newVal = newVal[header.value] ?{ [header.value]: newVal[header.value] } : {};
     setSorting(newVal);
+    handleSendSortBy(newVal);
   };
 
-  useEffect(() => {
-    //change Items Order from Api
-    if (handleSendSortBy) {
-      handleSendSortBy(sorting);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sorting]);
   const { t } = useTranslation();
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -191,25 +174,10 @@ export const DataTable = (props: any) => {
 
     return styles;
   };
-  const Actions = (id: string, isSuspended?: boolean) => {
-    return (
-      <MenuButton
-        actions={menu}
-        id={id}
-        isSuspended={isSuspended}
-        sx={sharedStyles("actions")}
-        onClick={(event: React.MouseEvent<HTMLElement>) => {
-          event.stopPropagation();
-        }}
-      >
-        <MoreHorizIcon />
-      </MenuButton>
-    );
-  };
-  if (!isLoading && (totalItems == undefined || (totalItems == 0))) {
+  if (!isLoading && (totalItems == undefined || totalItems == 0)) {
     return (
       <Noitems
-        title={SearchString ?  `${SearchString} is not exist`: `No ${name} yet`}
+        title={SearchString ? `${SearchString} is not exist` : `No ${name} yet`}
         icon={<FolderCopyIcon sx={{ color: "gray", fontSize: "4.2em" }} />}
       />
     );
@@ -220,7 +188,7 @@ export const DataTable = (props: any) => {
       <Card sx={{ borderRadius: "15px" }}>
         <Scrollbar>
           <Box sx={{ minWidth: 800, minHeight: 150 }}>
-            <Table sx={{ whiteSpace: "nowrap", p: 3,minHeight: 150 }}>
+            <Table sx={{ whiteSpace: "nowrap", p: 3, minHeight: 150 }}>
               <TableHead>
                 <TableRow>
                   {headers?.map((header: any) => {
@@ -231,7 +199,13 @@ export const DataTable = (props: any) => {
                           noNeedSorting(header.text) ? (
                             <TableSortLabel
                               active={sorting.hasOwnProperty(header.value)}
-                              direction={sorting[header.value]}
+                              direction={
+                                sorting[header.value] == "DESC"
+                                  ? "desc"
+                                  : sorting[header.value] == "ASC"
+                                  ? "asc"
+                                  : undefined
+                              }
                               onClick={(event) => handleSorting(header)}
                               sx={{
                                 textTransform: "none",
@@ -241,7 +215,7 @@ export const DataTable = (props: any) => {
                             >
                               {header.text}
                               <Box component="span" sx={visuallyHidden}>
-                                {sorting[header.value] === "desc"
+                                {sorting[header.value] === "DESC"
                                   ? "sorted descending"
                                   : "sorted ascending"}
                               </Box>
@@ -290,7 +264,7 @@ export const DataTable = (props: any) => {
                   ))
                 ) : (
                   <>
-                    {Array.from({ length: 3 }).map((_: any, index: number) => (
+                    {Array.from({ length: rowsPerPage }).map((_: any, index: number) => (
                       <TableRow key={index}>
                         {headers?.map((header: any) => {
                           return (

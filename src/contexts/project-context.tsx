@@ -18,10 +18,11 @@ const ProjectContextProvider = ({ children }: any) => {
     endpoint: string,
     PageNumber: number,
     PageSize: number,
-    SearchString?: string
+    SearchString?: string,
+    OrderBy?:{[key: string]: string}
   ) => {
     axiosClient
-      .get(get_Projects(endpoint, PageNumber, PageSize, SearchString))
+      .get(get_Projects(endpoint, PageNumber, PageSize, SearchString,OrderBy))
       .then((res) => {
         setProjects(res.data.data);
         setCount(res.data.meta.itemCount);
@@ -116,7 +117,8 @@ export type ProjectContextType = {
     endpoint: string,
     PageNumber: number,
     PageSize: number,
-    SearchString?: string
+    SearchString?: string,
+    OrderBy?:{[key: string]: string}
   ) => void;
   fetchAttachedFile: (page: number, rowsPerPage: number, projectID: string) => void;
   DeleteFile: (FileID: string) => void;

@@ -1,7 +1,7 @@
 //generate filtersString
 import { Filter } from "@/@types/filter";
 import { filtersString } from "@/utils/generate-filter-string";
-
+import { orderByToString } from "@/utils/helperFunctions";
 // Contact Messages API
 export const get_contact_messages = (page: number = 1, rowsPerPage: number = 10,  filter?:Filter[]) =>
   `/contacts?page=${page + 1}&limit=${rowsPerPage}&${filtersString(filter)}`;
@@ -50,19 +50,21 @@ export const get_Projects = (
   endpoint: string,
   page: number = 1,
   rowsPerPage: number = 10,
-  searchString?: string
-) => `/multi-rfp/${endpoint}?page=${page}&limit=${rowsPerPage}&sort_by_date=ASC${searchString?`&search_by_name=${searchString}` : ""}`;
+  searchString?: string,
+  orderBy?: { [key: string]: string}
+) => `/multi-rfp/${endpoint}?page=${page}&limit=${rowsPerPage}${searchString?`&search_by_name=${searchString}` : ""}${orderBy? orderByToString(orderBy) : `&sort_by_date=ASC`}`;
 export const get_attached_file = (page: number, limit: number, id?: string) =>
   `/attached-files/${id}?limit=${limit}&page=${page}`;
 export const delete_RFP = (id: string) => `/multi-rfp/${id}`
 //Bids----------------------------------------------------
-export const get_Bids = (page: number = 1, rowsPerPage: number = 10, searchString?: string) =>
-  `/multi-rfp/provider-all-offers?page=${page}&limit=${rowsPerPage}&sort_by_date=ASC${searchString?`&search_by_name=${searchString}` : ""}`;
+export const get_Bids = (page: number = 1, rowsPerPage: number = 10, searchString?: string,orderBy?: { [key: string]: string}) =>
+  `/multi-rfp/provider-all-offers?page=${page}&limit=${rowsPerPage}${searchString?`&search_by_name=${searchString}` : ""}${orderBy? orderByToString(orderBy) : `&sort_by_date=ASC`}`;
 export const get_list_of_offer = (
   multi_RFP_id: string,
   page: number = 1,
   rowsPerPage: number = 10,
-  searchString?: string
+  searchString?: string,
+  orderBy?: { [key: string]: string}
 ) =>
-  `/offers/${multi_RFP_id}/all-offers-for-project?page=${page}&limit=${rowsPerPage}&sort_by_date=ASC${searchString?`&search_by_name=${searchString}` : ""}`;
+  `/offers/${multi_RFP_id}/all-offers-for-project?page=${page}&limit=${rowsPerPage}${searchString?`&search_by_name=${searchString}` : ""}${orderBy? orderByToString(orderBy) : `&sort_by_date=ASC`}`;
 export const get_Bid_id = (id: string) => `/multi-rfp/${id}`;

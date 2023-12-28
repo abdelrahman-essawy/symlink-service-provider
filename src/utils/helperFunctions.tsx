@@ -5,17 +5,10 @@ import moment from "moment";
 
 //generate orderBY
 export const orderByToString = (orderBy: any): string | void => {
-  let orderBy_string = "";
-  if (orderBy) {
-    for (const key in orderBy) {
-      if (orderBy.hasOwnProperty(key)) {
-        const value = orderBy[key];
-        orderBy_string += `OrderBy=${key}:${value}&`;
-      }
-    }
-    return orderBy_string;
+  if (Object.keys(orderBy).length !== 0) {
+    return `&sort_by=${Object.keys(orderBy)[0]}&order=${orderBy[`${Object.keys(orderBy)[0]}`]}`;
   } else {
-    return "";
+    return `&sort_by_date=ASC`;
   }
 };
 // convert duration in hours to duration in (hours, days,months, years)

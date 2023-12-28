@@ -14,9 +14,9 @@ const BidContextProvider = ({ children }: any) => {
   const [pageSize, setPageSize] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
 
-  const fetchBids = async ( PageNumber: number , PageSize: number ,SearchString?:string) => {
+  const fetchBids = async ( PageNumber: number , PageSize: number ,SearchString?:string,OrderBy?:{[key: string]: string}) => {
    await axiosClient
-      .get(get_Bids(PageNumber, PageSize, SearchString))
+      .get(get_Bids(PageNumber, PageSize, SearchString,OrderBy))
       .then((res) => {
         setBids(res.data.data);
         setCountBids(res.data.meta.itemCount);
@@ -25,9 +25,9 @@ const BidContextProvider = ({ children }: any) => {
       })
       .catch((error) => {});
   };
-  const fetchlistOffers = async (multi_RFP_id :string, PageNumber: number , PageSize: number ,SearchString?:string) => {
+  const fetchlistOffers = async (multi_RFP_id :string, PageNumber: number , PageSize: number ,SearchString?:string,OrderBy?:{[key: string]: string}) => {
    await axiosClient
-      .get(get_list_of_offer(multi_RFP_id,PageNumber, PageSize, SearchString))
+      .get(get_list_of_offer(multi_RFP_id,PageNumber, PageSize, SearchString,OrderBy))
       .then((res) => {
         setOffers(res.data.data);
         setCountOffers(res.data.meta.itemCount);
@@ -77,7 +77,7 @@ export type BidContextType = {
   pageSize: number;
   totalPages: number;
   Selectedbid: IBid;
-  fetchBids:  ( PageNumber: number , PageSize: number ,SearchString?:string) => void;
+  fetchBids:  ( PageNumber: number , PageSize: number ,SearchString?:string,OrderBy?:{[key: string]: string}) => void;
   fetchlistOffers:  (multi_RFP_id :string, PageNumber: number , PageSize: number ,SearchString?:string) => void;
   getBid: ( id: string) => void;
 };

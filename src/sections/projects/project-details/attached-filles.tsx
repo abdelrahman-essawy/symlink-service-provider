@@ -110,7 +110,6 @@ function AttachedFilles({
           RefreshAttachedFiles();
         }
       } catch (error) {
-        console.log(showErrorMessage(error));
         showAlert(`${showErrorMessage(error)}`, "error");
       }
     }

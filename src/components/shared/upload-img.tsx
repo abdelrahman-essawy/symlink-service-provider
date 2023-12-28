@@ -25,7 +25,6 @@ function ProfileImgUpload() {
   const handleSubmit = (event: any) => {
     event.preventDefault();
     // perform actions with the selected file
-    console.log(selectedFile);
   };
 
   // handleUploadImage old upload

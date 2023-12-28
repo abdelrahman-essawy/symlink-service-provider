@@ -77,6 +77,7 @@ const DiscussionContextProvider = ({ multi_RFP_id, children }: any) => {
         console.log("Connection error:", err);
         // Handle connection error here
       });
+
       socket.on("disconnect", () => {
         console.log("Disconnected from the server");
       });

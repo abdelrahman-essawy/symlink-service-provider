@@ -88,9 +88,6 @@ export default function ExperienceDialog({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editValues,open]);
 
-  React.useEffect(()=>{
-    console.log(formik);
-  },[formik])
   const AddSubmit = async (values: project) => {
     try {
       await axiosClient.post("/provider/add-project", {
