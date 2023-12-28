@@ -295,7 +295,7 @@ const RfpForm = ({
               width: "200px",
             }}
           >
-            {isLoading ? <CircularProgress thickness={1.5} /> : t("Create")}
+            {isLoading ? <CircularProgress thickness={1.5} /> : !editMood? t("Create") : t("Edit")}
           </Button>
         </Grid>
       </Grid>

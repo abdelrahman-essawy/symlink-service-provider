@@ -9,7 +9,7 @@ export const usePageUtilities = () => {
     rowsPerPage: 10,
     filter: "",
     SearchString: "",
-    OrderBy: null,
+    OrderBy: undefined,
   });
 
   const handlePageChange = (event: any, newPage: number) => {

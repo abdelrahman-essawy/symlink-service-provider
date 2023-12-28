@@ -37,12 +37,12 @@ const Page = () => {
     { text: "Actions", value: "Actions" },
   ];
 
-  const { handlePageChange, handleRowsPerPageChange, handleSearch, controller, setController } =
+  const { handlePageChange, handleRowsPerPageChange, handleSearch, controller, setController,handleSorting } =
     usePageUtilities();
 
   const fetchBids = async () => {
     setIsLoadingBids(true);
-    await bidContext?.fetchBids(controller.page, controller.rowsPerPage, controller.SearchString);
+    await bidContext?.fetchBids(controller.page, controller.rowsPerPage, controller.SearchString,controller?.OrderBy);
     setIsLoadingBids(false);
   };
   useEffect(() => {
@@ -132,6 +132,7 @@ const Page = () => {
                       isLoading={isLoadingBids}
                       handleSearch={handleSearch}
                       SearchString={controller?.SearchString}
+                      handleSendSortBy={handleSorting}
                     />
                   </Stack>
               </RoleBasedRender>

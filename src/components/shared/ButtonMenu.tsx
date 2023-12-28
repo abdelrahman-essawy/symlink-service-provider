@@ -17,6 +17,7 @@ type IMenuButtonProps = {
   id?: string | undefined;
   isSuspended?: boolean | undefined;
   disabled?: boolean | undefined;
+  disabledfunc?: (lable:string) => boolean|string;
   visibility?: boolean | undefined;
   menuMinWidth?: number | string;
   expandIcon?: boolean;
@@ -29,6 +30,7 @@ const MenuButton = ({
   id,
   isSuspended,
   disabled,
+  disabledfunc=()=>false,
   expandIcon = false,
   visibility = false,
   menuMinWidth = 150,
@@ -80,15 +82,15 @@ const MenuButton = ({
         {actions?.map((child: any, index: number) => {
           return (
             <>
-              <Tooltip title={child.massage || null} placement="top">
-                <Box>
+              <Tooltip title={child.massage || disabledfunc(child.label) || null} placement="top">
+                <Button sx={{all:"unset",display:"block",width:'100%'}} onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>)=>{event.stopPropagation();}}>
                   <MenuItem
                     key={index}
                     onClick={(e) => {
                       child.onClick(e, id);
                       handleClose(e);
                     }}
-                    disabled={child.disabled}
+                    disabled={child.disabled || disabled || !!(disabledfunc(child.label))}
                   >
                     <Grid container alignItems="center">
                       {child.icon && (
@@ -115,7 +117,7 @@ const MenuButton = ({
                       </Typography>
                     </Grid>
                   </MenuItem>
-                </Box>
+                </Button>
               </Tooltip>
             </>
           );

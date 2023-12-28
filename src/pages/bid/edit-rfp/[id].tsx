@@ -78,7 +78,7 @@ const Page = () => {
     try {
       const res = await axiosClient.put(`multi-rfp/${id}`, formRecord);
       if (res.status === 200 || res.status === 201) {
-        router.push("/projects");
+        showAlert("Success! Your Project Has Been Edited", "success");
       }
     } catch (err: any) {
       showAlert(showErrorMessage(err), "error");

@@ -34,7 +34,6 @@ export default function ImageGallery(props: any) {
   const handleClose = () => setOpen(false);
 
   const { cols, galleryTitle, imagesArray, path } = props;
-  console.log(galleryTitle, imagesArray);
   const { t } = useTranslation();
   return (
     <>

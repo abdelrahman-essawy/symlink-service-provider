@@ -77,14 +77,15 @@ const DiscussionContextProvider = ({ multi_RFP_id, children }: any) => {
         console.log("Connection error:", err);
         // Handle connection error here
       });
+
       socket.on("disconnect", () => {
         console.log("Disconnected from the server");
       });
 
       return () => {
+        socket.disconnect();
         socket.off("connect");
         socket.off("disconnect");
-        socket.disconnect();
       };
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

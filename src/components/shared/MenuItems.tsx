@@ -23,6 +23,7 @@ export type TActionMenuButton = {
   sx: SxProps<Theme>;
   anothersx?: SxProps<Theme>;
   disabled?: boolean;
+  disabledfun?: (status: string) => boolean;
   massage?: string|null;
 };
 
