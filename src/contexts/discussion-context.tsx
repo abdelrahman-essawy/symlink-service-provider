@@ -83,9 +83,9 @@ const DiscussionContextProvider = ({ multi_RFP_id, children }: any) => {
       });
 
       return () => {
-        socket.disconnect();
         socket.off("connect");
         socket.off("disconnect");
+        socket.disconnect();
       };
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
