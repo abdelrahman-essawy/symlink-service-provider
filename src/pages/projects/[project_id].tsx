@@ -18,7 +18,6 @@ import { useRouter } from "next/router";
 import RoleBasedRender from "@/hocs/RoleBasedRender";
 import { useState } from "react";
 import { dictionary } from "@/configs/i18next";
-import bids from "../../../public/bids.json";
 import ViewImagesDialog from "@/components/_used-symline/dialogs/view-images";
 import Discussion from "@/components/_used-symline/chat/chat";
 import ConfirmDialog from "@/components/_used-symline/dialogs/confirm-dialog";
@@ -116,7 +115,9 @@ const Page = () => {
 
   React.useEffect(() => {
     fetchProject();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    fetchAttachedFiles(); //1
+    fetchListBids(); //2
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project_id]);
 
   React.useEffect(() => {
@@ -285,10 +286,10 @@ const Page = () => {
           {projectContext?.Selectedproject?.request_for_proposal_status == "PENDING" && (
             <RoleBasedRender componentId="button-bid-rfp">
               <Grid
-                item
-                xs={2}
+               ////////// item
+                xs={12}
                 sm={2}
-                sx={{ display: "flex", justifyContent: { sm: "end", xs: "start" } }}
+                sx={{ display: "flex", justifyContent: { sm: "end", xs: "end" } }}
               >
                 <Button
                   onClick={() => setOpenBidModle(true)}
