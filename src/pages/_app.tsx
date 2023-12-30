@@ -40,7 +40,7 @@ const App = (props: { Component: any; emotionCache?: any; pageProps: any }) => {
     axiosClient.defaults.headers.common['Accept-Language'] = sessionStorage.getItem("language") == "ar" ? "ar" : "en"
     i18n.changeLanguage(language);
     document.dir = direction;
-    theme.direction = direction;
+    theme.direction = "rtl";
     setTheme(theme);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
