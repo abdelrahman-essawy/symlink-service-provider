@@ -3,6 +3,7 @@ import { usePathname } from 'next/navigation';
 import PropTypes from 'prop-types';
 import {
   Box,
+  Divider,
   Drawer,
   Stack,
   useMediaQuery
@@ -16,6 +17,7 @@ import RoleBasedRender from '@/hocs/RoleBasedRender';
 import usePreviousPath from '@/hooks/usePreviousPath';
 import { useTranslation } from 'react-i18next';
 import { SideNavInnerItem } from './Inner-path-item';
+import Image from 'next/image';
 export const SideNav = (props: { open: any; onClose: any; }) => {
   const { open, onClose } = props;
   const pathname = usePathname();
@@ -50,13 +52,14 @@ export const SideNav = (props: { open: any; onClose: any; }) => {
               height: 100,
               width: '100%',
               justifyContent: "center",
-
+              pt:.5,
+              mb:-1.5,
+              backgroundColor:"transparent"
             }}
           >
-            <img src={"/assets/Logo_2.svg"} className="App-logo" alt="logo" style={{maxWidth:"80%"}}  />
+            <Image src={"/assets/Logo_2.svg"} className="App-logo" alt="logo" width={203} height={53.81}  />
           </Box>
         </Box>
-        {/* <Divider sx={{ borderColor: 'grey.700' }} /> */}
         <Box
           component="nav"
           sx={{
@@ -169,14 +172,14 @@ export const SideNav = (props: { open: any; onClose: any; }) => {
 
   return (
     <Drawer
-    anchor={i18n.language === "en" ? 'right' : 'left'}
+      anchor={i18n.language === "en" ? 'right' : 'left'}
       onClose={onClose}
       open={open}
       PaperProps={{
         sx: {
           backgroundColor: 'white',
           color: 'black',
-          width: 280
+          width: 280,
         }
       }}
       sx={{ zIndex: (theme) => theme.zIndex.appBar + 100 }}
