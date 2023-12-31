@@ -149,7 +149,7 @@ const Page = () => {
                       type="submit"
                       variant="contained"
                     >
-                      {t("continue")}
+                      {t("Sign in")}
                     </Button>
                   </Grid>
                 </Grid>

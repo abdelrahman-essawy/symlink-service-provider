@@ -232,7 +232,7 @@ export const AuthProvider = ({ children }: any) => {
       }
       return res;
     } catch (err: any) {
-      return err;
+      return Promise.reject(err);
     }
   };
   const ToggleReceiveOrders = () => {
