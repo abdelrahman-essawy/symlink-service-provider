@@ -1,28 +1,14 @@
 import {
   Box,
-  Container,
   Grid,
   Typography,
   Divider,
-  Avatar,
-  AppBar,
   Card,
-  IconButton,
-  Menu,
-  MenuItem,
-  Toolbar,
-  Tooltip,
-  TextField,
   Button,
   CircularProgress,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-
 import { useTranslation } from "react-i18next";
-import AttachFileIcon from "@mui/icons-material/AttachFile";
-import SendIcon from "@mui/icons-material/Send";
-import { styled } from "@mui/material/styles";
 import ForumIcon from "@mui/icons-material/Forum";
 import Noitems from "@/components/shared/no-items";
 import { IComment } from "@/@types/discussion";
@@ -31,21 +17,26 @@ import moment from "moment";
 import Comment from "./comment";
 import CommentForm from "./comment-Form";
 import { useDisscussion } from "@/contexts/discussion-context";
-import io from "socket.io-client";
-
+import { showErrorMessage } from "@/utils/helperFunctions";
+import useAlert from "@/hooks/use-alert";
+import DoNotDisturbOnIcon from '@mui/icons-material/DoNotDisturbOn';
+import SpeakerNotesOffIcon from '@mui/icons-material/SpeakerNotesOff';
 export default function Discussion({ multi_RFP_id }: { multi_RFP_id: string }) {
   const discussionContext = useDisscussion();
   const { i18n } = useTranslation();
   const { t } = useTranslation();
   const auth = useAuth();
   const [page, setPage] = useState<number>(0);
+  const [error,setError] = useState<any>('');
+  const {showAlert,renderForAlert} = useAlert();
   
   useEffect(() => {
     if (typeof multi_RFP_id == "string") {
       try {
         discussionContext?.getDiscussionComments(multi_RFP_id, discussionContext?.limit, page);
       } catch (error) {
-        console.log(error);
+        setError(showErrorMessage(error).toString());
+        showAlert(showErrorMessage(error).toString(), 'error');
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -66,7 +57,7 @@ export default function Discussion({ multi_RFP_id }: { multi_RFP_id: string }) {
               sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
             >
               <Grid item xs={12}>
-                <CommentForm multi_RFP_id={multi_RFP_id} />
+                <CommentForm multi_RFP_id={multi_RFP_id} disabled={!!(error)} />
                 <Divider sx={{ my: 4 }} />
               </Grid>
             </Box>
@@ -127,17 +118,26 @@ export default function Discussion({ multi_RFP_id }: { multi_RFP_id: string }) {
                     </Box>
                   )}
               </>
-            ) : (
+            ) : !error ? (
               <Box width={"100%"}>
                 <Noitems
                   title={"No comment yet"}
                   icon={<ForumIcon sx={{ color: "gray", fontSize: "4.2em" }} />}
                 />
               </Box>
+            ):(
+              <Box width={"100%"}>
+                <Noitems
+                  title={"This discussion has been closed"}
+                  icon={<SpeakerNotesOffIcon sx={{ color: "gray", fontSize: "4.2em" }} />}
+                />
+              </Box>
+
             )}
           </Grid>
         </Grid>
       </Grid>
+      {renderForAlert()}
     </Card>
   );
 }

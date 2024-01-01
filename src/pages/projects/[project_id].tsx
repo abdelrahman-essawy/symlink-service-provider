@@ -19,7 +19,7 @@ import RoleBasedRender from "@/hocs/RoleBasedRender";
 import { useState } from "react";
 import { dictionary } from "@/configs/i18next";
 import ViewImagesDialog from "@/components/_used-symline/dialogs/view-images";
-import Discussion from "@/components/_used-symline/chat/chat";
+import Discussion from "@/components/_used-symline/chat/discussion";
 import ConfirmDialog from "@/components/_used-symline/dialogs/confirm-dialog";
 import { useProject } from "@/hooks/use-project";
 import ProjectContextProvider from "@/contexts/project-context";

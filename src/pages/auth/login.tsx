@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Head from "next/head";
 import NextLink from "next/link";
 import { useFormik } from "formik";
@@ -19,7 +19,7 @@ import { AuthLayout } from "../../layouts/auth/layout";
 import { useTranslation } from "react-i18next";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 
 const Page = () => {
   const { t, i18n } = useTranslation();
@@ -39,14 +39,14 @@ const Page = () => {
       submit: null,
     },
     validationSchema: Yup.object({
-      username: Yup.string().required("username is required"),
+      username: Yup.string().email().required("username is required"),
       password: Yup.string().required("Password is required"),
     }),
     onSubmit: async (values, helpers) => {
       setIsLoading(true);
       try {
         await auth?.signIn(values.username, values.password);
-        router.push("/projects");
+        router.replace("/projects");
       } catch (err: any) {
         helpers.setStatus({ success: false });
         helpers.setErrors({ submit: err?.response?.data?.message || "Unknown error occurred" });
@@ -64,7 +64,6 @@ const Page = () => {
     // auth.skip();
     router.push("/");
   }, [router]);
-
   return (
     <>
       <Head>

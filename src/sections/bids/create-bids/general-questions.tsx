@@ -11,6 +11,8 @@ import {
   InputAdornment,
   Box,
   Checkbox,
+  FormHelperText,
+  FormGroup,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import styles from "@/styles/index.module.scss";
@@ -22,14 +24,16 @@ import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import moment from "moment";
 import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
+import { RequiredAstrisc } from "@/components/RequiredAstrisc";
+import { addDays, isBefore } from "date-fns";
 
 export interface IQuestion {
   id: string;
-  type: string;
+  type?: string;
   name: string;
 }
 export interface IProps {
-  time_type_id: string;
+  preferred_testing_time: string[];
   handleonchange: (event: any) => void;
   expiration_date: string | Date;
   firstFullName: string;
@@ -39,8 +43,32 @@ export interface IProps {
   secondEmail: string;
   secondMobile: string;
 }
+export enum PreferredTestingTime {
+  DURING_WORKING_HOURS = "DURING_WORKING_HOURS",
+  OFF_WORKING_HOURS = "OFF_WORKING_HOURS",
+  WEEKEND = "WEEKEND",
+  NOT_PREFFERED = "NOT_PREFFERED",
+}
+const questions: IQuestion[] = [
+  {
+    id: PreferredTestingTime.DURING_WORKING_HOURS,
+    name: "During the working hours",
+  },
+  {
+    id: PreferredTestingTime.OFF_WORKING_HOURS,
+    name: "Off working hours",
+  },
+  {
+    id: PreferredTestingTime.WEEKEND,
+    name: "Weekends",
+  },
+  {
+    id: PreferredTestingTime.NOT_PREFFERED,
+    name: "No preference",
+  },
+];
 function GeneralQuestions({
-  time_type_id,
+  preferred_testing_time,
   handleonchange: handleChange,
   expiration_date = moment().toISOString(true).slice(0, 19),
   firstFullName,
@@ -52,18 +80,7 @@ function GeneralQuestions({
 }: IProps) {
   const { t } = useTranslation();
 
-  const [questions, setQuestions] = useState<IQuestion[]>([]);
-  const fetchGernalQuestions = async () => {
-    try {
-      const res = await axiosClient?.get(`meta-data?status=times`);
-      setQuestions(res?.data?.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(() => {
-    fetchGernalQuestions();
-  }, []);
+  const [error, setError] = useState<string>("");
 
   const handlePhoneChange = (value: string | number, name: string) => {
     handleChange({
@@ -73,6 +90,23 @@ function GeneralQuestions({
       },
     });
   };
+  const handleChangeExpireDate = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const enteredDate = event.target.value;
+    handleChange({
+      target: {
+        name: event.target.name,
+        value: enteredDate,
+      },
+    });
+
+    const selectedDate = new Date(enteredDate);
+    if (isBefore(selectedDate, new Date())) {
+      setError("Please select a date from tomorrow onwards.");
+    } else {
+      setError("");
+    }
+  };
+
   return (
     <Grid item xs={12}>
       <Card elevation={1} sx={{ p: 3 }}>
@@ -101,17 +135,10 @@ function GeneralQuestions({
                   variant="body1"
                   fontWeight="bold"
                   sx={{ mb: 1, mt: 3, px: 1 }}
-                  id="time_type_id"
+                  id="preferred_testing_time"
                 >
-                  {t("What is the allowed testing time ?")}
+                  {t("What is the allowed testing time ?")} <RequiredAstrisc />
                 </Typography>
-                <RadioGroup
-                  row
-                  aria-labelledby="time_type_id"
-                  name="time_type_id"
-                  value={time_type_id}
-                  onChange={handleChange}
-                >
                   <Grid container>
                     {questions?.length &&
                       questions?.map((question: IQuestion) => {
@@ -120,20 +147,35 @@ function GeneralQuestions({
                             <FormControlLabel
                               sx={{ width: "100%" }}
                               value={question?.id}
-                              control={<Radio color="warning" />}
+                              control={<Checkbox color="warning" checked={preferred_testing_time?.includes(question?.id)} required={!(preferred_testing_time?.length>0)} />}
                               label={question?.name}
                               color="warning"
+                              name="preferred_testing_time"
+                              onChange={(e: any) => {
+                                let new_preferred_testing_time = preferred_testing_time;
+                                if(new_preferred_testing_time?.includes(e?.target?.value)){
+                                    new_preferred_testing_time = new_preferred_testing_time?.filter(time=>time != e?.target?.value)
+                                }
+                                else{
+                                  new_preferred_testing_time?.push(e?.target?.value)
+                                }
+                                handleChange({
+                                  target: {
+                                    name: e.target.name,
+                                    value: new_preferred_testing_time,
+                                  }
+                                });
+                              }}
                             />
                           </Grid>
                         );
                       })}
                   </Grid>
-                </RadioGroup>
               </FormControl>
             </Grid>
             <Grid item xs={6}>
               <Typography variant="body1" fontWeight="bold" sx={{ mb: 1, mt: 3, px: 1 }}>
-                {t("Select expire date")}
+                {t("Select expire date")} <RequiredAstrisc />
               </Typography>
               <OutlinedInput
                 fullWidth={true}
@@ -149,25 +191,29 @@ function GeneralQuestions({
                     borderRadius: "50px",
                   },
                 }}
-                onChange={handleChange}
+                onChange={handleChangeExpireDate}
                 inputProps={{
-                  min: moment().toISOString(true).slice(0, 19),
+                  min: addDays(new Date(), 1).toISOString().split("T")[0],
                 }}
+                error={Boolean(error)}
                 startAdornment={
                   <InputAdornment position="start">
                     <DateRangeOutlinedIcon />
                   </InputAdornment>
                 }
               />
+              <FormHelperText sx={{ color: (theme) => theme?.palette?.error.main, width: "100%" }}>
+                {error}
+              </FormHelperText>
             </Grid>
             <Grid item xs={12}>
               <Typography variant="body1" fontWeight="bold" sx={{ my: 1.5, mt: 3, px: 1 }}>
-                {t(`In case of emergency , what is the contact details of the person the assessor should
-                have a contact with :`)}
+                {t(`In case of an emergency, what are the contact details of the person the assessor should
+                    have contact with:`)}
               </Typography>
               <Box sx={{ px: 2 }}>
                 <Typography variant="body1" fontWeight="bold" color="primary" sx={{ my: 2 }}>
-                  {t("First person:")}
+                  {t("First person:")} {t("(Optional)")}
                 </Typography>
                 <Grid
                   container
@@ -186,7 +232,6 @@ function GeneralQuestions({
                       name="firstFullName"
                       value={firstFullName}
                       onChange={handleChange}
-                      required
                     />
                   </Grid>
                   <Grid item xs={12} md={4}>
@@ -200,7 +245,6 @@ function GeneralQuestions({
                       name="firstEmail"
                       value={firstEmail}
                       onChange={handleChange}
-                      required
                     />
                   </Grid>
                   <Grid item xs={12} md={4}>
@@ -213,13 +257,12 @@ function GeneralQuestions({
                         onChange={(e: any) => handlePhoneChange(e, "firstMobile")}
                         defaultCountry="SA"
                         className={styles.inputPhone}
-                        required
                       />
                     </Box>
                   </Grid>
                 </Grid>
                 <Typography variant="body1" fontWeight="bold" color="primary" sx={{ my: 2 }}>
-                  {t("Seconed person:")}
+                  {t("Seconed person:")} {t("(Optional)")}
                 </Typography>
                 <Grid
                   container
@@ -238,7 +281,6 @@ function GeneralQuestions({
                       name="secondFullName"
                       value={secondFullName}
                       onChange={handleChange}
-                      required
                     />
                   </Grid>
                   <Grid item xs={12} md={4}>
@@ -252,7 +294,6 @@ function GeneralQuestions({
                       name="secondEmail"
                       value={secondEmail}
                       onChange={handleChange}
-                      required
                     />
                   </Grid>
                   <Grid item xs={12} md={4}>
@@ -265,72 +306,11 @@ function GeneralQuestions({
                         onChange={(e: any) => handlePhoneChange(e, "secondMobile")}
                         defaultCountry="SA"
                         className={styles.inputPhone}
-                        required
                       />
                     </Box>
                   </Grid>
                 </Grid>
               </Box>
-            </Grid>
-            <Grid item xs={12}>
-              <Grid
-                item
-                xs={12}
-                sx={{
-                  mt: 3,
-                  p: 1,
-                  px: 1,
-                  borderRadius: 1,
-                  bgcolor: "warning.lightest",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Typography variant="body2" fontWeight="bold" color="warning.darkest">
-                  {t("Terms")}
-                </Typography>
-              </Grid>
-              <Grid container sx={{py:"15px"}}>
-                <Grid item xs={12}>
-                  <FormControlLabel
-                    label={
-                      <Typography variant="body1" color="initial">
-                        {t(
-                          `Whitebox (whitelist the assessor's IP of the and provide testing users for every role in the application)`
-                        )}
-                      </Typography>
-                    }
-                    control={
-                      <Checkbox
-                        checked={true}
-                        onChange={(event: any) =>
-                          handleChange({ target: { name: "term1", value: event.target.checked } })
-                        }
-                        color="warning"
-                      />
-                    }
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <FormControlLabel
-                    label={
-                      <Typography variant="body1" color="initial">
-                        {t(`Blackbox (the assessor has no knowledge of the application/ network)`)}
-                      </Typography>
-                    }
-                    control={
-                      <Checkbox
-                        checked={true}
-                        onChange={(event: any) =>
-                          handleChange({ target: { name: "term1", value: event.target.checked } })
-                        }
-                        color="warning"
-                      />
-                    }
-                  />
-                </Grid>
-              </Grid>
             </Grid>
           </Grid>
         </CardContent>
