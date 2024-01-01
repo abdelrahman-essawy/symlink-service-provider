@@ -24,7 +24,11 @@ import ConfirmDialog from "@/components/_used-symline/dialogs/confirm-dialog";
 import { useProject } from "@/hooks/use-project";
 import ProjectContextProvider from "@/contexts/project-context";
 import ProjectStatusBadge from "@/sections/projects/project-status";
-import { RequestForProposal } from "@/@types/project";
+import {
+  PreferredTestingTime,
+  PreferredTestingTimeStrings,
+  RequestForProposal,
+} from "@/@types/project";
 import WebAnswers from "@/sections/projects/answers/web-answers";
 import NetworkAnswers from "@/sections/projects/answers/network-answers";
 import MobileAnswers from "@/sections/projects/answers/mobile-answers";
@@ -117,7 +121,7 @@ const Page = () => {
     fetchProject();
     fetchAttachedFiles(); //1
     fetchListBids(); //2
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project_id]);
 
   React.useEffect(() => {
@@ -139,7 +143,7 @@ const Page = () => {
 
   const handletabs = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
-    handlePageChange(event,1);
+    handlePageChange(event, 1);
   };
 
   //for bids table
@@ -214,6 +218,20 @@ const Page = () => {
       return <Typography variant="body2">{convertFromHours(item?.number_of_hours)}</Typography>;
     },
   };
+  const testingTimeString = useCallback((time: PreferredTestingTime) => {
+    switch (time) {
+      case PreferredTestingTime.DURING_WORKING_HOURS:
+        return "During the working hours";
+      case PreferredTestingTime.OFF_WORKING_HOURS:
+        return "Off working hours";
+      case PreferredTestingTime.WEEKEND:
+        return "Weekends";
+      case PreferredTestingTime.NOT_PREFFERED:
+        return "No preference";
+      default:
+        return "During the working hours";
+    }
+  }, []);
   return (
     <>
       <Head>
@@ -286,7 +304,7 @@ const Page = () => {
           {projectContext?.Selectedproject?.request_for_proposal_status == "PENDING" && (
             <RoleBasedRender componentId="button-bid-rfp">
               <Grid
-               ////////// item
+                ////////// item
                 xs={12}
                 sm={2}
                 sx={{ display: "flex", justifyContent: { sm: "end", xs: "end" } }}
@@ -345,13 +363,21 @@ const Page = () => {
                     {t(" What is preferred testing time ?")}
                   </Typography>
                   <Typography variant="h6" fontWeight="light" sx={{ mb: 4 }}>
-                    {projectContext?.Selectedproject?.time_type_meta_data?.name}
+                    {projectContext?.Selectedproject?.preferred_testing_time?.map(
+                      (time: PreferredTestingTimeStrings, index: number) =>
+                        `${testingTimeString(PreferredTestingTime[time])} ${
+                          index <
+                          projectContext?.Selectedproject?.preferred_testing_time?.length - 1
+                            ? " - "
+                            : ""
+                        }`
+                    )}
                   </Typography>
 
-                  <Typography variant="body1" fontWeight="bold" sx={{ mb: 1, mt: 3, px: 1 }}>
-                    {t("Select expire date")}
+                  <Typography variant="h6" fontWeight="bold" sx={{ mb: 1, mt: 3, px: 1 }}>
+                    {t("Expire date")}
                   </Typography>
-                  <Typography variant="h6" fontWeight="light" sx={{ mb: 4 }}>
+                  <Typography variant="h6" fontWeight="light" sx={{ mb: 4, px: 1 }}>
                     {getLocalTime(
                       projectContext?.Selectedproject.expiration_date || ""
                     ).toLocaleDateString("en-US", {
@@ -371,17 +397,17 @@ const Page = () => {
                   <Grid container spacing={1} justifyContent={"space-between"}>
                     <Grid item xs={12} md={4}>
                       <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
-                        {`Name: ${projectContext?.Selectedproject?.firstFullName}`}
+                        {`Name: ${projectContext?.Selectedproject?.firstFullName || " - "}`}
                       </Typography>
                     </Grid>
                     <Grid item xs={12} md={4}>
                       <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
-                        {`Email: ${projectContext?.Selectedproject?.firstEmail}`}
+                        {`Email: ${projectContext?.Selectedproject?.firstEmail || " - "}`}
                       </Typography>
                     </Grid>
                     <Grid item xs={12} md={4}>
                       <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
-                        {`Mobile Number: ${projectContext?.Selectedproject?.firstMobile}`}
+                        {`Mobile Number: ${projectContext?.Selectedproject?.firstMobile || " - "}`}
                       </Typography>
                     </Grid>
                   </Grid>
@@ -391,17 +417,17 @@ const Page = () => {
                   <Grid container spacing={0} justifyContent={"space-between"}>
                     <Grid item xs={12} md={4}>
                       <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
-                        {`Name: ${projectContext?.Selectedproject?.secondFullName}`}
+                        {`Name: ${projectContext?.Selectedproject?.secondFullName || " - "}`}
                       </Typography>
                     </Grid>
                     <Grid item xs={12} md={4}>
                       <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
-                        {`Email: ${projectContext?.Selectedproject?.secondEmail}`}
+                        {`Email: ${projectContext?.Selectedproject?.secondEmail || " - "}`}
                       </Typography>
                     </Grid>
                     <Grid item xs={12} md={4}>
                       <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
-                        {`Mobile Number: ${projectContext?.Selectedproject?.secondMobile}`}
+                        {`Mobile Number: ${projectContext?.Selectedproject?.secondMobile || " - "}`}
                       </Typography>
                     </Grid>
                   </Grid>
@@ -417,7 +443,7 @@ const Page = () => {
                           <NetworkAnswers project={item} key={item?.id} />
                         ) : item?.category?.name === "Mobile Application" ? (
                           <MobileAnswers project={item} key={item?.id} />
-                        ) : item?.category?.name === "Source code" ? (
+                        ) : item?.category?.name === "Code source" ? (
                           <SourceCodeAnswers project={item} key={item?.id} />
                         ) : item?.category?.name === "Threat hunting" ? (
                           <ThreatHuntingAnswers project={item} key={item?.id} />

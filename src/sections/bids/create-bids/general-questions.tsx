@@ -1,4 +1,4 @@
-import React, { HtmlHTMLAttributes, useEffect, useState } from "react";
+import React, { HtmlHTMLAttributes, useCallback, useEffect, useState } from "react";
 import {
   Card,
   Grid,
@@ -12,20 +12,17 @@ import {
   Box,
   Checkbox,
   FormHelperText,
-  FormGroup,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import styles from "@/styles/index.module.scss";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
 import FormControl from "@mui/material/FormControl";
-import axiosClient from "@/configs/axios-client";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import moment from "moment";
 import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 import { RequiredAstrisc } from "@/components/RequiredAstrisc";
 import { addDays, isBefore } from "date-fns";
+import { PreferredTestingTime } from "@/@types/project";
 
 export interface IQuestion {
   id: string;
@@ -43,13 +40,8 @@ export interface IProps {
   secondEmail: string;
   secondMobile: string;
 }
-export enum PreferredTestingTime {
-  DURING_WORKING_HOURS = "DURING_WORKING_HOURS",
-  OFF_WORKING_HOURS = "OFF_WORKING_HOURS",
-  WEEKEND = "WEEKEND",
-  NOT_PREFFERED = "NOT_PREFFERED",
-}
-const questions: IQuestion[] = [
+
+const testingTime: IQuestion[] = [
   {
     id: PreferredTestingTime.DURING_WORKING_HOURS,
     name: "During the working hours",
@@ -140,8 +132,8 @@ function GeneralQuestions({
                   {t("What is the allowed testing time ?")} <RequiredAstrisc />
                 </Typography>
                   <Grid container>
-                    {questions?.length &&
-                      questions?.map((question: IQuestion) => {
+                    {testingTime?.length &&
+                      testingTime?.map((question: IQuestion) => {
                         return (
                           <Grid item xs={6} md={4} lg={3} key={question?.id}>
                             <FormControlLabel

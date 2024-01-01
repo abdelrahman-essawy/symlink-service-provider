@@ -12,7 +12,6 @@ import {
 } from "@mui/material";
 import React, { useState, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { dictionary, TranslatedWord } from "@/configs/i18next";
 import AddIcon from "@mui/icons-material/Add";
 import GeneralQuestions from "@/sections/bids/create-bids/general-questions";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -29,7 +28,6 @@ interface IProps {
   editMood?: boolean;
   categoriesIds?: ICategory[] | [];
 }
-export enum TestTime {}
 const RfpForm = ({
   handelsubmit,
   formRecord,

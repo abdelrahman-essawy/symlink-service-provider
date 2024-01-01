@@ -109,6 +109,7 @@ const Page = () => {
       await fetchCities();
       await fetchUserProfile();
     })();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const [selectedFile, setSelectedFile] = useState<string | Blob>("");

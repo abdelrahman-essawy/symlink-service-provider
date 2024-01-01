@@ -1,3 +1,10 @@
+export enum PreferredTestingTime {
+  DURING_WORKING_HOURS = "DURING_WORKING_HOURS",
+  OFF_WORKING_HOURS = "OFF_WORKING_HOURS",
+  WEEKEND = "WEEKEND",
+  NOT_PREFFERED = "NOT_PREFFERED",
+}
+export type PreferredTestingTimeStrings = keyof typeof PreferredTestingTime;
 //MultiRfp
 export interface IProject {
   projects: RequestForProposal[]
@@ -8,7 +15,7 @@ export interface IProject {
   request_for_proposal_status: string
   project_name: string
   user_id: string
-  preferred_testing_time: string
+  preferred_testing_time:  PreferredTestingTimeStrings[]
   user: User
   expiration_date: string
   firstFullName: string
@@ -36,6 +43,7 @@ export interface TimeTypeMetaData {
 }
 
 export interface RequestForProposal {
+  id: string
   category_id: string
   category_name: string
   target_ip_address: string
@@ -50,7 +58,7 @@ export interface RequestForProposal {
   how_many_workstation_to_review: string
   is_hld_lld_available: boolean
   apk_attachment_id: string,
-  category: ICategory[],
+  category: ICategory,
 }
 
 export type IMetaData = {
@@ -60,8 +68,8 @@ export type IMetaData = {
     completed: boolean;
 }
 export type ICategory = {
-    id: string
-    name: string
+    id: string;
+    name: string;
 }
 
 export interface AssessmentsTypeMetaData {

@@ -2,10 +2,12 @@ import {
   Grid,
   Typography,
   Box,
+  FormLabel,
 } from "@mui/material";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import {  RequestForProposal } from "@/@types/project";
+import MultilineTypography from "@/components/multilineTypography";
 interface IProps {
   project: RequestForProposal;
 }
@@ -24,95 +26,43 @@ export default function ArchitectureConfigurationReviewAnswer({  project }: IPro
     >
       {project?.category?.name}
     </Typography>
-    
-    <Grid container spacing={2}>
-      <Grid item xs={12} gap={1.5} display={"flex"} flexDirection={"column"}>
-         <Typography variant="h6" fontWeight="bold">
-              {t("Assessment Type?")}
-            </Typography>
-            <Typography variant="h6" fontWeight="light" >
-              {project?.assessments_type_meta_data?.name}
-            </Typography>
+    <Grid
+      container
+      spacing={0}
+      alignItems="center"
+      flexDirection={"row"}
+      justifyContent={"end"}
+      textAlign={i18n.language == "en" ? "right" : "left"}
+    >
+      <Grid item xs={12}>
+        <Typography variant="body1" fontWeight="bold" sx={{ mb: 3, mt: 3 }}>
+          {t("How many servers, network devices, and workstations do you want to review?")}{" "}
+        </Typography>
+        <Grid spacing={3} container alignItems="center" justifyContent="flex-start">
+          <Grid item xs={12} sm={6} md={4}>
+            <FormLabel sx={{ mx: 2 }}>{t("Servers")}</FormLabel>
+            <MultilineTypography value={project?.how_many_server_to_review} />
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            <FormLabel sx={{ mx: 2 }}>{t("Network devices")}</FormLabel>
+            <MultilineTypography value={project?.how_many_network_devices_to_review} />
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            <FormLabel sx={{ mx: 2 }}>{t("Workstations")}</FormLabel>
+            <MultilineTypography value={project?.how_many_workstation_to_review} />
+          </Grid>
+        </Grid>
       </Grid>
-      <Grid item xs={12} sx={{ mb: 1, mt: 2 }} gap={1.5} display={"flex"} flexDirection={"column"}>
-        <Typography variant="h6" fontWeight="bold" >
-            {t(
-              "Is this application accessible from the Internet? If no, how can the assessor access it?"
-            )}
-          </Typography>
-          <Typography variant="h6" fontWeight="light" >
-              {project?.how_can_the_assessor_access_it || "-" }
-            </Typography>
+
+      <Grid item xs={12}>
+        <MultilineTypography value={project?.is_hld_lld_available ? t("Yes") : t("No")} />
       </Grid>
-      <Grid item xs={12} sx={{ mb: 1, mt: 2 }} gap={1.5} display={"flex"} flexDirection={"column"}>
-        <Typography variant="h6" fontWeight="bold" >
-            {t("How to access internal applications?")}
-          </Typography>
-          <Typography variant="h6" fontWeight="light" >
-              {project?.how_to_access_the_application}
-            </Typography>
-      </Grid>
-      <Grid item xs={12} sx={{ mb: 1, mt: 2 }} gap={1.5} display={"flex"} flexDirection={"column"}>
-        <Typography variant="h6" fontWeight="bold" >
-              {t(
-                "What many API functions you have in the application? (example: Register, Login, Create a ticket, Close a ticket, etc..)"
-              )}
-            </Typography>
-                        <Typography variant="h6" fontWeight="light" >
-              {project?.apis_size_meta_data?.name}
-            </Typography>
-      </Grid>
-      <Grid item xs={12} sx={{ mb: 1, mt: 2 }} gap={1.5} display={"flex"} flexDirection={"column"}>
-        <Typography variant="h6" fontWeight="bold" >
-            {t(
-              "How many user roles you have in this application? i.e normal user, moderator, admin etc"
-            )}
-          </Typography>
-                      <Typography variant="h6" fontWeight="light" >
-              {project?.How_many_user_roles}
-            </Typography>
-      </Grid>
-      <Grid item xs={12} sx={{ mb: 1, mt: 2 }} gap={1.5} display={"flex"} flexDirection={"column"}>
-        <Typography variant="h6" fontWeight="bold" >
-            {t("List the scoped applications: (i.e. domain.com)")}
-          </Typography>
-                      <Typography variant="h6" fontWeight="light" >
-              {project?.list_applications_with_scope}
-            </Typography>
-      </Grid>
-      <Grid item xs={12} sx={{ mb: 1, mt: 2 }} gap={1.5} display={"flex"} flexDirection={"column"}>
-        <Typography variant="h6" fontWeight="bold" >
-            {t("Approach of the assessment (white/grey/black)")}
-          </Typography>
-                      <Typography variant="h6" fontWeight="light" >
-              {project?.evaluation_approach}
-            </Typography>
-      </Grid>
-      <Grid item xs={12} sx={{ mb: 1, mt: 2 }} gap={1.5} display={"flex"} flexDirection={"column"}>
-        <Typography variant="h6" fontWeight="bold" >
-              {t("Is it mandatory that the assessor to be onsite ?")}
-            </Typography>
-                        <Typography variant="h6" fontWeight="light" >
-              {project?.necessary_resident_be_on_site?"Yes":"No"}
-            </Typography>
-      </Grid>
-      <Grid item xs={12} sx={{ mb: 1, mt: 2 }} gap={1.5} display={"flex"} flexDirection={"column"}>
-        <Typography variant="h6" fontWeight="bold" >
-            {t("If yes, how many times ?")}
-          </Typography>
-                      <Typography variant="h6" fontWeight="light" >
-              {project?.how_many_times_on_site}
-            </Typography>
-      </Grid>
-      <Grid item xs={12} sx={{ mb: 1, mt: 2 }} gap={1.5} display={"flex"} flexDirection={"column"}>
-        <Typography variant="h6" fontWeight="bold" >
-                {t(
-                  "Is verification required to assess whether the reported vulnerabilities have been fixed?"
-                )}
-              </Typography>
-                          <Typography variant="h6" fontWeight="light" >
-              {project?.Verify_that_vulnerabilities_are_fixed?"Yes":"No"}
-            </Typography>
+
+      <Grid item xs={12}>
+        <Typography variant="body1" fontWeight="bold" sx={{ mb: 1, mt: 3 }}>
+          {t("Notes")}
+        </Typography>
+        <MultilineTypography value={project?.notes} />
       </Grid>
     </Grid>
   </Box>
