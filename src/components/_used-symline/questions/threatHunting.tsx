@@ -1,35 +1,27 @@
 import {
-  Box,
-  Card,
-  Container,
-  createTheme,
-  Stack,
   Radio,
-  Tab,
   FormLabel,
   Grid,
-  Select,
-  Chip,
-  CardHeader,
-  Tabs,
-  CardContent,
-  Divider,
   Typography,
-  Button,
-  OutlinedInput,
-  IconButton,
   Checkbox,
   FormControlLabel,
   TextField,
+  RadioGroup,
+  FormControl,
 } from "@mui/material";
-import React, { useState, useRef } from "react";
+import React from "react";
 import { useTranslation } from "react-i18next";
-import { useRouter } from "next/navigation";
+import { RequestForProposal } from "@/@types/project";
+import { RequiredAstrisc } from "@/components/RequiredAstrisc";
 
-export default function ThreatHunting({ assessment }: any) {
-  const { i18n } = useTranslation();
-  const { t } = useTranslation();
-  const router = useRouter();
+interface IProps {
+  onChange: (event: any, index: number) => void;
+  onChangeNumber: (event: any, index: number) => void;
+  projects: RequestForProposal[];
+  index: number;
+}
+export default function ThreatHunting({ onChange, projects, index,onChangeNumber }: IProps) {
+  const { t, i18n } = useTranslation();
 
   return (
     <>
@@ -38,130 +30,120 @@ export default function ThreatHunting({ assessment }: any) {
         spacing={0}
         alignItems="center"
         flexDirection={"row"}
-        justifyContent={"start"}
-        textAlign={"left"}
+        justifyContent={"end"}
+        textAlign={i18n.language == "en" ? "right" : "left"}
       >
         <Grid item xs={12}>
           <Typography variant="body1" fontWeight="bold" sx={{ mb: 3, mt: 3 }}>
-            {t("Assessment Type?")}
+            {t("How many servers, network devices, and workstations do you want to review?")} {" "} <RequiredAstrisc/>
           </Typography>
-
-          <Grid spacing={0} container alignItems="end" justifyContent="flex-start">
-            <Grid item xs={6} md={4}>
-              <FormControlLabel
-                value="Web"
-                control={<Checkbox />}
-                label={t("Web")}
-                labelPlacement="end"
-              />
-            </Grid>
-            <Grid item xs={6} md={4}>
-              <FormControlLabel
-                value="Architecture configuration review"
-                control={<Checkbox />}
-                label={t("Architecture configuration review")}
-                labelPlacement="end"
-              />
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item xs={12}>
-          <Typography variant="body1" fontWeight="bold" sx={{ mb: 3, mt: 3 }}>
-            {t("How many web applications you want to assess?")}
-          </Typography>
-
           <Grid spacing={3} container alignItems="center" justifyContent="flex-start">
             <Grid item xs={12} sm={6} md={4}>
-              <FormLabel sx={{ mx: 2 }}>{t("Internal applications")}</FormLabel>
+              <FormLabel sx={{ mx: 2 }}>{t("Servers")}</FormLabel>
               <TextField
                 fullWidth={true}
+                required
                 sx={{ "& .MuiOutlinedInput-root": { borderRadius: "50px" }, mt: 1 }}
                 placeholder={`${t("Type here ..")}`}
                 variant="outlined"
+                name="how_many_server_to_review"
+                value={projects[index]?.how_many_server_to_review}
+                onChange={(e: any) => onChangeNumber(e, index)}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
-              <FormLabel sx={{ mx: 2 }}>{t("Internal applications")}</FormLabel>
+              <FormLabel sx={{ mx: 2 }}>{t("Network devices")}</FormLabel>
               <TextField
                 fullWidth={true}
+                required
                 sx={{ "& .MuiOutlinedInput-root": { borderRadius: "50px" }, mt: 1 }}
                 placeholder={`${t("Type here ..")}`}
                 variant="outlined"
+                name="how_many_network_devices_to_review"
+                value={projects[index]?.how_many_network_devices_to_review}
+                onChange={(e: any) => onChangeNumber(e, index)}
               />
             </Grid>
-          </Grid>
-        </Grid>
-        <Grid item xs={12}>
-          <Typography variant="body1" fontWeight="bold" sx={{ mb: 3, mt: 3 }}>
-            {t("List the scoped applications:(i.e.domain.com)")}
-          </Typography>
-
-          <Grid spacing={3} container alignItems="center" justifyContent="flex-start">
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={6} md={4}>
               <FormLabel sx={{ mx: 2 }}>
-                {t(
-                  "((this option will be hidden from the bidders by default unless you want to be shown in the review page before publishing your proposal) from the bidders by default unless you want to be shown in the review page before publishing your proposal)"
-                )}
+                {t("Workstations")}
               </FormLabel>
               <TextField
                 fullWidth={true}
-                multiline
-                rows={3}
-                sx={{ "& .MuiOutlinedInput-root": { borderRadius: "10px" }, mt: 1 }}
+                required
+                sx={{ "& .MuiOutlinedInput-root": { borderRadius: "50px" }, mt: 1 }}
                 placeholder={`${t("Type here ..")}`}
                 variant="outlined"
+                name="how_many_workstation_to_review"
+                value={projects[index]?.how_many_workstation_to_review}
+                onChange={(e: any) => onChangeNumber(e, index)}
               />
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={12}>
-          <Typography variant="body1" fontWeight="bold" sx={{ mb: 3, mt: 3 }}>
-            {t("List the scoped applications:(i.e.domain.com)")}
-          </Typography>
 
-          <Grid spacing={3} container alignItems="center" justifyContent="flex-start">
-            <Grid item xs={12}>
-              <FormLabel sx={{ mx: 2 }}>
-                {t(
-                  "((this option will be hidden from the bidders by default unless you want to be shown in the review page before publishing your proposal) from the bidders by default unless you want to be shown in the review page before publishing your proposal)"
-                )}
-              </FormLabel>
-              <TextField
-                fullWidth={true}
-                multiline
-                rows={3}
-                sx={{ "& .MuiOutlinedInput-root": { borderRadius: "10px" }, mt: 1 }}
-                placeholder={`${t("Description")}`}
-                variant="outlined"
-              />
-            </Grid>
-          </Grid>
+        <Grid item xs={12}>
+          <FormControl fullWidth required>
+            <Typography variant="body1" fontWeight="bold" sx={{ mb: 1, mt: 4 }}>
+              {t("Is the High-Level Diagram (HLD)/Low-Level Diagram (LLD) available and updated?")} {" "} <RequiredAstrisc/>
+            </Typography>
+            <RadioGroup
+              row
+              aria-labelledby="is_hld_lld_available"
+              name="is_hld_lld_available"
+              value={projects[index]?.is_hld_lld_available}
+              onChange={(e: any) =>
+                onChange(
+                  {
+                    target: {
+                      value: JSON.parse(e?.target?.value),
+                      name: e?.target?.name,
+                    },
+                  },
+                  index
+                )
+              }
+            >
+              <Grid container>
+                <Grid item xs={12} md={4}>
+                  <FormControlLabel
+                    sx={{ width: "100%" }}
+                    value={true}
+                    control={<Radio color="warning" required />}
+                    label={t("Yes")}
+                    color="warning"
+                  />
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <FormControlLabel
+                    sx={{ width: "100%" }}
+                    value={false}
+                    control={<Radio color="warning" required />}
+                    label={t("No")}
+                    color="warning"
+                  />
+                </Grid>
+              </Grid>
+            </RadioGroup>
+          </FormControl>
         </Grid>
-        <Grid item xs={12}>
-          <Typography variant="body1" fontWeight="bold" sx={{ mb: 3, mt: 3 }}>
-            {t(
-              "Is verification required to assess whether the reported vulnerabilities have been fixed?"
-            )}
-          </Typography>
 
-          <Grid spacing={0} container alignItems="end" justifyContent="flex-start">
-            <Grid item xs={6} md={4}>
-              <FormControlLabel
-                value="Yes"
-                control={<Radio color="primary" size="medium" />}
-                label={t("Yes")}
-                labelPlacement="end"
-              />
-            </Grid>
-            <Grid item xs={6} md={4}>
-              <FormControlLabel
-                value="No"
-                control={<Radio color="primary" size="medium" />}
-                label={t("No")}
-                labelPlacement="end"
-              />
-            </Grid>
-          </Grid>
+        <Grid item xs={12}>
+          <Typography variant="body1" fontWeight="bold" sx={{ mb: 1, mt: 3 }}>
+            {t("Notes")}
+          </Typography>
+          <TextField
+            fullWidth={true}
+            placeholder={`${t("type here your notes")}`}
+            variant="outlined"
+            name="notes"
+            value={projects[index]?.notes}
+            onChange={(e: any) => onChange(e, index)}
+            multiline
+            minRows={3}
+            maxRows={5}
+            sx={{ "& .MuiOutlinedInput-root": { borderRadius: "10px", p: 1, pt: 0.5 }, mt: 1 }}
+          />
         </Grid>
       </Grid>
     </>

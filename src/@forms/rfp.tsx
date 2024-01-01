@@ -1,9 +1,7 @@
 import Head from "next/head";
 import {
-  Container,
   Badge,
   Grid,
-  Typography,
   Popover,
   Button,
   List,
@@ -14,17 +12,15 @@ import {
 } from "@mui/material";
 import React, { useState, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { dictionary, TranslatedWord } from "@/configs/i18next";
-import { useRouter } from "next/navigation";
 import AddIcon from "@mui/icons-material/Add";
 import GeneralQuestions from "@/sections/bids/create-bids/general-questions";
 import InputAdornment from "@mui/material/InputAdornment";
 import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
 import axiosClient from "@/configs/axios-client";
 import RenderAssessments from "@/sections/bids/create-bids/render-assessments";
-import { IAssessmentProject, IQuestion, RFP } from "@/@types/assessments";
+import { RFP } from "@/@types/assessments";
 import CircularProgress from "@mui/material/CircularProgress";
-import { ICategory } from "@/@types/project";
+import { ICategory, RequestForProposal } from "@/@types/project";
 interface IProps {
   handelsubmit: () => void;
   formRecord: RFP;
@@ -49,28 +45,28 @@ const RfpForm = ({
     if (editMood) {
       setInputs(categoriesIds);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [editMood,categoriesIds]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editMood, categoriesIds]);
 
   // useEffect(() => {
   //   console.log(inputs);
   //   console.log(inputs?.length);
   // }, [inputs]);
-  // useEffect(() => {
-  //   console.log(formRecord?.projects);
-  //   console.log(formRecord?.projects?.length);
-  // }, [formRecord?.projects]);
+  useEffect(() => {
+    console.log(formRecord);
+  }, [formRecord]);
 
   const addInput = (itemName: string, itemID: string) => {
-    const new_project: IAssessmentProject = {
+    const new_project: RequestForProposal = {
       category_id: itemID,
-    } as IAssessmentProject;
+      category_name: itemName,
+    } as RequestForProposal;
     setFormRecord({ ...formRecord, projects: [...formRecord?.projects, new_project] });
     setInputs((prev) => [...prev, { name: itemName, id: itemID }] as ICategory[]);
   };
   const removeInput = (index: number) => {
     //remove from the FormRecord
-    const AllProjects: IAssessmentProject[] = formRecord.projects;
+    const AllProjects: RequestForProposal[] = formRecord.projects;
     AllProjects.splice(index, 1);
     setFormRecord({ ...formRecord, projects: AllProjects });
     //remove from the UI
@@ -98,7 +94,7 @@ const RfpForm = ({
 
   function handleChangeProjects(event: any, index: number) {
     const newProject: any = formRecord.projects[index];
-    const AllProjects: IAssessmentProject[] = formRecord.projects;
+    const AllProjects: RequestForProposal[] = formRecord.projects;
     newProject[event.target.name] = event.target.value;
     AllProjects[index] = newProject;
     setFormRecord({ ...formRecord, projects: AllProjects });
@@ -108,7 +104,7 @@ const RfpForm = ({
     const { value } = event.target;
     const numericValue = value.replace(/[^0-9.]/g, "");
     const newProject: any = formRecord.projects[index];
-    const AllProjects: IAssessmentProject[] = formRecord.projects;
+    const AllProjects: RequestForProposal[] = formRecord.projects;
     newProject[event.target.name] = parseFloat(numericValue) || 0;
     AllProjects[index] = newProject;
     setFormRecord({ ...formRecord, projects: AllProjects });
@@ -167,7 +163,6 @@ const RfpForm = ({
             placeholder={`${t("Project name")}`}
             variant="filled"
             size="medium"
-            margin="dense"
             name={"project_name"}
             required
             value={formRecord?.project_name}
@@ -243,7 +238,7 @@ const RfpForm = ({
                       overlap="circular"
                       anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
                       sx={{
-                        "& .muirtl-4xw9my-MuiBadge-badge": { color: "#000", fontSize: "15px" },
+                        "& span": { color: "#000 !important", fontSize: "15px" },
                       }}
                     />
                   </ListItemButton>
@@ -254,7 +249,7 @@ const RfpForm = ({
         </Grid>
 
         <GeneralQuestions
-          time_type_id={formRecord?.time_type_id}
+          preferred_testing_time={formRecord?.preferred_testing_time}
           expiration_date={formRecord?.expiration_date}
           firstFullName={formRecord?.firstFullName}
           firstEmail={formRecord?.firstEmail}
@@ -295,7 +290,7 @@ const RfpForm = ({
               width: "200px",
             }}
           >
-            {isLoading ? <CircularProgress thickness={1.5} /> : !editMood? t("Create") : t("Edit")}
+            {isLoading ? <CircularProgress thickness={1.5} /> : !editMood ? t("Create") : t("Edit")}
           </Button>
         </Grid>
       </Grid>

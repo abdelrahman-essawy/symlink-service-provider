@@ -27,8 +27,9 @@ interface IProps {
   multi_RFP_id: string;
   message_id?: string | undefined;
   handleClose?: () => void;
+  disabled?: boolean;
 }
-function CommentForm({ multi_RFP_id, message_id = undefined, handleClose}: IProps) {
+function CommentForm({ multi_RFP_id, message_id = undefined, handleClose,disabled}: IProps) {
   const discussionContext = useDisscussion();
   const auth = useAuth();
   const { t } = useTranslation();
@@ -95,6 +96,7 @@ function CommentForm({ multi_RFP_id, message_id = undefined, handleClose}: IProp
           maxRows={2}
           error={!!error}
           helperText={error}
+          disabled={disabled}
           multiline
           sx={{
             direction: "rtl",

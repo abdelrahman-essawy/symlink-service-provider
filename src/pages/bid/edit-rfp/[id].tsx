@@ -9,10 +9,10 @@ import useAlert from "@/hooks/useAlert";
 import { showErrorMessage } from "@/utils/helperFunctions";
 import RfpForm from "@/@forms/rfp";
 import { useRouter } from "next/router";
-import { IAssessmentProject, RFP } from "@/@types/assessments";
+import {  RFP } from "@/@types/assessments";
 import { useProject } from "@/hooks/use-project";
 import ProjectContextProvider from "@/contexts/project-context";
-import { ICategory, IProject } from "@/@types/project";
+import { ICategory, IProject, RequestForProposal } from "@/@types/project";
 import moment from "moment";
 const Page = () => {
   const { i18n } = useTranslation();
@@ -23,7 +23,7 @@ const Page = () => {
   const [oldInputs, setOldInputs] = useState<ICategory[]>([])
   const [formRecord, setFormRecord] = useState<RFP>({
     project_name: "",
-    time_type_id: "",
+    preferred_testing_time: [],
     expiration_date: "",
     firstFullName: "",
     firstEmail: "",
@@ -61,7 +61,7 @@ const Page = () => {
             setOldInputs(
               oldValues?.projects
                 ? (oldValues?.projects.map(
-                    (project: IAssessmentProject) => project?.category
+                    (project: RequestForProposal) => project?.category
                   ) as ICategory[])
                 : ([] as ICategory[])
             );

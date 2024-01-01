@@ -1,42 +1,47 @@
-import {
-  Radio,
-  FormLabel,
-  Grid,
-  Typography,
-  Checkbox,
-  FormControlLabel,
-  TextField,
-} from "@mui/material";
-import React, { useState, useRef, useEffect } from "react";
+import { Radio, FormLabel, Grid, Typography, FormControlLabel, TextField } from "@mui/material";
+import React, { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useRouter } from "next/navigation";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControl from "@mui/material/FormControl";
-import {  IAssessmentProject } from "@/@types/assessments";
+import { RequestForProposal } from "@/@types/project";
+import { RequiredAstrisc } from "@/components/RequiredAstrisc";
+import { ImageHandler } from "@/components/ImageHandler";
+import styles from "@/styles/index.module.scss";
 import axiosClient from "@/configs/axios-client";
-import { IMetaData } from "@/@types/project";
+import { showErrorMessage } from "@/utils/helperFunctions";
 interface IProps {
   onChange: (event: any, index: number) => void;
   onChangeNumber: (event: any, index: number) => void;
-  projects: IAssessmentProject[];
+  projects: RequestForProposal[];
   index: number;
 }
-
 export default function Mobile({ onChange, onChangeNumber, projects, index }: IProps) {
   const { i18n } = useTranslation();
   const { t } = useTranslation();
-  const [appSize, setAppSize] = useState<IMetaData[]>([]);
-  const fetchGernalApisSize = async () => {
+  const [selectedFile, setSelectedFile] = useState<string | Blob>("");
+  const [uploadError, setUploadError] = useState<string>("");
+
+  const handleUploadFile = useCallback(async(event: any) => {
+    const file = event.target.files[0];
+    setSelectedFile(file);
+    const formData = new FormData();
+    formData.set("file", file);
     try {
-      const res = await axiosClient?.get(`meta-data?status=average_applications`);
-      setAppSize(res?.data?.data);
+      const res = await axiosClient.post(`multi-rfp/attach-request-for-proposal`, formData,{headers:{'Content-Type': 'mulitpart/form-data'}})
+      //save the attachment id to the assment data 
+      onChange({target:{
+        name:"apk_attachment_id",
+        value:res?.data?.id
+      }}, index)
+      setUploadError("");
     } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(() => {
-    fetchGernalApisSize();
-  }, []);
+      setUploadError(showErrorMessage(error));
+     }//finally{
+    //   event.target.value = "";
+    // }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [index]);
+
   return (
     <>
       <Grid
@@ -48,125 +53,111 @@ export default function Mobile({ onChange, onChangeNumber, projects, index }: IP
         textAlign={i18n.language == "en" ? "right" : "left"}
       >
         <Grid item xs={12}>
-          <FormControl fullWidth>
-            <Typography variant="body1" fontWeight="bold" sx={{ mb: 3, mt: 3 }}>
-              {t("What is the average size of these apps ?")}
+          <Typography variant="body1" fontWeight="bold" sx={{ mb: 1, mt: 3 }}>
+            {t("Target mobile application URL:")} <RequiredAstrisc />
+          </Typography>
+          <TextField
+            required
+            fullWidth={true}
+            variant="outlined"
+            name="target_mobile_application_url"
+            value={projects[index]?.target_mobile_application_url}
+            onChange={(e: any) => onChange(e, index)}
+            multiline
+            rows={3}
+            sx={{ "& .MuiOutlinedInput-root": { borderRadius: "10px", p: 1, pt: 0.5 }, mt: 1 }}
+          />
+        </Grid>
+
+        <Grid item xs={12}>
+          <Typography
+            variant="body1"
+            fontWeight="bold"
+            sx={{ mb: 1, mt: 3, display: "flex", gap: 0.5 }}
+          >
+            {t("Upload mobile application file")}{" "}
+            <Typography variant="body1" color="initial">
+              {t("(Optional)")}
+            </Typography>
+          </Typography>
+          <ImageHandler
+            handleFileSelect={handleUploadFile}
+            input={{
+              name: "file",
+              placeholder: "Upload mobile application file(.apk, .ipa, .hms)",
+              type: ".apk, .ipa, .hms",
+              required: false,
+            }}
+            styles={styles}
+            selectedFile={selectedFile}
+            error={uploadError}
+          />
+        </Grid>
+
+        <Grid item xs={12}>
+          <FormControl fullWidth required>
+            <Typography variant="body1" fontWeight="bold" sx={{ mb: 1, mt: 4 }}>
+              {t("The approach of the assessment:")} <RequiredAstrisc />
             </Typography>
             <RadioGroup
               row
-              aria-labelledby="apis_size_id"
-              name="apis_size_id"
-              value={projects[index]?.apis_size_id}
+              aria-labelledby="approach_of_assessment"
+              name="approach_of_assessment"
+              value={projects[index]?.approach_of_assessment}
               onChange={(e: any) => onChange(e, index)}
             >
               <Grid container>
-                {appSize?.length &&
-                  appSize?.map((question: any) => {
-                    return (
-                      <Grid item xs={6} md={4} lg={3} key={question?.id}>
-                        <FormControlLabel
-                          sx={{ width: "100%" }}
-                          value={question?.id}
-                          control={<Radio color="warning" />}
-                          label={t(question?.name)}
-                          color="warning"
-                        />
-                      </Grid>
-                    );
-                  })}
+                <Grid item xs={12} md={4}>
+                  <FormControlLabel
+                    sx={{ width: "100%" }}
+                    value={"WHITE"}
+                    control={<Radio color="warning" required />}
+                    label={t("Whitebox Approach (i.e., VPN, Whitelisting, etc.)")}
+                    color="warning"
+                  />
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <FormControlLabel
+                    sx={{ width: "100%" }}
+                    value={"BLACK"}
+                    control={<Radio color="warning" required />}
+                    label={t("Blackbox Approach")}
+                    color="warning"
+                  />
+                </Grid>
               </Grid>
             </RadioGroup>
           </FormControl>
         </Grid>
 
         <Grid item xs={12}>
-          <Typography variant="body1" fontWeight="bold" sx={{ mb: 1, mt: 4 }}>
-            {t(
-              "How many user roles you have in this application? i.e normal user, moderator, admin etc"
-            )}
-          </Typography>
-          <TextField
-            fullWidth={true}
-            sx={{ "& .MuiOutlinedInput-root": { borderRadius: "50px" }, mt: 1 }}
-            placeholder={`${t("Type here ..")}`}
-            variant="outlined"
-            name="How_many_user_roles"
-            value={projects[index]?.How_many_user_roles}
-            onChange={(e: any) => onChangeNumber(e, index)}
-            type="text"
-            inputProps={{
-              pattern: "^\\d+(\\.\\d+)?$", // Enforce numbers only pattern
-              inputMode: "numeric", // Show numeric keyboard on mobile devices
-            }}
-          />
-        </Grid>
-
-        <Grid item xs={12}>
-          <Typography variant="body1" fontWeight="bold" sx={{ mt: 3 }}>
-            {t("Approach of the assessment (white/grey/black)")}
-          </Typography>
-          <Grid spacing={3} container alignItems="center" justifyContent="flex-start">
-            <Grid item xs={12}>
-              <FormLabel sx={{ mx: 0.5 }}>
-                {t("(If you want to be more specific, please comment in the textbox below)")}
-              </FormLabel>
-              <TextField
-                fullWidth={true}
-                multiline
-                name="evaluation_approach"
-                value={projects[index]?.evaluation_approach}
-                onChange={(e: any) => onChange(e, index)}
-                rows={3}
-                sx={{ "& .MuiOutlinedInput-root": { borderRadius: "10px" }, mt: 1 }}
-                placeholder={`${t("Description")}`}
-                variant="outlined"
-              />
-            </Grid>
-          </Grid>
-        </Grid>
-
-        <Grid item xs={12}>
-          <Typography variant="body1" fontWeight="bold" sx={{ mb: 0.5, mt: 4 }}>
-            {t("How to access the application: (i.e. link of their Apple/Google stores)")}
-          </Typography>
-          <FormLabel sx={{ mx: 0.5 }}>
-            {t(
-              "((this option will be hidden from the bidders by default unless you want to be shown in the review page before publishing your proposal) from the bidders by default unless you want to be shown in the review page before publishing your proposal)"
-            )}
-          </FormLabel>
-          <TextField
-            fullWidth={true}
-            placeholder={`${t("Description")}`}
-            variant="outlined"
-            value={projects[index]?.how_to_access_the_application}
-            onChange={(e: any) => onChange(e, index)}
-            name="how_to_access_the_application"
-            multiline
-            rows={3}
-            sx={{ "& .MuiOutlinedInput-root": { borderRadius: "10px" }, mt: 1 }}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <FormControl fullWidth>
+          <FormControl fullWidth required>
             <Typography variant="body1" fontWeight="bold" sx={{ mb: 1, mt: 4 }}>
-              {t("Is it mandatory that the assessor to be onsite ?")}
+              {t("Is active directory part of the assessment?")} <RequiredAstrisc />
             </Typography>
             <RadioGroup
               row
-              aria-labelledby="necessary_resident_be_on_site"
-              name="necessary_resident_be_on_site"
-              value={projects[index]?.necessary_resident_be_on_site}
-              onChange={(e: any) => onChange({target:{
-                value: JSON.parse(e?.target?.value),
-                name: e?.target?.name,
-              }}, index)}
+              aria-labelledby="is_active_directory"
+              name="is_active_directory"
+              value={projects[index]?.is_active_directory}
+              onChange={(e: any) =>
+                onChange(
+                  {
+                    target: {
+                      value: JSON.parse(e?.target?.value),
+                      name: e?.target?.name,
+                    },
+                  },
+                  index
+                )
+              }
             >
               <Grid container>
                 <Grid item xs={12} md={4}>
                   <FormControlLabel
                     sx={{ width: "100%" }}
                     value={true}
-                    control={<Radio color="warning" />}
+                    control={<Radio color="warning" required />}
                     label={t("Yes")}
                     color="warning"
                   />
@@ -175,7 +166,7 @@ export default function Mobile({ onChange, onChangeNumber, projects, index }: IP
                   <FormControlLabel
                     sx={{ width: "100%" }}
                     value={false}
-                    control={<Radio color="warning" />}
+                    control={<Radio color="warning" required />}
                     label={t("No")}
                     color="warning"
                   />
@@ -184,72 +175,22 @@ export default function Mobile({ onChange, onChangeNumber, projects, index }: IP
             </RadioGroup>
           </FormControl>
         </Grid>
-
         <Grid item xs={12}>
-          <Typography variant="body1" fontWeight="bold" sx={{ mb: 1, mt: 1 }}>
-            {t("If yes, how many times ?")}
+          <Typography variant="body1" fontWeight="bold" sx={{ mb: 1, mt: 3 }}>
+            {t("Notes")}
           </Typography>
-
-          <Grid container alignItems="center" justifyContent="flex-start">
-            <Grid item xs={12} sm={6} md={4}>
-              <TextField
-                fullWidth={true}
-                sx={{ "& .MuiOutlinedInput-root": { borderRadius: "50px" } }}
-                placeholder={`${t("Type here ..")}`}
-                variant="outlined"
-                name="how_many_times_on_site"
-                value={projects[index]?.how_many_times_on_site}
-                onChange={(e: any) => onChangeNumber(e, index)}
-                type="text"
-                inputProps={{
-                  pattern: "^\\d+(\\.\\d+)?$", // Enforce numbers only pattern
-                  inputMode: "numeric", // Show numeric keyboard on mobile devices
-                }}
-              />
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item xs={12}>
-          <Grid item xs={12}>
-            <FormControl fullWidth>
-              <Typography variant="body1" fontWeight="bold" sx={{ mb: 1, mt: 4 }}>
-                {t(
-                  "Is verification required to assess whether the reported vulnerabilities have been fixed?"
-                )}
-              </Typography>
-              <RadioGroup
-                row
-                aria-labelledby="Verify_that_vulnerabilities_are_fixed"
-                name="Verify_that_vulnerabilities_are_fixed"
-                value={projects[index]?.Verify_that_vulnerabilities_are_fixed}
-                onChange={(e: any) => onChange({target:{
-                  value: JSON.parse(e?.target?.value),
-                  name: e?.target?.name,
-                }}, index)}
-              >
-                <Grid container>
-                  <Grid item xs={12} md={4}>
-                    <FormControlLabel
-                      sx={{ width: "100%" }}
-                      value={true}
-                      control={<Radio color="warning" />}
-                      label={t("Yes")}
-                      color="warning"
-                    />
-                  </Grid>
-                  <Grid item xs={12} md={4}>
-                    <FormControlLabel
-                      sx={{ width: "100%" }}
-                      value={false}
-                      control={<Radio color="warning" />}
-                      label={t("No")}
-                      color="warning"
-                    />
-                  </Grid>
-                </Grid>
-              </RadioGroup>
-            </FormControl>
-          </Grid>
+          <TextField
+            fullWidth={true}
+            placeholder={`${t("type here your notes")}`}
+            variant="outlined"
+            name="notes"
+            value={projects[index]?.notes}
+            onChange={(e: any) => onChange(e, index)}
+            multiline
+            minRows={3}
+            maxRows={5}
+            sx={{ "& .MuiOutlinedInput-root": { borderRadius: "10px", p: 1, pt: 0.5 }, mt: 1 }}
+          />
         </Grid>
       </Grid>
     </>

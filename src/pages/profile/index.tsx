@@ -16,6 +16,7 @@ import {
   Avatar,
   Badge,
   InputLabel,
+  FormControl,
 } from "@mui/material";
 import React, { useState, useRef } from "react";
 import { DashboardLayout } from "../../layouts/dashboard/layout";
@@ -38,17 +39,21 @@ import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import styles from "@/styles/index.module.scss";
 import { ICity, ICountry, IUserProfile } from "@/@types/user";
-
-
+// import * as yup from "yup";
 
 const toBeSent = ["name", "email", "linkedin", "city_id", "phone"];
-
+// const validationSchema = yup.object({
+//   name: yup.string().trim(),
+//   email: yup.string().email(),
+//   linkedin: yup.string(),
+//   city_id: yup.string(),
+//   phone: yup.number(),
+// });
 const Page = () => {
   const { i18n } = useTranslation();
   const title = "Profile";
   const { t } = useTranslation();
   const auth = useAuth();
-  const [value, setValue] = React.useState(0);
   const { showAlert, renderForAlert } = useAlert();
   const [countries, setCountries] = React.useState<ICountry[] | undefined>(undefined);
   const [cities, setCities] = React.useState<ICity[] | undefined>(undefined);
@@ -71,6 +76,10 @@ const Page = () => {
 
   //when change Country id
   React.useEffect(() => {
+    if(profileFormRecord){
+      setProfileFormRecord({...profileFormRecord,city:{...profileFormRecord?.city,name:"",id:""},city_id:""});
+    }
+    console.log(profileFormRecord?.city);
     fetchCities();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profileFormRecord?.city?.country_id]);
@@ -100,6 +109,7 @@ const Page = () => {
       await fetchCities();
       await fetchUserProfile();
     })();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const [selectedFile, setSelectedFile] = useState<string | Blob>("");
@@ -131,7 +141,6 @@ const Page = () => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    setIsLoading(true);
     const profileFormRecordToBeSent: any = profileFormRecord;
     Object.keys(profileFormRecordToBeSent as any)
       .filter((i) => toBeSent.includes(i))
@@ -149,9 +158,6 @@ const Page = () => {
       })
       .catch((err: any) => {
         showAlert(err?.response?.data?.message, "error");
-      })
-      .finally(() => {
-        setIsLoading(false);
       });
   };
   return (
@@ -211,6 +217,7 @@ const Page = () => {
                           value={profileFormRecord?.name}
                           onChange={handleChange}
                           InputProps={{
+                            required:true,
                             startAdornment: (
                               <InputAdornment position="start">
                                 <PersonIcon />
@@ -289,6 +296,7 @@ const Page = () => {
                         <InputLabel id={"city_id"} sx={{ mx: 2 }}>
                           {t("City")}
                         </InputLabel>
+                        <FormControl required={!!(profileFormRecord?.city?.country_id)} sx={{ m: 1, minWidth: "100%" }}>
                         <Select
                           labelId="city_id"
                           id="city_id"
@@ -312,7 +320,6 @@ const Page = () => {
                           name="city_id"
                           value={profileFormRecord?.city_id}
                           defaultValue={profileFormRecord?.city_id}
-                          disabled={!profileFormRecord?.city?.country_id}
                           onChange={handleChange}
                           // disabled={!profileFormRecord?.city}
                           endAdornment={
@@ -337,6 +344,7 @@ const Page = () => {
                               </MenuItem>
                             ))}
                         </Select>
+                        </FormControl>
                       </Grid>
                       <Grid item xs={12} md={6}>
                         <FormLabel sx={{ mx: 2 }}>{t("Email")}</FormLabel>
@@ -346,9 +354,11 @@ const Page = () => {
                           placeholder={`${t("Type here ..")}`}
                           variant="outlined"
                           name="email"
+                          type="email"
                           value={profileFormRecord?.email}
                           onChange={handleChange}
                           InputProps={{
+                            type:"email",
                             startAdornment: (
                               <InputAdornment position="start">
                                 <AlternateEmailIcon />

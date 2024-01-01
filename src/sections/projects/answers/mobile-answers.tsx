@@ -1,102 +1,66 @@
-import {
-  Grid,
-  Typography,
-  Box,
-} from "@mui/material";
+import { Grid, Typography, Box } from "@mui/material";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import {  RequestForProposal } from "@/@types/project";
+import { RequestForProposal } from "@/@types/project";
+import MultilineTypography from "@/components/multilineTypography";
 interface IProps {
   project: RequestForProposal;
 }
 
-export default function MobileAnswers({  project }: IProps) {
+export default function MobileAnswers({ project }: IProps) {
   const { i18n } = useTranslation();
   const { t } = useTranslation();
-  
+
   return (
     <Box>
-    <Typography
+      <Typography
       variant="h6"
       fontWeight="bold"
       color="primary"
-      sx={{ p: 1, mb: 2, borderRadius: 1, bgcolor: "primary.lightest" }}
+      sx={{ p: 1, mb: 2, borderRadius: 1, bgcolor: "primary.lightest",m:0 }}
     >
       {project?.category?.name}
     </Typography>
-    
-    <Grid container spacing={2}>
-      <Grid item xs={12} gap={1.5} display={"flex"} flexDirection={"column"}>
-         <Typography variant="h6" fontWeight="bold">
-              {t("What is the average size of these apps ?")}
-            </Typography>
-            <Typography variant="h6" fontWeight="light" >
-              {project?.apis_size_meta_data?.name|| "-"}
-            </Typography>
+      <Grid item xs={12}>
+        <Typography variant="h6" fontWeight="bold" sx={{ mb: 1, mt: 3 }}>
+          {t("Target mobile application URL:")}
+        </Typography>
+        <MultilineTypography value={project?.target_mobile_application_url} />
       </Grid>
-      <Grid item xs={12} sx={{ mb: 1, mt: 2 }} gap={1.5} display={"flex"} flexDirection={"column"}>
-        <Typography variant="h6" fontWeight="bold" >
-            {t(
-              "How many user roles you have in this application? i.e normal user, moderator, admin etc"
-            )}
+
+      <Grid item xs={12}>
+        <Typography
+          variant="h6"
+          fontWeight="bold"
+          sx={{ mb: 1, mt: 3, display: "flex", gap: 0.5 }}
+        >
+          {t("Upload mobile application file")}{" "}
+          <Typography variant="h6" color="initial">
+            {t("(Optional)")}
           </Typography>
-          <Typography variant="h6" fontWeight="light" >
-              {project?.How_many_user_roles || "-" }
-            </Typography>
+        </Typography>
+        <MultilineTypography value={project?.apk_attachment_id} />
       </Grid>
-      <Grid item xs={12} sx={{ mb: 1, mt: 2 }} gap={1.5} display={"flex"} flexDirection={"column"}>
-        <Typography variant="h6" fontWeight="bold" >
-            {t("Approach of the assessment (white/grey/black)")}
-          </Typography>
-          <Typography variant="h6" fontWeight="light" >
-              {project?.evaluation_approach}
-            </Typography>
+
+      <Grid item xs={12}>
+        <Typography variant="h6" fontWeight="bold" sx={{ mb: 1, mt: 4 }}>
+          {t("The approach of the assessment:")}
+        </Typography>
+        <MultilineTypography value={project?.approach_of_assessment} />
       </Grid>
-      <Grid item xs={12} sx={{ mb: 1, mt: 2 }} gap={1.5} display={"flex"} flexDirection={"column"}>
-        <Typography variant="h6" fontWeight="bold" >
-              {t(
-                "How to access the application: (i.e. link of their Apple/Google stores)"
-              )}
-            </Typography>
-                        <Typography variant="h6" fontWeight="light" >
-              {project?.how_to_access_the_application}
-            </Typography>
+
+      <Grid item xs={12}>
+        <Typography variant="h6" fontWeight="bold" sx={{ mb: 1, mt: 4 }}>
+          {t("Is active directory part of the assessment?")}
+        </Typography>
+        <MultilineTypography value={project?.is_active_directory ? t("Yes") : t("No")} />
       </Grid>
-      <Grid item xs={12} sx={{ mb: 1, mt: 2 }} gap={1.5} display={"flex"} flexDirection={"column"}>
-        <Typography variant="h6" fontWeight="bold" >
-            {t(
-              "Is it mandatory that the assessor to be onsite ?"
-            )}
-          </Typography>
-                      <Typography variant="h6" fontWeight="light" >
-              {project?.how_many_times_on_site?"Yes":"No"}
-            </Typography>
+      <Grid item xs={12}>
+        <Typography variant="h6" fontWeight="bold" sx={{ mb: 1, mt: 3 }}>
+          {t("Notes")}
+        </Typography>
+        <MultilineTypography value={project?.notes} />
       </Grid>
-      <Grid item xs={12} sx={{ mb: 1, mt: 2 }} gap={1.5} display={"flex"} flexDirection={"column"}>
-        <Typography variant="h6" fontWeight="bold" >
-            {t("If yes, how many times ?")}
-          </Typography>
-                      <Typography variant="h6" fontWeight="light" >
-              {project?.how_many_times_on_site}
-            </Typography>
-      </Grid>
-      <Grid item xs={12} sx={{ mb: 1, mt: 2 }} gap={1.5} display={"flex"} flexDirection={"column"}>
-        <Typography variant="h6" fontWeight="bold" >
-            {t("Approach of the assessment (white/grey/black)")}
-          </Typography>
-                      <Typography variant="h6" fontWeight="light" >
-              {project?.evaluation_approach}
-            </Typography>
-      </Grid>
-      <Grid item xs={12} sx={{ mb: 1, mt: 2 }} gap={1.5} display={"flex"} flexDirection={"column"}>
-        <Typography variant="h6" fontWeight="bold" >
-              {t("Is verification required to assess whether the reported vulnerabilities have been fixed?")}
-            </Typography>
-                        <Typography variant="h6" fontWeight="light" >
-              {project?.Verify_that_vulnerabilities_are_fixed?"Yes":"No"}
-            </Typography>
-      </Grid>
-    </Grid>
-  </Box>
+    </Box>
   );
 }

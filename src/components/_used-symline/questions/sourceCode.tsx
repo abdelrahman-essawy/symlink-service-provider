@@ -1,35 +1,24 @@
 import {
-  Box,
-  Card,
-  Container,
-  createTheme,
-  Stack,
   Radio,
-  Tab,
-  FormLabel,
   Grid,
-  Select,
-  Chip,
-  CardHeader,
-  Tabs,
-  CardContent,
-  Divider,
   Typography,
-  Button,
-  OutlinedInput,
-  IconButton,
-  Checkbox,
+  RadioGroup,
   FormControlLabel,
   TextField,
+  FormControl,
 } from "@mui/material";
-import React, { useState, useRef } from "react";
+import React from "react";
 import { useTranslation } from "react-i18next";
-import { useRouter } from "next/navigation";
-
-export default function SourceCode({ assessment }: any) {
-  const { i18n } = useTranslation();
-  const { t } = useTranslation();
-  const router = useRouter();
+import { RequiredAstrisc } from "@/components/RequiredAstrisc";
+import { RequestForProposal } from "@/@types/project";
+interface IProps {
+  onChange: (event: any, index: number) => void;
+  onChangeNumber: (event: any, index: number) => void;
+  projects: RequestForProposal[];
+  index: number;
+}
+export default function SourceCode({ onChange, projects, index }: IProps) {
+  const { t,i18n} = useTranslation();
 
   return (
     <>
@@ -38,130 +27,60 @@ export default function SourceCode({ assessment }: any) {
         spacing={0}
         alignItems="center"
         flexDirection={"row"}
-        justifyContent={"start"}
-        textAlign={"left"}
+        justifyContent={"end"}
+        textAlign={i18n.language == "en" ? "right" : "left"}
       >
-        <Grid item xs={12}>
-          <Typography variant="body1" fontWeight="bold" sx={{ mb: 3, mt: 3 }}>
-            {t("Assessment Type?")}
+         <Grid item xs={12}>
+          <Typography variant="body1" fontWeight="bold" sx={{ mb: 1, mt: 3 }}>
+            {t("How many custom lines of code want to assess?")} <RequiredAstrisc />
           </Typography>
-
-          <Grid spacing={0} container alignItems="end" justifyContent="flex-start">
-            <Grid item xs={6} md={4}>
-              <FormControlLabel
-                value="Web"
-                control={<Checkbox />}
-                label={t("Web")}
-                labelPlacement="end"
-              />
-            </Grid>
-            <Grid item xs={6} md={4}>
-              <FormControlLabel
-                value="Architecture configuration review"
-                control={<Checkbox />}
-                label={t("Architecture configuration review")}
-                labelPlacement="end"
-              />
-            </Grid>
-          </Grid>
+          <TextField
+            required
+            fullWidth={true}
+            variant="outlined"
+            name="how_many_custom_lines_of_code"
+            value={projects[index]?.how_many_custom_lines_of_code}
+            onChange={(e: any) => onChange(e, index)}
+            multiline
+            rows={3}
+            sx={{ "& .MuiOutlinedInput-root": { borderRadius: "10px", p: 1, pt: 0.5 }, mt: 1 }}
+          />
         </Grid>
-        <Grid item xs={12}>
-          <Typography variant="body1" fontWeight="bold" sx={{ mb: 3, mt: 3 }}>
-            {t("How many web applications you want to assess?")}
-          </Typography>
 
-          <Grid spacing={3} container alignItems="center" justifyContent="flex-start">
-            <Grid item xs={12} sm={6} md={4}>
-              <FormLabel sx={{ mx: 2 }}>{t("Internal applications")}</FormLabel>
-              <TextField
-                fullWidth={true}
-                sx={{ "& .MuiOutlinedInput-root": { borderRadius: "50px" }, mt: 1 }}
-                placeholder={`${t("Type here ..")}`}
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <FormLabel sx={{ mx: 2 }}>{t("Internal applications")}</FormLabel>
-              <TextField
-                fullWidth={true}
-                sx={{ "& .MuiOutlinedInput-root": { borderRadius: "50px" }, mt: 1 }}
-                placeholder={`${t("Type here ..")}`}
-                variant="outlined"
-              />
-            </Grid>
-          </Grid>
+        <Grid item xs={12}>
+          <Typography variant="body1" fontWeight="bold" sx={{ mb: 1, mt: 3 }}>
+            {t("What is the programming language of the code or frameworks?")} <RequiredAstrisc />
+          </Typography>
+          <TextField
+            required
+            fullWidth={true}
+            variant="outlined"
+            placeholder="java,PHP,etc..."
+            name="what_is_programming_language"
+            value={projects[index]?.what_is_programming_language}
+            onChange={(e: any) => onChange(e, index)}
+            multiline
+            rows={3}
+            sx={{ "& .MuiOutlinedInput-root": { borderRadius: "10px", p: 1, pt: 0.5 }, mt: 1 }}
+          />
         </Grid>
-        <Grid item xs={12}>
-          <Typography variant="body1" fontWeight="bold" sx={{ mb: 3, mt: 3 }}>
-            {t("List the scoped applications:(i.e.domain.com)")}
-          </Typography>
 
-          <Grid spacing={3} container alignItems="center" justifyContent="flex-start">
-            <Grid item xs={12}>
-              <FormLabel sx={{ mx: 2 }}>
-                {t(
-                  "((this option will be hidden from the bidders by default unless you want to be shown in the review page before publishing your proposal) from the bidders by default unless you want to be shown in the review page before publishing your proposal)"
-                )}
-              </FormLabel>
-              <TextField
-                fullWidth={true}
-                multiline
-                rows={3}
-                sx={{ "& .MuiOutlinedInput-root": { borderRadius: "10px" }, mt: 1 }}
-                placeholder={`${t("Type here ..")}`}
-                variant="outlined"
-              />
-            </Grid>
-          </Grid>
-        </Grid>
         <Grid item xs={12}>
-          <Typography variant="body1" fontWeight="bold" sx={{ mb: 3, mt: 3 }}>
-            {t("List the scoped applications:(i.e.domain.com)")}
+          <Typography variant="body1" fontWeight="bold" sx={{ mb: 1, mt: 3 }}>
+            {t("Notes")}
           </Typography>
-
-          <Grid spacing={3} container alignItems="center" justifyContent="flex-start">
-            <Grid item xs={12}>
-              <FormLabel sx={{ mx: 2 }}>
-                {t(
-                  "((this option will be hidden from the bidders by default unless you want to be shown in the review page before publishing your proposal) from the bidders by default unless you want to be shown in the review page before publishing your proposal)"
-                )}
-              </FormLabel>
-              <TextField
-                fullWidth={true}
-                multiline
-                rows={3}
-                sx={{ "& .MuiOutlinedInput-root": { borderRadius: "10px" }, mt: 1 }}
-                placeholder={`${t("Description")}`}
-                variant="outlined"
-              />
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item xs={12}>
-          <Typography variant="body1" fontWeight="bold" sx={{ mb: 3, mt: 3 }}>
-            {t(
-              "Is verification required to assess whether the reported vulnerabilities have been fixed?"
-            )}
-          </Typography>
-
-          <Grid spacing={0} container alignItems="end" justifyContent="flex-start">
-            <Grid item xs={6} md={4}>
-              <FormControlLabel
-                value="Yes"
-                control={<Radio color="primary" size="medium" />}
-                label={t("Yes")}
-                labelPlacement="end"
-              />
-            </Grid>
-            <Grid item xs={6} md={4}>
-              <FormControlLabel
-                value="No"
-                control={<Radio color="primary" size="medium" />}
-                label={t("No")}
-                labelPlacement="end"
-              />
-            </Grid>
-          </Grid>
+          <TextField
+            fullWidth={true}
+            placeholder={`${t("type here your notes")}`}
+            variant="outlined"
+            name="notes"
+            value={projects[index]?.notes}
+            onChange={(e: any) => onChange(e, index)}
+            multiline
+            minRows={3}
+            maxRows={5}
+            sx={{ "& .MuiOutlinedInput-root": { borderRadius: "10px", p: 1, pt: 0.5 }, mt: 1 }}
+          />
         </Grid>
       </Grid>
     </>

@@ -83,10 +83,19 @@ const RenderAssessments = ({
                           index={index}
                           onChangeNumber={onChangeNumber}
                         />
-                      ) : assessment === "Source code" ? (
-                        <SourceCode />
+                      ) : assessment === "Code source" ? (
+                        <SourceCode 
+                        projects={projects}
+                        onChange={onChange}
+                        index={index}
+                        onChangeNumber={onChangeNumber}
+                        />
                       ) : assessment === "Threat hunting" ? (
-                        <ThreatHunting />
+                        <ThreatHunting
+                        projects={projects}
+                        onChange={onChange}
+                        index={index}
+                        onChangeNumber={onChangeNumber} />
                       ) : null}
                     </Box>
                   </Grid>

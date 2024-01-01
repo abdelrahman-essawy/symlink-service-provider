@@ -43,9 +43,14 @@ function ProjectName({ project_name, handleonchange }: IProps) {
                 <Grid item xs={12}>
                   <TextField
                     fullWidth={true}
+                    value={project_name}
+                    onChange={handleonchange}
                     sx={{ "& .MuiOutlinedInput-root": { borderRadius: "50px" }, mt: 1 }}
                     placeholder={`${t("Type here ..")}`}
                     variant="outlined"
+                    InputProps={{
+                      required: true,
+                    }}
                   />
                 </Grid>
               </Grid>

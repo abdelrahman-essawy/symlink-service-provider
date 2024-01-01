@@ -6,14 +6,21 @@ import { useTranslation } from "react-i18next";
 import LocalizationSwitcher from "@/components/LocalizationSwitcher";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import { useRouter } from "next/router";
+import Image from "next/image";
+import { useAuthContext } from "@/contexts/auth-context";
 export const AuthLayout = (props: { children: any }) => {
   const { children } = props;
   const { t } = useTranslation();
+  const auth = useAuthContext()
   const router = useRouter();
 
-  useEffect(()=>{
-    
-  },[router?.pathname])
+  //redirect to /projects or home if the user is already logged in
+  useEffect(() => {
+    if (auth?.isAuthenticated) {
+      router?.push("/projects");
+    } 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [auth?.isAuthenticated,router]);
   return (
     <Box
       component="main"
@@ -43,7 +50,7 @@ export const AuthLayout = (props: { children: any }) => {
         >
           <Box>
             <Grid container spacing={2} justifyContent="center" alignItems="center">
-              <img alt="" width="300px" src={Logo.src} />
+              <Image alt="Logo-symlink" width={300} height={300} src={Logo.src} />
             </Grid>
           </Box>
         </Grid>

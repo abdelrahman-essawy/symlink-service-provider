@@ -8,7 +8,7 @@ export interface IBid {
   request_for_proposal_status: string;
   project_name: string;
   user_id: string;
-  time_type_id: string;
+  preferred_testing_time: string;
   expiration_date: string;
   firstFullName: string;
   firstEmail: string;

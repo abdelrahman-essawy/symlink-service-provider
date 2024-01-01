@@ -167,7 +167,11 @@ export async function downloadFileUsingFetch(url: string, fileName: string) {
 export const showErrorMessage: (err: any) => string = (err: any) => {
   if (err?.response?.status == 404) {
     return "404 Not Found";
-  } else if (err?.response?.status == 400 || err?.response?.status == 422) {
+  }
+ else if (err?.response?.status == 403) {
+    return err?.response?.data?.message + ", " +  "Not allowed";
+  }
+   else if (err?.response?.status == 400 || err?.response?.status == 422) {
     if (
       (err?.response?.data?.message?.message || err?.response?.data?.message?.Message) &&
       typeof err?.response?.data?.message?.message == "string"

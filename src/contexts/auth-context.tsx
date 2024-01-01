@@ -21,7 +21,7 @@ type initialValue = {
   providerInfo: IProviderInfo;
   signIn: (username: string, password: string) => Promise<void>;
   signUp: (avatarFile: any, email: string, password: string, role: string) => Promise<void>;
-  signOut: () => void;
+  signOut: () => Promise<any>;
   requestRestPassword: (email: string) => Promise<void>;
   updateProfile: (formData: FormData) => Promise<any>;
   ToggleReceiveOrders: () => void;
@@ -71,11 +71,11 @@ const handlers = {
       user,
     };
   },
-  [HANDLERS.SIGN_OUT]: (state: any) => {
+  [HANDLERS.SIGN_OUT]: (state: any, action: { payload: any }) => {
     return {
       ...state,
       isAuthenticated: false,
-      user: null,
+      user: action.payload,
     };
   },
 };
@@ -87,7 +87,6 @@ const reducer = (state: any, action: ActionType) =>
 
 // export const AuthContext = createContext({ undefined });
 export const AuthContext = createContext<initialValue | undefined>(undefined);
-
 export const AuthProvider = ({ children }: any) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const initialized = useRef(false);
@@ -203,6 +202,10 @@ export const AuthProvider = ({ children }: any) => {
     window.sessionStorage.removeItem("user");
     delete axiosClient.defaults.headers.common["Authorization"];
     delete axiosClient.defaults.headers.common["Accept-Language"];
+    dispatch({
+      type: HANDLERS.SIGN_OUT,
+      payload: {},
+    });
   };
 
   const requestRestPassword = async (email: string) => {
@@ -232,7 +235,7 @@ export const AuthProvider = ({ children }: any) => {
       }
       return res;
     } catch (err: any) {
-      return err;
+      return Promise.reject(err);
     }
   };
   const ToggleReceiveOrders = () => {
