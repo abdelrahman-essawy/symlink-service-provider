@@ -9,38 +9,67 @@ import { ImageHandler } from "@/components/ImageHandler";
 import styles from "@/styles/index.module.scss";
 import axiosClient from "@/configs/axios-client";
 import { showErrorMessage } from "@/utils/helperFunctions";
+import { boolean } from "yup";
 interface IProps {
   onChange: (event: any, index: number) => void;
   onChangeNumber: (event: any, index: number) => void;
   projects: RequestForProposal[];
   index: number;
+  setDisableSubmitBtn: (status:boolean)=>void;
 }
-export default function Mobile({ onChange, onChangeNumber, projects, index }: IProps) {
+export default function Mobile({
+  onChange,
+  onChangeNumber,
+  projects,
+  index,
+  setDisableSubmitBtn=()=>null
+}: IProps) {
   const { i18n } = useTranslation();
   const { t } = useTranslation();
   const [selectedFile, setSelectedFile] = useState<string | Blob>("");
   const [uploadError, setUploadError] = useState<string>("");
-
-  const handleUploadFile = useCallback(async(event: any) => {
-    const file = event.target.files[0];
-    setSelectedFile(file);
-    const formData = new FormData();
-    formData.set("file", file);
-    try {
-      const res = await axiosClient.post(`multi-rfp/attach-request-for-proposal`, formData,{headers:{'Content-Type': 'mulitpart/form-data'}})
-      //save the attachment id to the assment data 
-      onChange({target:{
-        name:"apk_attachment_id",
-        value:res?.data?.id
-      }}, index)
+  const [loading, setIsloading] = useState<boolean>(false);
+  const [uploaded, setUploaded] = useState<boolean>(false);
+  
+  const handleUploadFile = useCallback(
+    async (event: any) => {
+      const file = event.target.files[0];
+      setSelectedFile(file);
+      const formData = new FormData();
+      formData.set("file", file);
+      setIsloading(true);
       setUploadError("");
-    } catch (error) {
-      setUploadError(showErrorMessage(error));
-     }//finally{
-    //   event.target.value = "";
-    // }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [index]);
+      setUploaded(false);
+      //disable submit button when upload is in progress
+      setDisableSubmitBtn(true);
+      try {
+        const res = await axiosClient.post(`multi-rfp/attach-request-for-proposal`, formData, {
+          headers: { "Content-Type": "mulitpart/form-data" },
+        });
+        //save the attachment id to the assment data
+        onChange(
+          {
+            target: {
+              name: "apk_attachment_id",
+              value: res?.data?.id,
+            },
+          },
+          index
+        );
+        setUploadError("");
+        setUploaded(true);
+      } catch (error) {
+        setUploadError(showErrorMessage(error));
+        event.target.value = ""
+        setUploaded(false);
+      } finally{
+        setIsloading(false);
+        setDisableSubmitBtn(false);
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [index]
+  );
 
   return (
     <>
@@ -88,9 +117,12 @@ export default function Mobile({ onChange, onChangeNumber, projects, index }: IP
               type: ".apk, .ipa, .hms",
               required: false,
             }}
+            apk_attachment={projects[index]?.apk_attachment||undefined}
             styles={styles}
             selectedFile={selectedFile}
             error={uploadError}
+            loading={loading}
+            uploaded={uploaded}
           />
         </Grid>
 

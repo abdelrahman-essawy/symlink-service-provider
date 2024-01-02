@@ -1,4 +1,3 @@
-import ArchitectureCompositionReview from "@/components/_used-symline/questions/architectureConfigurationReview";
 import Network from "@/components/_used-symline/questions/network";
 import SourceCode from "@/components/_used-symline/questions/sourceCode";
 import Web from "@/components/_used-symline/questions/web";
@@ -8,7 +7,7 @@ import { Card, Grid, CardContent, Typography, IconButton } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useTranslation } from "react-i18next";
 import Mobile from "@/components/_used-symline/questions/mobile";
-import ThreatHunting from "@/components/_used-symline/questions/threatHunting";
+import ArchitectureConfiguration from "@/components/_used-symline/questions/ArchitectureConfiguration";
 
 type Props = {
   assessment: string;
@@ -18,6 +17,7 @@ type Props = {
   index: number;
   order: number;
   removeInput: (index: number) => void;
+  setDisableSubmitBtn: (status: boolean) => void;
 };
 
 const RenderAssessments = ({
@@ -28,6 +28,7 @@ const RenderAssessments = ({
   index,
   removeInput,
   order,
+  setDisableSubmitBtn
 }: Props) => {
   const { t } = useTranslation();
   return (
@@ -60,15 +61,13 @@ const RenderAssessments = ({
                     </Box>
                     <Box></Box>{" "}
                     <Box>
-                      {assessment === "Web" ? (
+                      {assessment === "Web Application" ? (
                         <Web
                           projects={projects}
                           onChange={onChange}
                           index={index}
                           onChangeNumber={onChangeNumber}
                         />
-                      ) : assessment === "Architecture composition review" ? (
-                        <ArchitectureCompositionReview />
                       ) : assessment === "Network" ? (
                         <Network
                           projects={projects}
@@ -82,16 +81,17 @@ const RenderAssessments = ({
                           onChange={onChange}
                           index={index}
                           onChangeNumber={onChangeNumber}
+                          setDisableSubmitBtn={setDisableSubmitBtn}
                         />
-                      ) : assessment === "Code source" ? (
+                      ) : assessment === "Security Source Code" ? (
                         <SourceCode 
                         projects={projects}
                         onChange={onChange}
                         index={index}
                         onChangeNumber={onChangeNumber}
                         />
-                      ) : assessment === "Threat hunting" ? (
-                        <ThreatHunting
+                      ) : assessment === "Architecture Configuration" ? (
+                        <ArchitectureConfiguration
                         projects={projects}
                         onChange={onChange}
                         index={index}

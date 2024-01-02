@@ -3,7 +3,6 @@ import {
   FormLabel,
   Grid,
   Typography,
-  Checkbox,
   FormControlLabel,
   TextField,
   RadioGroup,
@@ -20,7 +19,7 @@ interface IProps {
   projects: RequestForProposal[];
   index: number;
 }
-export default function ThreatHunting({ onChange, projects, index,onChangeNumber }: IProps) {
+export default function ArchitectureConfiguration({ onChange, projects, index,onChangeNumber }: IProps) {
   const { t, i18n } = useTranslation();
 
   return (

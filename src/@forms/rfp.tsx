@@ -40,6 +40,7 @@ const RfpForm = ({
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [inputs, setInputs] = useState<ICategory[]>(categoriesIds);
   const [isLoading, setIsLoading] = useState(false);
+  const [disableSubmitBtn, setDisableSubmitBtn] = useState(false);
 
   useEffect(() => {
     if (editMood) {
@@ -48,10 +49,7 @@ const RfpForm = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editMood, categoriesIds]);
 
-  // useEffect(() => {
-  //   console.log(inputs);
-  //   console.log(inputs?.length);
-  // }, [inputs]);
+
   useEffect(() => {
     console.log(formRecord);
   }, [formRecord]);
@@ -100,15 +98,6 @@ const RfpForm = ({
     setFormRecord({ ...formRecord, projects: AllProjects });
   }
 
-  function handleChangeNumberInProjects(event: any, index: number) {
-    const { value } = event.target;
-    const numericValue = value.replace(/[^0-9.]/g, "");
-    const newProject: any = formRecord.projects[index];
-    const AllProjects: RequestForProposal[] = formRecord.projects;
-    newProject[event.target.name] = parseFloat(numericValue) || 0;
-    AllProjects[index] = newProject;
-    setFormRecord({ ...formRecord, projects: AllProjects });
-  }
 
   const [assessments, setAssessments] = useState<ICategory[]>([]);
   const fetchGernalAssessments = async () => {
@@ -265,11 +254,12 @@ const RfpForm = ({
             key={item?.id}
             projects={formRecord?.projects}
             onChange={handleChangeProjects}
-            onChangeNumber={handleChangeNumberInProjects}
+            onChangeNumber={handleChangeProjects}
             assessment={item?.name}
             index={index}
             removeInput={removeInput}
             order={inputs?.filter((input) => input?.name == item?.name).indexOf(item)}
+            setDisableSubmitBtn={setDisableSubmitBtn}
           />
         ))}
         <Grid item xs={12} display={"flex"} sx={{ justifyContent: { xs: "center", md: "start" } }}>
@@ -280,7 +270,7 @@ const RfpForm = ({
             aria-label="add"
             color="warning"
             size="large"
-            disabled={!(formRecord?.projects?.length > 0)}
+            disabled={!(formRecord?.projects?.length > 0) || disableSubmitBtn}
             sx={{
               borderRadius: 20,
               display: "flex",
@@ -288,6 +278,7 @@ const RfpForm = ({
               alignItems: "start",
               gap: 0.5,
               width: "200px",
+              cursor:disableSubmitBtn?"not-allowed":"pointer",
             }}
           >
             {isLoading ? <CircularProgress thickness={1.5} /> : !editMood ? t("Create") : t("Edit")}

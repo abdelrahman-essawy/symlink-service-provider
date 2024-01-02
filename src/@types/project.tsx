@@ -59,7 +59,20 @@ export interface RequestForProposal {
   is_hld_lld_available: boolean
   apk_attachment_id: string,
   category: ICategory,
+  apk_attachment:ApkAttachment,
 }
+
+export type ApkAttachment = {
+  id: string
+  created_at: string
+  updated_at: string
+  deleted_at: any
+  file_type: string
+  file_name: string
+  file_url: string
+  request_for_proposal_id: string
+}
+
 
 export type IMetaData = {
     userId: number;
