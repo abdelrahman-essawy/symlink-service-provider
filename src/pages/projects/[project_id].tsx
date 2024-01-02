@@ -33,7 +33,6 @@ import WebAnswers from "@/sections/projects/answers/web-answers";
 import NetworkAnswers from "@/sections/projects/answers/network-answers";
 import MobileAnswers from "@/sections/projects/answers/mobile-answers";
 import SourceCodeAnswers from "@/sections/projects/answers/sourceCode-answers";
-import ThreatHuntingAnswers from "@/sections/projects/answers/threatHunting-answers";
 import ArchitectureConfigurationReviewAnswer from "@/sections/projects/answers/architectureConfigurationReview-answer.tsx";
 import AttachedFilles from "@/sections/projects/project-details/attached-filles";
 import { convertFromHours, getLocalTime, showErrorMessage } from "@/utils/helperFunctions";
@@ -359,94 +358,98 @@ const Page = () => {
                   >
                     {t("General Questions")}
                   </Typography>
-                  <Typography variant="h6" fontWeight="bold" sx={{ mb: 1 }}>
-                    {t(" What is preferred testing time ?")}
-                  </Typography>
-                  <Typography variant="h6" fontWeight="light" sx={{ mb: 4 }}>
-                    {projectContext?.Selectedproject?.preferred_testing_time?.map(
-                      (time: PreferredTestingTimeStrings, index: number) =>
-                        `${testingTimeString(PreferredTestingTime[time])} ${
-                          index <
-                          projectContext?.Selectedproject?.preferred_testing_time?.length - 1
-                            ? " - "
-                            : ""
-                        }`
-                    )}
-                  </Typography>
+                  <Container maxWidth={"xl"}>
+                    <Typography variant="h6" fontWeight="bold" sx={{ mb: 1 }}>
+                      {t(" What is preferred testing time ?")}
+                    </Typography>
+                    <Typography variant="h6" fontWeight="light" sx={{ mb: 4 }}>
+                      {projectContext?.Selectedproject?.preferred_testing_time?.map(
+                        (time: PreferredTestingTimeStrings, index: number) =>
+                          `${testingTimeString(PreferredTestingTime[time])} ${
+                            index <
+                            projectContext?.Selectedproject?.preferred_testing_time?.length - 1
+                              ? " - "
+                              : ""
+                          }`
+                      )}
+                    </Typography>
 
-                  <Typography variant="h6" fontWeight="bold" sx={{ mb: 1, mt: 3, px: 1 }}>
-                    {t("Expire date")}
-                  </Typography>
-                  <Typography variant="h6" fontWeight="light" sx={{ mb: 4, px: 1 }}>
-                    {getLocalTime(
-                      projectContext?.Selectedproject.expiration_date || ""
-                    ).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "numeric",
-                      day: "numeric",
-                    })}
-                  </Typography>
+                    <Typography variant="h6" fontWeight="bold" sx={{ mb: 1, mt: 3, px: 1 }}>
+                      {t("Expire date")}
+                    </Typography>
+                    <Typography variant="h6" fontWeight="light" sx={{ mb: 4, px: 1 }}>
+                      {getLocalTime(
+                        projectContext?.Selectedproject.expiration_date || ""
+                      ).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "numeric",
+                        day: "numeric",
+                      })}
+                    </Typography>
 
-                  <Typography variant="h6" fontWeight="bold" sx={{ mb: 1 }}>
-                    {t(`In case of emergency , what is the contact details of the person the assessor
-                      should have a contact with :`)}
-                  </Typography>
-                  <Typography variant="body1" fontWeight="bold" color="primary" sx={{ mb: 1 }}>
-                    {t("First person:")}
-                  </Typography>
-                  <Grid container spacing={1} justifyContent={"space-between"}>
-                    <Grid item xs={12} md={4}>
-                      <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
-                        {`Name: ${projectContext?.Selectedproject?.firstFullName || " - "}`}
-                      </Typography>
+                    <Typography variant="h6" fontWeight="bold" sx={{ mb: 1 }}>
+                      {t(`In case of emergency , what is the contact details of the person the assessor
+                       should have a contact with :`)}
+                    </Typography>
+                    <Typography variant="body1" fontWeight="bold" color="primary" sx={{ mb: 1 }}>
+                      {t("First person:")}
+                    </Typography>
+                    <Grid container spacing={1} justifyContent={"space-between"}>
+                      <Grid item xs={12} md={4}>
+                        <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
+                          {`Name: ${projectContext?.Selectedproject?.firstFullName || " - "}`}
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={12} md={4}>
+                        <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
+                          {`Email: ${projectContext?.Selectedproject?.firstEmail || " - "}`}
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={12} md={4}>
+                        <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
+                          {`Mobile Number: ${
+                            projectContext?.Selectedproject?.firstMobile || " - "
+                          }`}
+                        </Typography>
+                      </Grid>
                     </Grid>
-                    <Grid item xs={12} md={4}>
-                      <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
-                        {`Email: ${projectContext?.Selectedproject?.firstEmail || " - "}`}
-                      </Typography>
+                    <Typography variant="body1" fontWeight="bold" color="primary" sx={{ mb: 1 }}>
+                      {t("Second person:")}
+                    </Typography>
+                    <Grid container spacing={0} justifyContent={"space-between"}>
+                      <Grid item xs={12} md={4}>
+                        <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
+                          {`Name: ${projectContext?.Selectedproject?.secondFullName || " - "}`}
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={12} md={4}>
+                        <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
+                          {`Email: ${projectContext?.Selectedproject?.secondEmail || " - "}`}
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={12} md={4}>
+                        <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
+                          {`Mobile Number: ${
+                            projectContext?.Selectedproject?.secondMobile || " - "
+                          }`}
+                        </Typography>
+                      </Grid>
                     </Grid>
-                    <Grid item xs={12} md={4}>
-                      <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
-                        {`Mobile Number: ${projectContext?.Selectedproject?.firstMobile || " - "}`}
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                  <Typography variant="body1" fontWeight="bold" color="primary" sx={{ mb: 1 }}>
-                    {t("Second person:")}
-                  </Typography>
-                  <Grid container spacing={0} justifyContent={"space-between"}>
-                    <Grid item xs={12} md={4}>
-                      <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
-                        {`Name: ${projectContext?.Selectedproject?.secondFullName || " - "}`}
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={12} md={4}>
-                      <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
-                        {`Email: ${projectContext?.Selectedproject?.secondEmail || " - "}`}
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={12} md={4}>
-                      <Typography variant="h6" fontWeight="light" sx={{ mb: 2 }}>
-                        {`Mobile Number: ${projectContext?.Selectedproject?.secondMobile || " - "}`}
-                      </Typography>
-                    </Grid>
-                  </Grid>
+                  </Container>
 
                   {projectContext?.Selectedproject?.request_for_proposal &&
                     projectContext?.Selectedproject?.request_for_proposal?.map(
                       (item: RequestForProposal) =>
-                        item?.category?.name === "Web" ? (
+                        item?.category?.name === "Web Application" ? (
                           <WebAnswers key={item?.id} project={item} />
-                        ) : item?.category?.name === "Architecture composition review" ? (
+                        ) : item?.category?.name === "Architecture Configuration" ? (
                           <ArchitectureConfigurationReviewAnswer key={item?.id} project={item} />
                         ) : item?.category?.name === "Network" ? (
                           <NetworkAnswers project={item} key={item?.id} />
                         ) : item?.category?.name === "Mobile Application" ? (
                           <MobileAnswers project={item} key={item?.id} />
-                        ) : item?.category?.name === "Code source" ? (
+                        ) : item?.category?.name === "Security Source Code" ? (
                           <SourceCodeAnswers project={item} key={item?.id} />
-                        ) : item?.category?.name === "Threat hunting" ? (
-                          <ThreatHuntingAnswers project={item} key={item?.id} />
                         ) : (
                           <></>
                         )

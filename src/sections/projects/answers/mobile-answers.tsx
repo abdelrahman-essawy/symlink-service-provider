@@ -1,8 +1,10 @@
-import { Grid, Typography, Box } from "@mui/material";
+import { Grid, Typography, Box, Container, Tooltip, IconButton } from "@mui/material";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { RequestForProposal } from "@/@types/project";
 import MultilineTypography from "@/components/multilineTypography";
+import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
+
 interface IProps {
   project: RequestForProposal;
 }
@@ -14,53 +16,62 @@ export default function MobileAnswers({ project }: IProps) {
   return (
     <Box>
       <Typography
-      variant="h6"
-      fontWeight="bold"
-      color="primary"
-      sx={{ p: 1, mb: 2, borderRadius: 1, bgcolor: "primary.lightest",m:0 }}
-    >
-      {project?.category?.name}
-    </Typography>
-      <Grid item xs={12}>
-        <Typography variant="h6" fontWeight="bold" sx={{ mb: 1, mt: 3 }}>
-          {t("Target mobile application URL:")}
-        </Typography>
-        <MultilineTypography value={project?.target_mobile_application_url} />
-      </Grid>
+        variant="h6"
+        fontWeight="bold"
+        color="primary"
+        sx={{ p: 1, my: 1, borderRadius: 1, bgcolor: "primary.lightest", m: 0 }}
+      >
+        {project?.category?.name}
+      </Typography>
 
-      <Grid item xs={12}>
-        <Typography
-          variant="h6"
-          fontWeight="bold"
-          sx={{ mb: 1, mt: 3, display: "flex", gap: 0.5 }}
-        >
-          {t("Upload mobile application file")}{" "}
-          <Typography variant="h6" color="initial">
-            {t("(Optional)")}
+      <Container maxWidth={"xl"}>
+        <Grid item xs={12}>
+          <Typography variant="h6" fontWeight="bold" sx={{ mb: 1, mt: 1 }}>
+            {t("Target mobile application URL:")}
           </Typography>
-        </Typography>
-        <MultilineTypography value={project?.apk_attachment_id} />
-      </Grid>
+          <MultilineTypography value={project?.target_mobile_application_url} />
+        </Grid>
+        <Grid item xs={12}>
+          <Typography variant="h6" fontWeight="bold" sx={{ mb: 1, mt: 3 }}>
+            {t("Upload mobile application file")}
+          </Typography>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Tooltip title={"Download the file"}>
+              <IconButton
+                aria-label="apk_attachment download"
+                onClick={() => {
+                  window.open(project?.apk_attachment?.file_url, "_blank");
+                }}
+              >
+                <CloudDownloadIcon color="success" />
+              </IconButton>
+            </Tooltip>
+            <Typography variant="caption" color="initial">
+              {project?.apk_attachment?.file_name}
+            </Typography>
+          </Box>
+        </Grid>
 
-      <Grid item xs={12}>
-        <Typography variant="h6" fontWeight="bold" sx={{ mb: 1, mt: 4 }}>
-          {t("The approach of the assessment:")}
-        </Typography>
-        <MultilineTypography value={project?.approach_of_assessment} />
-      </Grid>
+        <Grid item xs={12}>
+          <Typography variant="h6" fontWeight="bold" sx={{ mb: 1, mt: 4 }}>
+            {t("The approach of the assessment:")}
+          </Typography>
+          <MultilineTypography value={project?.approach_of_assessment} />
+        </Grid>
 
-      <Grid item xs={12}>
-        <Typography variant="h6" fontWeight="bold" sx={{ mb: 1, mt: 4 }}>
-          {t("Is active directory part of the assessment?")}
-        </Typography>
-        <MultilineTypography value={project?.is_active_directory ? t("Yes") : t("No")} />
-      </Grid>
-      <Grid item xs={12}>
-        <Typography variant="h6" fontWeight="bold" sx={{ mb: 1, mt: 3 }}>
-          {t("Notes")}
-        </Typography>
-        <MultilineTypography value={project?.notes} />
-      </Grid>
+        <Grid item xs={12}>
+          <Typography variant="h6" fontWeight="bold" sx={{ mb: 1, mt: 4 }}>
+            {t("Is active directory part of the assessment?")}
+          </Typography>
+          <MultilineTypography value={project?.is_active_directory ? t("Yes") : t("No")} />
+        </Grid>
+        <Grid item xs={12}>
+          <Typography variant="h6" fontWeight="bold" sx={{ mb: 1, mt: 3 }}>
+            {t("Notes")}
+          </Typography>
+          <MultilineTypography value={project?.notes} />
+        </Grid>
+      </Container>
     </Box>
   );
 }
