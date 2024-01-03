@@ -35,7 +35,8 @@ export default function MobileAnswers({ project }: IProps) {
           <Typography variant="h6" fontWeight="bold" sx={{ mb: 1, mt: 3 }}>
             {t("Upload mobile application file")}
           </Typography>
-          <Box sx={{ display: "flex", alignItems: "center" }}>
+          {project?.apk_attachment ?
+            <Box sx={{ display: "flex", alignItems: "center" }}>
             <Tooltip title={"Download the file"}>
               <IconButton
                 aria-label="apk_attachment download"
@@ -50,6 +51,8 @@ export default function MobileAnswers({ project }: IProps) {
               {project?.apk_attachment?.file_name}
             </Typography>
           </Box>
+          :
+          (<Typography>{" - "}</Typography>)}
         </Grid>
 
         <Grid item xs={12}>
