@@ -23,16 +23,16 @@ export const convertFromHours = (hours: number): string => {
     return `${hours} hours`;
   } else if (hours < hoursInDay * daysInWeek) {
     const days = Math.floor(hours / hoursInDay);
-    return `${days} day${days > 1 ? 's' : ''}`;
+    return `${days} day${days > 1 ? "s" : ""}`;
   } else if (hours < hoursInDay * daysInWeek * daysInMonth) {
     const weeks = Math.floor(hours / (hoursInDay * daysInWeek));
-    return `${weeks} week${weeks > 1 ? 's' : ''}`;
+    return `${weeks} week${weeks > 1 ? "s" : ""}`;
   } else if (hours < hoursInDay * daysInMonth * daysInYear) {
     const months = Math.floor(hours / (hoursInDay * daysInMonth));
-    return `${months} month${months > 1 ? 's' : ''}`;
+    return `${months} month${months > 1 ? "s" : ""}`;
   } else {
     const years = Math.floor(hours / (hoursInDay * daysInYear));
-    return `${years} year${years > 1 ? 's' : ''}`;
+    return `${years} year${years > 1 ? "s" : ""}`;
   }
 };
 //convert  duration in (hours, days,weeks,months, years) to duration in hours
@@ -165,13 +165,14 @@ export async function downloadFileUsingFetch(url: string, fileName: string) {
 }
 
 export const showErrorMessage: (err: any) => string = (err: any) => {
-  if (err?.response?.status == 404) {
-    return "404 Not Found";
-  }
- else if (err?.response?.status == 403) {
-    return err?.response?.data?.message + ", " +  "Not allowed";
-  }
-   else if (err?.response?.status == 400 || err?.response?.status == 422) {
+  if (
+    (err?.response?.data?.message?.message || err?.response?.data?.message?.Message) &&
+    typeof err?.response?.data?.message?.message == "string"
+  ) {
+    return err?.response?.data?.message?.message || err?.response?.data?.message?.Message;
+  } else if (err?.response?.status == 403) {
+    return err?.response?.data?.message + ", " + "Not allowed";
+  } else if (err?.response?.status == 400 || err?.response?.status == 422) {
     if (
       (err?.response?.data?.message?.message || err?.response?.data?.message?.Message) &&
       typeof err?.response?.data?.message?.message == "string"

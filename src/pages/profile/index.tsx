@@ -226,7 +226,7 @@ const Page = () => {
                           }}
                         />
                       </Grid>
-                      <Grid item xs={12} md={6}>
+                      <Grid item xs={12} md={6} >
                         <FormLabel sx={{ mx: 2 }}>{t("Location")}</FormLabel>
                         <Select
                           fullWidth
@@ -236,6 +236,11 @@ const Page = () => {
                             "& .muirtl-19j8lcu-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiSelect-select":
                               {
                                 height: "20.125px",
+                              },
+                            "& svg ,& .MuiSvgIcon-root, & .MuiSelect-icon,& .MuiSelect-iconOutlined":
+                              {
+                                position: "relative !important",
+                                margin:"0 10px !important",
                               },
                           }}
                           MenuProps={{
