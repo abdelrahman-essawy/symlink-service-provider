@@ -124,7 +124,7 @@ export default function Comment({
   const token = sessionStorage.getItem("token");
   React.useEffect(() => {
     if (multi_RFP_id) {
-      const socket = io(`http://164.90.181.17:3000/discussion?multi_rfp_id=${multi_RFP_id}`, {
+      const socket = io(`https://symlink.live/discussion?multi_rfp_id=${multi_RFP_id}`, {
         extraHeaders: {
           Authorization: `Bearer ${token}`,
         },
