@@ -329,5 +329,13 @@
   "Penetrating Testing": "اختبار الاختراق",
   "Add assessment": "اضافة تقييم للمشروع",
   "Is this application accessible from the Internet? If no, how can the assessor access it?": "هل يمكن الوصول إلى هذا التطبيق من الإنترنت؟ إذا كانت الإجابة لا، فكيف يمكن للمقيم الوصول إليها؟",
-  "Service provider name": "اسم مقدم الخدمة"
+  "Service provider name": "اسم مقدم الخدمة",
+  "Upload mobile application file(.apk, .ipa, .hms)": "تحميل ملف تطبيق الجوال (.apk، .ipa، .hms)",
+  "File is not valid. Please upload a file with a different extension":"الملف غير صالح يرجى تحميل ملف بامتداد مختلف"
+
+
+
+
+
+
 }

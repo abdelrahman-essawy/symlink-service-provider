@@ -1,4 +1,5 @@
 {
     "hello": "hello {{name}}",
-    "Login": "Login"
+    "Login": "Login",
+    "File is not valid. Please upload a file with a different extension":"File is not valid. Please upload a file with a different extension"
 }

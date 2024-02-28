@@ -9,7 +9,7 @@ import { ImageHandler } from "@/components/ImageHandler";
 import styles from "@/styles/index.module.scss";
 import axiosClient from "@/configs/axios-client";
 import { showErrorMessage } from "@/utils/helperFunctions";
-import { boolean } from "yup";
+const mobileExtensions = ['apk', 'ipa', 'app'];
 interface IProps {
   onChange: (event: any, index: number) => void;
   onChangeNumber: (event: any, index: number) => void;
@@ -34,6 +34,16 @@ export default function Mobile({
   const handleUploadFile = useCallback(
     async (event: any) => {
       const file = event.target.files[0];
+      // if the file is not apk file
+      const fileName = file.name;
+      const extension = fileName.split('.').pop();
+      if (!(mobileExtensions.includes(extension))) {
+          setUploadError('File is not valid. Please upload a file with a different extension');
+          return;
+      } else {
+          setUploadError('');
+          // File is valid, you can proceed with further actions here
+      }
       setSelectedFile(file);
       const formData = new FormData();
       formData.set("file", file);
@@ -113,14 +123,14 @@ export default function Mobile({
             handleFileSelect={handleUploadFile}
             input={{
               name: "file",
-              placeholder: "Upload mobile application file(.apk, .ipa, .hms)",
+              placeholder: t("Upload mobile application file(.apk, .ipa, .hms)"),
               type: ".apk, .ipa, .hms",
               required: false,
             }}
             apk_attachment={projects[index]?.apk_attachment||undefined}
             styles={styles}
             selectedFile={selectedFile}
-            error={uploadError}
+            error={t(uploadError)}
             loading={loading}
             uploaded={uploaded}
           />
