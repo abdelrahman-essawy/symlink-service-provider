@@ -72,7 +72,7 @@ export const ImageHandler: React.FC<ImageHandlerProps> = ({
       />
       {error && (
         <Typography sx={{ mx: 3 }} color={"error"} variant="caption">
-          {error}
+          {t(error)}
         </Typography>
       )}
       {}
