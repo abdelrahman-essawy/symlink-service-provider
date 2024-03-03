@@ -58,13 +58,23 @@ export const get_attached_file = (page: number, limit: number, id?: string) =>
 export const delete_RFP = (id: string) => `/multi-rfp/${id}`
 //Bids----------------------------------------------------
 export const get_Bids = (page: number = 1, rowsPerPage: number = 10, searchString?: string,orderBy?: { [key: string]: string}) =>
-  `/multi-rfp/provider-all-offers?page=${page}&limit=${rowsPerPage}${searchString?`&search_by_name=${searchString}` : ""}${orderBy? orderByToString(orderBy) : `&sort_by_date=ASC`}`;
+`/multi-rfp/provider-all-offers?page=${page}&limit=${rowsPerPage}${searchString?`&search_by_name=${searchString}` : ""}${orderBy? orderByToString(orderBy) : `&sort_by_date=ASC`}`;
 export const get_list_of_offer = (
   multi_RFP_id: string,
   page: number = 1,
   rowsPerPage: number = 10,
   searchString?: string,
   orderBy?: { [key: string]: string}
-) =>
+  ) =>
   `/offers/${multi_RFP_id}/all-offers-for-project?page=${page}&limit=${rowsPerPage}${searchString?`&search_by_name=${searchString}` : ""}${orderBy? orderByToString(orderBy) : `&sort_by_date=ASC`}`;
-export const get_Bid_id = (id: string) => `/multi-rfp/${id}`;
+  export const get_Bid_id = (id: string) => `/multi-rfp/${id}`;
+  
+  //SupportTicket----------------------------------------------------
+  export const add_ticket = () => `/support-ticket`;
+  export const add_Comment_ticket = (ticketId:string) => `/support-ticket/comment/${ticketId}`;
+  export const get_ticket_massages = (ticketId:string,offset:number,limit:number) => `/support-ticket/comments/${ticketId}/${offset}/${limit}`;
+  export const get_tickets = () => `/support-ticket`;
+  
+  
+  
+  

@@ -90,12 +90,12 @@ const Page = () => {
                 <Grid container spacing={3} justifyContent="center" alignItems="center">
                   <Grid item xs={12}>
                     <TextField
-                      error={!!(formik.touched.username && formik.errors.username)}
                       fullWidth
                       helperText={formik.touched.username && formik.errors.username}
+                      error={!!(formik.touched.username && formik.errors.username)}
+                      onBlur={formik.handleBlur}
                       placeholder={`${t("username")}`}
                       name="username"
-                      onBlur={formik.handleBlur}
                       onChange={formik.handleChange}
                       type="username"
                       value={formik.values.username}
