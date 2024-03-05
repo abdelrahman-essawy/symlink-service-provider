@@ -1,17 +1,18 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import Modal from "@mui/material/Modal";
 import { Card, CardContent, CardHeader, Dialog,  IconButton, FormControl, InputAdornment, TextField } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import LoadingButton from '@mui/lab/LoadingButton';
 
 import { useFormik } from "formik";
-import * as Yup from "yup";
+import * as yup from "yup";
 import StyledTextarea from "../StyledTextArea";
 import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
+import { useSupportTicket } from "@/contexts/support-context";
+import { showErrorMessage } from "@/utils/helperFunctions";
+import axiosClient from "@/configs/axios-client";
 const style = {
   position: "absolute" as "absolute",
   top: "50%",
@@ -25,12 +26,17 @@ const style = {
   p: 4,
 };
 
-export default function BasicModal({ open, handleClose }: any) {
+const validationSchema = yup.object({
+  subject : yup.string().required("subject Required"),
+  description  : yup.string().required("description Required"),
+  file: yup.string().nullable(),
+});
+export default function BasicModal({ open, handleClose,showMessage }: any) {
   const { t } = useTranslation();
-  const [file, setFile] = React.useState({ name: "Choose File" });
+  const [selectedFile, setFile] = React.useState<any>();
   const [loading, setLoading] = React.useState(false);
   const [upload, setUpload] = React.useState(false);
-
+  const supportContext = useSupportTicket();
   const update = async () => {
     setLoading(true);
     await new Promise((resolve) => setTimeout(resolve, 1600));
@@ -52,12 +58,27 @@ export default function BasicModal({ open, handleClose }: any) {
   };
   const formik = useFormik({
     initialValues: {
-      title: "",
-      message: "",
+      subject: "",
+      description: "",
+      file: "",
     },
-    validationSchema: Yup.object({}),
+    validationSchema: validationSchema,
     onSubmit: async (values) => {
-      console.log(values);
+      console.log("first")
+      const formData = new FormData();
+      formData.set("subject", values?.subject);
+      formData.set("description", values?.description);
+      formData.set("file", selectedFile);
+      try {
+        await axiosClient.post(`/support-ticket`,formData,{headers:{
+          "Content-Type": "application/multipart" 
+        }});
+        showMessage("Your support ticket has been successfully sent! 🚀", "success");
+        formik.resetForm();
+        handleClose();
+      } catch (error) {
+        showMessage(showErrorMessage(error).toString(), "error");
+      }
     },
   });
 
@@ -112,8 +133,11 @@ export default function BasicModal({ open, handleClose }: any) {
                 <FormControl fullWidth >
 
                   <TextField
-                    id="title"
+                    id="subject"
                     type="text"
+                    helperText={formik.touched.subject && formik.errors.subject}
+                    error={!!(formik.touched.subject && formik.errors.subject)}
+                    onBlur={formik.handleBlur}
                     placeholder={t("Title") || "Title"}
                     inputProps={{
                       step: 300,
@@ -123,20 +147,22 @@ export default function BasicModal({ open, handleClose }: any) {
                         fontSize: "14px",
                       },
                     }}
-                    value={formik.values.title}
+                    value={formik.values.subject}
                     onChange={formik.handleChange}
-                    name="title"
+                    name="subject"
                   />
                 </FormControl>
                 <FormControl fullWidth >
                   <TextField
-                    id="title"
+                    id="description"
                     multiline
-                    value={formik.values.message}
+                    value={formik.values.description}
                     onChange={formik.handleChange}
                     rows="3"
-                    name="message"
-
+                    name="description"
+                    helperText={formik.touched.description && formik.errors.description}
+                    error={!!(formik.touched.description && formik.errors.description)}
+                    onBlur={formik.handleBlur}
                     type="text"
                     placeholder={t("Description") || "Description"}
                     InputProps={{
@@ -156,11 +182,10 @@ export default function BasicModal({ open, handleClose }: any) {
                 <LoadingButton
                   component="label"
                   loading={upload}
+                  sx={{px:2,}}
                   onChange={uploading}
-
-                  endIcon={<Typography sx={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word', fontSize: { md: '15px !important', xs: '14px !important' } }}>{`${file?.name ?? 'Choose File'}`}</Typography>}
+                  startIcon={<Typography sx={{mx:1, fontSize: { md: '15px !important', xs: '14px !important' } }}>{`${selectedFile?.name ?? 'Choose File'}`}</Typography>}
                   variant="text"
-                  
                   size="small"
                 >
                   <UploadFileIcon color="warning" sx={{ ml: '-15px' }} />
@@ -173,12 +198,10 @@ export default function BasicModal({ open, handleClose }: any) {
 
                    <LoadingButton 
                     size="large"
-                    
+                    type="submit"
                     color="warning"
-                    onClick={update}
                     loading={loading}
                     sx={{ mt: 3, borderRadius: "50px" }}
-                    type="submit"
                     variant="contained"
                   >
                     {t("Send")}

@@ -203,3 +203,11 @@ export const Captalize = (word: any) => {
     return word.toLowerCase().charAt(0).toUpperCase() + word.substring(1);
   return word;
 };
+
+export function shortenText(text: string): string {
+  if (text.length <= 40) {
+      return text; // If text is already 20 characters or less, return it as is
+  } else {
+      return text.slice(0, 37) + '...'; // Slice the text to get the first 17 characters and add three dots
+  }
+}
