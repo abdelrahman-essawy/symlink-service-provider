@@ -72,7 +72,7 @@ export const get_list_of_offer = (
   //SupportTicket----------------------------------------------------
   export const add_ticket = () => `/support-ticket`;
   export const add_Comment_ticket = (ticketId:string) => `/support-ticket/comment/${ticketId}`;
-  export const get_ticket_massages = (ticketId:string,offset:number,limit:number) => `/support-ticket/comments/${ticketId}/${offset}/${limit}`;
+  export const get_ticket_massages = (ticketId:string) => `/support-ticket/comments/${ticketId}`;
   export const get_tickets = () => `/support-ticket`;
   
   

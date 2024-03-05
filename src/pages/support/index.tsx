@@ -8,6 +8,7 @@ import {
   Button,
   Avatar,
   CircularProgress,
+  IconButton,
 } from "@mui/material";
 import React, { useCallback, useEffect, useState } from "react";
 import { DashboardLayout } from "../../layouts/dashboard/layout";
@@ -33,7 +34,8 @@ import document from "@/assets/document.svg";
 import ViewerPdf from "@/components/_used-symline/dialogs/pdf-viewer";
 import ViewImagesDialog from "@/components/_used-symline/dialogs/view-images";
 import { useAuthContext } from "@/contexts/auth-context";
-
+import Pagination from "@mui/material/Pagination";
+import { Stack } from "@mui/system";
 const Page = () => {
   // ----------- hooks ----------------
   const [open, setOpen] = React.useState(false);
@@ -45,18 +47,33 @@ const Page = () => {
   const auth = useAuthContext();
   const { i18n } = useTranslation();
   const ticketsContext = useSupportTicket();
-  const { handlePageChange, handleRowsPerPageChange, handleSearch, controller, handleSorting } =
-    usePageUtilities();
+  const { handlePageChange, controller } = usePageUtilities();
+  const [MessagesPage, setMessagesPage] = React.useState(1);
+  const [loadingMessages, setLoadingMessages] = useState<boolean>(true);
+
+  const FetchMessages = useCallback(async () => {
+    setLoadingMessages(true);
+    await ticketsContext?.getCommentsWithinTicket(selectedTicketId, MessagesPage);
+    setLoadingMessages(false);
+  }, [MessagesPage, selectedTicketId, ticketsContext]);
 
   useEffect(() => {
-    ticketsContext?.getSupportTickets();
+    ticketsContext?.getSupportTickets(8, controller?.page);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [controller]);
 
   useEffect(() => {
-    if (selectedTicketId) ticketsContext?.getCommentsWithinTicket(selectedTicketId);
+    if (selectedTicketId) FetchMessages();
     // eslint-disable-next-line react-hooks/exhaustive-deps
+    setMessagesPage(1);
   }, [selectedTicketId]);
+
+  useEffect(() => {
+    if (selectedTicketId) {
+      FetchMessages();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [MessagesPage]);
 
   // ----------------- functions ---------------
   const handleOpen = () => setOpen(true);
@@ -66,6 +83,17 @@ const Page = () => {
     setSelectedTicketStatus(status);
   }, []);
 
+  const handleScroll = (e: any) => {
+    console.log({ totalMessagesPages: ticketsContext?.totalMessagesPages, MessagesPage });
+    if (ticketsContext?.totalMessagesPages === MessagesPage) {
+      return;
+    }
+    const { scrollTop, clientHeight, scrollHeight } = e.target;
+    // Check if the user has scrolled to the top
+    if (2 >= Math.abs(Math.floor(scrollHeight - clientHeight + scrollTop))) {
+      setMessagesPage((prev) => ++prev); // Fetch older messages
+    }
+  };
   return (
     <>
       <Head>
@@ -94,9 +122,9 @@ const Page = () => {
         </Box>
 
         <Card sx={{ mt: 2, p: 3 }}>
-          <Grid container spacing={1}>
+          <Grid container spacing={2}>
             <Grid item xs={12} md={3}>
-              <Box>
+              <Box sx={{ minHeight: "90%" }}>
                 <List>
                   {ticketsContext?.tickets?.map((data, index) => {
                     return (
@@ -114,6 +142,17 @@ const Page = () => {
                   })}
                 </List>
               </Box>
+              <Stack
+                spacing={1}
+                sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+                dir={`${i18n.language === "en" ? "ltr" : "rtl"}`}
+              >
+                <Pagination
+                  count={ticketsContext?.totalPages && ticketsContext?.totalPages}
+                  page={controller?.page}
+                  onChange={handlePageChange}
+                />
+              </Stack>
             </Grid>
             <Grid
               item
@@ -132,43 +171,66 @@ const Page = () => {
                 <Typography variant="body1">{t("TermsAndConditions_Page.Privacy text")}</Typography>
               </Box>
               <Divider variant="middle" sx={{ my: 2 }} />
-                <Grid  spacing={1} sx={{ py: 2, px: 3 }} height={500} overflow={"auto"} display={"flex"} flexDirection={"column-reverse"}>
-                  {ticketsContext?.ticketMessages?.length != undefined &&
-                  ticketsContext?.ticketMessages?.length > 0 ? (
-                    <>
-                      {ticketsContext?.ticketMessages?.map((message) => (
-                        <Grid item xs={12} key={message?.id} >
-                          <Message
-                            message={message?.comment_text}
-                            time={moment
-                              .utc(message?.created_at?.slice(0, 19))
-                              ?.local()
-                              ?.calendar()}
-                            avatar={auth?.user?.avatar}
-                            attachment={message?.attachment}
+              <Grid
+                spacing={1}
+                sx={{ py: 0, px: 3 }}
+                height={500}
+                overflow={"auto"}
+                display={"flex"}
+                flexDirection={"column-reverse"}
+                onScroll={handleScroll}
+              >
+                {ticketsContext?.ticketMessages?.length != undefined &&
+                ticketsContext?.ticketMessages?.length > 0 ? (
+                  <>
+                    {ticketsContext?.ticketMessages?.map((message) => (
+                      <Grid item xs={12} key={message?.id}>
+                        <Message
+                          message={message?.comment_text}
+                          time={moment.utc(message?.created_at?.slice(0, 19))?.local()?.calendar()}
+                          avatar={auth?.user?.avatar}
+                          attachment={message?.attachment}
                           />
-                        </Grid>
-                      ))}
-                    </>
-                  ) : (
-                    <Box width={"100%"}>
-                      <Noitems
-                        title={"No comment yet"}
-                        icon={<ForumIcon sx={{ color: "gray", fontSize: "4.2em" }} />}
-                      />
-                    </Box>
-                  )}
-                </Grid>
-              <Divider variant="middle" sx={{ my: 2 }} />
-              <Grid xs={12}>
-                <SupportContextProvider>
-                  <SupportCommentForm
-                    ticketId={selectedTicketId}
-                    disabled={!(selectedTicketStatus === "OPEN")}
-                    key={selectedTicketId}
-                  />
-                </SupportContextProvider>
+                      </Grid>
+                    ))}
+                    {loadingMessages && (
+                      <IconButton aria-label="Progress" sx={{py:2}}>
+                        <CircularProgress thickness={2} size={40} />
+                      </IconButton>
+                    )}
+                  </>
+                ) : selectedTicketId ? (
+                  <Box width={"100%"}>
+                    <Noitems
+                      title={t("No messages yet")}
+                      icon={<ForumIcon sx={{ color: "gray", fontSize: "4.2em" }} />}
+                      minHeight={500}
+                    />
+                  </Box>
+                ) : (
+                  <Box width={"100%"}>
+                    <Noitems
+                      title={t("Hello! How can we assist you today?")}
+                      icon={<ForumIcon sx={{ color: "gray", fontSize: "4.2em" }} />}
+                      minHeight={500}
+                    />
+                  </Box>
+                )}
               </Grid>
+              {selectedTicketId && (
+                <>
+                  <Divider variant="middle" sx={{ my: 4 }} />
+                  <Grid xs={12}>
+                    <SupportContextProvider>
+                      <SupportCommentForm
+                        ticketId={selectedTicketId}
+                        disabled={!(selectedTicketStatus === "OPEN")}
+                        key={selectedTicketId}
+                      />
+                    </SupportContextProvider>
+                  </Grid>
+                </>
+              )}
             </Grid>
           </Grid>
         </Card>
@@ -217,7 +279,7 @@ const Message = ({ name, avatar, message, time, attachment }: any) => {
         display: "flex",
         flexDirection: name === "user" ? "row-reverse" : "row",
         alignItems: "start",
-        gap: "30px",
+        gap: "20px",
         mb: 3,
       }}
     >
@@ -226,7 +288,7 @@ const Message = ({ name, avatar, message, time, attachment }: any) => {
         sx={{
           bgcolor: name === "user" ? "#F6F6F6" : "#adb8ef",
           borderRadius: "10px",
-          width:  "50%",
+          width: "50%",
           p: 2,
           position: "relative",
         }}
@@ -256,7 +318,7 @@ const Message = ({ name, avatar, message, time, attachment }: any) => {
             />
           </Grid>
         ) : null}
-        <Typography variant="body2">{time}</Typography>
+        <Typography variant="caption">{time}</Typography>
       </Box>
       <ViewerPdf open={openPdf} handleClose={handleClosePdf} document={fileLink} />
       <ViewImagesDialog
