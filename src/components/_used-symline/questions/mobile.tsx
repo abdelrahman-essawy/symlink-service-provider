@@ -171,52 +171,6 @@ export default function Mobile({
             </RadioGroup>
           </FormControl>
         </Grid>
-
-        <Grid item xs={12}>
-          <FormControl fullWidth required>
-            <Typography variant="body1" fontWeight="bold" sx={{ mb: 1, mt: 4 }}>
-              {t("Is active directory part of the assessment?")} <RequiredAstrisc />
-            </Typography>
-            <RadioGroup
-              row
-              aria-labelledby="is_active_directory"
-              name="is_active_directory"
-              value={projects[index]?.is_active_directory}
-              onChange={(e: any) =>
-                onChange(
-                  {
-                    target: {
-                      value: JSON.parse(e?.target?.value),
-                      name: e?.target?.name,
-                    },
-                  },
-                  index
-                )
-              }
-            >
-              <Grid container>
-                <Grid item xs={12} md={4}>
-                  <FormControlLabel
-                    sx={{ width: "100%" }}
-                    value={true}
-                    control={<Radio color="warning" required />}
-                    label={t("Yes")}
-                    color="warning"
-                  />
-                </Grid>
-                <Grid item xs={12} md={4}>
-                  <FormControlLabel
-                    sx={{ width: "100%" }}
-                    value={false}
-                    control={<Radio color="warning" required />}
-                    label={t("No")}
-                    color="warning"
-                  />
-                </Grid>
-              </Grid>
-            </RadioGroup>
-          </FormControl>
-        </Grid>
         <Grid item xs={12}>
           <Typography variant="body1" fontWeight="bold" sx={{ mb: 1, mt: 3 }}>
             {t("Notes")}
