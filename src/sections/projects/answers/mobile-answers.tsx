@@ -61,13 +61,6 @@ export default function MobileAnswers({ project }: IProps) {
           </Typography>
           <MultilineTypography value={project?.approach_of_assessment} />
         </Grid>
-
-        <Grid item xs={12}>
-          <Typography variant="h6" fontWeight="bold" sx={{ mb: 1, mt: 4 }}>
-            {t("Is active directory part of the assessment?")}
-          </Typography>
-          <MultilineTypography value={project?.is_active_directory ? t("Yes") : t("No")} />
-        </Grid>
         <Grid item xs={12}>
           <Typography variant="h6" fontWeight="bold" sx={{ mb: 1, mt: 3 }}>
             {t("Notes")}
